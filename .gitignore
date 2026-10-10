@@ -1,0 +1,52 @@
+# Nunca versionar: segredos, dados de clientes, backups e arquivos gerados.
+
+# Segredos (APP_KEY) — só os .example entram
+.env
+.env.*
+!.env.example
+!.env.*.example
+laravel/.env
+laravel/.env.*
+!laravel/.env.example
+!laravel/.env.*.example
+deploy/.env*
+auth.json
+codigos-recuperacao*
+info.txt
+
+# Banco de dados (jogadores, ranking) e cópias dele
+*.sqlite
+*.sqlite-*
+*.sqlite.*
+*.bak*
+laravel/storage/app/*
+!laravel/storage/app/.gitignore
+laravel/storage/logs/*
+laravel/storage/framework/cache/*
+laravel/storage/framework/sessions/*
+laravel/storage/framework/testing/*
+laravel/storage/framework/views/*
+laravel/storage/*.key
+laravel/storage/pail
+
+# Pacotes de deploy e zips (podem conter dados)
+*.zip
+
+# Dependências e build (recriados por composer/npm)
+laravel/vendor/
+node_modules/
+public/build/
+public/hot
+public/storage
+laravel/bootstrap/cache/*.php
+
+# Sistema e editores
+*.log
+.DS_Store
+Thumbs.db
+.phpunit.result.cache
+.phpunit.cache/
+.idea/
+.vscode/
+.fleet/
+.zed/

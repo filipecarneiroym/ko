@@ -1,0 +1,8 @@
+[Unit]
+Description=K.O - Backup externo (banco de dados)
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/var/www/ko/laravel
+ExecStart=/bin/bash /var/www/ko/deploy/backup-offsite.sh
