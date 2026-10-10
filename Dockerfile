@@ -31,8 +31,8 @@ RUN mkdir -p /var/www/html/laravel/database && \
     chmod -R 777 /var/www/html/laravel/storage /var/www/html/laravel/database && \
     chown -R www-data:www-data /var/www/html/laravel
 
-# Roda a limpeza completa de cache antes de expor o servidor
-RUN cd /var/www/html/laravel && php artisan optimize:clear
+# Roda as tabelas do banco de dados e limpa os arquivos de cache de bootstrap
+RUN cd /var/www/html/laravel && php artisan migrate --force && php artisan optimize:clear
 
 # Expõe a porta padrão de internet
 EXPOSE 80
