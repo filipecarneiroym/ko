@@ -28,8 +28,12 @@ RUN cd /var/www/html/laravel && composer install --no-dev --optimize-autoloader
 # Cria a pasta do banco de dados, gera o arquivo SQLite em branco e dá as permissões corretas de escrita
 RUN mkdir -p /var/www/html/laravel/database && \
     touch /var/www/html/laravel/database/database.sqlite && \
-    chmod -R 777 /var/www/html/laravel/storage /var/www/html/laravel/database && \
-    chown -R www-data:www-data /var/www/html/laravel
+# Dá permissão total de escrita para as pastas de storage e cache do Laravel
+RUN chmod -R 775 /var/www/html/laravel/storage /var/www/html/laravel/bootstrap/cache
+
+# Garante que o usuário do Apache (www-data) seja o dono de todos os arquivos
+RUN chown -R www-data:www-data /var/www/html/laravel
+
 
 # Roda as tabelas do banco de dados e limpa os arquivos de cache de bootstrap
 RUN cd /var/www/html/laravel && php artisan migrate --force && (php artisan optimize:clear || true)
