@@ -32,7 +32,7 @@ RUN mkdir -p /var/www/html/laravel/database && \
     chown -R www-data:www-data /var/www/html/laravel
 
 # Roda as tabelas do banco de dados e limpa os arquivos de cache de bootstrap
-RUN cd /var/www/html/laravel && php artisan migrate --force && php artisan optimize:clear
+RUN cd /var/www/html/laravel && php artisan migrate --force && (php artisan optimize:clear || true)
 
 # Expõe a porta padrão de internet
 EXPOSE 80
