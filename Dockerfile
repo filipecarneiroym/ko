@@ -44,3 +44,10 @@ RUN cd /var/www/html/laravel && php artisan migrate --force && (php artisan opti
 
 # Expõe a porta padrão de internet
 EXPOSE 80
+
+# Expõe a porta padrão de internet
+EXPOSE 80
+
+# Altera as permissões ao ligar o container e inicia o Apache
+CMD chown -R www-data:www-data /var/www/html/laravel/storage /var/www/html/laravel/bootstrap/cache && apache2-foreground
+
