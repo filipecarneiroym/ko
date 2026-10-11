@@ -1,0 +1,618 @@
+{
+  "origem": "GLB real no importador do laboratório; montagem de estudos com gestos rápidos ampliados no tempo.",
+  "sha256Glb": "de0a66e89417bfe4c18d0d98cfe0ccf500aa6a1deb9f03818fb8e36d1ce9d3c1",
+  "quadros": [
+    {
+      "clip": "parado",
+      "quadro": 0,
+      "atraso": 11,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 6.5,
+      "atraso": 11,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 13,
+      "atraso": 11,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 19.5,
+      "atraso": 11,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 26,
+      "atraso": 11,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 32.5,
+      "atraso": 11,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 39,
+      "atraso": 11,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 45.5,
+      "atraso": 11,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 52,
+      "atraso": 11,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 58.5,
+      "atraso": 11,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 65,
+      "atraso": 11,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 71.5,
+      "atraso": 11,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 78,
+      "atraso": 11,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 84.5,
+      "atraso": 11,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 91,
+      "atraso": 11,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 97.5,
+      "atraso": 11,
+      "x": 0
+    },
+    {
+      "clip": "p1",
+      "quadro": 0,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p1",
+      "quadro": 1,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p1",
+      "quadro": 2,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p1",
+      "quadro": 3,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p1",
+      "quadro": 4,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p1",
+      "quadro": 5,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p1",
+      "quadro": 6,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p1",
+      "quadro": 7,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p1",
+      "quadro": 8,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p1",
+      "quadro": 9,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p1",
+      "quadro": 10,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p1",
+      "quadro": 11,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p1",
+      "quadro": 12,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 1,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 2,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 3,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 4,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 5,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 6,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 7,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 8,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 9,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 10,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 11,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 12,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 13,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 14,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 15,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 16,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 17,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "p2",
+      "quadro": 18,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "defesa",
+      "quadro": 0,
+      "atraso": 20,
+      "x": 0
+    },
+    {
+      "clip": "defesa",
+      "quadro": 5,
+      "atraso": 8,
+      "x": 0
+    },
+    {
+      "clip": "defesa",
+      "quadro": 10,
+      "atraso": 8,
+      "x": 0
+    },
+    {
+      "clip": "defesa",
+      "quadro": 15,
+      "atraso": 8,
+      "x": 0
+    },
+    {
+      "clip": "defesa",
+      "quadro": 20,
+      "atraso": 8,
+      "x": 0
+    },
+    {
+      "clip": "defesa",
+      "quadro": 25,
+      "atraso": 8,
+      "x": 0
+    },
+    {
+      "clip": "defesa",
+      "quadro": 30,
+      "atraso": 8,
+      "x": 0
+    },
+    {
+      "clip": "defesa",
+      "quadro": 35,
+      "atraso": 8,
+      "x": 0
+    },
+    {
+      "clip": "defesa",
+      "quadro": 40,
+      "atraso": 8,
+      "x": 0
+    },
+    {
+      "clip": "defesa",
+      "quadro": 45,
+      "atraso": 8,
+      "x": 0
+    },
+    {
+      "clip": "defesa",
+      "quadro": 50,
+      "atraso": 8,
+      "x": 0
+    },
+    {
+      "clip": "defesa",
+      "quadro": 55,
+      "atraso": 8,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 1,
+      "atraso": 8,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 2,
+      "atraso": 8,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 3,
+      "atraso": 8,
+      "x": 0
+    },
+    {
+      "clip": "parado",
+      "quadro": 4,
+      "atraso": 8,
+      "x": 0
+    },
+    {
+      "clip": "dano",
+      "quadro": 0,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "dano",
+      "quadro": 1,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "dano",
+      "quadro": 2,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "dano",
+      "quadro": 3,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "dano",
+      "quadro": 4,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "dano",
+      "quadro": 5,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "dano",
+      "quadro": 6,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "dano",
+      "quadro": 7,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "dano",
+      "quadro": 8,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "dano",
+      "quadro": 9,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "dano",
+      "quadro": 10,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "dano",
+      "quadro": 11,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "dano",
+      "quadro": 12,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "andando",
+      "quadro": 0,
+      "atraso": 5,
+      "x": 0
+    },
+    {
+      "clip": "andando",
+      "quadro": 1,
+      "atraso": 5,
+      "x": 0.109375
+    },
+    {
+      "clip": "andando",
+      "quadro": 2,
+      "atraso": 5,
+      "x": 0.21875
+    },
+    {
+      "clip": "andando",
+      "quadro": 3,
+      "atraso": 5,
+      "x": 0.328125
+    },
+    {
+      "clip": "andando",
+      "quadro": 4,
+      "atraso": 5,
+      "x": 0.4375
+    },
+    {
+      "clip": "andando",
+      "quadro": 5,
+      "atraso": 5,
+      "x": 0.546875
+    },
+    {
+      "clip": "andando",
+      "quadro": 6,
+      "atraso": 5,
+      "x": 0.65625
+    },
+    {
+      "clip": "andando",
+      "quadro": 7,
+      "atraso": 5,
+      "x": 0.765625
+    },
+    {
+      "clip": "andando",
+      "quadro": 8,
+      "atraso": 5,
+      "x": 0.875
+    },
+    {
+      "clip": "andando",
+      "quadro": 9,
+      "atraso": 5,
+      "x": 0.984375
+    },
+    {
+      "clip": "andando",
+      "quadro": 10,
+      "atraso": 5,
+      "x": 1.09375
+    },
+    {
+      "clip": "andando",
+      "quadro": 11,
+      "atraso": 5,
+      "x": 1.203125
+    },
+    {
+      "clip": "andando",
+      "quadro": 12,
+      "atraso": 5,
+      "x": 1.3125
+    },
+    {
+      "clip": "andando",
+      "quadro": 13,
+      "atraso": 5,
+      "x": 1.421875
+    },
+    {
+      "clip": "andando",
+      "quadro": 14,
+      "atraso": 5,
+      "x": 1.53125
+    },
+    {
+      "clip": "andando",
+      "quadro": 15,
+      "atraso": 5,
+      "x": 1.640625
+    },
+    {
+      "clip": "andando",
+      "quadro": 16,
+      "atraso": 5,
+      "x": 1.75
+    },
+    {
+      "clip": "andando",
+      "quadro": 17,
+      "atraso": 5,
+      "x": 1.859375
+    },
+    {
+      "clip": "andando",
+      "quadro": 18,
+      "atraso": 5,
+      "x": 1.96875
+    },
+    {
+      "clip": "andando",
+      "quadro": 19,
+      "atraso": 5,
+      "x": 2.078125
+    },
+    {
+      "clip": "andando",
+      "quadro": 20,
+      "atraso": 5,
+      "x": 2.1875
+    },
+    {
+      "clip": "andando",
+      "quadro": 21,
+      "atraso": 5,
+      "x": 2.296875
+    },
+    {
+      "clip": "andando",
+      "quadro": 22,
+      "atraso": 5,
+      "x": 2.40625
+    },
+    {
+      "clip": "andando",
+      "quadro": 23,
+      "atraso": 5,
+      "x": 2.515625
+    },
+    {
+      "clip": "andando",
+      "quadro": 24,
+      "atraso": 5,
+      "x": 2.625
+    },
+    {
+      "clip": "parado",
+      "quadro": 0,
+      "atraso": 30,
+      "x": 0
+    }
+  ]
+}

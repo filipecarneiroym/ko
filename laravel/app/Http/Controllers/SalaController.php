@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Sala;
 use App\Services\PartidaService;
+use App\Services\RelayEndereco;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,7 +22,8 @@ class SalaController extends Controller
 
     public function entrar(Request $request): RedirectResponse
     {
-        $codigo = strtoupper(trim((string) $request->input('codigo')));
+        $request->validate(['codigo' => ['required', 'string', 'regex:/^\s*[A-Za-z0-9]{4}\s*$/']]);
+        $codigo = strtoupper(trim($request->input('codigo')));
         $sala = Sala::query()->where('codigo', $codigo)->first();
         if (! $sala) {
             return back()->withInput()->withErrors(['codigo' => 'Não achei essa sala. Confira o código.']);
@@ -52,7 +54,7 @@ class SalaController extends Controller
             'eu' => Auth::user()->apelido,
             'host' => $sala->host->apelido,
             'convidado' => $sala->convidado?->apelido,
-            'relay' => config('ko.relay_url').'?'.http_build_query(['sala' => $sala->codigo, 'lado' => $lado, 't' => $sala->tokenRelay($lado)]),
+            'relay' => RelayEndereco::para(request()).'?'.http_build_query(['sala' => $sala->codigo, 'lado' => $lado, 't' => $sala->tokenRelay($lado)]),
             'resultado' => route('sala.resultado', $sala),
             'proxima' => $sala->partidas()->max('numero') + 1,
         ]]);
@@ -74,6 +76,8 @@ class SalaController extends Controller
             'rounds_convidado' => ['required', 'integer', 'between:0,2'],
         ]);
         abort_if(max($dados['rounds_host'], $dados['rounds_convidado']) !== 2, 422, 'Luta sem vencedor.');
+        $vencedorCorreto = $dados['rounds_host'] > $dados['rounds_convidado'] ? 'host' : 'convidado';
+        abort_if($dados['rounds_host'] === $dados['rounds_convidado'] || $dados['vencedor'] !== $vencedorCorreto, 422, 'Placar incompatível com o vencedor.');
 
         $partida = $partidas->registrar($sala, $lado, $dados);
 

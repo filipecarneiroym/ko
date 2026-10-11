@@ -1,0 +1,15 @@
+{
+  "lote": 6,
+  "personagens": [
+    {
+      "id": "volt",
+      "arquivo": "volt-v1.png",
+      "prompt": "Original K.O fighting game ONLY VOLT character cutout. Reference 1 STYLE only: premium stylized 3D sculpted forms, expressive face, detailed fabric and gold key light violet rim. Adult HUMAN Brazilian male motorcycle delivery courier fighter, medium warm brown skin, athletic compact build, dark eyes, energetic confident friendly grin. YELLOW MOTORCYCLE HELMET with raised dark visor so face is clearly visible, ORANGE protective riding JACKET with YELLOW reflective bands, dark NAVY protective trousers, dark riding boots, bright BLUE protective electric gauntlet gloves. Compact RED insulated delivery backpack strapped to back. Small electric blue luminous seams on gauntlets, no large lightning cloud. Battle-ready boxing guard three-quarter facing right, slight forward lean suggesting speed, knees flexed, both gloved fists visible. Original family friendly hero, no motorcycle in this portrait, no gun no weapon, not an animal. Full body helmet backpack both gloves and boots entirely inside image with generous transparent margin. Rich stylized leather fabric and metal materials, not photorealistic not plastic toy. TRUE transparent alpha background, no floor no backdrop no fog glow cloud scenery text logos watermark or other characters. Key art for later ensemble composition, not a playable model."
+    },
+    {
+      "id": "kilo",
+      "arquivo": "kilo-v1.png",
+      "prompt": "Original K.O fighting game ONLY KILO character cutout. Reference 1 STYLE only: premium stylized 3D sculpted forms expressive face detailed game materials warm gold key light violet rim. Adult HUMAN Brazilian male heavyweight strongman powerlifter, huge broad stocky barrel torso with substantial round belly, immense thick forearms and thighs, bald head and short DARK BROWN full beard, warm light tan skin, broad confident friendly face. Clearly different from lean bodybuilding physique, a massive strongman silhouette. BLUE athletic TANK TOP covering torso and belly, loose BLACK athletic shorts reaching above knees, broad DARK BROWN weightlifting belt with brass buckle, WHITE wrist wraps, sturdy black lifting shoes. Practical sports outfit not underwear. Powerful grappling guard three-quarter facing left with both open hands forward ready to grab, feet planted wide, knees flexed. No barbell prop in this portrait, focus on character. Full body bald head hands shorts and shoes fully visible generous transparent margin. Two arms two legs natural fingers. Family-friendly humorous strongman personality, no animal traits, no photorealism no plastic toy. TRUE transparent alpha background no floor backdrop scenery fog glow cloud text logo watermark or extra person. Character concept key art for later ensemble composition, not a playable model."
+    }
+  ]
+}

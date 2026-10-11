@@ -3,6 +3,11 @@
 Dois jogadores, cada um no seu celular deitado, lutam pelo navegador. O jogo é um app instalável (PWA):
 abre em tela cheia e deitado, sem loja de aplicativos.
 
+Entre com apelido e PIN de 4 dígitos para usar o mesmo jogador em qualquer aparelho.
+Jogadores antigos cadastram o PIN no navegador original, pelo menu. Para jogar entre amigos,
+cada pessoa usa seu próprio jogador. A configuração para o Render está em
+[`deploy/render/README.md`](../deploy/render/README.md).
+
 - **Online:** um cria a sala e passa o código de 4 letras; o outro entra pelo código.
 - **Contra o computador** e **Treino** (boneco que não cai) rodam só no celular.
 - **Ranking:** cada luta online conta quando os dois celulares concordam com o resultado.
@@ -40,7 +45,8 @@ Em `public/js/`:
 |---|---|
 | `ko-sim.js` | motor da luta. Só números inteiros: com os mesmos botões, chega no mesmo resultado nos dois celulares |
 | `ko-arte.js` | desenho dos lutadores, cenários, placar e efeitos |
-| `ko.js` | telas, controles de toque, rede, computador, som e locutor |
+| `ko.js` | telas, controles de toque com analógico, rede, computador, som e locutor |
+| `ko-voz.js` | gritos sintetizados e frases originais dos 16 lutadores |
 
 ## Rodar no computador
 
@@ -61,8 +67,17 @@ Para testar online sozinho, abra duas janelas (uma anônima) com apelidos difere
 ```
 cd laravel
 php artisan test            # entrar, salas, resultado/ranking e o relay de verdade
-node --test tests/js/       # motor da luta: determinismo, combos, Super, quebra-combo, rounds
+node --test tests/js/sim.test.js tests/js/voz.test.js
 ```
+
+Teste opcional em navegador mobile, a partir da raiz do projeto (requer Edge instalado):
+```
+npm install --prefix .browser-check --no-package-lock playwright
+node laravel/tests/browser/mobile.cjs
+```
+O teste cria um banco separado em `.browser-check`, inicia dois navegadores e verifica
+entrada, sala, analógico, reconexão, ranking e revanche. Para usar outro Chromium,
+configure `KO_BROWSER` com o caminho do executável. Não usa o banco de produção.
 
 ## Como funciona a rede (lockstep)
 

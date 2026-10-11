@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\RelayEndereco;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,10 +23,12 @@ class SecurityHeaders
         }
 
         // O jogo não usa nada de fora: CSP valendo de verdade. Só o relay da luta fica liberado.
-        $relay = parse_url(config('ko.relay_url'));
+        $relay = parse_url(RelayEndereco::para($request));
         $origemRelay = $relay['scheme'].'://'.$relay['host'].(isset($relay['port']) ? ':'.$relay['port'] : '');
+        // Texturas incorporadas no GLB são decodificadas por URLs blob locais.
+        $origensImagens = $request->routeIs('laboratorio.3d') ? "'self' data: blob:" : "'self' data:";
         $response->headers->set('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; "
-            ."img-src 'self' data:; connect-src 'self' {$origemRelay}; manifest-src 'self'; worker-src 'self'; "
+            ."img-src {$origensImagens}; connect-src 'self' {$origemRelay}; manifest-src 'self'; worker-src 'self'; "
             ."object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'");
 
         return $response;

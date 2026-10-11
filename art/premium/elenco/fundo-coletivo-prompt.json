@@ -1,0 +1,12 @@
+{
+  "ferramenta": "image_gen integrada",
+  "prompt": "Create a widescreen 16:9 premium fighting game main menu background, original polished stylized 3D animated cinematic illustration. Exactly eighteen distinct fighters from the 18 reference images, one instance of each, preserve their unique faces, outfits, species and accessories. Epic friendly battle faceoff on a night rooftop with violet sky, dramatic gold and purple lighting, sparks and motion but no gore. Arrange nine characters on left and nine on right in layered readable tiers facing the opposite team; leave the middle 30 percent dark and relatively empty for menu buttons. No text, no logos, no UI. Reference images in order: 1 Pipoca, 2 Uivo, 3 Maromba, 4 Ginga, 5 Vó Nena, 6 Vô Tião, 7 Kira, 8 Toco, 9 Nix, 10 Eco, 11 Volt, 12 Kilo, 13 Brasa, 14 Maré, 15 Truque, 16 Fóssil, 17 Forja, 18 Bórun. The muscular Maromba MUST wear his red athletic SHORTS. Include white rabbit boxer, grey wolf martial artist, grandpa with cane, grandma with handbag, kickboxer, capoeirista, lumberjack with log, skater, DJ, delivery rider, powerlifter, firefighter woman, blond surfer with board, magician, elderly scientist with mechanical dinosaur arm, dark-skinned fire blacksmith, SHORT broad grey-bearded dwarf with iron club. All are individuals, no cloned male faces, do not omit any reference. Cinematic coordinated action poses; clearly readable faces even in back tiers.",
+  "referenciasAnexadas": [
+    "pipoca-v1.png",
+    "uivo-v1.png",
+    "maromba-v3.png",
+    "forja-v1.png",
+    "borun-v1.png"
+  ],
+  "observacao": "Ferramenta aceita no máximo cinco referências. Os outros personagens são descritos em texto; conferir presença e identidade de todos antes de usar no menu."
+}

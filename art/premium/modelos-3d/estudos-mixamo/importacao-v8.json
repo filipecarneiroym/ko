@@ -1,0 +1,183 @@
+{
+  "aprovadoFinal": false,
+  "clips": 31,
+  "faces": [
+    1,
+    -1
+  ],
+  "amostrasReacao": 50,
+  "erroMaximoPe": 3.0719530773294423e-8,
+  "erroMaximoSola": 2.0734563577207155e-7,
+  "erroRecuperacao": 5.960464477539063e-8,
+  "recuperacaoQuadro": 7,
+  "stunMinimoMotor": 8,
+  "impactoDesdeInicio": true,
+  "guardaRecuperadaAntesDoFimDoStun": true,
+  "quadrosHitstop": 6,
+  "repeticoesPorQuadroCongelado": 10,
+  "renderizacoes": 121,
+  "simulacaoPreservada": true,
+  "gpuUsada": false,
+  "amostras": [
+    {
+      "face": 1,
+      "quadro": 0,
+      "recuoCabeca": 0.11353559419512749,
+      "recuoPeito": 0.054565932528930716
+    },
+    {
+      "face": 1,
+      "quadro": 1,
+      "recuoCabeca": 0.15775024890899658,
+      "recuoPeito": 0.07561555124993902
+    },
+    {
+      "face": 1,
+      "quadro": 2,
+      "recuoCabeca": 0.1460697054862976,
+      "recuoPeito": 0.0700625888275681
+    },
+    {
+      "face": 1,
+      "quadro": 3,
+      "recuoCabeca": 0.11681515723466873,
+      "recuoPeito": 0.05613020800228696
+    },
+    {
+      "face": 1,
+      "quadro": 4,
+      "recuoCabeca": 0.07874301630363334,
+      "recuoPeito": 0.037934992389637046
+    },
+    {
+      "face": 1,
+      "quadro": 5,
+      "recuoCabeca": 0.04073194041848183,
+      "recuoPeito": 0.019680643381434493
+    },
+    {
+      "face": 1,
+      "quadro": 6,
+      "recuoCabeca": 0.0116080641746521,
+      "recuoPeito": 0.005622738433885388
+    },
+    {
+      "face": 1,
+      "quadro": 7,
+      "recuoCabeca": -1.4901161193847656e-8,
+      "recuoPeito": -2.0372681319713593e-10
+    },
+    {
+      "face": 1,
+      "quadro": 8,
+      "recuoCabeca": -1.4901161193847656e-8,
+      "recuoPeito": -2.0372681319713593e-10
+    },
+    {
+      "face": 1,
+      "quadro": 9,
+      "recuoCabeca": -1.4901161193847656e-8,
+      "recuoPeito": -2.0372681319713593e-10
+    },
+    {
+      "face": 1,
+      "quadro": 10,
+      "recuoCabeca": -1.4901161193847656e-8,
+      "recuoPeito": -2.0372681319713593e-10
+    },
+    {
+      "face": 1,
+      "quadro": 11,
+      "recuoCabeca": -1.4901161193847656e-8,
+      "recuoPeito": -2.0372681319713593e-10
+    },
+    {
+      "face": 1,
+      "quadro": 12,
+      "recuoCabeca": -1.4901161193847656e-8,
+      "recuoPeito": -2.0372681319713593e-10
+    },
+    {
+      "face": -1,
+      "quadro": 0,
+      "recuoCabeca": 0.11353559419512749,
+      "recuoPeito": 0.054565932528930716
+    },
+    {
+      "face": -1,
+      "quadro": 1,
+      "recuoCabeca": 0.15775024890899658,
+      "recuoPeito": 0.07561555124993902
+    },
+    {
+      "face": -1,
+      "quadro": 2,
+      "recuoCabeca": 0.1460697054862976,
+      "recuoPeito": 0.0700625888275681
+    },
+    {
+      "face": -1,
+      "quadro": 3,
+      "recuoCabeca": 0.11681515723466873,
+      "recuoPeito": 0.05613020800228696
+    },
+    {
+      "face": -1,
+      "quadro": 4,
+      "recuoCabeca": 0.07874301630363334,
+      "recuoPeito": 0.037934992389637046
+    },
+    {
+      "face": -1,
+      "quadro": 5,
+      "recuoCabeca": 0.04073194041848183,
+      "recuoPeito": 0.019680643381434493
+    },
+    {
+      "face": -1,
+      "quadro": 6,
+      "recuoCabeca": 0.0116080641746521,
+      "recuoPeito": 0.005622738433885388
+    },
+    {
+      "face": -1,
+      "quadro": 7,
+      "recuoCabeca": -1.4901161193847656e-8,
+      "recuoPeito": -2.0372681319713593e-10
+    },
+    {
+      "face": -1,
+      "quadro": 8,
+      "recuoCabeca": -1.4901161193847656e-8,
+      "recuoPeito": -2.0372681319713593e-10
+    },
+    {
+      "face": -1,
+      "quadro": 9,
+      "recuoCabeca": -1.4901161193847656e-8,
+      "recuoPeito": -2.0372681319713593e-10
+    },
+    {
+      "face": -1,
+      "quadro": 10,
+      "recuoCabeca": -1.4901161193847656e-8,
+      "recuoPeito": -2.0372681319713593e-10
+    },
+    {
+      "face": -1,
+      "quadro": 11,
+      "recuoCabeca": -1.4901161193847656e-8,
+      "recuoPeito": -2.0372681319713593e-10
+    },
+    {
+      "face": -1,
+      "quadro": 12,
+      "recuoCabeca": -1.4901161193847656e-8,
+      "recuoPeito": -2.0372681319713593e-10
+    }
+  ],
+  "limites": [
+    "Reação genérica; não varia direção e intensidade por golpe.",
+    "Arte provisória; rosto, quedas e demais movimentos continuam em revisão."
+  ]
+}

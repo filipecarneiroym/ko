@@ -1,0 +1,26 @@
+{
+  "status": "Importação técnica validada; arte e transições ainda em revisão.",
+  "clips": 31,
+  "malhas": 6,
+  "faces": [
+    1,
+    -1
+  ],
+  "amostrasGuarda": 416,
+  "erroMaximoAncoraImportada": 0.00037671535027363346,
+  "golpesPreservados": [
+    "p1",
+    "p2",
+    "k1",
+    "k2",
+    "cp",
+    "ck",
+    "ap",
+    "ak",
+    "esp",
+    "sup"
+  ],
+  "estadoSimulacaoPreservado": true,
+  "orientacaoFrontalVerificada": true,
+  "gpuUsada": false
+}

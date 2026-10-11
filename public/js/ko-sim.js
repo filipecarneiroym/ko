@@ -438,6 +438,7 @@
 
   function iniciarGolpe(s, l, nome) {
     l.golpe = nome; l.estado = 'golpe'; l.t = 0; l.encostou = 0; l.acertos = 0;
+    if (nome !== 'esp' && nome !== 'sup') s.ev.push({ t: 'ataque', lado: l.lado, id: l.id, golpe: nome });
     if (nome === 'esp') s.ev.push({ t: 'especial', lado: l.lado, id: l.id });
     if (nome === 'sup') { l.poder = 0; s.ev.push({ t: 'super', lado: l.lado, id: l.id }); s.hitstop = 24; }
   }
@@ -901,9 +902,9 @@
   function hash(s) {
     let h = 2166136261;
     const mix = (n) => { h ^= n & 0xffffffff; h = Math.imul(h, 16777619) >>> 0; };
-    mix(s.f); mix(s.timer); mix(s.gelo.f); mix(s.rounds[0]); mix(s.rounds[1]); mix(s.proj.length);
-    for (const l of s.p) { mix(l.x); mix(l.y); mix(l.vida); mix(l.poder); mix(l.t); mix(l.combo); mix(l.estado.length); mix(l.forca); mix(l.armadura); }
-    for (const p of s.proj) { mix(p.x); mix(p.y); }
+    // Inclui velocidades, buffers e estados completos: todos podem mudar o próximo quadro.
+    const texto = JSON.stringify(s, (chave, valor) => chave === 'ev' ? undefined : valor);
+    for (let i = 0; i < texto.length; i++) mix(texto.charCodeAt(i));
     return h;
   }
 

@@ -1,0 +1,15 @@
+{
+  "lote": 5,
+  "personagens": [
+    {
+      "id": "nix",
+      "arquivo": "nix-v1.png",
+      "prompt": "Original fighting game K.O character concept cutout, ONLY NIX. Reference image 1 is STYLE reference only, match premium stylized 3D sculpted forms, expressive face and game materials, gold key light and violet rim. Nix is an adult human female ice skater fighter, fair skin, athletic agile strong body, expressive pale blue eyes, confident playful face, flowing short icy-white hair. Costume: light BLUE fitted long-sleeved skating jacket and opaque blue skating trousers, WHITE ice skating boots with visible SILVER skating blades, pink scarf flowing behind shoulders. Practical modest athletic outfit, no dress or underwear. Graceful dynamic battle-ready ice skating pose three-quarter facing right, knees flexed, one skate slightly forward, arms in martial arts balance, clearly two arms two legs and natural hands. Subtle frost accents on cuffs but no aura or floating effects. Full body including scarf hair hands both boots and complete blades, generous transparent margins. Beautiful detailed fabric and leather, warm edge lighting with cool icy accents. Family friendly original design, not photorealistic not plastic toy. TRUE transparent alpha background, no floor no backdrop no glow cloud no scenery no text no logo no extra person. Art for ensemble poster, not a playable model."
+    },
+    {
+      "id": "eco",
+      "arquivo": "eco-v1.png",
+      "prompt": "Original fighting game K.O character concept cutout, ONLY ECO. Reference image 1 is STYLE only, match premium stylized 3D sculpted forms expressive face detailed fabric game materials gold key light violet rim. Adult HUMAN Afro-Brazilian male DJ fighter, deep brown skin, lean athletic build, lively brown eyes, charismatic confident smile, short dark hair under a YELLOW baseball cap worn backwards. PURPLE hoodie with hood down, dark navy roomy streetwear trousers, WHITE sneakers, black headphones with CYAN ear cups resting around neck. Signature equipment: compact pair of dark gray SPEAKERS secured as a backpack behind shoulders, speaker cones visibly facing out beside upper torso, practical straps over hoodie. Dynamic rhythmic fighting guard three-quarter facing left, knees flexed, one fist forward and other hand open near chest like keeping beat. No microphone or extra props. Clearly two arms and legs, natural fingers, full body cap headphones backpack hands feet all visible with generous transparent margins. Original family friendly stylish urban fighter not animal not photorealistic not plastic toy. TRUE transparent alpha background, no floor no scenery no backdrop no atmosphere or glow cloud no text logos watermark or other people. Character art for ensemble poster, not a playable model."
+    }
+  ]
+}

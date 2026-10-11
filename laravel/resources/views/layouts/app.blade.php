@@ -14,10 +14,14 @@
     <link rel="icon" href="/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="stylesheet" href="/css/ko.css?v={{ filemtime(public_path('css/ko.css')) }}">
-    <script src="/js/pwa.js" defer></script>
+    <script src="/js/ko-controle.js?v={{ filemtime(public_path('js/ko-controle.js')) }}" defer></script>
+    <script src="/js/pwa.js?v={{ filemtime(public_path('js/pwa.js')) }}" defer></script>
     @stack('head')
 </head>
 <body class="@yield('corpo')">
+    @if(trim($__env->yieldContent('corpo')) !== 'corpo-jogo')
+        @include('partials.fundo-elenco')
+    @endif
     @yield('conteudo')
 </body>
 </html>

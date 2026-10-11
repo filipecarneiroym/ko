@@ -1,15 +1,17 @@
 # Spec: K.O — jogo de luta 1x1 no celular
 
 ## Objetivo
+O link abre uma arena privada: senha compartilhada `O.K`, validada no servidor antes do apelido e PIN. `KO_SENHA_AMIGOS` permite trocar a senha; a troca revoga desbloqueios anteriores. A saída da conta preserva o desbloqueio da arena na sessão atual. Fundo ilustrado de combate somente nos menus, sem interferir na arena jogável.
+
 Dois amigos, cada um no seu celular deitado, lutam um contra o outro pelo navegador (PWA instalável).
 Sucesso = criar sala, o amigo entra pelo código, os dois veem a mesma luta e o resultado fica salvo no ranking.
 
 ## Decisões (aprovadas)
-- Nome: **K.O** · Entrada: **só apelido** (o celular lembra) · Visual: **traço liso estilo desenho animado, em alta resolução** (começou em pixel art; trocado a pedido) · 16 lutadores originais com mecânicas inspiradas em SF2, MK3, KOF94 e KI.
+- Nome: **K.O** · Entrada: **apelido + PIN de 4 dígitos** (o celular lembra; a mesma conta funciona em outros aparelhos) · Visual: **traço liso estilo desenho animado, em alta resolução** (começou em pixel art; trocado a pedido) · 16 lutadores originais com mecânicas inspiradas em SF2, MK3, KOF94 e KI.
 - Pasta: `C:\Users\Windows\Desktop\Digital\K.O`, mesmo molde da YM: `deploy/`, `laravel/`, `public/`.
 
 ## Como funciona
-1. Jogador digita apelido → vira um `jogador` no banco e fica logado (cookie "lembrar").
+1. Jogador digita apelido e PIN → cria o `jogador` ou entra na conta existente (cookie "lembrar"). Contas antigas cadastram o PIN na sessão original; o PIN é armazenado como hash.
 2. **Criar sala** → código de 4 letras (`K7P2`). O amigo digita o código → entra.
 3. Cada um escolhe o lutador; quando os dois confirmam, a luta começa nos dois aparelhos.
 4. **Rede (lockstep):** os dois celulares rodam a mesma simulação (60 quadros/s, só números inteiros)
@@ -56,11 +58,13 @@ Combinações: 👊+🦵 esquiva · 🛡️+⚡ quebra-combo · frente-frente co
 No PC (para testar): WASD + J K L I.
 
 ## Banco (SQLite)
-- `jogadores`: id, apelido (único), vitorias, derrotas, timestamps
+- `jogadores`: id, apelido (único), pin_hash (nulo para contas antigas), vitorias, derrotas, timestamps
 - `salas`: id, codigo (único), host_id, convidado_id, lutador_host, lutador_convidado, status (`esperando|escolhendo|lutando|encerrada`), timestamps
 - `partidas`: id, sala_id, vencedor_id, perdedor_id, rounds_vencedor, rounds_perdedor, resultado_host, resultado_convidado (json), timestamps
 
 ## Tecnologia
+
+Atualização aprovada em 11/10/2026: laboratório 3D separado em `/laboratorio/3d`, com `@babylonjs/core`, `@babylonjs/loaders` e esbuild autorizados pelo usuário. Preparação local por `npm ci` e `npm run build:3d`; bundle servido pelo próprio projeto, sem npm no servidor. A simulação continua sendo `ko-sim.js`. Modelos finais de Pipoca e Uivo ainda pendentes; contrato e referências em `art/premium/modelos-3d/`. O laboratório não substitui as partidas atuais nem altera o ranking.
 - Laravel 12, PHP 8.2+, SQLite — igual à YM. Tempo real por relay próprio (`ko:relay`), sem dependência nova.
 - Front sem build: Blade + `public/js/ko-sim.js` (motor), `ko-arte.js` (desenho), `ko.js` (telas, controles, rede). Canvas 2D puro.
   Sem Phaser, sem Vite, sem npm no servidor.
@@ -117,4 +121,14 @@ Leva 6 pronta (elenco completo, 16 lutadores): Truque (troca na fumaça; cartola
 ## Fora da primeira versão
 Os 16 lutadores entraram em levas; todos prontos.
 Rollback netcode (trocar o lockstep se o atraso no 4G incomodar), modo equipe 3x3 estilo KOF,
-mais lutadores, som, modo local 2 jogadores no mesmo celular, contas com senha.
+mais lutadores, modo local 2 jogadores no mesmo celular, recuperação de conta sem o navegador original.
+
+## Revisão de confiabilidade e mobile
+
+- PIN de exatamente 4 dígitos aprovado; migração aditiva sem apagar jogadores ou ranking.
+- Analógico visual, áreas de toque ampliadas e feedback imediato nos formulários.
+- Aviso de rotação apenas durante a luta; espera e seleção utilizáveis em pé.
+- Docker para Render: Apache e relay supervisionados, `/ws` encaminhado na mesma porta pública.
+- Mensagens vinculadas à partida, limites no reenvio, hash do estado completo e confirmação visível do ranking.
+- Vozes originais sintetizadas: perfis próprios e frases para especial, Super e Golpe Final.
+- Publicação e testes em aparelhos físicos continuam necessários; configuração Docker não foi executada neste ambiente Windows.

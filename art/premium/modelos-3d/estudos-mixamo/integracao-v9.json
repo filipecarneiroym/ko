@@ -1,0 +1,59 @@
+{
+  "aprovadoFinal": false,
+  "caminho": "public/modelos/estudos/pipoca-marcha-v9.glb",
+  "bytes": 1450712,
+  "sha256": "022c47f17039bb6d2835293db4ffa5bd8e1294d4649e1fc411b974fbd7a8286a",
+  "clips": 31,
+  "substituidos": [
+    "parado",
+    "p1",
+    "p2",
+    "defesa",
+    "dano",
+    "andando"
+  ],
+  "marcha": {
+    "clip": "andando",
+    "distanciaCiclo": 1.3125,
+    "duracaoQuadros": 12,
+    "apoioQuadros": 6,
+    "excursao": 0.328125,
+    "alturaBalanco": 0.08,
+    "amostragemQuadros": 0.5,
+    "velocidadeReferencia": 0.109375,
+    "fase": "distancia-horizontal-assinada",
+    "personagem": "pipoca"
+  },
+  "preservados": [
+    "corrida",
+    "agachado",
+    "pulo",
+    "pousando",
+    "defesaBaixa",
+    "caido",
+    "levantando",
+    "rolando",
+    "recuo",
+    "quebra",
+    "agarrando",
+    "agarrado",
+    "tonto",
+    "vitoria",
+    "derrotado",
+    "final",
+    "vitimaFinal",
+    "k1",
+    "k2",
+    "cp",
+    "ck",
+    "ap",
+    "ak",
+    "esp",
+    "sup"
+  ],
+  "limites": [
+    "Arte provisória com pesos rígidos.",
+    "Os 25 clips restantes, incluindo corrida, permanecem em revisão.",
+    "Passada por distância validada separadamente no importador; transições de entrada e saída exigem inspeção."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "lote": 7,
+  "personagens": [
+    {
+      "id": "brasa",
+      "arquivo": "brasa-v1.png",
+      "prompt": "Original K.O fighting game ONLY BRASA character cutout. Reference 1 STYLE only premium stylized 3D sculpted forms expressive face detailed game materials gold key light violet rim. Adult HUMAN Brazilian female former firefighter fighter, fair warm skin, powerful athletic build, vivid red-orange hair tied back beneath a RED firefighter helmet, determined friendly expressive face. Practical full protective TAN GOLD FIREFIGHTER COAT and matching trousers with WHITE AND YELLOW reflective bands, dark BLACK work boots, protective brown gloves. Signature prop: a RED FIRE EXTINGUISHER held firmly by handle in one hand beside hip, short black hose and nozzle clearly readable and attached, other hand raised in fighting guard. Compact folded silver rescue ladder strapped vertically to back, not blocking face. Dynamic strong three-quarter facing right combat stance knees flexed. No flames hiding character, no weapon, family friendly original fighter. Full body helmet entire ladder extinguisher hands boots visible with generous transparent margin. Premium stylized fabric seams reflective strips metal and leather not photorealistic not plastic toy. TRUE transparent alpha background, no floor scene backdrop fog glow cloud text logos watermark or other people. Character concept art for ensemble composition not a playable model."
+    },
+    {
+      "id": "mare",
+      "arquivo": "mare-v1.png",
+      "prompt": "Original K.O fighting game ONLY MARÉ character cutout. Reference 1 STYLE only premium stylized 3D sculpted forms expressive appealing face detailed game materials gold key light violet rim. Adult HUMAN Brazilian male surfer fighter, warm deeply suntanned skin, lean broad-shouldered athletic build, tousled medium-length GOLDEN BLOND hair, confident easygoing grin and lively eyes. Bare chest, comfortable TURQUOISE knee-length board shorts with small YELLOW tropical flower pattern, white waistband and drawstring, barefoot. Signature prop SINGLE ORANGE SURFBOARD with a clean WHITE lengthwise stripe, held upright diagonally beside his rear shoulder by one hand, front hand in open martial arts guard. Entire board including rounded nose and tail fully within frame, not cut off; no text or brand on board. Dynamic surfer balance stance, knees flexed, three-quarter facing left, clear two arms two legs natural hands. Modest practical shorts not briefs, original family friendly playful fighter. Full body hair hands both feet entire surfboard with generous transparent margins. Premium stylized skin fabric and glossy board materials, not photorealistic not plastic toy. TRUE transparent alpha background, no floor ocean backdrop water aura cloud scenery text logo watermark or other people. Character concept key art for ensemble poster not a playable model."
+    }
+  ]
+}

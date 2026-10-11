@@ -1,0 +1,51 @@
+{
+  "aprovadoFinal": false,
+  "caminho": "public/modelos/estudos/pipoca-jab-v5.glb",
+  "bytes": 1343024,
+  "sha256": "d2420fbc6361377e148f95df2828189f899535f19a80fb0d3ae3ba27d1cd9501",
+  "clips": 31,
+  "substituidos": [
+    "parado",
+    "p1"
+  ],
+  "janelaContato": [
+    3,
+    5
+  ],
+  "duracaoJabQuadros": 12,
+  "preservados": [
+    "andando",
+    "corrida",
+    "agachado",
+    "pulo",
+    "pousando",
+    "defesa",
+    "defesaBaixa",
+    "dano",
+    "caido",
+    "levantando",
+    "rolando",
+    "recuo",
+    "quebra",
+    "agarrando",
+    "agarrado",
+    "tonto",
+    "vitoria",
+    "derrotado",
+    "final",
+    "vitimaFinal",
+    "p2",
+    "k1",
+    "k2",
+    "cp",
+    "ck",
+    "ap",
+    "ak",
+    "esp",
+    "sup"
+  ],
+  "limites": [
+    "Estudo visual; acabamento e demais movimentos continuam pendentes.",
+    "Validar alcance visual na arena."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "lote": 3,
+  "tipo": "Artes conceituais; não são modelos 3D",
+  "referenciaEstilo": "ginga-v1.png",
+  "personagens": [
+    {
+      "id": "vo-nena",
+      "arquivo": "vo-nena-v1.png"
+    },
+    {
+      "id": "vo-tiao",
+      "arquivo": "vo-tiao-v1.png"
+    }
+  ]
+}

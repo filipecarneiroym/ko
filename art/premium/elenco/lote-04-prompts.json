@@ -1,0 +1,16 @@
+{
+  "lote": 4,
+  "tipo": "Artes conceituais; não são modelos 3D",
+  "referenciaEstilo": "ginga-v1.png",
+  "personagens": [
+    {
+      "id": "kira",
+      "arquivo": "kira-v1.png",
+      "prompt": "Original fighting game K.O character key art. Reference image 1 is STYLE AND LIGHTING ONLY: premium stylized 3D sculpted forms, expressive appealing face, beautifully rendered game materials, warm golden key light and restrained violet rim; do not copy its male character. Create ONLY KIRA, an original adult HUMAN Brazilian female kickboxing fighter, warm medium brown skin, athletic muscular yet agile build with powerful legs and shoulders, expressive brown eyes, determined confident friendly face, dark brown hair in a high ponytail and RED athletic headband. Outfit faithful to game: RED sports top, loose BLACK KICKBOXING SHORTS reaching mid-thigh with white waistband and tasteful red side trim, BLUE padded boxing gloves, WHITE shin guards strapped securely to shins with feet bare. Proper practical fight sportswear, no underwear silhouette, no sexual posing. Dynamic recognizable kickboxing guard, both gloves up near face, one knee slightly lifted ready for a kick, torso three-quarter facing right; balanced readable stance, full body including ponytail both gloves shin guards and both bare feet fully visible with generous transparent margin all around. Keep anatomy natural, exactly two arms two legs. Premium stylized 3D game character art with detailed fabric folds and leather, not photorealistic, not flat illustration not plastic doll. One fighter only, TRUE transparent alpha background, no floor no backdrop no fog or glow cloud no scenery no text logo watermark or extra objects. This is character concept art for later ensemble composition, not a playable model."
+    },
+    {
+      "id": "toco",
+      "arquivo": "toco-v1.png"
+    }
+  ]
+}

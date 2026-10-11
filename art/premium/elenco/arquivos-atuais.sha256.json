@@ -1,0 +1,128 @@
+[
+  {
+    "id": "pipoca",
+    "arte": "pipoca-v1.png",
+    "sha256": "aaac8e7e1bf7067529ef02828d225ab41b6b915bf33c899adc19a4cf8ef87bec",
+    "webp": "pipoca-v1.webp",
+    "sha256Webp": "208b9db3142b9e13a46efe7bb607c188b0dd4007618bdd047d42a6c2f96f2dda"
+  },
+  {
+    "id": "uivo",
+    "arte": "uivo-v1.png",
+    "sha256": "1dcb4ad14ab2dbbb12a3a924da49b7d4cf57cb067ffebc6d31185a928036e6de",
+    "webp": "uivo-v1.webp",
+    "sha256Webp": "9ed9fa5b036794943254af89986dce29c62d3eaba6d48a7f47f3c9de44e98536"
+  },
+  {
+    "id": "maromba",
+    "arte": "maromba-v3.png",
+    "sha256": "d2f47e2dbdcb38387fdee4cd873855bc454f08e35a069e777e999fcf4c078ef0",
+    "webp": "maromba-v3.webp",
+    "sha256Webp": "414d52fef858f2fa775fd178fd2380838e8f33f95b53f1f93ca0f81baa57af03"
+  },
+  {
+    "id": "ginga",
+    "arte": "ginga-v1.png",
+    "sha256": "9bad2de74e5f029e9af281a6c8c092e9069819373ee804f48da3534f2f6adc2d",
+    "webp": "ginga-v1.webp",
+    "sha256Webp": "44fe51e01f03bfa1c5c0d2eaca4109f5bf26a2d38bae3c26c81a9b5465df3882"
+  },
+  {
+    "id": "vo-nena",
+    "arte": "vo-nena-v1.png",
+    "sha256": "cbedf45a2917a231ff1b6c27d8810ff8546ebc435584c0f5d268d7a7af640f0b",
+    "webp": "vo-nena-v1.webp",
+    "sha256Webp": "986e637556c7a7e504dee0d686074aeef8f6c9d467d4a8a6d1751db4f6423731"
+  },
+  {
+    "id": "vo-tiao",
+    "arte": "vo-tiao-v1.png",
+    "sha256": "ab9f6c5b21454bbaef94784688084a070ff79ed079e557e30c37ad0fb308200d",
+    "webp": "vo-tiao-v1.webp",
+    "sha256Webp": "2cb08be097a28583865f9e3da3f8b828584d62610c882c399ed684f3ce3c408c"
+  },
+  {
+    "id": "kira",
+    "arte": "kira-v1.png",
+    "sha256": "20cb072339bb6aa380742538e3fc4c6b560245f6c17609e28822526351fafa57",
+    "webp": "kira-v1.webp",
+    "sha256Webp": "a3da16343e6e12467b458a53bcf781f78eb2dc50c1ca56bf5d6861caeea1d130"
+  },
+  {
+    "id": "toco",
+    "arte": "toco-v2.png",
+    "sha256": "3479fb8aba89bc62656a9de298288a8d850743ad705ba19dc5b32abee04b5b42",
+    "webp": "toco-v2.webp",
+    "sha256Webp": "8ebb255c7c293cd197c2a079266da07e3a8dccbd5c4fccc6d1a489e6d8372710"
+  },
+  {
+    "id": "nix",
+    "arte": "nix-v1.png",
+    "sha256": "deb010caece67ddad8090f29ff4ab66ec1dea3ec6478b0937cc755a4c4096c4e",
+    "webp": "nix-v1.webp",
+    "sha256Webp": "ab36a4a16b7f9dcdd3f84e50ee8afa70af88c2fe4c90c528953446c115ba8042"
+  },
+  {
+    "id": "eco",
+    "arte": "eco-v2.png",
+    "sha256": "8e48944f335cc1590dfa5faa8f86ed0fd2196481b7d3d2fca9c023cb6e2e6355",
+    "webp": "eco-v2.webp",
+    "sha256Webp": "2e56256f19cefa5607c3f3fccea5a6b2bfe2014f1aa93646016072f20d98a84e"
+  },
+  {
+    "id": "volt",
+    "arte": "volt-v2.png",
+    "sha256": "4b4c3511550e7e5d51d1242727f2411b5a3f60f23a307c9459a138d0eabd98fe",
+    "webp": "volt-v2.webp",
+    "sha256Webp": "0a7d0fcc240d39115a444e910956fc6830ec78a14de82eb2a086316ec071d5bf"
+  },
+  {
+    "id": "kilo",
+    "arte": "kilo-v3.png",
+    "sha256": "9c5d1cf5e3bf2c91a51afac320ed6c5e2f5433247994f94b91b6bfeb269895dc",
+    "webp": "kilo-v3.webp",
+    "sha256Webp": "40de21f51c7681270979d5e044e375b8d8399277d1e3739ab893fdb1b974a1ca"
+  },
+  {
+    "id": "brasa",
+    "arte": "brasa-v1.png",
+    "sha256": "7304a1f6311e207437e6f038d5a30f805727eb77564148ebfc8c871c0566e318",
+    "webp": "brasa-v1.webp",
+    "sha256Webp": "6ddec2303d0712ed282b32184ab47aecf5b106cb60193b9db8fe20e40f4ef642"
+  },
+  {
+    "id": "mare",
+    "arte": "mare-v2.png",
+    "sha256": "e98c6762f845603d9fc2e796bb7605a8e8310037dbb145cf51a05faf39ad0768",
+    "webp": "mare-v2.webp",
+    "sha256Webp": "145b97b401310a5dde4a5567a7099a464bcba21f327dfdc54256667ff57aca28"
+  },
+  {
+    "id": "truque",
+    "arte": "truque-v2.png",
+    "sha256": "980235d62d200d168ca71aac68560fb542456bee42b0021d608b53d1fbf6b76d",
+    "webp": "truque-v2.webp",
+    "sha256Webp": "635334992cc198ab119eeb9a838334714a3f90cd1f9b0f42ef7950658b0a4179"
+  },
+  {
+    "id": "fossil",
+    "arte": "fossil-v3.png",
+    "sha256": "23e777abfca658996ff94c290c47aa769d414c5ca9a99bc8fa245a0049d69509",
+    "webp": "fossil-v3.webp",
+    "sha256Webp": "da4742ead487341fa62dbc28b7b300030eface71970db627b5859167db0f86ab"
+  },
+  {
+    "id": "forja",
+    "arte": "forja-v1.png",
+    "sha256": "f61726fabafd58f7142f5c82d170f680e5624db2f45ee462a4a9bd60670d3985",
+    "webp": "forja-v1.webp",
+    "sha256Webp": "c75d867e4a33d9ff95b35a64fd887b4392720e48c97ae7e315f4a0fb22af8d0a"
+  },
+  {
+    "id": "borun",
+    "arte": "borun-v1.png",
+    "sha256": "9a834e9b5eab1807b774a92994747061fc51fe27953085669c4c4aacdd5f4e50",
+    "webp": "borun-v1.webp",
+    "sha256Webp": "3f9d942313cc481ac8b513e5acc94d7ec1ecaf79fd5e681c5909a11c8b6781b0"
+  }
+]

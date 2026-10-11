@@ -1,0 +1,285 @@
+{
+  "versao": 1,
+  "status": "Estudos de geometria e movimento; sem aprovação artística final.",
+  "aprovadoFinal": false,
+  "modelos": [
+    {
+      "id": "pipoca",
+      "caminho": "public/modelos/blockout/pipoca-v1.glb",
+      "sha256": "72598bd2524d826497b03df443b2e39e8008b84b2bd01d5260e665745ca78f6d",
+      "bytes": 1246500,
+      "triangulos": 24008,
+      "vertices": 16458,
+      "materiais": 6,
+      "ossos": 20,
+      "clips": [
+        {
+          "nome": "parado",
+          "duracaoQuadros": 72
+        },
+        {
+          "nome": "andando",
+          "duracaoQuadros": 40
+        },
+        {
+          "nome": "corrida",
+          "duracaoQuadros": 24
+        },
+        {
+          "nome": "agachado",
+          "duracaoQuadros": 60
+        },
+        {
+          "nome": "pulo",
+          "duracaoQuadros": 44
+        },
+        {
+          "nome": "pousando",
+          "duracaoQuadros": 4
+        },
+        {
+          "nome": "defesa",
+          "duracaoQuadros": 60
+        },
+        {
+          "nome": "defesaBaixa",
+          "duracaoQuadros": 60
+        },
+        {
+          "nome": "dano",
+          "duracaoQuadros": 30
+        },
+        {
+          "nome": "caido",
+          "duracaoQuadros": 46
+        },
+        {
+          "nome": "levantando",
+          "duracaoQuadros": 16
+        },
+        {
+          "nome": "rolando",
+          "duracaoQuadros": 24
+        },
+        {
+          "nome": "recuo",
+          "duracaoQuadros": 18
+        },
+        {
+          "nome": "quebra",
+          "duracaoQuadros": 16
+        },
+        {
+          "nome": "agarrando",
+          "duracaoQuadros": 30
+        },
+        {
+          "nome": "agarrado",
+          "duracaoQuadros": 30
+        },
+        {
+          "nome": "tonto",
+          "duracaoQuadros": 60
+        },
+        {
+          "nome": "vitoria",
+          "duracaoQuadros": 100
+        },
+        {
+          "nome": "derrotado",
+          "duracaoQuadros": 100
+        },
+        {
+          "nome": "final",
+          "duracaoQuadros": 200
+        },
+        {
+          "nome": "vitimaFinal",
+          "duracaoQuadros": 200
+        },
+        {
+          "nome": "p1",
+          "duracaoQuadros": 12
+        },
+        {
+          "nome": "p2",
+          "duracaoQuadros": 18
+        },
+        {
+          "nome": "k1",
+          "duracaoQuadros": 24
+        },
+        {
+          "nome": "k2",
+          "duracaoQuadros": 28
+        },
+        {
+          "nome": "cp",
+          "duracaoQuadros": 10
+        },
+        {
+          "nome": "ck",
+          "duracaoQuadros": 26
+        },
+        {
+          "nome": "ap",
+          "duracaoQuadros": 20
+        },
+        {
+          "nome": "ak",
+          "duracaoQuadros": 22
+        },
+        {
+          "nome": "esp",
+          "duracaoQuadros": 30
+        },
+        {
+          "nome": "sup",
+          "duracaoQuadros": 62
+        }
+      ],
+      "referencia": "art/premium/modelos-3d/referencias/pipoca-referencia-v1.png",
+      "sha256Referencia": "82bef96091a57f7c71cf49e9bca0e2aff16c66f19b5c371493680e18272fa9e7",
+      "aprovadoFinal": false
+    },
+    {
+      "id": "uivo",
+      "caminho": "public/modelos/blockout/uivo-v1.glb",
+      "sha256": "1bd8a185d85d56cb759216581a3e84ddf4832658f0d28b6b3fdf2b86336bd023",
+      "bytes": 1350376,
+      "triangulos": 24972,
+      "vertices": 18414,
+      "materiais": 8,
+      "ossos": 20,
+      "clips": [
+        {
+          "nome": "parado",
+          "duracaoQuadros": 72
+        },
+        {
+          "nome": "andando",
+          "duracaoQuadros": 40
+        },
+        {
+          "nome": "corrida",
+          "duracaoQuadros": 24
+        },
+        {
+          "nome": "agachado",
+          "duracaoQuadros": 60
+        },
+        {
+          "nome": "pulo",
+          "duracaoQuadros": 44
+        },
+        {
+          "nome": "pousando",
+          "duracaoQuadros": 4
+        },
+        {
+          "nome": "defesa",
+          "duracaoQuadros": 60
+        },
+        {
+          "nome": "defesaBaixa",
+          "duracaoQuadros": 60
+        },
+        {
+          "nome": "dano",
+          "duracaoQuadros": 30
+        },
+        {
+          "nome": "caido",
+          "duracaoQuadros": 46
+        },
+        {
+          "nome": "levantando",
+          "duracaoQuadros": 16
+        },
+        {
+          "nome": "rolando",
+          "duracaoQuadros": 24
+        },
+        {
+          "nome": "recuo",
+          "duracaoQuadros": 18
+        },
+        {
+          "nome": "quebra",
+          "duracaoQuadros": 16
+        },
+        {
+          "nome": "agarrando",
+          "duracaoQuadros": 30
+        },
+        {
+          "nome": "agarrado",
+          "duracaoQuadros": 30
+        },
+        {
+          "nome": "tonto",
+          "duracaoQuadros": 60
+        },
+        {
+          "nome": "vitoria",
+          "duracaoQuadros": 100
+        },
+        {
+          "nome": "derrotado",
+          "duracaoQuadros": 100
+        },
+        {
+          "nome": "final",
+          "duracaoQuadros": 200
+        },
+        {
+          "nome": "vitimaFinal",
+          "duracaoQuadros": 200
+        },
+        {
+          "nome": "p1",
+          "duracaoQuadros": 14
+        },
+        {
+          "nome": "p2",
+          "duracaoQuadros": 22
+        },
+        {
+          "nome": "k1",
+          "duracaoQuadros": 24
+        },
+        {
+          "nome": "k2",
+          "duracaoQuadros": 32
+        },
+        {
+          "nome": "cp",
+          "duracaoQuadros": 12
+        },
+        {
+          "nome": "ck",
+          "duracaoQuadros": 30
+        },
+        {
+          "nome": "ap",
+          "duracaoQuadros": 22
+        },
+        {
+          "nome": "ak",
+          "duracaoQuadros": 24
+        },
+        {
+          "nome": "esp",
+          "duracaoQuadros": 40
+        },
+        {
+          "nome": "sup",
+          "duracaoQuadros": 64
+        }
+      ],
+      "referencia": "art/premium/modelos-3d/referencias/uivo-referencia-v1.png",
+      "sha256Referencia": "d9800ec7b447a481195499c8ed50157b6740bd75845e5634713f1e1740327e14",
+      "aprovadoFinal": false
+    }
+  ]
+}

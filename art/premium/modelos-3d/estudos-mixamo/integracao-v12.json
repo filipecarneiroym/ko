@@ -1,0 +1,100 @@
+{
+  "aprovadoFinal": false,
+  "caminho": "public/modelos/estudos/pipoca-chutes-v12.glb",
+  "bytes": 1535468,
+  "sha256": "5196333abc6cc518e01c310a7a6380dc458f36e2355c632237c59f949af7f6c0",
+  "clips": 31,
+  "substituidos": [
+    "parado",
+    "p1",
+    "p2",
+    "defesa",
+    "dano",
+    "andando",
+    "k1",
+    "k2"
+  ],
+  "chutes": {
+    "k1": {
+      "ladoJanelas": [
+        "E",
+        "D"
+      ],
+      "alturaJanelas": [
+        "media",
+        "media"
+      ],
+      "duracaoQuadros": 24,
+      "apoio": "Perna oposta ancorada durante a extensão",
+      "impulso": "Quadril transladado e girado dentro da raiz"
+    },
+    "k2": {
+      "ladoJanelas": [
+        "E"
+      ],
+      "alturaJanelas": [
+        "alta"
+      ],
+      "duracaoQuadros": 28,
+      "apoio": "Perna oposta ancorada durante a extensão",
+      "impulso": "Quadril transladado e girado dentro da raiz"
+    }
+  },
+  "guardaCompletaNasExtremidades": true,
+  "golpes": [
+    {
+      "nome": "k1",
+      "duracaoQuadros": 24,
+      "janelas": [
+        [
+          6,
+          8
+        ],
+        [
+          12,
+          14
+        ]
+      ]
+    },
+    {
+      "nome": "k2",
+      "duracaoQuadros": 28,
+      "janelas": [
+        [
+          7,
+          10
+        ]
+      ]
+    }
+  ],
+  "preservados": [
+    "corrida",
+    "agachado",
+    "pulo",
+    "pousando",
+    "defesaBaixa",
+    "caido",
+    "levantando",
+    "rolando",
+    "recuo",
+    "quebra",
+    "agarrando",
+    "agarrado",
+    "tonto",
+    "vitoria",
+    "derrotado",
+    "final",
+    "vitimaFinal",
+    "cp",
+    "ck",
+    "ap",
+    "ak",
+    "esp",
+    "sup"
+  ],
+  "limites": [
+    "Arte provisória e pesos rígidos.",
+    "Alcance e alturas validados no importador; leitura visual ainda pendente.",
+    "Corrida e demais clips permanecem em revisão."
+  ]
+}

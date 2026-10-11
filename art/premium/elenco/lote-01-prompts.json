@@ -1,0 +1,16 @@
+{
+  "lote": 1,
+  "tipo": "Artes conceituais com transparência; não são modelos 3D",
+  "personagens": [
+    {
+      "id": "pipoca",
+      "arquivo": "pipoca-v1.png",
+      "prompt": "Create a single full-body character asset of Pipoca for the original fighting game K.O. Reference image 1 defines her identity and art style: ONLY the white rabbit on the LEFT, do not include wolf or arena. Adult athletic anthropomorphic female white rabbit boxer, long upright ears with pink interior, expressive amber eyes, distinctive friendly determined face, sculpted white fur tufts, blue sports top and blue boxing shorts with white waistband and white side stripes, red leather boxing gloves, cream ankle wraps, rabbit feet and small white tail. Preserve those costume colors exactly. Premium stylized 3D game concept rendering, beautiful sculpted anatomy, hand-painted material accents, readable strong silhouette, warm golden key light and soft violet rim. Energetic boxing fighting guard, three-quarter view facing slightly right, one glove raised in guard and other forward, knees flexed, balanced feet, no extreme perspective, no overlap hiding face. Entire figure including ears, gloves and both feet with generous transparent margin on all edges. Transparent background, no floor, no backdrop, no scenery, no extra character, no text no watermark no logo. This is a clean character key-art cutout for later ensemble poster composition, not a playable 3D model."
+    },
+    {
+      "id": "uivo",
+      "arquivo": "uivo-v1.png",
+      "prompt": "Create a single full-body character asset of Uivo for the original fighting game K.O. Reference image 1 defines his identity and art style: ONLY the gray wolf on the RIGHT, do not include rabbit or arena. Adult tall athletic anthropomorphic male gray wolf martial artist, pointed upright wolf ears, distinctive angular wolf muzzle with light fur, amber eyes, sculpted layered gray fur mane, friendly fierce confident face, indigo sleeveless martial arts gi vest with fabric belt, dark indigo loose pants, cream handwraps, bare wolf paw feet, long gray wolf tail. Preserve clothing and colors from reference. Premium stylized 3D game concept rendering, powerful but athletic anatomy, detailed sculpted fur clumps, fabric folds and hand-painted material accents. Warm golden key light and soft violet rim, clear silhouette, no realistic strand fur overload. Energetic martial arts fighting guard, three-quarter view facing slightly left, front hand open in guard and rear fist raised, knees bent balanced feet. Entire figure including ears hands feet and tail with generous transparent margins on all edges. Transparent background, no floor no backdrop no scenery, no other character, no effects obscuring body, no text logo or watermark. This is character key-art cutout for future ensemble poster composition, not a playable 3D model."
+    }
+  ]
+}

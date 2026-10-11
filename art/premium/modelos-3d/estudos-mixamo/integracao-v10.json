@@ -1,0 +1,119 @@
+{
+  "aprovadoFinal": false,
+  "caminho": "public/modelos/estudos/pipoca-corpo-v10.glb",
+  "bytes": 1263204,
+  "sha256": "5957e10e18b28f7bb1f02f0bebe1ecfa154936d7f89b80c7f109592bb408198c",
+  "clips": 31,
+  "ossos": 20,
+  "restPosePreservada": true,
+  "animacoesPreservadas": true,
+  "sha256ClipsPreservados": "2e712beeaad489f2abe0597831162f1329c5cbe48e47357ba24d09fc614ff837",
+  "sha256RigPreservado": "6a5126ba6037916ec46498f5c779ef0e5d212d1ad5d2d68291fe417ea0077aa2",
+  "corpo": {
+    "versao": 2,
+    "superficies": [
+      {
+        "nome": "pele-torso",
+        "material": 0,
+        "aneis": 11,
+        "vertices": 266,
+        "triangulos": 528,
+        "tampas": true
+      },
+      {
+        "nome": "top",
+        "material": 1,
+        "aneis": 4,
+        "vertices": 96,
+        "triangulos": 144,
+        "tampas": false
+      },
+      {
+        "nome": "faixa-cintura",
+        "material": 0,
+        "aneis": 2,
+        "vertices": 48,
+        "triangulos": 48,
+        "tampas": false
+      },
+      {
+        "nome": "pele-braco-E",
+        "material": 0,
+        "aneis": 9,
+        "vertices": 216,
+        "triangulos": 384,
+        "tampas": false
+      },
+      {
+        "nome": "pele-perna-E",
+        "material": 0,
+        "aneis": 10,
+        "vertices": 240,
+        "triangulos": 432,
+        "tampas": false
+      },
+      {
+        "nome": "barra-short-E",
+        "material": 0,
+        "aneis": 2,
+        "vertices": 48,
+        "triangulos": 48,
+        "tampas": false
+      },
+      {
+        "nome": "pele-braco-D",
+        "material": 0,
+        "aneis": 9,
+        "vertices": 216,
+        "triangulos": 384,
+        "tampas": false
+      },
+      {
+        "nome": "pele-perna-D",
+        "material": 0,
+        "aneis": 10,
+        "vertices": 240,
+        "triangulos": 432,
+        "tampas": false
+      },
+      {
+        "nome": "barra-short-D",
+        "material": 0,
+        "aneis": 2,
+        "vertices": 48,
+        "triangulos": 48,
+        "tampas": false
+      },
+      {
+        "nome": "short-continuo",
+        "material": 1,
+        "aneis": 9,
+        "vertices": 216,
+        "triangulos": 362,
+        "tampas": false,
+        "uniao": "Cintura e pernas compartilham vértices; apenas cintura e duas barras permanecem abertas."
+      }
+    ],
+    "verticesMistos": 960,
+    "rigPreservado": true,
+    "partesPreservadas": [
+      "cabeca",
+      "mandibula",
+      "orelha_E",
+      "orelha_D",
+      "mao_E",
+      "mao_D",
+      "pe_E",
+      "pe_D",
+      "cauda"
+    ],
+    "tecnica": "Lofts com anéis compartilhados, normais suaves e até duas influências por vértice."
+  },
+  "vertices": 13102,
+  "triangulos": 19610,
+  "limites": [
+    "Estudo de superfície corporal; ainda requer revisão artística e de dobras.",
+    "Rosto, luvas, pés, orelhas e cauda anteriores preservados.",
+    "Uniões sob roupas e ombros exigem inspeção em todas as poses; sem pelagem ou tecido texturizado."
+  ]
+}

@@ -12,8 +12,11 @@
         <input id="apelido" name="apelido" value="{{ old('apelido') }}" maxlength="16" minlength="2"
                autocomplete="nickname" autocapitalize="words" required autofocus placeholder="Ex.: Raio da Vovó">
         @error('apelido') <p class="erro" role="alert">{{ $message }}</p> @enderror
-        <button class="botao botao-grande">Lutar!</button>
-        <p class="dica">Sem senha: este celular lembra de você.</p>
+        <label for="pin">PIN de 4 dígitos</label>
+        <input id="pin" name="pin" type="password" inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" autocomplete="current-password" required placeholder="••••" aria-describedby="pin-ajuda">
+        @error('pin') <p class="erro" role="alert">{{ $message }}</p> @enderror
+        <button class="botao botao-grande">Entrar e jogar</button>
+        <p class="dica" id="pin-ajuda">Primeira vez? Escolha um apelido e crie seu PIN. Já joga? Use o mesmo apelido e PIN em qualquer aparelho.</p>
     </form>
 </main>
 @endsection

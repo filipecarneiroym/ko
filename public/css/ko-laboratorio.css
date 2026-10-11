@@ -1,0 +1,14 @@
+body.corpo-jogo{overflow-y:auto;height:auto;min-height:100dvh}
+.laboratorio{max-width:1100px;margin:auto;padding:16px;color:#fff}
+.laboratorio header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.laboratorio h1{font-size:1.5rem}.laboratorio p{line-height:1.5}
+#arena-3d{display:block;width:100%;height:min(65dvh,620px);min-height:220px;touch-action:none;background:#110d21;border-radius:16px}
+.laboratorio nav{display:flex;flex-wrap:wrap;gap:12px}
+.laboratorio button{min-height:48px;min-width:90px;touch-action:manipulation}
+.importar-modelo{margin-top:20px;padding:12px;border:1px solid #786998;border-radius:12px}
+.importar-modelo summary{cursor:pointer;min-height:44px;display:list-item}
+.importar-modelo label{display:block;margin:12px 0}.importar-modelo input{max-width:100%}
+.aviso-blockouts{padding:12px;border-left:3px solid #d4aa6a;background:#241d2e;color:#f4dfbc}
+#testar-blockouts{max-width:100%;padding:12px 16px;white-space:normal;background:#3b3450;color:#fff;border:1px solid #8a7c9e;border-radius:8px}
+.importar-modelo button:disabled,.importar-modelo input:disabled{opacity:.6;cursor:wait}
+#estado-modelos{overflow-wrap:anywhere;min-height:1.5em}

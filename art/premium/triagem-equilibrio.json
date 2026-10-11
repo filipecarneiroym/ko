@@ -1,0 +1,3240 @@
+{
+  "metodo": "16 lutadores, todos os pares, lados invertidos, bot difícil com sementes fixas, até 16000 quadros. Amostra pequena e dependente da estratégia do bot; não comprova equilíbrio humano.",
+  "total": 240,
+  "totais": {
+    "pipoca": {
+      "partidas": 30,
+      "vitorias": 12,
+      "derrotas": 18,
+      "empates": 0,
+      "incompletas": 0
+    },
+    "uivo": {
+      "partidas": 30,
+      "vitorias": 19,
+      "derrotas": 11,
+      "empates": 0,
+      "incompletas": 0
+    },
+    "maromba": {
+      "partidas": 30,
+      "vitorias": 13,
+      "derrotas": 17,
+      "empates": 0,
+      "incompletas": 0
+    },
+    "ginga": {
+      "partidas": 30,
+      "vitorias": 13,
+      "derrotas": 17,
+      "empates": 0,
+      "incompletas": 0
+    },
+    "vo-nena": {
+      "partidas": 30,
+      "vitorias": 17,
+      "derrotas": 13,
+      "empates": 0,
+      "incompletas": 0
+    },
+    "vo-tiao": {
+      "partidas": 30,
+      "vitorias": 4,
+      "derrotas": 26,
+      "empates": 0,
+      "incompletas": 0
+    },
+    "kira": {
+      "partidas": 30,
+      "vitorias": 22,
+      "derrotas": 8,
+      "empates": 0,
+      "incompletas": 0
+    },
+    "toco": {
+      "partidas": 30,
+      "vitorias": 7,
+      "derrotas": 23,
+      "empates": 0,
+      "incompletas": 0
+    },
+    "nix": {
+      "partidas": 30,
+      "vitorias": 13,
+      "derrotas": 17,
+      "empates": 0,
+      "incompletas": 0
+    },
+    "eco": {
+      "partidas": 30,
+      "vitorias": 16,
+      "derrotas": 14,
+      "empates": 0,
+      "incompletas": 0
+    },
+    "truque": {
+      "partidas": 30,
+      "vitorias": 20,
+      "derrotas": 10,
+      "empates": 0,
+      "incompletas": 0
+    },
+    "mare": {
+      "partidas": 30,
+      "vitorias": 19,
+      "derrotas": 11,
+      "empates": 0,
+      "incompletas": 0
+    },
+    "volt": {
+      "partidas": 30,
+      "vitorias": 22,
+      "derrotas": 8,
+      "empates": 0,
+      "incompletas": 0
+    },
+    "kilo": {
+      "partidas": 30,
+      "vitorias": 10,
+      "derrotas": 20,
+      "empates": 0,
+      "incompletas": 0
+    },
+    "brasa": {
+      "partidas": 30,
+      "vitorias": 19,
+      "derrotas": 11,
+      "empates": 0,
+      "incompletas": 0
+    },
+    "fossil": {
+      "partidas": 30,
+      "vitorias": 14,
+      "derrotas": 16,
+      "empates": 0,
+      "incompletas": 0
+    }
+  },
+  "partidas": [
+    {
+      "lutadores": [
+        "pipoca",
+        "uivo"
+      ],
+      "quadros": 3955,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "uivo",
+        "pipoca"
+      ],
+      "quadros": 6322,
+      "completa": true,
+      "vencedor": "pipoca",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "pipoca",
+        "maromba"
+      ],
+      "quadros": 4396,
+      "completa": true,
+      "vencedor": "maromba",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "maromba",
+        "pipoca"
+      ],
+      "quadros": 7201,
+      "completa": true,
+      "vencedor": "pipoca",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "pipoca",
+        "ginga"
+      ],
+      "quadros": 3844,
+      "completa": true,
+      "vencedor": "ginga",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "ginga",
+        "pipoca"
+      ],
+      "quadros": 4115,
+      "completa": true,
+      "vencedor": "pipoca",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "pipoca",
+        "vo-nena"
+      ],
+      "quadros": 4134,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-nena",
+        "pipoca"
+      ],
+      "quadros": 6711,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "pipoca",
+        "vo-tiao"
+      ],
+      "quadros": 4175,
+      "completa": true,
+      "vencedor": "vo-tiao",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-tiao",
+        "pipoca"
+      ],
+      "quadros": 5883,
+      "completa": true,
+      "vencedor": "pipoca",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "pipoca",
+        "kira"
+      ],
+      "quadros": 5600,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kira",
+        "pipoca"
+      ],
+      "quadros": 3416,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "pipoca",
+        "toco"
+      ],
+      "quadros": 4154,
+      "completa": true,
+      "vencedor": "pipoca",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "toco",
+        "pipoca"
+      ],
+      "quadros": 4243,
+      "completa": true,
+      "vencedor": "pipoca",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "pipoca",
+        "nix"
+      ],
+      "quadros": 3165,
+      "completa": true,
+      "vencedor": "nix",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "nix",
+        "pipoca"
+      ],
+      "quadros": 5774,
+      "completa": true,
+      "vencedor": "nix",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "pipoca",
+        "eco"
+      ],
+      "quadros": 4038,
+      "completa": true,
+      "vencedor": "pipoca",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "eco",
+        "pipoca"
+      ],
+      "quadros": 5647,
+      "completa": true,
+      "vencedor": "eco",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "pipoca",
+        "truque"
+      ],
+      "quadros": 6359,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "truque",
+        "pipoca"
+      ],
+      "quadros": 4048,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "pipoca",
+        "mare"
+      ],
+      "quadros": 3715,
+      "completa": true,
+      "vencedor": "pipoca",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "mare",
+        "pipoca"
+      ],
+      "quadros": 4352,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "pipoca",
+        "volt"
+      ],
+      "quadros": 3365,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "volt",
+        "pipoca"
+      ],
+      "quadros": 4472,
+      "completa": true,
+      "vencedor": "pipoca",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "pipoca",
+        "kilo"
+      ],
+      "quadros": 7162,
+      "completa": true,
+      "vencedor": "pipoca",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "kilo",
+        "pipoca"
+      ],
+      "quadros": 5070,
+      "completa": true,
+      "vencedor": "pipoca",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "pipoca",
+        "brasa"
+      ],
+      "quadros": 4421,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "brasa",
+        "pipoca"
+      ],
+      "quadros": 4411,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "pipoca",
+        "fossil"
+      ],
+      "quadros": 4142,
+      "completa": true,
+      "vencedor": "pipoca",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "fossil",
+        "pipoca"
+      ],
+      "quadros": 5217,
+      "completa": true,
+      "vencedor": "fossil",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "uivo",
+        "maromba"
+      ],
+      "quadros": 6237,
+      "completa": true,
+      "vencedor": "maromba",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "maromba",
+        "uivo"
+      ],
+      "quadros": 6166,
+      "completa": true,
+      "vencedor": "maromba",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "uivo",
+        "ginga"
+      ],
+      "quadros": 6151,
+      "completa": true,
+      "vencedor": "ginga",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "ginga",
+        "uivo"
+      ],
+      "quadros": 5135,
+      "completa": true,
+      "vencedor": "ginga",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "uivo",
+        "vo-nena"
+      ],
+      "quadros": 4766,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-nena",
+        "uivo"
+      ],
+      "quadros": 6451,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "uivo",
+        "vo-tiao"
+      ],
+      "quadros": 5140,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-tiao",
+        "uivo"
+      ],
+      "quadros": 4264,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "uivo",
+        "kira"
+      ],
+      "quadros": 3967,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "kira",
+        "uivo"
+      ],
+      "quadros": 6805,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "uivo",
+        "toco"
+      ],
+      "quadros": 3423,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "toco",
+        "uivo"
+      ],
+      "quadros": 5835,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "uivo",
+        "nix"
+      ],
+      "quadros": 3661,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "nix",
+        "uivo"
+      ],
+      "quadros": 3415,
+      "completa": true,
+      "vencedor": "nix",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "uivo",
+        "eco"
+      ],
+      "quadros": 3849,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "eco",
+        "uivo"
+      ],
+      "quadros": 5652,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "uivo",
+        "truque"
+      ],
+      "quadros": 3680,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "truque",
+        "uivo"
+      ],
+      "quadros": 7273,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "uivo",
+        "mare"
+      ],
+      "quadros": 6394,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "mare",
+        "uivo"
+      ],
+      "quadros": 4879,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "uivo",
+        "volt"
+      ],
+      "quadros": 3460,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "volt",
+        "uivo"
+      ],
+      "quadros": 7029,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "uivo",
+        "kilo"
+      ],
+      "quadros": 5721,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "kilo",
+        "uivo"
+      ],
+      "quadros": 4544,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "uivo",
+        "brasa"
+      ],
+      "quadros": 3923,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "brasa",
+        "uivo"
+      ],
+      "quadros": 4664,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "uivo",
+        "fossil"
+      ],
+      "quadros": 4194,
+      "completa": true,
+      "vencedor": "uivo",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "fossil",
+        "uivo"
+      ],
+      "quadros": 6667,
+      "completa": true,
+      "vencedor": "fossil",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "maromba",
+        "ginga"
+      ],
+      "quadros": 7434,
+      "completa": true,
+      "vencedor": "maromba",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "ginga",
+        "maromba"
+      ],
+      "quadros": 7220,
+      "completa": true,
+      "vencedor": "maromba",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "maromba",
+        "vo-nena"
+      ],
+      "quadros": 6873,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-nena",
+        "maromba"
+      ],
+      "quadros": 4783,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "maromba",
+        "vo-tiao"
+      ],
+      "quadros": 6341,
+      "completa": true,
+      "vencedor": "maromba",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-tiao",
+        "maromba"
+      ],
+      "quadros": 3791,
+      "completa": true,
+      "vencedor": "maromba",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "maromba",
+        "kira"
+      ],
+      "quadros": 5297,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kira",
+        "maromba"
+      ],
+      "quadros": 3786,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "maromba",
+        "toco"
+      ],
+      "quadros": 6307,
+      "completa": true,
+      "vencedor": "toco",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "toco",
+        "maromba"
+      ],
+      "quadros": 5468,
+      "completa": true,
+      "vencedor": "maromba",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "maromba",
+        "nix"
+      ],
+      "quadros": 6676,
+      "completa": true,
+      "vencedor": "nix",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "nix",
+        "maromba"
+      ],
+      "quadros": 3685,
+      "completa": true,
+      "vencedor": "nix",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "maromba",
+        "eco"
+      ],
+      "quadros": 6268,
+      "completa": true,
+      "vencedor": "maromba",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "eco",
+        "maromba"
+      ],
+      "quadros": 4988,
+      "completa": true,
+      "vencedor": "eco",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "maromba",
+        "truque"
+      ],
+      "quadros": 4689,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "truque",
+        "maromba"
+      ],
+      "quadros": 4357,
+      "completa": true,
+      "vencedor": "maromba",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "maromba",
+        "mare"
+      ],
+      "quadros": 7696,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "mare",
+        "maromba"
+      ],
+      "quadros": 7145,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "maromba",
+        "volt"
+      ],
+      "quadros": 3987,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "volt",
+        "maromba"
+      ],
+      "quadros": 5270,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "maromba",
+        "kilo"
+      ],
+      "quadros": 4287,
+      "completa": true,
+      "vencedor": "kilo",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kilo",
+        "maromba"
+      ],
+      "quadros": 5175,
+      "completa": true,
+      "vencedor": "kilo",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "maromba",
+        "brasa"
+      ],
+      "quadros": 6153,
+      "completa": true,
+      "vencedor": "maromba",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "brasa",
+        "maromba"
+      ],
+      "quadros": 4279,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "maromba",
+        "fossil"
+      ],
+      "quadros": 6751,
+      "completa": true,
+      "vencedor": "maromba",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "fossil",
+        "maromba"
+      ],
+      "quadros": 4347,
+      "completa": true,
+      "vencedor": "maromba",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "ginga",
+        "vo-nena"
+      ],
+      "quadros": 7195,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-nena",
+        "ginga"
+      ],
+      "quadros": 4083,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "ginga",
+        "vo-tiao"
+      ],
+      "quadros": 4790,
+      "completa": true,
+      "vencedor": "ginga",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-tiao",
+        "ginga"
+      ],
+      "quadros": 3947,
+      "completa": true,
+      "vencedor": "ginga",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "ginga",
+        "kira"
+      ],
+      "quadros": 7127,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kira",
+        "ginga"
+      ],
+      "quadros": 4675,
+      "completa": true,
+      "vencedor": "ginga",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "ginga",
+        "toco"
+      ],
+      "quadros": 4863,
+      "completa": true,
+      "vencedor": "ginga",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "toco",
+        "ginga"
+      ],
+      "quadros": 6350,
+      "completa": true,
+      "vencedor": "ginga",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "ginga",
+        "nix"
+      ],
+      "quadros": 5200,
+      "completa": true,
+      "vencedor": "ginga",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "nix",
+        "ginga"
+      ],
+      "quadros": 3699,
+      "completa": true,
+      "vencedor": "ginga",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "ginga",
+        "eco"
+      ],
+      "quadros": 7185,
+      "completa": true,
+      "vencedor": "eco",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "eco",
+        "ginga"
+      ],
+      "quadros": 6254,
+      "completa": true,
+      "vencedor": "eco",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "ginga",
+        "truque"
+      ],
+      "quadros": 6014,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "truque",
+        "ginga"
+      ],
+      "quadros": 4623,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "ginga",
+        "mare"
+      ],
+      "quadros": 4751,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "mare",
+        "ginga"
+      ],
+      "quadros": 4076,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "ginga",
+        "volt"
+      ],
+      "quadros": 6677,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "volt",
+        "ginga"
+      ],
+      "quadros": 4250,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "ginga",
+        "kilo"
+      ],
+      "quadros": 5030,
+      "completa": true,
+      "vencedor": "kilo",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kilo",
+        "ginga"
+      ],
+      "quadros": 7474,
+      "completa": true,
+      "vencedor": "ginga",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "ginga",
+        "brasa"
+      ],
+      "quadros": 4118,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "brasa",
+        "ginga"
+      ],
+      "quadros": 6216,
+      "completa": true,
+      "vencedor": "ginga",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "ginga",
+        "fossil"
+      ],
+      "quadros": 6657,
+      "completa": true,
+      "vencedor": "fossil",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "fossil",
+        "ginga"
+      ],
+      "quadros": 4480,
+      "completa": true,
+      "vencedor": "ginga",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-nena",
+        "vo-tiao"
+      ],
+      "quadros": 4038,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-tiao",
+        "vo-nena"
+      ],
+      "quadros": 3491,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-nena",
+        "kira"
+      ],
+      "quadros": 6694,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kira",
+        "vo-nena"
+      ],
+      "quadros": 6195,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-nena",
+        "toco"
+      ],
+      "quadros": 6646,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "toco",
+        "vo-nena"
+      ],
+      "quadros": 6797,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-nena",
+        "nix"
+      ],
+      "quadros": 6182,
+      "completa": true,
+      "vencedor": "nix",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "nix",
+        "vo-nena"
+      ],
+      "quadros": 3613,
+      "completa": true,
+      "vencedor": "nix",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-nena",
+        "eco"
+      ],
+      "quadros": 5471,
+      "completa": true,
+      "vencedor": "eco",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "eco",
+        "vo-nena"
+      ],
+      "quadros": 3867,
+      "completa": true,
+      "vencedor": "eco",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-nena",
+        "truque"
+      ],
+      "quadros": 6522,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "truque",
+        "vo-nena"
+      ],
+      "quadros": 4126,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-nena",
+        "mare"
+      ],
+      "quadros": 6232,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "mare",
+        "vo-nena"
+      ],
+      "quadros": 4657,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-nena",
+        "volt"
+      ],
+      "quadros": 5798,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "volt",
+        "vo-nena"
+      ],
+      "quadros": 5145,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-nena",
+        "kilo"
+      ],
+      "quadros": 5367,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "kilo",
+        "vo-nena"
+      ],
+      "quadros": 7074,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-nena",
+        "brasa"
+      ],
+      "quadros": 3969,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "brasa",
+        "vo-nena"
+      ],
+      "quadros": 5736,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-nena",
+        "fossil"
+      ],
+      "quadros": 4158,
+      "completa": true,
+      "vencedor": "vo-nena",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "fossil",
+        "vo-nena"
+      ],
+      "quadros": 4866,
+      "completa": true,
+      "vencedor": "fossil",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-tiao",
+        "kira"
+      ],
+      "quadros": 5016,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kira",
+        "vo-tiao"
+      ],
+      "quadros": 4794,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-tiao",
+        "toco"
+      ],
+      "quadros": 4144,
+      "completa": true,
+      "vencedor": "vo-tiao",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "toco",
+        "vo-tiao"
+      ],
+      "quadros": 5008,
+      "completa": true,
+      "vencedor": "toco",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-tiao",
+        "nix"
+      ],
+      "quadros": 3784,
+      "completa": true,
+      "vencedor": "vo-tiao",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "nix",
+        "vo-tiao"
+      ],
+      "quadros": 4373,
+      "completa": true,
+      "vencedor": "nix",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-tiao",
+        "eco"
+      ],
+      "quadros": 4997,
+      "completa": true,
+      "vencedor": "eco",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "eco",
+        "vo-tiao"
+      ],
+      "quadros": 3371,
+      "completa": true,
+      "vencedor": "eco",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-tiao",
+        "truque"
+      ],
+      "quadros": 3776,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "truque",
+        "vo-tiao"
+      ],
+      "quadros": 3897,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-tiao",
+        "mare"
+      ],
+      "quadros": 4790,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "mare",
+        "vo-tiao"
+      ],
+      "quadros": 3978,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-tiao",
+        "volt"
+      ],
+      "quadros": 3147,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "volt",
+        "vo-tiao"
+      ],
+      "quadros": 3728,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-tiao",
+        "kilo"
+      ],
+      "quadros": 4727,
+      "completa": true,
+      "vencedor": "kilo",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kilo",
+        "vo-tiao"
+      ],
+      "quadros": 5609,
+      "completa": true,
+      "vencedor": "kilo",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-tiao",
+        "brasa"
+      ],
+      "quadros": 3803,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "brasa",
+        "vo-tiao"
+      ],
+      "quadros": 4306,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "vo-tiao",
+        "fossil"
+      ],
+      "quadros": 4258,
+      "completa": true,
+      "vencedor": "fossil",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "fossil",
+        "vo-tiao"
+      ],
+      "quadros": 6984,
+      "completa": true,
+      "vencedor": "vo-tiao",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kira",
+        "toco"
+      ],
+      "quadros": 6575,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "toco",
+        "kira"
+      ],
+      "quadros": 6330,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kira",
+        "nix"
+      ],
+      "quadros": 6422,
+      "completa": true,
+      "vencedor": "nix",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "nix",
+        "kira"
+      ],
+      "quadros": 5426,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kira",
+        "eco"
+      ],
+      "quadros": 5446,
+      "completa": true,
+      "vencedor": "eco",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "eco",
+        "kira"
+      ],
+      "quadros": 4163,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kira",
+        "truque"
+      ],
+      "quadros": 7346,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "truque",
+        "kira"
+      ],
+      "quadros": 4106,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kira",
+        "mare"
+      ],
+      "quadros": 6951,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "mare",
+        "kira"
+      ],
+      "quadros": 5752,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kira",
+        "volt"
+      ],
+      "quadros": 4237,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "volt",
+        "kira"
+      ],
+      "quadros": 6183,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "kira",
+        "kilo"
+      ],
+      "quadros": 4905,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "kilo",
+        "kira"
+      ],
+      "quadros": 4021,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kira",
+        "brasa"
+      ],
+      "quadros": 4365,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "brasa",
+        "kira"
+      ],
+      "quadros": 5566,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kira",
+        "fossil"
+      ],
+      "quadros": 4143,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "fossil",
+        "kira"
+      ],
+      "quadros": 4761,
+      "completa": true,
+      "vencedor": "kira",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "toco",
+        "nix"
+      ],
+      "quadros": 6146,
+      "completa": true,
+      "vencedor": "toco",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "nix",
+        "toco"
+      ],
+      "quadros": 6203,
+      "completa": true,
+      "vencedor": "toco",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "toco",
+        "eco"
+      ],
+      "quadros": 7359,
+      "completa": true,
+      "vencedor": "eco",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "eco",
+        "toco"
+      ],
+      "quadros": 4081,
+      "completa": true,
+      "vencedor": "eco",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "toco",
+        "truque"
+      ],
+      "quadros": 6429,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "truque",
+        "toco"
+      ],
+      "quadros": 7098,
+      "completa": true,
+      "vencedor": "toco",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "toco",
+        "mare"
+      ],
+      "quadros": 6488,
+      "completa": true,
+      "vencedor": "toco",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "mare",
+        "toco"
+      ],
+      "quadros": 4484,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "toco",
+        "volt"
+      ],
+      "quadros": 4474,
+      "completa": true,
+      "vencedor": "toco",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "volt",
+        "toco"
+      ],
+      "quadros": 4859,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "toco",
+        "kilo"
+      ],
+      "quadros": 6998,
+      "completa": true,
+      "vencedor": "kilo",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kilo",
+        "toco"
+      ],
+      "quadros": 8539,
+      "completa": true,
+      "vencedor": "kilo",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "toco",
+        "brasa"
+      ],
+      "quadros": 4657,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "brasa",
+        "toco"
+      ],
+      "quadros": 4322,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "toco",
+        "fossil"
+      ],
+      "quadros": 4188,
+      "completa": true,
+      "vencedor": "fossil",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "fossil",
+        "toco"
+      ],
+      "quadros": 4298,
+      "completa": true,
+      "vencedor": "fossil",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "nix",
+        "eco"
+      ],
+      "quadros": 4014,
+      "completa": true,
+      "vencedor": "nix",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "eco",
+        "nix"
+      ],
+      "quadros": 5455,
+      "completa": true,
+      "vencedor": "eco",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "nix",
+        "truque"
+      ],
+      "quadros": 5893,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "truque",
+        "nix"
+      ],
+      "quadros": 5046,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "nix",
+        "mare"
+      ],
+      "quadros": 5619,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "mare",
+        "nix"
+      ],
+      "quadros": 5745,
+      "completa": true,
+      "vencedor": "nix",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "nix",
+        "volt"
+      ],
+      "quadros": 7431,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "volt",
+        "nix"
+      ],
+      "quadros": 3319,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "nix",
+        "kilo"
+      ],
+      "quadros": 5652,
+      "completa": true,
+      "vencedor": "kilo",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kilo",
+        "nix"
+      ],
+      "quadros": 6223,
+      "completa": true,
+      "vencedor": "nix",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "nix",
+        "brasa"
+      ],
+      "quadros": 6076,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "brasa",
+        "nix"
+      ],
+      "quadros": 5491,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "nix",
+        "fossil"
+      ],
+      "quadros": 3547,
+      "completa": true,
+      "vencedor": "nix",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "fossil",
+        "nix"
+      ],
+      "quadros": 4081,
+      "completa": true,
+      "vencedor": "fossil",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "eco",
+        "truque"
+      ],
+      "quadros": 6918,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "truque",
+        "eco"
+      ],
+      "quadros": 4209,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "eco",
+        "mare"
+      ],
+      "quadros": 5764,
+      "completa": true,
+      "vencedor": "eco",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "mare",
+        "eco"
+      ],
+      "quadros": 4499,
+      "completa": true,
+      "vencedor": "eco",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "eco",
+        "volt"
+      ],
+      "quadros": 6549,
+      "completa": true,
+      "vencedor": "eco",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "volt",
+        "eco"
+      ],
+      "quadros": 5970,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "eco",
+        "kilo"
+      ],
+      "quadros": 5857,
+      "completa": true,
+      "vencedor": "kilo",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kilo",
+        "eco"
+      ],
+      "quadros": 7452,
+      "completa": true,
+      "vencedor": "kilo",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "eco",
+        "brasa"
+      ],
+      "quadros": 4363,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "brasa",
+        "eco"
+      ],
+      "quadros": 3771,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "eco",
+        "fossil"
+      ],
+      "quadros": 4819,
+      "completa": true,
+      "vencedor": "fossil",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "fossil",
+        "eco"
+      ],
+      "quadros": 6374,
+      "completa": true,
+      "vencedor": "eco",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "truque",
+        "mare"
+      ],
+      "quadros": 4310,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "mare",
+        "truque"
+      ],
+      "quadros": 3905,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "truque",
+        "volt"
+      ],
+      "quadros": 4077,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "volt",
+        "truque"
+      ],
+      "quadros": 4990,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "truque",
+        "kilo"
+      ],
+      "quadros": 4556,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "kilo",
+        "truque"
+      ],
+      "quadros": 6824,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "truque",
+        "brasa"
+      ],
+      "quadros": 6143,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "brasa",
+        "truque"
+      ],
+      "quadros": 7021,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "truque",
+        "fossil"
+      ],
+      "quadros": 6286,
+      "completa": true,
+      "vencedor": "truque",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "fossil",
+        "truque"
+      ],
+      "quadros": 9532,
+      "completa": true,
+      "vencedor": "fossil",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "mare",
+        "volt"
+      ],
+      "quadros": 5794,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "volt",
+        "mare"
+      ],
+      "quadros": 5895,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "mare",
+        "kilo"
+      ],
+      "quadros": 4221,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "kilo",
+        "mare"
+      ],
+      "quadros": 4265,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "mare",
+        "brasa"
+      ],
+      "quadros": 6020,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "brasa",
+        "mare"
+      ],
+      "quadros": 4274,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "mare",
+        "fossil"
+      ],
+      "quadros": 4106,
+      "completa": true,
+      "vencedor": "fossil",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "fossil",
+        "mare"
+      ],
+      "quadros": 4745,
+      "completa": true,
+      "vencedor": "mare",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "volt",
+        "kilo"
+      ],
+      "quadros": 5081,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "kilo",
+        "volt"
+      ],
+      "quadros": 6642,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "volt",
+        "brasa"
+      ],
+      "quadros": 6432,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "brasa",
+        "volt"
+      ],
+      "quadros": 5404,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "volt",
+        "fossil"
+      ],
+      "quadros": 3646,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "fossil",
+        "volt"
+      ],
+      "quadros": 3719,
+      "completa": true,
+      "vencedor": "volt",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "kilo",
+        "brasa"
+      ],
+      "quadros": 6744,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        1,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "brasa",
+        "kilo"
+      ],
+      "quadros": 4401,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        2,
+        0
+      ]
+    },
+    {
+      "lutadores": [
+        "kilo",
+        "fossil"
+      ],
+      "quadros": 4823,
+      "completa": true,
+      "vencedor": "fossil",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "fossil",
+        "kilo"
+      ],
+      "quadros": 7243,
+      "completa": true,
+      "vencedor": "fossil",
+      "rounds": [
+        2,
+        1
+      ]
+    },
+    {
+      "lutadores": [
+        "brasa",
+        "fossil"
+      ],
+      "quadros": 5453,
+      "completa": true,
+      "vencedor": "fossil",
+      "rounds": [
+        0,
+        2
+      ]
+    },
+    {
+      "lutadores": [
+        "fossil",
+        "brasa"
+      ],
+      "quadros": 5272,
+      "completa": true,
+      "vencedor": "brasa",
+      "rounds": [
+        0,
+        2
+      ]
+    }
+  ]
+}

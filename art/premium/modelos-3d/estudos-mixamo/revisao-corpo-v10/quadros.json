@@ -1,0 +1,62 @@
+{
+  "origem": "Revisão frontal e traseira da passada pelo importador real.",
+  "sha256Glb": "5957e10e18b28f7bb1f02f0bebe1ecfa154936d7f89b80c7f109592bb408198c",
+  "quadros": [
+    {
+      "clip": "andando",
+      "quadro": 0,
+      "atraso": 20,
+      "x": 0,
+      "vista": "frente"
+    },
+    {
+      "clip": "andando",
+      "quadro": 3,
+      "atraso": 20,
+      "x": 0.328125,
+      "vista": "frente"
+    },
+    {
+      "clip": "andando",
+      "quadro": 6,
+      "atraso": 20,
+      "x": 0.65625,
+      "vista": "frente"
+    },
+    {
+      "clip": "andando",
+      "quadro": 9,
+      "atraso": 20,
+      "x": 0.984375,
+      "vista": "frente"
+    },
+    {
+      "clip": "andando",
+      "quadro": 0,
+      "atraso": 20,
+      "x": 0,
+      "vista": "costas"
+    },
+    {
+      "clip": "andando",
+      "quadro": 3,
+      "atraso": 20,
+      "x": 0.328125,
+      "vista": "costas"
+    },
+    {
+      "clip": "andando",
+      "quadro": 6,
+      "atraso": 20,
+      "x": 0.65625,
+      "vista": "costas"
+    },
+    {
+      "clip": "andando",
+      "quadro": 9,
+      "atraso": 20,
+      "x": 0.984375,
+      "vista": "costas"
+    }
+  ]
+}

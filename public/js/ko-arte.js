@@ -1246,7 +1246,33 @@
   };
 
   // ---------- Efeitos ----------
-  const parts = [], aneis = [], avisos = [];
+  const parts = [], aneis = [], avisos = [], impactos = [];
+  const movimentoReduzido = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function impacto(x, y, forte, defesa = false) {
+    if (impactos.length >= 20) impactos.shift();
+    impactos.push({ x, y, forte, defesa, t: 0, dir: Math.random() * Math.PI });
+  }
+  function desenharImpactos(g) {
+    for (let i = impactos.length - 1; i >= 0; i--) {
+      const p = impactos[i], progresso = p.t++ / 12;
+      if (progresso >= 1) { impactos.splice(i, 1); continue; }
+      const r = (p.defesa ? 10 : 12 + p.forte * 5) * (0.5 + progresso);
+      g.save(); g.translate(p.x, p.y); g.rotate(p.dir);
+      g.globalAlpha = (1 - progresso) * 0.85;
+      g.strokeStyle = p.defesa ? '#8de4ff' : '#ffab38'; g.lineWidth = 2.5 * (1 - progresso) + 0.5;
+      g.beginPath(); g.ellipse(0, 0, r, r * 0.65, 0, 0, Math.PI * 2); g.stroke();
+      if (!p.defesa) {
+        g.fillStyle = '#fff4cf'; g.beginPath();
+        for (let n = 0; n < 16; n++) {
+          const a = n * Math.PI / 8, raio = n % 2 ? r * 0.2 : r * (n % 4 ? 0.65 : 1.2);
+          if (n === 0) g.moveTo(Math.cos(a) * raio, Math.sin(a) * raio);
+          else g.lineTo(Math.cos(a) * raio, Math.sin(a) * raio);
+        }
+        g.closePath(); g.fill();
+      }
+      g.restore();
+    }
+  }
   let tremor = 0, flash = 0, superFlash = 0, superLado = -1;
   function faisca(x, y, cor, n, vel, vida) {
     for (let i = 0; i < n; i++) { const a = Math.random() * Math.PI * 2, v = vel * (0.4 + Math.random()); parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, vida: vida + ((Math.random() * 6) | 0), max: vida + 6, cor, g: 0.05, tam: 0.6 + Math.random() * 1.2, risco: true }); }
@@ -1260,12 +1286,13 @@
       const ex = e.x !== undefined ? e.x / U : 0, ey = e.y !== undefined ? CHAO - e.y / U : 0;
       switch (e.t) {
         case 'acerto':
+          impacto(ex, ey, e.forte || 0);
           faisca(ex, ey, e.forte ? '#ffe066' : '#ffffff', 10 + e.forte * 6, 1.6 + e.forte * 0.6, 10);
           aneis.push({ x: ex, y: ey, r: 3, vida: 12, max: 12, cor: e.forte ? '#ffb000' : '#ffffff', estrela: e.forte >= 1 });
           if (e.forte >= 1) tremor = Math.max(tremor, 3 + e.forte * 2.5);
           if (e.forte >= 2) flash = 3;
           break;
-        case 'defendeu': faisca(ex, ey, '#7fd4ff', 7, 1.2, 8); aneis.push({ x: ex, y: ey, r: 3, vida: 9, max: 9, cor: '#7fd4ff' }); break;
+        case 'defendeu': impacto(ex, ey, 0, true); faisca(ex, ey, '#7fd4ff', 7, 1.2, 8); aneis.push({ x: ex, y: ey, r: 3, vida: 9, max: 9, cor: '#7fd4ff' }); break;
         case 'chao': { const l = s.p[e.lado]; poeira(l.x / U, CHAO, 12); tremor = Math.max(tremor, 3); break; }
         case 'super': superFlash = 40; superLado = e.lado; break;
         case 'quebra': { const l = s.p[e.lado]; faisca(l.x / U, CHAO - 40, '#ff4fd8', 26, 2.6, 18); aviso('QUEBRA-COMBO!', { grad: ['#ffd0f6', '#ff4fd8'], tam: 24, y: 58 }); tremor = 8; break; }
@@ -1707,11 +1734,25 @@
     const nome = fundoNome; fundoNome = null; if (nome) cenario(nome);
   }
   function iniciar(cv) { canvas = cv; ctx = cv.getContext('2d'); ajustar(); addEventListener('resize', ajustar); }
+  const fundosIlustrados = {};
+  function fundoIlustrado(nome) {
+    if (nome !== 'academia') return null;
+    if (!fundosIlustrados[nome]) {
+      const img = new Image();
+      fundosIlustrados[nome] = img;
+      img.onload = () => { if (fundoNome === nome) { fundoNome = null; cenario(nome); } };
+      img.src = '/img/cenario-poster-v1.webp';
+    }
+    const img = fundosIlustrados[nome];
+    return img.complete && img.naturalWidth > 0 ? img : null;
+  }
   function cenario(nome) {
     if (fundoNome === nome) return;
     const cv = document.createElement('canvas'); cv.width = W * R; cv.height = H * R;
     const g = cv.getContext('2d'); g.scale(R, R);
     CENARIOS[nome].fundo(g);
+    const ilustracao = fundoIlustrado(nome);
+    if (ilustracao) g.drawImage(ilustracao, 0, 0, W, H);
     fundoCv = cv; fundoNome = nome;
   }
 
@@ -1751,11 +1792,15 @@
 
   function desenhar(s, opc) {
     tAnim++;
+    // Orçamento visual por quadro: combos e rajadas não acumulam efeitos sem limite.
+    const limiteParticulas = movimentoReduzido.matches ? 96 : 256;
+    if (parts.length > limiteParticulas) parts.splice(0, parts.length - limiteParticulas);
+    if (aneis.length > 36) aneis.splice(0, aneis.length - 36);
     const nomes = opc.nomes;
     moverCamera(s);
     ctx.setTransform(R, 0, 0, R, 0, 0);
     ctx.save();
-    if (tremor > 0) { ctx.translate((Math.random() - 0.5) * tremor, (Math.random() - 0.5) * tremor); tremor = Math.max(0, tremor - 0.6); }
+    if (tremor > 0) { if (!movimentoReduzido.matches) ctx.translate((Math.random() - 0.5) * tremor, (Math.random() - 0.5) * tremor); tremor = Math.max(0, tremor - 0.6); }
     ctx.scale(cam.zoom, cam.zoom);
     ctx.translate(-cam.x, -(H - H / cam.zoom) * 0.85);
     ctx.drawImage(fundoCv, 0, 0, W, H);
@@ -1782,6 +1827,7 @@
     for (const p of s.proj) desenharProj(ctx, p, tAnim);
 
     ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    desenharImpactos(ctx);
     for (let i = parts.length - 1; i >= 0; i--) {
       const p = parts[i];
       p.x += p.vx; p.y += p.vy; p.vy += p.g; p.vida--;
@@ -1802,7 +1848,7 @@
     ctx.restore();
     ctx.restore();
 
-    if (flash > 0) { ctx.fillStyle = `rgba(255,255,255,${flash / 8})`; ctx.fillRect(0, 0, W, H); flash--; }
+    if (flash > 0) { if (!movimentoReduzido.matches) { ctx.fillStyle = `rgba(255,255,255,${Math.min(0.22, flash / 12)})`; ctx.fillRect(0, 0, W, H); } flash--; }
     placar(ctx, s, nomes);
 
     for (const lado of [0, 1]) {
@@ -1830,7 +1876,7 @@
     }
   }
 
-  function limparAvisos() { avisos.length = 0; parts.length = 0; aneis.length = 0; }
+  function limparAvisos() { avisos.length = 0; parts.length = 0; aneis.length = 0; impactos.length = 0; tremor = flash = superFlash = 0; }
 
   // Retrato para a tela de escolha: rosto e tronco, em alta resolução.
   const retratos = {};

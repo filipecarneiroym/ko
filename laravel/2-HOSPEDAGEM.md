@@ -60,6 +60,14 @@ sudo systemctl status ko-relay                  # deve mostrar "Relay do K.O ouv
 
 O relay escuta só em `127.0.0.1:6001` (só o Nginx fala com ele); não abra essa porta no firewall.
 
+Se a sala ficar em “Conectando”, confira o serviço acima e o bloco `/ws` do Nginx.
+`KO_RELAY_URL=` vazio usa automaticamente `wss://DOMINIO-DO-SITE/ws` em HTTPS
+ou `ws://IP-DO-SERVIDOR:6001` em HTTP. Um `.env` antigo com `ws://localhost:6001`
+precisa ser atualizado: no celular, localhost é o próprio aparelho. Depois de alterar,
+rode `php artisan config:clear` (ou `php artisan optimize` em produção).
+Para testes por Wi-Fi sem Nginx, use `KO_RELAY_HOST=0.0.0.0`, execute o relay e
+abra o site pelo IP do computador nos dois celulares.
+
 ## Antes de abrir para todo mundo (checklist)
 
 - [ ] `.env` com `APP_ENV=production`, `APP_DEBUG=false`, `SESSION_SECURE_COOKIE=true`, `KO_RELAY_URL=wss://SEUDOMINIO/ws`

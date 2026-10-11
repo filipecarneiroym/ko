@@ -87,6 +87,8 @@ class ResultadoTest extends TestCase
         $this->enviar($this->host, $this->relato(['lutador_host' => 'zumbi']))->assertStatus(422); // lutador que não existe
         $this->enviar($this->host, $this->relato(['cenario' => 'lua']))->assertStatus(422);
         $this->enviar($this->host, $this->relato(['rounds_host' => 1, 'rounds_convidado' => 1]))->assertStatus(422);
+        $this->enviar($this->host, $this->relato(['rounds_host' => 2, 'rounds_convidado' => 2]))->assertStatus(422);
+        $this->enviar($this->host, $this->relato(['vencedor' => 'host']))->assertStatus(422);
         $this->assertSame(0, Partida::query()->count());
     }
 
@@ -94,5 +96,13 @@ class ResultadoTest extends TestCase
     {
         $intruso = Jogador::query()->create(['apelido' => 'Intruso']);
         $this->enviar($intruso, $this->relato())->assertForbidden();
+    }
+
+    public function test_cenarios_diferentes_nao_confirmam_a_mesma_luta(): void
+    {
+        $this->enviar($this->host, $this->relato());
+        $cenario = collect(config('ko.cenarios'))->first(fn ($c) => $c !== 'praia');
+        $this->enviar($this->amigo, $this->relato(['cenario' => $cenario]))->assertJson(['valeu' => false]);
+        $this->assertSame(0, Jogador::query()->sum('vitorias'));
     }
 }

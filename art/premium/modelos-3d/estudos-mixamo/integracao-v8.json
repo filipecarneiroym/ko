@@ -1,0 +1,49 @@
+{
+  "aprovadoFinal": false,
+  "caminho": "public/modelos/estudos/pipoca-reacao-v8.glb",
+  "bytes": 1427116,
+  "sha256": "2790a398c52b2944f7fc35ecde3b6ecdef25ef192cdbe65830690b29244d40cf",
+  "clips": 31,
+  "substituidos": [
+    "parado",
+    "p1",
+    "p2",
+    "defesa",
+    "dano"
+  ],
+  "impactoDesdeInicio": true,
+  "recuperacaoQuadro": 7,
+  "stunMinimoMotor": 8,
+  "preservados": [
+    "andando",
+    "corrida",
+    "agachado",
+    "pulo",
+    "pousando",
+    "defesaBaixa",
+    "caido",
+    "levantando",
+    "rolando",
+    "recuo",
+    "quebra",
+    "agarrando",
+    "agarrado",
+    "tonto",
+    "vitoria",
+    "derrotado",
+    "final",
+    "vitimaFinal",
+    "k1",
+    "k2",
+    "cp",
+    "ck",
+    "ap",
+    "ak",
+    "esp",
+    "sup"
+  ],
+  "limites": [
+    "Arte provisória e pesos rígidos.",
+    "Reação genérica; rosto, quedas, defesa baixa e demais 26 clips em revisão."
+  ]
+}

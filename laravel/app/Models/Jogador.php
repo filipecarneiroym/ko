@@ -5,16 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-/** Quem joga. Entra só com o apelido; o cookie "lembrar" mantém a pessoa no celular. */
+/** Apelido e PIN identificam o jogador; contas antigas cadastram o PIN na sessão original. */
 class Jogador extends Authenticatable
 {
     protected $table = 'jogadores';
 
-    protected $fillable = ['apelido'];
+    protected $fillable = ['apelido', 'pin_hash'];
 
-    protected $hidden = ['remember_token'];
+    protected $attributes = ['pin_hash' => null, 'remember_token' => null];
 
-    /** Sem senha: o Laravel pede uma para o "lembrar", mas nunca é conferida. */
+    protected $hidden = ['remember_token', 'pin_hash'];
+
+    /** Preserva os cookies de contas antigas; o PIN é conferido explicitamente na entrada. */
     public function getAuthPassword(): string
     {
         return '';

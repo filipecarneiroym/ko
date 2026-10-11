@@ -1,0 +1,18 @@
+{
+  "name": "ko-renderizador",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Preparação local do laboratório 3D do K.O",
+  "dependencies": {
+    "@babylonjs/core": "9.30.0",
+    "@babylonjs/loaders": "9.30.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  },
+  "scripts": {
+    "build:3d": "node scripts/build-3d.mjs",
+    "verificar:3d": "node scripts/verificar-modelos-3d.mjs",
+    "verificar:build-3d": "node scripts/verificar-build-3d.mjs"
+  }
+}

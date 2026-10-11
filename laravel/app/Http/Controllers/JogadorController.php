@@ -6,6 +6,7 @@ use App\Models\Jogador;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class JogadorController extends Controller
@@ -20,18 +21,28 @@ class JogadorController extends Controller
     {
         $dados = $request->validate([
             'apelido' => ['required', 'string', 'min:2', 'max:16', 'regex:/^[\pL\pN _-]+$/u'],
+            'pin' => ['required', 'string', 'regex:/^[0-9]{4}$/'],
         ], [
             'apelido.regex' => 'Use só letras, números, espaço, - ou _.',
         ]);
         $apelido = preg_replace('/\s+/u', ' ', trim($dados['apelido']));
 
-        // ponytail: sem senha, um apelido já usado fica com quem chegou primeiro. Contas com senha
-        // entram se alguém perder o celular e quiser o placar de volta.
-        if (Jogador::query()->where('apelido', $apelido)->exists()) {
-            return back()->withInput()->withErrors(['apelido' => 'Esse apelido já tem dono. Escolha outro.']);
+        if (mb_strlen($apelido) < 2) {
+            return back()->withInput($request->only('apelido', 'sala'))->withErrors(['apelido' => 'Use pelo menos 2 caracteres no apelido.']);
         }
 
-        Auth::login(Jogador::query()->create(['apelido' => $apelido]), remember: true);
+        $jogador = Jogador::query()->where('apelido', $apelido)->first();
+        if (! $jogador) {
+            // firstOrCreate recupera o dono se dois cadastros disputarem o mesmo apelido.
+            $jogador = Jogador::query()->firstOrCreate(['apelido' => $apelido], ['pin_hash' => Hash::make($dados['pin'])]);
+        }
+        if ($jogador && $jogador->pin_hash === null) {
+            return back()->withInput($request->only('apelido', 'sala'))->withErrors(['apelido' => 'Esse jogador ainda não tem PIN. Abra no navegador onde ele foi criado e cadastre o PIN no menu.']);
+        }
+        if ($jogador && ! Hash::check($dados['pin'], $jogador->pin_hash)) {
+            return back()->withInput($request->only('apelido', 'sala'))->withErrors(['pin' => 'Apelido ou PIN incorreto.']);
+        }
+        Auth::login($jogador, remember: true);
         $request->session()->regenerate();
 
         // Veio pelo link que o amigo mandou: já cai com o código da sala preenchido.
@@ -43,5 +54,26 @@ class JogadorController extends Controller
     public function ranking(): View
     {
         return view('ranking', ['jogadores' => Jogador::query()->ranking()->limit(50)->get()]);
+    }
+
+    public function cadastrarPin(Request $request): RedirectResponse
+    {
+        $dados = $request->validate(['pin' => ['required', 'string', 'regex:/^[0-9]{4}$/', 'confirmed']]);
+        $alterou = Jogador::query()->whereKey(Auth::id())->whereNull('pin_hash')
+            ->update(['pin_hash' => Hash::make($dados['pin']), 'updated_at' => now()]);
+        abort_unless($alterou, 409, 'Este jogador já tem PIN cadastrado.');
+
+        return redirect()->route('inicio')->with('status', 'PIN cadastrado! Use seu apelido e PIN para entrar em outro aparelho.');
+    }
+
+    public function sair(Request $request): RedirectResponse
+    {
+        $acessoAmigos = $request->session()->get('acesso_amigos');
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        $request->session()->put('acesso_amigos', $acessoAmigos);
+
+        return redirect()->route('inicio');
     }
 }

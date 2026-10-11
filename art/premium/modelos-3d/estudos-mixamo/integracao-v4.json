@@ -1,0 +1,63 @@
+{
+  "versao": 1,
+  "status": "Estudo técnico de guarda; sem aprovação artística final.",
+  "aprovadoFinal": false,
+  "entrada": {
+    "caminho": "art/premium/modelos-3d/estudos-mixamo/guarda-v4.json",
+    "sha256": "d57ea6794371708ecac3c0c41ffdad62f19ae0a762315b77d1ec2360c8524d67"
+  },
+  "modelo": {
+    "caminho": "public/modelos/estudos/pipoca-guarda-v4.glb",
+    "sha256": "9a38fbca1521329427eeb75de89623c261ed24c08a518acff31be22c839e13d3",
+    "bytes": 1328812,
+    "vertices": 16458,
+    "triangulos": 24008,
+    "ossos": 20,
+    "materiais": 6,
+    "clips": 31
+  },
+  "substituido": {
+    "nome": "parado",
+    "duracaoQuadros": 104,
+    "fpsSimulacao": 60
+  },
+  "clipsPreservados": [
+    "andando",
+    "corrida",
+    "agachado",
+    "pulo",
+    "pousando",
+    "defesa",
+    "defesaBaixa",
+    "dano",
+    "caido",
+    "levantando",
+    "rolando",
+    "recuo",
+    "quebra",
+    "agarrando",
+    "agarrado",
+    "tonto",
+    "vitoria",
+    "derrotado",
+    "final",
+    "vitimaFinal",
+    "p1",
+    "p2",
+    "k1",
+    "k2",
+    "cp",
+    "ck",
+    "ap",
+    "ak",
+    "esp",
+    "sup"
+  ],
+  "sha256ClipsPreservados": "7f51847e5ca66ef2fa6bc8fe2cb40cd6a5e202fe91a875be2b063b79fa3e9c18",
+  "limites": [
+    "Estudo optativo do laboratório; não substitui o renderizador principal.",
+    "Malha e materiais provisórios preservados; acabamento visual ainda pendente.",
+    "Os golpes conservam os tempos e movimentos anteriores; o estudo substitui somente a guarda.",
+    "Transições para outros clips e desempenho em aparelhos físicos ainda exigem revisão."
+  ]
+}

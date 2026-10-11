@@ -1,0 +1,110 @@
+[
+  {
+    "id": "pipoca",
+    "nome": "Pipoca",
+    "arte": "pipoca-v1.png",
+    "status": "conceito do lutador existente"
+  },
+  {
+    "id": "uivo",
+    "nome": "Uivo",
+    "arte": "uivo-v1.png",
+    "status": "conceito do lutador existente"
+  },
+  {
+    "id": "maromba",
+    "nome": "Maromba",
+    "arte": "maromba-v3.png",
+    "status": "conceito do lutador existente"
+  },
+  {
+    "id": "ginga",
+    "nome": "Ginga",
+    "arte": "ginga-v1.png",
+    "status": "conceito do lutador existente"
+  },
+  {
+    "id": "vo-nena",
+    "nome": "Vó Nena",
+    "arte": "vo-nena-v1.png",
+    "status": "conceito do lutador existente"
+  },
+  {
+    "id": "vo-tiao",
+    "nome": "Vô Tião",
+    "arte": "vo-tiao-v1.png",
+    "status": "conceito do lutador existente"
+  },
+  {
+    "id": "kira",
+    "nome": "Kira",
+    "arte": "kira-v1.png",
+    "status": "conceito do lutador existente"
+  },
+  {
+    "id": "toco",
+    "nome": "Toco",
+    "arte": "toco-v2.png",
+    "status": "conceito do lutador existente"
+  },
+  {
+    "id": "nix",
+    "nome": "Nix",
+    "arte": "nix-v1.png",
+    "status": "conceito do lutador existente"
+  },
+  {
+    "id": "eco",
+    "nome": "Eco",
+    "arte": "eco-v2.png",
+    "status": "conceito do lutador existente"
+  },
+  {
+    "id": "volt",
+    "nome": "Volt",
+    "arte": "volt-v2.png",
+    "status": "conceito do lutador existente"
+  },
+  {
+    "id": "kilo",
+    "nome": "Kilo",
+    "arte": "kilo-v3.png",
+    "status": "conceito do lutador existente"
+  },
+  {
+    "id": "brasa",
+    "nome": "Brasa",
+    "arte": "brasa-v1.png",
+    "status": "conceito do lutador existente"
+  },
+  {
+    "id": "mare",
+    "nome": "Maré",
+    "arte": "mare-v2.png",
+    "status": "conceito do lutador existente"
+  },
+  {
+    "id": "truque",
+    "nome": "Truque",
+    "arte": "truque-v2.png",
+    "status": "conceito do lutador existente"
+  },
+  {
+    "id": "fossil",
+    "nome": "Fóssil",
+    "arte": "fossil-v3.png",
+    "status": "conceito do lutador existente"
+  },
+  {
+    "id": "forja",
+    "nome": "Forja",
+    "arte": "forja-v1.png",
+    "status": "conceito novo; ainda não jogável"
+  },
+  {
+    "id": "borun",
+    "nome": "Bórun",
+    "arte": "borun-v1.png",
+    "status": "conceito novo; ainda não jogável"
+  }
+]

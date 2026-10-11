@@ -19,9 +19,20 @@ class RelayTest extends TestCase
         $this->relay = new Process(['php', 'artisan', 'ko:relay', '--porta='.$this->porta], base_path());
         $this->relay->start();
         $limite = microtime(true) + 5;
-        while (! @fsockopen('127.0.0.1', $this->porta) && microtime(true) < $limite) {
+        $abriu = false;
+        while (microtime(true) < $limite) {
+            $sonda = @fsockopen('127.0.0.1', $this->porta, $erro, $mensagem, 0.2);
+            if ($sonda) {
+                fclose($sonda);
+                $abriu = true;
+                break;
+            }
+            if (! $this->relay->isRunning()) {
+                break;
+            }
             usleep(50_000);
         }
+        $this->assertTrue($abriu, 'Relay não abriu: '.$this->relay->getErrorOutput().$this->relay->getOutput());
     }
 
     protected function tearDown(): void
@@ -34,7 +45,7 @@ class RelayTest extends TestCase
     private function conectar(string $sala, string $lado, ?string $token = null)
     {
         $token ??= hash_hmac('sha256', $sala.'|'.$lado, config('app.key'));
-        $s = fsockopen('127.0.0.1', $this->porta);
+        $s = fsockopen('127.0.0.1', $this->porta, $erro, $mensagem, 2);
         stream_set_timeout($s, 2);
         $chave = base64_encode(random_bytes(16));
         fwrite($s, "GET /ws?sala={$sala}&lado={$lado}&t={$token} HTTP/1.1\r\nHost: x\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Key: {$chave}\r\nSec-WebSocket-Version: 13\r\n\r\n");

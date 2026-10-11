@@ -1,0 +1,17 @@
+{
+  "lote": 2,
+  "tipo": "Artes conceituais com transparência; não são modelos 3D",
+  "referenciaEstilo": "pipoca-v1.png",
+  "personagens": [
+    {
+      "id": "maromba",
+      "arquivo": "maromba-v1.png",
+      "identidade": "Humano, fisiculturista bronzeado, cabelo curto castanho, faixa dourada, roupa esportiva vermelha e tênis branco"
+    },
+    {
+      "id": "ginga",
+      "arquivo": "ginga-v1.png",
+      "identidade": "Humano, capoeirista negro, cabelo crespo curto, calça branca, corda e faixa verde e amarela, descalço"
+    }
+  ]
+}

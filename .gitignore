@@ -35,6 +35,10 @@ laravel/storage/pail
 # Dependências e build (recriados por composer/npm)
 laravel/vendor/
 node_modules/
+.npm-cache/
+.composer-cache/
+laravel/.composer-cache/
+.browser-check/
 public/build/
 public/hot
 public/storage

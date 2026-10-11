@@ -1,0 +1,15 @@
+{
+  "lote": 8,
+  "personagens": [
+    {
+      "id": "truque",
+      "arquivo": "truque-v1.png",
+      "prompt": "Original K.O fighting game ONLY TRUQUE character cutout. Reference 1 STYLE only premium stylized 3D sculpted forms expressive face detailed materials warm gold key light violet rim. Adult HUMAN Brazilian male stage magician martial artist, light warm skin, slim elegant athletic build, expressive dark eyes and mischievous confident smile, short sleek dark hair. BLACK TOP HAT, tailored CHARCOAL BLACK tuxedo jacket and trousers, white shirt and burgundy bowtie, WHITE magician gloves, flowing RED CAPE with darker burgundy lining, polished black shoes. Dynamic theatrical fighting stance three-quarter facing right, front open white glove extended as if conjuring illusion and rear hand holding brim of his top hat. Cape forms beautiful readable arc behind without hiding limbs. No wand no extra floating props no rabbit. Family-friendly original charismatic magician. Full body complete hat cape both gloves shoes with generous transparent margin. Rich stylized velvet silk fabric leather materials, not photorealistic not plastic toy. TRUE transparent alpha background no floor scene backdrop fog aura glow cloud text logo watermark or other character. Character key art for ensemble poster not a playable model."
+    },
+    {
+      "id": "fossil",
+      "arquivo": "fossil-v1.png",
+      "prompt": "Original K.O fighting game ONLY FÓSSIL character cutout. Reference 1 STYLE only premium stylized 3D sculpted forms expressive face detailed materials warm gold key light violet rim. Older adult HUMAN Brazilian male paleontologist inventor fighter, light warm tan skin, tall slightly wiry build, swept-back wild SILVER GRAY hair, rectangular scientific glasses, clever enthusiastic friendly smile. WHITE lab coat with rolled sleeves over GREEN shirt, BROWN trousers and sturdy dark brown shoes. His signature LEFT ARM is a clearly attached articulated SILVER ROBOTIC DINOSAUR ARM prosthetic, ending in a compact mechanical T-REX HEAD claw with hinged jaws, rounded stylized metal teeth and small RED sensor eye, exposed mechanical joints and bolts. Exactly one normal human arm on right and one prosthetic arm on left, not extra arms, robot attached naturally at shoulder. Normal hand raised in martial arts guard and robot dinosaur head held forward ready to bite. Three-quarter facing left strong balanced stance. Mechanical head clearly visible without obscuring face. No real dinosaur no skeleton no gun no gore. Family friendly original quirky scientist. Full body all hair coat both shoes and entire robot arm visible generous transparent margin. Premium stylized 3D fabric brushed metal leather not photorealistic not plastic toy. TRUE transparent alpha background no floor scene backdrop fog glow aura cloud text logo watermark or extra person. Character concept for ensemble poster not a playable model."
+    }
+  ]
+}

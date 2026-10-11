@@ -24,6 +24,7 @@ class PartidaService
         );
 
         $relato = [
+            'cenario' => $dados['cenario'],
             'lutador_host' => $dados['lutador_host'],
             'lutador_convidado' => $dados['lutador_convidado'],
             'vencedor' => $dados['vencedor'],

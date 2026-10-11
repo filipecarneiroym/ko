@@ -1,0 +1,41 @@
+{
+  "versao": 4,
+  "aprovadoFinal": false,
+  "origem": "Boxing.fbx/Mixamo baixado pelo usuário",
+  "sha256Fbx": "c18780468f85fcdd01ccf20611c3f90d5919d74623147fefcea0cce9723a294a",
+  "quadros": [
+    1,
+    105
+  ],
+  "duracaoQuadros": 104,
+  "fps": 60.0,
+  "guardas": [
+    "luvas elevadas próximas do queixo",
+    "cotovelos aproximados do tronco",
+    "pés ancorados"
+  ],
+  "secundario": {
+    "orelhasGraus": [
+      3.5,
+      3
+    ],
+    "caudaGraus": 2.5,
+    "apenasVisual": true
+  },
+  "validacao": {
+    "amostrasPorPe": 209,
+    "incluiMeiosQuadros": true,
+    "erroMaximoSola": 0.0003495410783216357,
+    "erroMaximoAncora": 0.0003767897895934558,
+    "erroLoopAntesRadianos": 0.0,
+    "erroLoopAntesPosicao": 5.960464477539063e-08,
+    "erroLoopDepoisRadianos": 0.0,
+    "diferencaMaximaVelocidadeEscalarLoopRadS": 0.4455029578015096
+  },
+  "limites": [
+    "Modelo continua blockout com pesos rígidos e junções separadas.",
+    "Apoio fixo específico da guarda; não é captura de passos.",
+    "Demais 30 clips continuam estudos procedurais.",
+    "Sem comprovação de desempenho em celular físico."
+  ]
+}

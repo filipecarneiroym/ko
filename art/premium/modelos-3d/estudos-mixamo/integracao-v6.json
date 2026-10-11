@@ -1,0 +1,69 @@
+{
+  "aprovadoFinal": false,
+  "caminho": "public/modelos/estudos/pipoca-socos-v6.glb",
+  "bytes": 1361572,
+  "sha256": "f1ea7e261289cbffd98c85b462646a5b770947b9a5f7882586f7207aee3e4e41",
+  "clips": 31,
+  "substituidos": [
+    "parado",
+    "p1",
+    "p2"
+  ],
+  "guardaCompletaNasExtremidades": true,
+  "golpes": [
+    {
+      "nome": "p1",
+      "duracaoQuadros": 12,
+      "contato": [
+        [
+          3,
+          5
+        ]
+      ]
+    },
+    {
+      "nome": "p2",
+      "duracaoQuadros": 18,
+      "contato": [
+        [
+          5,
+          7
+        ]
+      ]
+    }
+  ],
+  "preservados": [
+    "andando",
+    "corrida",
+    "agachado",
+    "pulo",
+    "pousando",
+    "defesa",
+    "defesaBaixa",
+    "dano",
+    "caido",
+    "levantando",
+    "rolando",
+    "recuo",
+    "quebra",
+    "agarrando",
+    "agarrado",
+    "tonto",
+    "vitoria",
+    "derrotado",
+    "final",
+    "vitimaFinal",
+    "k1",
+    "k2",
+    "cp",
+    "ck",
+    "ap",
+    "ak",
+    "esp",
+    "sup"
+  ],
+  "limites": [
+    "Arte provisória e pesos rígidos.",
+    "Transição p1→p2 suavizada até o quadro 4; outras transições pendentes."
+  ]
+}

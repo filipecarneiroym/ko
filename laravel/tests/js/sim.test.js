@@ -4,6 +4,15 @@ const assert = require('node:assert');
 const K = require('../../../public/js/ko-sim.js');
 
 const { B } = K;
+test('hash detecta diferenças que alteram quadros futuros', () => {
+  const a = K.novo({ lutadores: ['pipoca', 'uivo'] });
+  const b = structuredClone(a);
+  b.p[0].vx = 1;
+  assert.notEqual(K.hash(a), K.hash(b));
+  b.p[0].vx = 0;
+  b.p[0].estado = 'xyzabcd'; // mesmo comprimento de parado
+  assert.notEqual(K.hash(a), K.hash(b));
+});
 // Gerador pseudoaleatório com semente (o teste se repete igual toda vez).
 function rng(semente) { let x = semente >>> 0 || 1; return () => (x = (Math.imul(x ^ (x >>> 15), 2246822519) + 0x9e3779b9) >>> 0); }
 

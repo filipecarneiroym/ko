@@ -11,6 +11,8 @@
     ], JSON_HEX_TAG | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
     <script src="/js/ko-sim.js?v={{ filemtime(public_path('js/ko-sim.js')) }}" defer></script>
     <script src="/js/ko-arte.js?v={{ filemtime(public_path('js/ko-arte.js')) }}" defer></script>
+    <script src="/js/ko-voz.js?v={{ filemtime(public_path('js/ko-voz.js')) }}" defer></script>
+    <script src="/js/ko-cpu.js?v={{ filemtime(public_path('js/ko-cpu.js')) }}" defer></script>
     <script src="/js/ko.js?v={{ filemtime(public_path('js/ko.js')) }}" defer></script>
 @endpush
 
@@ -21,6 +23,7 @@
         {{-- Direcional em cruz e quatro botões em losango, como nos controles clássicos. --}}
         <div class="direcional" id="direcional" data-dir="">
             <span class="seta seta-c"></span><span class="seta seta-b"></span><span class="seta seta-e"></span><span class="seta seta-d"></span><span class="miolo"></span>
+            <span class="analogico" aria-hidden="true"></span>
         </div>
         <div class="botoes">
             <button type="button" data-b="B" class="b b-defesa" aria-label="Defesa">🛡️</button>
@@ -32,5 +35,5 @@
     </div>
     <div id="painel" class="painel"></div>
 </div>
-<div class="gire" aria-hidden="true"><div class="gire-celular"></div><p>Gire o celular</p></div>
+<div class="gire"><div class="gire-celular" aria-hidden="true"></div><p>Gire o celular para lutar</p><a class="botao botao-sec" href="{{ route('inicio') }}">Voltar ao menu</a></div>
 @endsection

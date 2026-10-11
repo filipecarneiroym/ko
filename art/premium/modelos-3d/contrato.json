@@ -1,0 +1,146 @@
+{
+  "versao": 1,
+  "data": "2026-10-11",
+  "status": "especificacao de producao; modelos finais ainda inexistentes",
+  "fontes": {
+    "manifesto": "art/premium/elenco/manifesto.json",
+    "simulacao": "public/js/ko-sim.js",
+    "sha256Simulacao": "aa7ea83e1c9398f6977be2728d7d031780a49df7cc9b8a2b044601d2b02a3304",
+    "proposta": "art/premium/PROPOSTA-RENDERIZADOR.md",
+    "formato": "https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html"
+  },
+  "arquivo": {
+    "formato": "GLB glTF 2.0",
+    "autocontido": true,
+    "urisExternasPermitidas": false,
+    "urisEmBuffersOuImagensPermitidas": false,
+    "extensoesObrigatorias": [],
+    "extensoesUsadas": [],
+    "limiteImportacaoBytes": 25165824,
+    "pipelineLaboratorio": "selecao de GLB local por input de arquivo; leitura no navegador sem envio ao servidor",
+    "nomeRaiz": "lutador",
+    "unidade": "metro",
+    "eixoVertical": "+Y",
+    "frentePersonagem": "+X",
+    "origem": "centro dos pes no piso; y=0",
+    "transformacaoRaiz": "identidade na pose de repouso; sem escala negativa",
+    "texturas": "PNG ou JPEG incorporados; PBR metallic-roughness",
+    "movimento": "animacoes no lugar; posicao do mundo pertence apenas a simulacao",
+    "orientacao": "face=1 olha +X; face=-1 gira 180 graus em Y",
+    "conversaoCoordenadas": "GLB usa coordenadas glTF; Babylon importa para a cena. +X de frente e uma convencao do projeto, aplicada antes da exportacao."
+  },
+  "rig": {
+    "deformacao": "skin esqueletico",
+    "influenciasMaximasPorVertice": 4,
+    "ossoRaizSemTranslacao": true,
+    "controleSecundario": "orelhas e cauda por ossos animados; sem fisica de gameplay",
+    "pontosAnexacaoSugeridos": ["mao_esquerda", "mao_direita", "pe_esquerdo", "pe_direito", "boca", "peito"],
+    "rigsPodemSerDiferentes": true,
+    "retargetAutomaticoExigido": false
+  },
+  "orcamentoInicial": {
+    "status": "hipotese a medir em aparelhos fisicos; nao comprova compatibilidade nem desempenho",
+    "triangulosPorLutadorAlvo": 25000,
+    "triangulosPorLutadorTetoInicial": 40000,
+    "ossosPorLutadorTetoInicial": 80,
+    "materiaisPorLutadorTetoInicial": 4,
+    "texturasDimensaoMaximaInicial": 2048,
+    "glbMiBPorLutadorAlvoMaximo": 8,
+    "texturasDecodificadasMiBPorLutadorAlvoMaximo": 48,
+    "doisLutadoresDrawCallsAlvoMaximo": 16,
+    "fpsAlvo": 60,
+    "quadroMsAlvo": 16.67,
+    "observacao": "Draw calls incluem passes extras dos lutadores; cenario e efeitos usam orcamento separado. Memoria real depende de formato, mipmaps, resolucao e navegador."
+  },
+  "animacao": {
+    "fpsSimulacao": 60,
+    "nomesExatosObrigatorios": ["parado", "andando", "corrida", "agachado", "pulo", "pousando", "defesa", "defesaBaixa", "dano", "caido", "levantando", "rolando", "recuo", "quebra", "agarrando", "agarrado", "tonto", "vitoria", "derrotado", "final", "vitimaFinal", "p1", "p2", "k1", "k2", "cp", "ck", "ap", "ak", "esp", "sup"],
+    "selecao": "estado golpe usa o nome p.golpe; demais usam p.estado",
+    "tempo": "tempo de pose derivado de p.t/60; final e vitimaFinal na fase final usam s.fT/60",
+    "hitstop": "nao avancar pose nem transicao enquanto o relogio de estado estiver congelado",
+    "ciclos": ["parado", "andando", "corrida", "agachado", "defesa", "defesaBaixa", "tonto"],
+    "terminaisMantemUltimaPose": ["caido", "derrotado", "agarrado", "vitoria"],
+    "continuidade": "pulo pode reiniciar quando p.t volta a zero no pulo duplo; pousando tem apenas quatro quadros",
+    "semEventosDeGameplay": true,
+    "semAlterarColisoes": true,
+    "agarrando": {"duracaoQuadros": 30, "arremessoQuadro": 10},
+    "rolando": {"duracaoQuadros": 24},
+    "recuo": {"duracaoQuadros": 18},
+    "quebra": {"duracaoMinimaNoChaoQuadros": 16},
+    "caido": {"duracaoQuadros": 46},
+    "levantando": {"duracaoQuadros": 16},
+    "pousando": {"duracaoQuadros": 4},
+    "final": {"duracaoQuadros": 200, "fonteTempo": "s.fT"},
+    "observacaoDuracoes": "Reacoes, defesa e pulo dependem do estado real. Os tempos sao referencia do motor e nao eventos a disparar pelo GLB. Golpes podem ser interrompidos, cancelados ou aterrissar antes de completar."
+  },
+  "lutadores": [
+    {
+      "id": "pipoca",
+      "nome": "Pipoca",
+      "modeloFinal": null,
+      "referencia": "art/premium/elenco/pipoca-v1.png",
+      "sha256Referencia": "aaac8e7e1bf7067529ef02828d225ab41b6b915bf33c899adc19a4cf8ef87bec",
+      "identidade": ["coelha antropomorfica atletica", "pelagem branca ou creme", "orelhas longas com interior rosado", "olhos grandes ambar", "focinho curto com nariz rosado", "luvas vermelhas de boxe com faixas brancas", "top e short azul-violeta; short com listras brancas", "faixas brancas nos tornozelos e pes; cauda curta e clara"],
+      "alturaCorpoSimulacaoPixels": 60,
+      "alturaCorpoVisualInicialMetros": 2.5,
+      "alturaObservacao": "Referencia de alinhamento do corpo; orelhas decorativas nao ampliam a hurtbox. Ajustar silhueta junto a sobreposicao das caixas no laboratorio.",
+      "estiloMovimento": "boxe agil, guarda alta, saltos elasticos; nao substituir por lutadora humana",
+      "golpes": {
+        "p1": {"duracaoQuadros": 12, "janelasAtivas": [[3,5]]},
+        "p2": {"duracaoQuadros": 18, "janelasAtivas": [[5,7]]},
+        "k1": {"duracaoQuadros": 24, "janelasAtivas": [[6,8],[12,14]]},
+        "k2": {"duracaoQuadros": 28, "janelasAtivas": [[7,10]]},
+        "cp": {"duracaoQuadros": 10, "janelasAtivas": [[3,5]]},
+        "ck": {"duracaoQuadros": 26, "janelasAtivas": [[6,9]]},
+        "ap": {"duracaoQuadros": 20, "janelasAtivas": [[4,14]]},
+        "ak": {"duracaoQuadros": 22, "janelasAtivas": [[5,16]]},
+        "esp": {"duracaoQuadros": 30, "janelasAtivas": [], "projetil": {"tipo": "cenoura", "criacaoQuadro": 10, "retornoQuadroDoProjetil": 30, "vidaInicialQuadros": 110}},
+        "sup": {"duracaoQuadros": 62, "janelasAtivas": [[44,50]], "invisivelQuadrosInclusive": [8,42], "invulneravelQuadrosInclusive": [0,46]}
+      },
+      "efeitos": {
+        "especial": "cenoura bumerangue visual segue s.proj; nao desaparece quando o clip esp termina",
+        "super": "entrada na toca, deslocamento oculto e reaparecimento ascendente; ocultar malhas quando p.sumido",
+        "final": "CHUVA DE CENOURAS!; encenacao comica sem sangue conforme ko-arte.js"
+      }
+    },
+    {
+      "id": "uivo",
+      "nome": "Uivo",
+      "modeloFinal": null,
+      "referencia": "art/premium/elenco/uivo-v1.png",
+      "sha256Referencia": "1dcb4ad14ab2dbbb12a3a924da49b7d4cf57cb067ffebc6d31185a928036e6de",
+      "identidade": ["lobo antropomorfico musculoso", "pelagem cinza escura com focinho e peito claros", "orelhas triangulares altas", "focinho alongado, nariz preto e sobrancelhas escuras marcadas", "olhos ambar", "quimono indigo sem mangas, tecido gasto, faixa na cintura", "faixas claras em maos e antebracos", "cauda grande, espessa e cinza; patas e garras visiveis"],
+      "alturaCorpoSimulacaoPixels": 66,
+      "alturaCorpoVisualInicialMetros": 2.75,
+      "alturaObservacao": "Referencia do corpo; cauda e garras nao criam colisoes extras.",
+      "estiloMovimento": "guarda baixa e ampla, ataques ferais com garras, investidas fortes; silhueta mais pesada que Pipoca",
+      "golpes": {
+        "p1": {"duracaoQuadros": 14, "janelasAtivas": [[4,6]]},
+        "p2": {"duracaoQuadros": 22, "janelasAtivas": [[6,9]]},
+        "k1": {"duracaoQuadros": 24, "janelasAtivas": [[7,10]]},
+        "k2": {"duracaoQuadros": 32, "janelasAtivas": [[8,12]]},
+        "cp": {"duracaoQuadros": 12, "janelasAtivas": [[4,6]]},
+        "ck": {"duracaoQuadros": 30, "janelasAtivas": [[7,10]]},
+        "ap": {"duracaoQuadros": 22, "janelasAtivas": [[5,14]]},
+        "ak": {"duracaoQuadros": 24, "janelasAtivas": [[6,16]]},
+        "esp": {"duracaoQuadros": 40, "janelasAtivas": [[12,18]]},
+        "sup": {"duracaoQuadros": 64, "janelasAtivas": [[6,12],[20,26],[34,42]], "invulneravelQuadrosInclusive": [0,8], "movimentosQuadros": [[4,13,170],[18,27,170],[32,41,170]]}
+      },
+      "efeitos": {
+        "especial": "uivo em area curta; pose da boca/peito acompanha janela, onda e visual sem dano autonomo",
+        "super": "tres investidas de garras sincronizadas as tres janelas; deslocamento vem apenas de p.x",
+        "final": "UIVO A LUA!; lua, ondas e vitima projetada de forma comica conforme ko-arte.js"
+      }
+    }
+  ],
+  "aceitacao": {
+    "identidadeComparadaComReferenciasAtuais": false,
+    "glbValidado": false,
+    "clipsValidados": false,
+    "colisoesComparadas": false,
+    "desempenhoEmIPhoneFisico": false,
+    "desempenhoEmAndroidFisico": false,
+    "testeEmTVOuComputadorHDMI": false,
+    "aprovadoParaSubstituirRenderizadorPrincipal": false
+  }
+}

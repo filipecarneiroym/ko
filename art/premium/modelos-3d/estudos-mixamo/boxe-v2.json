@@ -1,0 +1,28 @@
+{
+  "arquivo": "C:\\Users\\Windows\\Desktop\\Digital\\K.O\\art\\premium\\modelos-3d\\estudos-mixamo\\pipoca-boxing-apoio-v2.blend",
+  "acao": "pipoca_mixamo_boxing_estudo",
+  "quadros": [
+    1,
+    105
+  ],
+  "fps": 60.0,
+  "duracao_segundos": 1.7333333333333334,
+  "aprovadoFinal": false,
+  "ik": {
+    "variante": "guarda fixa; ambos os pés ancorados durante todo o estudo",
+    "amostras_verificadas": 210,
+    "erro_maximo_ancora": 2.8778922432404707e-07
+  },
+  "apoio": {
+    "quadros_verificados": 105,
+    "erro_maximo_solo": 1.9608953039096377e-07,
+    "correcao_minima": -0.21061080694198608,
+    "correcao_maxima": -0.13209223747253418
+  },
+  "limites": [
+    "Guarda fixa criada a partir do Mixamo; passos originais são substituídos por pés ancorados.",
+    "Solas horizontais específicas para este estudo, não para saltos ou chutes.",
+    "Sem sincronização aos golpes do motor.",
+    "Orelhas e cauda acompanham os pais; sem animação secundária própria."
+  ]
+}
