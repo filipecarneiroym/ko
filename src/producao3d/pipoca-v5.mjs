@@ -54,6 +54,37 @@ export function alturaSolas(pes) {
   return Math.min(...pes.flatMap(({ lado, G, P }) => SOLA[lado].map(s => P.add(s.applyRotationQuaternion(G)).y)));
 }
 
+// Sobe a pelve, quadro a quadro, para que nenhum vértice da malha deformada
+// (skinning linear, como no jogo) fique abaixo do piso. A estimativa pelo
+// esqueleto não cobria as orelhas no rolamento (atravessavam 40 cm).
+export function acimaDoPiso(clip, ossos, malha) {
+  const n = ossos.length, canal = (i, t) => clip.canais.find(c => c.osso === i && c.tipo === t);
+  const raiz = canal(0, 'translation'), quadros = raiz.tempos.length, V = malha.posicoes.length / 3;
+  for (let q = 0; q < quadros; q++) {
+    const G = [], P = [];
+    for (let i = 0; i < n; i++) {
+      const r = Quaternion.FromArray(canal(i, 'rotation').valores, q * 4), t = Vector3.FromArray(canal(i, 'translation').valores, q * 3);
+      const pai = ossos[i].pai;
+      G.push(pai === null ? r : G[pai].multiply(r).normalize());
+      P.push(pai === null ? t : P[pai].add(t.applyRotationQuaternion(G[pai])));
+    }
+    let minY = Infinity;
+    for (let v = 0; v < V; v += 3) {           // 1 em cada 3 vértices basta (malha densa)
+      let y = 0;
+      for (let k = 0; k < 4; k++) {
+        const w = malha.pesos[v * 4 + k];
+        if (!w) continue;
+        const i = malha.juntas[v * 4 + k], m = ossos[i].mundo;
+        const local = new Vector3(malha.posicoes[v * 3] - m[0], malha.posicoes[v * 3 + 1] - m[1], malha.posicoes[v * 3 + 2] - m[2]);
+        y += w * (local.applyRotationQuaternion(G[i]).y + P[i].y);
+      }
+      minY = Math.min(minY, y);
+    }
+    if (minY < 0) raiz.valores[q * 3 + 1] -= minY;
+  }
+  return clip;
+}
+
 // Osso -> filho que dá a direção do osso (para alinhar os dois esqueletos).
 const DIRECAO = { quadril: 'tronco', tronco: 'peito', peito: 'cabeca' };
 for (const l of 'ED') Object.assign(DIRECAO, { [`braco_${l}`]: `antebraco_${l}`, [`antebraco_${l}`]: `mao_${l}`,

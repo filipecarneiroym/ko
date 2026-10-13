@@ -14,6 +14,8 @@ import { alturaSolas } from './pipoca-v5.mjs';
 // plantado na guarda), direção do joelho e forma do pé ('plano' ou 'esticado').
 
 const PX = 24;
+// Centro do corpo encolhido (bola do rolamento), relativo ao quadril, em repouso.
+const BOLA = new Vector3(.18, .3, 0);
 const suave = t => t * t * (3 - 2 * t);
 const v = (x, y, z) => new Vector3(x, y, z);
 
@@ -39,8 +41,13 @@ export function criarGolpesV5(ossos, parado, simulador) {
   function resolver(p) {
     const G = new Array(n), P = new Array(n), joelhos = {};
     const q0 = idx('quadril'), tronco = idx('tronco');
-    G[q0] = Quaternion.RotationAxis(v(0, 1, 0), p.giro).multiply(G0[q0]).normalize();
-    P[q0] = P0[q0].add(p.pelve);
+    // Rotação da pelve: giro (Y) e rolamento (Z, negativo = cambalhota para a
+    // frente). Com 'bola' > 0 a pelve gira em volta do centro do corpo
+    // encolhido, rente ao chão, em vez de girar em torno do quadril.
+    const R = Quaternion.RotationAxis(v(0, 0, 1), p.rol ?? 0).multiply(Quaternion.RotationAxis(v(0, 1, 0), p.giro)).normalize();
+    G[q0] = R.multiply(G0[q0]).normalize();
+    const emBola = (p.centro ?? v(0, .55, 0)).subtract(BOLA.applyRotationQuaternion(R));
+    P[q0] = Vector3.Lerp(P0[q0].add(p.pelve), emBola, p.bola ?? 0);
     for (let i = 0; i < n; i++) {
       if (i === q0) continue;
       const pai = ossos[i].pai;
@@ -51,10 +58,13 @@ export function criarGolpesV5(ossos, parado, simulador) {
         const pp = p.pernas[lado];
         if (i === b.coxa) {
           // Joelho por IK de dois ossos no plano dado pela direção do joelho.
-          const H = P[i], T = pp.tornozelo, eixo = T.subtract(H);
+          // Pernas presas ao corpo (loc > 0): tornozelo no referencial da pelve.
+          const T = Vector3.Lerp(pp.tornozelo, P[q0].add(pp.local.applyRotationQuaternion(R)), pp.loc);
+          const H = P[i], eixo = T.subtract(H);
           const d = Math.min(Math.max(eixo.length(), Math.abs(L1 - L2) + 1e-4), L1 + L2 - 1e-4);
           const e = eixo.normalizeToNew();
-          const polo = pp.joelho.subtract(e.scale(Vector3.Dot(pp.joelho, e))).normalize();
+          const dirJoelho = Vector3.Lerp(pp.joelho, pp.joelho.applyRotationQuaternion(R), pp.loc);
+          const polo = dirJoelho.subtract(e.scale(Vector3.Dot(dirJoelho, e))).normalize();
           const u = (L1 * L1 - L2 * L2 + d * d) / (2 * d), h = Math.sqrt(Math.max(0, L1 * L1 - u * u));
           const K = H.add(e.scale(u)).add(polo.scale(h));
           joelhos[lado] = { K, T: H.add(e.scale(d)) };
@@ -72,8 +82,9 @@ export function criarGolpesV5(ossos, parado, simulador) {
 
   // Forma do pé: 'plano' = como na guarda; 'esticado' = ponta continuando a
   // canela (dorso para cima), sem dobra no tornozelo.
-  function formaPe(lado, forma, joelho, tornozelo, giro) {
+  function formaPe(lado, forma, joelho, tornozelo, giro, rol = 0) {
     const b = PERNAS[lado];
+    if (forma === 'corpo') return Quaternion.RotationAxis(v(0, 0, 1), rol).multiply(Quaternion.RotationAxis(v(0, 1, 0), giro)).multiply(G0[b.pe]).normalize();
     if (forma === 'plano') return Quaternion.RotationAxis(v(0, 1, 0), giro * 0.3).multiply(G0[b.pe]).normalize();
     const canela = tornozelo.subtract(joelho).normalize();
     // Eixo lateral fixo do corpo (girado com a pelve). Derivá-lo de
@@ -106,20 +117,24 @@ export function criarGolpesV5(ossos, parado, simulador) {
         pelve: lerpV(a.pelve ?? Vector3.Zero(), b.pelve ?? Vector3.Zero(), t),
         giro: (a.giro ?? 0) + ((b.giro ?? 0) - (a.giro ?? 0)) * t,
         inclinacao: (a.inclinacao ?? 0) + ((b.inclinacao ?? 0) - (a.inclinacao ?? 0)) * t,
+        rol: (a.rol ?? 0) + ((b.rol ?? 0) - (a.rol ?? 0)) * t,
+        bola: (a.bola ?? 0) + ((b.bola ?? 0) - (a.bola ?? 0)) * t,
         pernas: {},
       };
       for (const lado of ['E', 'D']) {
         const pa = a.pernas?.[lado] ?? {}, pb = b.pernas?.[lado] ?? {};
         const tornozelo = lerpV(tornozeloDe(a, lado), tornozeloDe(b, lado), t);
         const joelho = lerpV(pa.joelho ?? v(1, 0, lado === 'E' ? -.15 : .15), pb.joelho ?? v(1, 0, lado === 'E' ? -.15 : .15), t);
-        pose.pernas[lado] = { tornozelo, joelho };
+        const local = lerpV(pa.local ?? v(.2, -.5, lado === 'E' ? -.15 : .15), pb.local ?? v(.2, -.5, lado === 'E' ? -.15 : .15), t);
+        const loc = (pa.loc ?? 0) + ((pb.loc ?? 0) - (pa.loc ?? 0)) * t;
+        pose.pernas[lado] = { tornozelo, joelho, local, loc };
       }
       // Forma do pé nas duas chaves, depois interpolada (sem saltos).
       let { G, P } = resolver({ ...pose, pernas: Object.fromEntries(['E', 'D'].map(l => [l, { ...pose.pernas[l], pe: G0[PERNAS[l].pe] }])) });
       for (const lado of ['E', 'D']) {
         const b2 = PERNAS[lado], K = P[b2.canela], T = P[b2.pe];
-        const fa = formaPe(lado, a.pernas?.[lado]?.pe ?? 'plano', K, T, pose.giro);
-        const fb = formaPe(lado, b.pernas?.[lado]?.pe ?? 'plano', K, T, pose.giro);
+        const fa = formaPe(lado, a.pernas?.[lado]?.pe ?? 'plano', K, T, pose.giro, pose.rol);
+        const fb = formaPe(lado, b.pernas?.[lado]?.pe ?? 'plano', K, T, pose.giro, pose.rol);
         pose.pernas[lado].pe = Quaternion.Slerp(fa, fb, t).normalize();
       }
       ({ G, P } = resolver(pose));
@@ -139,6 +154,10 @@ export function criarGolpesV5(ossos, parado, simulador) {
       raiz.push(...P[0].asArray());
       poses.push(P);
     }
+    // Continuidade do sinal dos quaternions (q e -q são a mesma rotação; a
+    // interpolação entre quadros escolheria o caminho longo após a volta de 360°).
+    for (const r of rot) for (let k = 4; k < r.length; k += 4)
+      if (r[k] * r[k - 4] + r[k + 1] * r[k - 3] + r[k + 2] * r[k - 2] + r[k + 3] * r[k - 1] < 0) for (let j = 0; j < 4; j++) r[k + j] = -r[k + j];
     if (laco) for (let i = 0; i < n; i++) assert.ok(rot[i].slice(0, 4).every((x, k) => Math.abs(x - rot[i].at(-4 + k)) < 1e-6), `${nome} fecha o laço`);
     const canais = [];
     for (let i = 0; i < n; i++) {
@@ -148,6 +167,8 @@ export function criarGolpesV5(ossos, parado, simulador) {
     return { clip: { nome, duracaoQuadros: duracao, canais }, poses };
   }
 
+  // Segmentos osso -> filho (e pontas soltas) para medir o contorno do corpo.
+  const PONTAS_OSSOS = ossos.map((o, i) => [i, ossos.findIndex(f => f.pai === i)]).map(([i, j]) => [i, j >= 0 ? j : i]);
   const guarda = P0[PERNAS.E.pe], tras = P0[PERNAS.D.pe];
   const ZE = guarda.z, ZD = tras.z;
   const clips = {};
@@ -213,6 +234,35 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 44, ...ar(-.02, v(.3, quadrilY - .95, ZE + .1), v(-.3, quadrilY - .95, ZD - .02), -.02) },
   ]);
 
+  // rolando: esquiva (24 quadros, o motor desloca). Mergulho para a frente,
+  // corpo em bola rente ao chão com uma volta inteira e levantada na guarda.
+  // O herdado dava um salto de cambalhota de mais de 1 m.
+  const encolhida = (rol, bola, loc, inclinacao, pelve = v(0, 0, 0)) => ({ rol, bola, inclinacao, pelve,
+    pernas: { E: { local: v(.16, -.36, ZE * .4), loc, joelho: v(1, .6, -.1), pe: 'corpo' },
+      D: { local: v(.16, -.36, ZD * .4), loc, joelho: v(1, .6, .1), pe: 'corpo' } } });
+  clips.rolando = animar('rolando', 24, [
+    { q: 0 },
+    { q: 4, ...encolhida(-.5, .45, .55, -.5, v(.05, -.4, 0)) },
+    { q: 8, ...encolhida(-1.8, 1, 1, -.6) },
+    { q: 12, ...encolhida(-3.3, 1, 1, -.6) },
+    { q: 16, ...encolhida(-4.8, 1, 1, -.55) },
+    { q: 20, ...encolhida(-6.1, .55, .4, -.3, v(0, -.32, 0)) },
+    { q: 24, rol: -2 * Math.PI },
+  ]);
+
+  // Rolamento sem atravessar o chão: em cada quadro, mede o ponto mais baixo
+  // de todos os ossos (com a espessura do corpo/orelhas) e sobe a pelve.
+  {
+    const c = clips.rolando, raiz = c.clip.canais.find(k => k.osso === 0 && k.tipo === 'translation');
+    const raio = ossos.map(o => /orelha|cabeca/.test(o.nome) ? .1 : /pe_/.test(o.nome) ? .02 : .09);
+    c.poses.forEach((P, q) => {
+      const pontas = PONTAS_OSSOS.map(([i, j]) => [P[i], P[j] ?? null, raio[i]]);
+      let minY = Infinity;
+      for (const [a, b, r] of pontas) for (const s of [0, .5, 1]) minY = Math.min(minY, (b ? Vector3.Lerp(a, b, s) : a).y - r);
+      if (minY < 0) raiz.valores[q * 3 + 1] -= minY;
+    });
+  }
+
   // Contato: no meio de cada janela ativa, algum ponto do pé (tornozelo a
   // ponta) precisa estar dentro da caixa do motor (x à frente, altura do pé).
   const ponta = 0.36;
@@ -234,6 +284,35 @@ export function criarGolpesV5(ossos, parado, simulador) {
     });
   }
   return { clips: Object.fromEntries(Object.entries(clips).map(([k, c]) => [k, c.clip])), relatorio };
+}
+
+// Olhar no oponente: nos movimentos baixos e de defesa a cabeça mantém a
+// direção da guarda (só acompanha o giro da pelve). Com o tronco inclinado
+// para agachar, a cabeça ia junto e o olhar caía para o chão.
+export function olharParaFrente(ossos, clip, guarda) {
+  const n = ossos.length, cab = ossos.findIndex(o => o.nome === 'cabeca');
+  const canal = (c, i, t) => c.canais.find(k => k.osso === i && k.tipo === t);
+  const globais = (c, q) => {
+    const G = [];
+    for (let i = 0; i < n; i++) {
+      const r = Quaternion.FromArray(canal(c, i, 'rotation').valores, q * 4), pai = ossos[i].pai;
+      G.push(pai === null ? r : G[pai].multiply(r).normalize());
+    }
+    return G;
+  };
+  const G0 = globais(guarda, 0);
+  const rc = canal(clip, cab, 'rotation'), valores = rc.valores.slice();
+  for (let q = 0; q < rc.tempos.length; q++) {
+    const G = globais(clip, q);
+    // giro da pelve só em torno do eixo vertical
+    const frente = v(1, 0, 0).applyRotationQuaternion(G[0]);
+    const giro = Quaternion.RotationAxis(v(0, 1, 0), Math.atan2(-frente.z, frente.x));
+    const g0frente = v(1, 0, 0).applyRotationQuaternion(G0[0]);
+    const desejada = giro.multiply(Quaternion.RotationAxis(v(0, 1, 0), -Math.atan2(-g0frente.z, g0frente.x))).multiply(G0[cab]).normalize();
+    const pai = ossos[cab].pai;
+    Quaternion.Inverse(G[pai]).multiply(desejada).normalize().toArray(valores, q * 4);
+  }
+  return { ...clip, canais: clip.canais.map(c => c === rc ? { ...c, valores } : c) };
 }
 
 // Pernas e pelve emprestadas de uma pose de referência, braços e tronco do

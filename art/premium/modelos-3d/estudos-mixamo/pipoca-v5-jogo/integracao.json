@@ -32,7 +32,7 @@
     "azul": {
       "caminho": "public/modelos/estudos/pipoca-v5-azul.glb",
       "bytes": 5965500,
-      "sha256": "a08ed4c23d906342b347598846769bbecac5b4562383894b3fe30b100ef84cef",
+      "sha256": "4aa2affd44742f4eb60cb33cc0e0ac3208511d9003619490cb7a5064ebc0827e",
       "triangulos": 28346,
       "materiais": 1,
       "ossos": 20,
@@ -43,7 +43,7 @@
     "vermelha": {
       "caminho": "public/modelos/estudos/pipoca-v5-vermelha.glb",
       "bytes": 5980236,
-      "sha256": "0baf74726100769a78c7d90e04fbb6591a27de4631dd8af25af1ec1e12b983d5",
+      "sha256": "9e104ccca928bbb9de79b53e03928ce94c70c5dae6a99c2656622646d2c3c587",
       "triangulos": 28346,
       "materiais": 1,
       "ossos": 20,
