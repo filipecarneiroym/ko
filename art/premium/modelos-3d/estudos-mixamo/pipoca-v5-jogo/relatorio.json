@@ -1,0 +1,28 @@
+{
+  "fonte": "art\\premium\\modelos-3d\\estudos-mixamo\\meshy-pipoca-v2\\identidade-v5\\pipoca-identidade-v5.blend",
+  "sha256Fonte": "8134243b4f0bf7de784495a3f2de22d3754ac0cba04dd0865e5ba5e389f601ab",
+  "triangulos": 28346,
+  "vertices": 15593,
+  "ossos": 20,
+  "verticesSemPeso": 0,
+  "escala": 1.529051987767584,
+  "texturas": {
+    "cor_azul": [
+      2048,
+      2048
+    ],
+    "normal": [
+      2048,
+      2048
+    ],
+    "rugosidade": [
+      1024,
+      1024
+    ],
+    "cor_vermelha": [
+      2048,
+      2048
+    ]
+  },
+  "sha256Malha": "28c4e8c6c32401c7bd846a5f319379e876bb0ffd1ab400d9bdaaff7327972464"
+}

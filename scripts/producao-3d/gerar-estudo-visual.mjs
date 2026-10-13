@@ -31,11 +31,12 @@ export function criarEstudoVisual(guarda,jab,forte,defesa,reacao,marcha,k1,k2,K)
   assert.equal(dados.ossos,base.ossos,'O refinamento preserva os 20 ossos');
   return dados;
 }
-export function gerarEstudoVisual() {
+export const NOMES_FONTES=['guarda-v4.json','jab-v5.json','soco-forte-v6.json','defesa-v7.json',
+  'reacao-v8.json','andando-v9.json','chute-v11.json','chute-forte-v12.json'];
+// Monta o estudo v13 completo (corpo, figurino e os 31 movimentos), sem gravar.
+export function montarEstudoVisual() {
   const pasta=resolve(raiz,'art/premium/modelos-3d/estudos-mixamo');
-  const nomesFontes=['guarda-v4.json','jab-v5.json','soco-forte-v6.json','defesa-v7.json',
-    'reacao-v8.json','andando-v9.json','chute-v11.json','chute-forte-v12.json'];
-  const fontes=nomesFontes.map(nome=>JSON.parse(readFileSync(resolve(pasta,nome))));
+  const fontes=NOMES_FONTES.map(nome=>JSON.parse(readFileSync(resolve(pasta,nome))));
   const K=createRequire(import.meta.url)('../../public/js/ko-sim.js');
   const posturas=JSON.parse(readFileSync(resolve(pasta,'posturas-v14.json')));
   const tecnicas=JSON.parse(readFileSync(resolve(pasta,'tecnicas-v15.json')));
@@ -49,7 +50,10 @@ export function gerarEstudoVisual() {
     assert.equal(fonte.sha256Geometria,sha256Geometria,
       `Regenere ${arquivo}: sua geometria difere do corpo/figurino atual.`);
   }
-  const dados=aplicarAtuacaoPipoca(aplicarEstadosPipoca(aplicarTecnicasPipoca(aplicarPosturasPipoca(baseVisual,posturas),tecnicas),estados),atuacao),bytes=exportarGlb(dados);
+  return {dados:aplicarAtuacaoPipoca(aplicarEstadosPipoca(aplicarTecnicasPipoca(aplicarPosturasPipoca(baseVisual,posturas),tecnicas),estados),atuacao),K,pasta};
+}
+export function gerarEstudoVisual() {
+  const {dados,K,pasta}=montarEstudoVisual(),nomesFontes=NOMES_FONTES,bytes=exportarGlb(dados);
   const doc=validarGlb(bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.length),'pipoca',K);
   assert.equal(doc.animations.length,31);
   assert.ok(doc.extras.corpo.verticesMistos>0);
