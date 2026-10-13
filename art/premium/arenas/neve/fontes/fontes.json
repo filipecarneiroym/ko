@@ -1,0 +1,58 @@
+{
+  "snowy_forest_path_01": {
+    "tipo": "hdri",
+    "nome": "Snowy Forest Path 01",
+    "autores": [
+      "Oliksiy Yakovlyev"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/snowy_forest_path_01"
+  },
+  "snow_02": {
+    "tipo": "textura",
+    "nome": "Snow 02",
+    "autores": [
+      "Rob Tuytel"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/snow_02"
+  },
+  "tree_stump_01": {
+    "tipo": "modelo",
+    "nome": "Tree Stump 01",
+    "autores": [
+      "Rob Tuytel"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/tree_stump_01"
+  },
+  "boulder_01": {
+    "tipo": "modelo",
+    "nome": "Boulder 01",
+    "autores": [
+      "Rico Cilliers"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/boulder_01"
+  },
+  "pine_sapling_small": {
+    "tipo": "modelo",
+    "nome": "Pine Sapling Small",
+    "autores": [
+      "Rob Tuytel",
+      "Rico Cilliers"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/pine_sapling_small"
+  },
+  "fir_sapling": {
+    "tipo": "modelo",
+    "nome": "Fir Sapling",
+    "autores": [
+      "Rob Tuytel",
+      "Rico Cilliers"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/fir_sapling"
+  }
+}

@@ -38,6 +38,16 @@
                 <option value="dificil">Difícil</option>
             </select>
         </label>
+        <label>Arena
+            <select id="arena">
+                <option value="academia">Academia</option>
+                <option value="praia">Praia</option>
+                <option value="telhado">Telhado</option>
+                <option value="floresta">Floresta</option>
+                <option value="feira">Feira</option>
+                <option value="neve">Neve</option>
+            </select>
+        </label>
         <button type="button" id="iniciar-luta" aria-describedby="estado-modelos">Começar luta</button>
     </fieldset>
     <label><input id="exibir-caixas" type="checkbox"> Mostrar alcance real de corpos e golpes</label>

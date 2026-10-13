@@ -59,3 +59,8 @@ Thumbs.db
 __pycache__/
 *.py[cod]
 *.blend[0-9]*
+
+# Fontes brutas das arenas (Poly Haven, CC0): baixadas de novo por
+# scripts/producao-3d/baixar-polyhaven.mjs; fontes.json fica versionado.
+art/premium/arenas/*/fontes/*
+!art/premium/arenas/*/fontes/fontes.json

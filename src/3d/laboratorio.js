@@ -13,7 +13,7 @@ import { LIMITE_GLB } from './contrato-glb.mjs';
 import { criarEfeitos } from './efeitos.js';
 import { criarCaixas } from './caixas.js';
 import { criarApresentacao } from './apresentacao.js';
-import { criarArenaAcademia } from './arena-academia.js';
+import { criarArena, ARENAS } from './arenas.js';
 import { criarEfeitosSF4 } from './efeitos-sf4.js';
 
 const canvas = document.querySelector('#arena-3d');
@@ -81,7 +81,6 @@ function enquadrarCamera() {
   // O enquadramento depende do estado da luta; FPS e hitstop não movem a câmera.
   const alturaPulo = Math.max(...estado.p.map(p => p.y / KOSim.U / 24));
   const metadeAltura = Math.max(2.3, 1.4 + alturaPulo, (Math.abs(xs[1] - xs[0]) + 4) / (2 * aspecto));
-  const metadeLargura = metadeAltura * aspecto;
   const pedido = sf4?.camera(estado);
   let cx = centro, cy = 1.5 + Math.max(0, alturaPulo - .9) / 2, zoom = 1;
   if (pedido?.foco) {
@@ -89,10 +88,13 @@ function enquadrarCamera() {
     cx += (pedido.foco.x - cx) * Math.min(1, k * 2.5); cy += (pedido.foco.y - cy) * Math.min(1, k * 2.5); zoom = pedido.zoom;
   }
   const d = pedido?.desloc || Vector3.Zero();
-  camera.position.set(cx + d.x, 3.6 + d.y, -13);
+  // Perspectiva com lente fechada (teleobjetiva), como em Street Fighter IV:
+  // as lutadoras ficam quase planas, o cenário ganha profundidade. A
+  // distância é a que enquadra a mesma meia-altura do plano de luta.
+  const distancia = metadeAltura * zoom / Math.tan(camera.fov / 2);
+  camera.position.set(cx + d.x, cy + d.y + distancia * .14, -distancia);
   camera.setTarget(new Vector3(cx + d.x, cy + d.y, 0));
-  camera.orthoLeft = -metadeLargura * zoom; camera.orthoRight = metadeLargura * zoom;
-  camera.orthoTop = metadeAltura * zoom; camera.orthoBottom = -metadeAltura * zoom;
+  camera.maxZ = distancia + 160;   // inclui o fundo 360° das arenas realistas
 }
 function retomar() { anterior = performance.now(); acumulado = 0; limparEntrada(); redimensionar(); }
 function atualizarImportadores() {
@@ -261,10 +263,23 @@ try {
   engine.setHardwareScalingLevel(Math.max(1, window.devicePixelRatio / 1.5));
   scene = new Scene(engine); scene.clearColor.set(.025, .015, .06, 1);
   camera = new FreeCamera('lateral', new Vector3(0, 3.6, -13), scene);
-  camera.setTarget(new Vector3(0, 1.5, 0)); camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
+  camera.setTarget(new Vector3(0, 1.5, 0)); camera.mode = Camera.PERSPECTIVE_CAMERA;
+  camera.fov = .4; camera.minZ = .5;   // ~23°: teleobjetiva de jogo de luta 2,5D
   redimensionar();
   apresentacao = criarApresentacao(scene);
-  criarArenaAcademia(scene, apresentacao);
+  // Arena escolhida (seis cenários 3D); a animação ambiente segue o tempo real.
+  let arena = { atualizar() {}, descartar() {} }, tempoArena = 0, trocaArena = Promise.resolve();
+  const seletorArena = document.querySelector('#arena');
+  const trocarArena = nome => {
+    trocaArena = trocaArena.then(async () => {
+      arena.descartar();
+      arena = { atualizar() {}, descartar() {} };
+      try { arena = await criarArena(nome, scene, apresentacao); }
+      catch (erro) { console.error('Arena 3D:', erro); arena = await criarArena('academia', scene, apresentacao); }
+    });
+  };
+  trocarArena('academia');
+  ouvir(seletorArena, 'change', () => trocarArena(ARENAS.includes(seletorArena.value) ? seletorArena.value : 'academia'));
   const bonecos = [manequim(0, '#ffb12b'), manequim(1, '#6aa8ff')];
   efeitos = criarEfeitos(scene, KOSim, window.matchMedia('(prefers-reduced-motion: reduce)'));
   sf4 = criarEfeitosSF4(scene, KOSim, window.matchMedia('(prefers-reduced-motion: reduce)'));
@@ -314,6 +329,7 @@ try {
       b.braco.position.x = janela ? 1.05 : .65;
       b.perna.rotation.z = janela && p.golpe?.includes('k') ? -.9 : 0;
     });
+    tempoArena += dt / (1000 / 60); arena.atualizar(tempoArena);
     enquadrarCamera();
     efeitos.atualizar(estado.f, estado); caixas.atualizar(estado, !!exibirCaixas?.checked);
     scene.render();

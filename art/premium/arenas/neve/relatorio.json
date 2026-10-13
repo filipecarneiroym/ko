@@ -1,0 +1,49 @@
+{
+  "fir_sapling": {
+    "triangulos": 14000,
+    "dimensoes_m": [
+      2.743,
+      0.827,
+      1.302
+    ],
+    "bytes": 4193520
+  },
+  "pine_sapling_small": {
+    "triangulos": 8999,
+    "dimensoes_m": [
+      2.641,
+      0.769,
+      1.301
+    ],
+    "bytes": 4010652
+  },
+  "boulder_01": {
+    "triangulos": 26611,
+    "dimensoes_m": [
+      1.275,
+      1.838,
+      1.01
+    ],
+    "bytes": 4105888
+  },
+  "tree_stump_01": {
+    "triangulos": 2500,
+    "dimensoes_m": [
+      1.425,
+      1.59,
+      0.571
+    ],
+    "bytes": 2245988
+  },
+  "arquivos": {
+    "ambiente.hdr": 6680698,
+    "boulder_01.glb": 4105888,
+    "fir_sapling.glb": 4193520,
+    "fundo.jpg": 2309822,
+    "neve_diff.jpg": 192934,
+    "neve_nor_gl.jpg": 426655,
+    "neve_rough.jpg": 96426,
+    "pine_sapling_small.glb": 4010652,
+    "tree_stump_01.glb": 2245988
+  }
+}
