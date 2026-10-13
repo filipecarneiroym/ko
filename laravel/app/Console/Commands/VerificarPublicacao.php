@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Services\Elenco;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Schema;
 use Throwable;
@@ -34,8 +35,20 @@ class VerificarPublicacao extends Command
             $erros[] = 'Não foi possível acessar o banco; confira conexão, caminho e permissões.';
         }
         foreach (config('ko.lutadores') as $id => $lutador) {
-            if ($lutador['pronto'] && (! isset($lutador['arte']) || ! is_file(public_path('img/elenco/'.$lutador['arte'])))) {
+            if (! $lutador['pronto']) {
+                continue;
+            }
+            if (! isset($lutador['arte']) || ! is_file(public_path('img/elenco/'.$lutador['arte']))) {
                 $erros[] = 'Arte atual ausente: '.$id;
+            }
+            if (! Elenco::temModelos($lutador)) {
+                $erros[] = 'Configure os dois modelos 3D antes de liberar: '.$id;
+            } else {
+                foreach ($lutador['modelos3d'] as $modelo) {
+                    if (! is_file(public_path(ltrim($modelo, '/')))) {
+                        $erros[] = 'Modelo 3D ausente: '.$id.' ('.$modelo.')';
+                    }
+                }
             }
         }
         foreach ($erros as $erro) {

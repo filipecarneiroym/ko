@@ -5,15 +5,16 @@
 @push('head')
     {{-- JSON_HEX_TAG: nada no conteúdo consegue fechar o <script> antes da hora. --}}
     <script type="application/json" id="ko-config">{!! json_encode($config + [
-        'lutadores' => config('ko.lutadores'),
+        'lutadores' => App\Services\Elenco::publicados(),
         'cenarios' => config('ko.cenarios'),
         'inicio' => route('inicio'),
     ], JSON_HEX_TAG | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
     <script src="/js/ko-sim.js?v={{ filemtime(public_path('js/ko-sim.js')) }}" defer></script>
     <script src="/js/ko-arte.js?v={{ filemtime(public_path('js/ko-arte.js')) }}" defer></script>
     <script src="/js/ko-voz.js?v={{ filemtime(public_path('js/ko-voz.js')) }}" defer></script>
+    <script src="/js/ko-audio.js?v={{ filemtime(public_path('js/ko-audio.js')) }}" defer></script>
     <script src="/js/ko-cpu.js?v={{ filemtime(public_path('js/ko-cpu.js')) }}" defer></script>
-    {{-- Gráficos 3D (Babylon.js): opcional; sem ele a luta usa a arte 2D. --}}
+    {{-- A luta aguarda os gráficos 3D; uma falha oferece nova tentativa. --}}
     <script src="/js/ko-jogo-3d.js?v={{ filemtime(public_path('js/ko-jogo-3d.js')) }}" defer></script>
     <script src="/js/ko.js?v={{ filemtime(public_path('js/ko.js')) }}" defer></script>
 @endpush

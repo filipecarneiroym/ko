@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sala;
+use App\Services\Elenco;
 use App\Services\PartidaService;
 use App\Services\RelayEndereco;
 use Illuminate\Http\JsonResponse;
@@ -65,7 +66,7 @@ class SalaController extends Controller
         $lado = $sala->ladoDe(Auth::user());
         abort_if($lado === null || $sala->convidado_id === null, 403);
 
-        $lutadores = array_keys(array_filter(config('ko.lutadores'), fn (array $l) => $l['pronto']));
+        $lutadores = array_keys(Elenco::publicados());
         $dados = $request->validate([
             'numero' => ['required', 'integer', 'min:1', 'max:100000'],
             'lutador_host' => ['required', Rule::in($lutadores)],

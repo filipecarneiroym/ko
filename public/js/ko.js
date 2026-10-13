@@ -12,7 +12,7 @@
   const $ = (sel) => document.querySelector(sel);
   const painel = $('#painel'), canvas = $('#tela'), controles = $('#controles');
   const PASSO_MS = 1000 / 60;
-  const prontos = Object.keys(cfg.lutadores).filter((id) => cfg.lutadores[id].pronto && K.LUTADORES[id]);
+  const prontos = Object.keys(cfg.lutadores).filter((id) => cfg.lutadores[id].pronto && cfg.lutadores[id].modelos3d?.length === 2 && K.LUTADORES[id]);
   const guarda = (f) => { try { return f(); } catch (e) { return null; } };
   const dificuldadeSalva = guarda(() => localStorage.getItem('ko-dificuldade'));
   cfg.dificuldade = KOCPU.PERFIS[dificuldadeSalva] ? dificuldadeSalva : 'medio';
@@ -60,16 +60,19 @@
   A.iniciar(canvas);
 
   // ---------- Som (sintetizado na hora, sem arquivos) ----------
-  let audio = null;
+  let audio = null, somArena = null;
   let somLigado = guarda(() => localStorage.getItem('ko-som')) !== 'nao';
-  // Gráficos 3D (ko-jogo-3d.js): ligados por padrão quando o aparelho e os
-  // lutadores escolhidos têm suporte; senão a luta usa a arte 2D.
-  let graficos3d = guarda(() => localStorage.getItem('ko-graficos')) !== '2d';
+  // A luta usa apenas modelos 3D. Preferências antigas de 2D não se aplicam.
   const tela3d = document.getElementById('tela-3d');
-  const pode3d = (ids) => graficos3d && !!window.KO3D && !!tela3d && KO3D.disponivel(ids);
   function acordarAudio() {
     if (!window.AudioContext) return;
-    if (!audio) audio = new AudioContext();
+    if (!audio) {
+      audio = new AudioContext();
+      if (window.KOSom) {
+        somArena = KOSom.criar(audio);
+        somArena.preparar().catch(erro => console.warn('K.O: não foi possível preparar o locutor.', erro));
+      }
+    }
     if (audio.state === 'suspended') audio.resume().catch(() => {});
   }
   function tom(freq, dur, tipo, vol, desliza) {
@@ -109,8 +112,6 @@
     if (superGolpe) tom(70, 0.3, 'sine', 0.12, 35);
   }
   const SONS = {
-    acerto: (e) => { ruido(0.08 + e.forte * 0.05, 0.35 + e.forte * 0.1, 900 + e.forte * 500); tom(140 - e.forte * 30, 0.1, 'square', 0.12, 60); },
-    defendeu: () => { tom(900, 0.05, 'square', 0.06); ruido(0.04, 0.12, 4000); },
     pulo: () => tom(300, 0.12, 'square', 0.04, 600),
     especial: (e) => somEspecial(e),
     super: (e) => somEspecial(e, true),
@@ -122,14 +123,6 @@
     golpeFinal: () => tom(220, 1.2, 'triangle', 0.12, 880),
   };
 
-  // Locutor com a voz do próprio celular (pt-BR).
-  function locutor(frase) {
-    if (!somLigado || !window.speechSynthesis) return;
-    const u = new SpeechSynthesisUtterance(frase);
-    u.lang = 'pt-BR'; u.rate = 1.05; u.pitch = 0.55; u.volume = 1;
-    speechSynthesis.cancel(); speechSynthesis.speak(u);
-  }
-
   const ultimoGrito = [-999, -999];
   function vozLutador(e) {
     if (!somLigado || !window.KOVoz || !luta) return;
@@ -140,12 +133,6 @@
     if (e.t === 'ataque' && luta.s.f - ultimoGrito[lado] < 12) return;
     ultimoGrito[lado] = luta.s.f;
     KOVoz.grito(audio, id, e.t !== 'ataque', luta.s.f);
-    const frase = { especial: perfil.esp, super: perfil.sup, golpeFinal: perfil.final }[e.t];
-    if (frase && window.speechSynthesis && !speechSynthesis.speaking && !speechSynthesis.pending) {
-      const u = new SpeechSynthesisUtterance(frase);
-      u.lang = 'pt-BR'; u.pitch = perfil.pitch; u.rate = 1.25; u.volume = 0.85;
-      speechSynthesis.speak(u);
-    }
   }
 
   function vibrar(ms) { if (navigator.vibrate) guarda(() => navigator.vibrate(ms)); }
@@ -349,7 +336,6 @@
     controles.hidden = false;
     A.limparAvisos();
     ultimoGrito[0] = ultimoGrito[1] = -999;
-    A.cenario(d.c);
     const online = cfg.modo === 'online';
     const s = K.novo({ lutadores: [d.lh, d.lc], treino: cfg.modo === 'treino' });
     luta = {
@@ -363,32 +349,70 @@
     tratarEventos(s.ev);
   }
 
-  function encerrarLuta() { descartarGraficos(luta); luta = null; controles.hidden = true; document.body.classList.remove('em-luta'); limparControles(); }
+  function encerrarLuta() { somArena?.pararVoz(); descartarGraficos(luta); luta = null; controles.hidden = true; document.body.classList.remove('em-luta'); limparControles(); }
 
   // ---------- Gráficos 3D ----------
-  let r3d = null;
+  let r3d = null, painelGraficos = null;
+  function fecharPainelGraficos() { painelGraficos?.remove(); painelGraficos = null; }
+  function mostrarEstadoGraficos(partida, erro) {
+    fecharPainelGraficos();
+    painelGraficos = document.createElement('div');
+    painelGraficos.className = 'painel painel-graficos';
+    painelGraficos.setAttribute('aria-live', 'polite');
+    painelGraficos.innerHTML = `<div class="cartao-fim">
+      <h2>${erro ? 'O 3D não carregou' : 'Preparando a arena'}</h2>
+      <p role="status">${erro ? 'Confira sua conexão e tente novamente para entrar na luta.' : 'Carregando o cenário e as lutadoras…'}</p>
+      ${erro ? `<details><summary>Detalhes do erro</summary><p>${esc(erro.message || String(erro))}</p></details>
+        <button class="botao" data-acao="tentar-3d">Tentar novamente</button>` : '<span class="carregando-3d" aria-hidden="true"></span>'}
+      <a class="botao botao-sec" href="${cfg.inicio}">Voltar ao menu</a>
+    </div>`;
+    document.getElementById('jogo').appendChild(painelGraficos);
+    painelGraficos.querySelector('[data-acao="tentar-3d"]')?.addEventListener('click', () => {
+      if (luta !== partida) return;
+      if (!window.KO3D) { location.reload(); return; }
+      prepararGraficos(partida, partida.s.lutadores, partida.cenario);
+    });
+  }
   function descartarGraficos(partida) {
-    if (partida?.r3d) { partida.r3d.descartar(); partida.r3d = null; }
-    if (r3d && (!partida || r3d === partida?.r3d)) r3d = null;
+    const anterior = partida?.r3d || r3d;
+    anterior?.descartar();
+    if (partida) partida.r3d = null;
+    if (r3d === anterior) r3d = null;
+    fecharPainelGraficos();
     document.body.classList.remove('graficos-3d');
   }
   function prepararGraficos(partida, ids, cenario) {
-    if (r3d) { r3d.descartar(); r3d = null; }
-    document.body.classList.remove('graficos-3d');
-    if (!pode3d(ids)) return;
-    // Visível já na criação (tamanho certo); a arte 2D cobre tudo até ficar pronto.
+    descartarGraficos(partida);
+    const tentativa = partida.tentativa3d = {};
+    partida.carregando3d = true; partida.erro3d = null; partida.aviso = '';
+    controles.hidden = true;
+    limparControles();
+    mostrarEstadoGraficos(partida);
+    const atual = () => luta === partida && partida.tentativa3d === tentativa;
+    const falhar = (erro) => {
+      if (!atual()) return;
+      console.warn('K.O: falha nos gráficos 3D.', erro);
+      descartarGraficos(partida);
+      partida.carregando3d = false; partida.erro3d = erro; partida.sobra = 0;
+      controles.hidden = true;
+      window.KODiagnostico3D = { etapa: erro.etapa3d || 'inicialização', mensagem: erro.message || String(erro), data: new Date().toISOString() };
+      mostrarEstadoGraficos(partida, erro);
+    };
+    // Canvas visível antes de criar o motor, para calcular a resolução correta.
     document.body.classList.add('graficos-3d');
-    try { r3d = KO3D.criar(tela3d, { cenario, lutadores: ids }); }
-    catch (erro) { console.warn('K.O: 3D indisponível, usando 2D.', erro); document.body.classList.remove('graficos-3d'); return; }
-    partida.r3d = r3d; partida.carregando3d = true; partida.aviso = 'Carregando gráficos 3D…';
+    try {
+      if (!window.KO3D) throw new Error('O arquivo dos gráficos 3D não carregou. Tente recarregar a página.');
+      if (!tela3d || !KO3D.disponivel(ids)) throw new Error('O navegador não conseguiu iniciar os gráficos 3D. Feche outras abas e recarregue a página.');
+      r3d = KO3D.criar(tela3d, { cenario, lutadores: ids, aoFalhar: falhar });
+    } catch (erro) { falhar(erro); return; }
+    partida.r3d = r3d;
     r3d.pronto.then(() => {
-      if (luta !== partida) return;
+      if (!atual() || partida.erro3d) return;
+      fecharPainelGraficos(); controles.hidden = false;
+      window.KODiagnostico3D = null;
       partida.carregando3d = false; partida.aviso = ''; partida.ultimo = performance.now(); partida.sobra = 0;
-    }, (erro) => {
-      console.warn('K.O: falha ao carregar o 3D, seguindo em 2D.', erro);
-      if (luta !== partida) return;
-      descartarGraficos(partida); partida.carregando3d = false; partida.aviso = '';
-    });
+      if (somLigado && partida.s.fase === 'intro') somArena?.locutor({ t: 'round', n: partida.s.round, final: partida.s.rounds.every(n => n === 1) });
+    }, falhar);
   }
 
   function conferirHash(f, h, deQuem) {
@@ -406,16 +430,13 @@
     A.eventos(luta.s, evs, nomes);
     if (luta.r3d && !luta.carregando3d) luta.r3d.eventos(evs, luta.s);
     for (const e of evs) {
-      if (SONS[e.t]) SONS[e.t](e);
+      if (somLigado) {
+        if (!somArena?.evento(e) && SONS[e.t]) SONS[e.t](e);
+        // O primeiro round só é anunciado depois de a arena ficar pronta.
+        if (!(e.t === 'round' && (luta.carregando3d || luta.erro3d))) somArena?.locutor(e);
+      }
       vozLutador(e);
       if (e.t === 'acerto' && (e.lado === meuLado || luta.s.p[meuLado].estado === 'dano') && e.forte) vibrar(e.forte * 20);
-      const fala = {
-        round: e.final ? 'Round final!' : 'Round ' + e.n, lutem: 'Lutem!', ko: 'K.O.!', tempo: 'Tempo!', acaba: 'Acaba!',
-        perfeito: 'Perfeito!', quebra: 'Quebra-combo!',
-        vitoria: e.vencedor !== undefined ? nomes[e.vencedor] + ' venceu!' : null,
-        combo: e.n === 4 ? 'Ótimo!' : e.n === 5 ? 'Brutal!' : e.n === 7 ? 'Insano!' : e.n === 10 ? 'Monstruoso!' : null,
-      }[e.t];
-      if (fala) locutor(fala);
     }
   }
 
@@ -432,9 +453,11 @@
     }
     if (!luta) return;
     const esperando = luta.aviso || (luta.parado > 30 ? 'Esperando o outro celular…' : '');
-    const em3d = !!luta.r3d && !luta.carregando3d;
-    if (em3d) luta.r3d.desenhar(luta.s);
-    A.desenhar(luta.s, { nomes, esperando, somenteHud: em3d });
+    const em3d = !!luta.r3d && !luta.carregando3d && !luta.erro3d;
+    if (em3d) {
+      luta.r3d.desenhar(luta.s);
+      A.desenhar(luta.s, { nomes, esperando, somenteHud: true });
+    } else canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
     if (luta.s.fase === 'fim' && !luta.fimEm) { luta.fimEm = agora; fimDaLuta(); }
   }
   requestAnimationFrame(quadro);
@@ -444,7 +467,7 @@
     const s = luta.s;
     if (s.fase === 'fim') return false;
     if (luta.pausado) return false; // só pausa fora do online: lá a luta não para para um só
-    if (luta.carregando3d) return false; // espera a arena 3D (o outro celular espera junto)
+    if (luta.carregando3d || luta.erro3d || !luta.r3d) return false; // espera a arena 3D (o outro celular espera junto)
     if (!luta.online) {
       const meus = lerBotoes();
       const dele = versus ? estadosPads[1].bits | pulsosPads[1] : luta.cpu ? luta.cpu(s, 1) : 0;
@@ -610,11 +633,11 @@
     if (versus) primeiroLocal = null;
     painel.dataset.tela = 'escolha';
     painel.className = 'painel painel-escolha';
-    const cartas = Object.entries(cfg.lutadores).map(([id, l]) => {
-      const ok = prontos.includes(id);
-      return `<button class="carta ${ok ? '' : 'bloqueada'}" data-id="${id}" ${ok ? '' : 'disabled'} aria-label="${esc(l.nome)}${ok ? '' : ' (em breve)'}">
-        ${ok ? '<canvas width="224" height="280"></canvas>' : '<span class="silhueta">?</span>'}
-        <span class="nome">${esc(l.nome)}</span>${ok ? '' : '<span class="breve">em breve</span>'}
+    const cartas = prontos.map((id) => {
+      const l = cfg.lutadores[id];
+      return `<button class="carta" data-id="${id}" aria-label="${esc(l.nome)}">
+        <canvas width="480" height="600"></canvas>
+        <span class="nome">${esc(l.nome)}</span>
       </button>`;
     }).join('');
     painel.innerHTML = `
@@ -627,12 +650,20 @@
           <div class="lado-dele" id="ladoDele"></div>
           <button class="botao botao-grande" id="pronto" disabled>Pronto!</button>
           <button class="botao botao-sec" id="ajustar-controles">Configurar controles</button>
-          <button class="botao botao-sec" id="graficos" aria-pressed="${graficos3d}">Gráficos: ${graficos3d ? '3D' : '2D'}</button>
         </footer>
       </div>`;
     painel.querySelectorAll('.carta canvas').forEach((cv) => {
-      const r = A.retrato(cv.closest('.carta').dataset.id), g = cv.getContext('2d');
-      if (r) g.drawImage(r, 0, 0);
+      const id = cv.closest('.carta').dataset.id, g = cv.getContext('2d');
+      // O retrato 2D aparece na hora; quando existe, o retrato 3D do modelo o substitui.
+      const desenho = A.retrato(id);
+      if (desenho) g.drawImage(desenho, 0, 0, cv.width, cv.height);
+      const foto = new Image();
+      foto.onload = () => {
+        if (!cv.isConnected) return;
+        g.clearRect(0, 0, cv.width, cv.height); // o fundo do retrato 3D é transparente
+        g.drawImage(foto, 0, 0, cv.width, cv.height);
+      };
+      foto.src = `/personagens/${id}-3d-retrato.png`;
     });
     painel.querySelectorAll('.carta:not(.bloqueada)').forEach((b) => b.addEventListener('click', () => {
       acordarAudio(); tom(660, 0.06, 'square', 0.08);
@@ -659,7 +690,6 @@
       marcarEscolhas(); talvezComecar();
     });
     $('#ajustar-controles').onclick = abrirControles;
-    $('#graficos').onclick = (e) => { graficos3d = !graficos3d; guarda(() => localStorage.setItem('ko-graficos', graficos3d ? '3d' : '2d')); e.target.textContent = 'Gráficos: ' + (graficos3d ? '3D' : '2D'); e.target.setAttribute('aria-pressed', String(graficos3d)); };
     painel.querySelectorAll('[data-nivel]').forEach((b) => b.onclick = () => {
       cfg.dificuldade = b.dataset.nivel;
       guarda(() => localStorage.setItem('ko-dificuldade', cfg.dificuldade));
@@ -700,11 +730,8 @@
 
   function comecarLocal(meu) {
     estadoSala.minhaEscolha = meu;
-    const outros = prontos.filter((id) => id !== meu);
-    // Com gráficos 3D, o adversário da máquina é o espelho (mesmo lutador, roupa
-    // vermelha) enquanto só esse lutador tem modelo 3D.
-    const espelho = cfg.modo === 'cpu' && pode3d([meu, meu]);
-    const dele = versus || espelho ? meu : cfg.modo === 'cpu' ? (outros.length ? outros[(Math.random() * outros.length) | 0] : meu) : meu;
+    // Espelho em 3D: a adversária usa a variação vermelha do mesmo modelo.
+    const dele = meu;
     const cenario = cfg.cenarios[(Math.random() * cfg.cenarios.length) | 0];
     estadoSala.numero++;
     comecarLuta({ n: estadoSala.numero, lh: versus ? primeiroLocal : meu, lc: dele, c: cenario, d: 0 });
@@ -712,7 +739,7 @@
 
   // ---------- Menu de pausa ----------
   $('#pausa').addEventListener('click', () => {
-    if (!luta || luta.s.fase === 'fim' || document.querySelector('.painel-pausa')) return;
+    if (!luta || luta.carregando3d || luta.erro3d || luta.s.fase === 'fim' || document.querySelector('.painel-pausa')) return;
     const pausavel = !luta.online;
     if (pausavel) luta.pausado = true;
     const sobreposicao = document.createElement('div');
@@ -720,7 +747,6 @@
     sobreposicao.innerHTML = `<div class="cartao-fim"><h2>${pausavel ? 'Pausa' : 'Menu'}</h2>
       <div class="acoes"><button class="botao" data-acao="voltar">Voltar para a luta</button>
       <button class="botao botao-sec" data-acao="som">Som: ${somLigado ? 'ligado' : 'desligado'}</button>
-      <button class="botao botao-sec" data-acao="graficos">Gráficos: ${graficos3d ? '3D' : '2D'} (vale na próxima luta)</button>
       <a class="botao botao-sec" href="${cfg.inicio}">${luta.online ? 'Desistir e sair' : 'Sair'}</a></div>
       <p class="dica">Soco+chute juntos: esquiva · Defesa+especial no meio do combo dele: quebra-combo · Toque duplo para frente: corrida</p></div>`;
     document.getElementById('jogo').appendChild(sobreposicao);
@@ -729,8 +755,7 @@
       sobreposicao.remove(); limparControles(); pulsosPads = [0, 0];
       if (luta) { luta.pausado = false; luta.aviso = ''; luta.ultimo = performance.now(); }
     };
-    sobreposicao.querySelector('[data-acao="graficos"]').onclick = (e) => { graficos3d = !graficos3d; guarda(() => localStorage.setItem('ko-graficos', graficos3d ? '3d' : '2d')); e.target.textContent = 'Gráficos: ' + (graficos3d ? '3D' : '2D') + ' (vale na próxima luta)'; };
-    sobreposicao.querySelector('[data-acao="som"]').onclick = (e) => { somLigado = !somLigado; guarda(() => localStorage.setItem('ko-som', somLigado ? 'sim' : 'nao')); e.target.textContent = 'Som: ' + (somLigado ? 'ligado' : 'desligado'); };
+    sobreposicao.querySelector('[data-acao="som"]').onclick = (e) => { somLigado = !somLigado; if (!somLigado) somArena?.pararVoz(); guarda(() => localStorage.setItem('ko-som', somLigado ? 'sim' : 'nao')); e.target.textContent = 'Som: ' + (somLigado ? 'ligado' : 'desligado'); };
   });
 
   // Para testes automáticos (endereço terminando em #teste): deixa ver e mexer na luta pelo console.

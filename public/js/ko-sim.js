@@ -507,7 +507,15 @@
     if (usar(l, 'P')) { iniciarGolpe(s, l, agachado ? 'cp' : 'p1'); return; }
     if (usar(l, 'K')) { iniciarGolpe(s, l, agachado ? 'ck' : (l.estado === 'corrida' ? 'k2' : 'k1')); return; }
 
-    if (segura(DEF)) { mudar(l, agachado ? 'defesaBaixa' : 'defesa'); vel(s, l, 0); return; }
+    if (segura(DEF)) {
+      // O relógio do estado reinicia a cada quadro (como já era antes): a entrada e a
+      // saída da guarda seguem as poses testadas.
+      mudar(l, agachado ? 'defesaBaixa' : 'defesa');
+      // Guarda em pé permite avançar/recuar a 60% da caminhada, sem correr. Agachado fica
+      // no lugar e, durante o impacto na guarda, só vale o empurrão do golpe.
+      const alvo = agachado || l.stun > 0 ? 0 : segura(fr) ? l.face * ((d.andar * 3 / 5) | 0) : segura(tr) ? -l.face * ((d.tras * 3 / 5) | 0) : 0;
+      vel(s, l, alvo); return;
+    }
     if (l.estado === 'defesa' || l.estado === 'defesaBaixa') mudar(l, 'parado');
 
     if (l.buf.U || segura(B.U)) {
@@ -662,7 +670,7 @@
       const forte = dados(v).defesaForte; // Fóssil: defesa forte, sem raspão e recupera mais rápido
       const raspa = especial && !forte ? Math.max(1, (golpe.dano / 5) | 0) : 0; // especial "raspa" na defesa
       v.vida = Math.max(s.treino ? 1 : 0, v.vida - raspa);
-      v.stun = forte ? (golpe.bs * 3) >> 2 : golpe.bs; v.empurrao = -dirDe() * golpe.empurra * 8;
+      v.stun = forte ? (golpe.bs * 3) >> 2 : golpe.bs; v.empurrao = -dirDe() * golpe.empurra * 8; v.vx = 0;
       v.poder = Math.min(PODER_MAX, v.poder + ((golpe.dano / 2) | 0));
       a.poder = Math.min(PODER_MAX, a.poder + ((golpe.dano / 2) | 0));
       s.hitstop = Math.max(s.hitstop, 5);

@@ -12,79 +12,185 @@ import { criarCameraLuta, enquadrarCameraLuta } from './camera-luta.js';
 // máquina e o online continuam iguais. A tela 2D fica por cima, transparente,
 // com o placar. Personagens com modelo 3D: por enquanto a Pipoca (roupa azul
 // no lado 1 e vermelha no lado 2).
-const MODELOS = { pipoca: ['/modelos/estudos/pipoca-v5-azul.glb', '/modelos/estudos/pipoca-v5-vermelha.glb'] };
+function lerModelos() {
+  let config;
+  try { config = JSON.parse(document.getElementById('ko-config')?.textContent || 'null'); }
+  catch { throw new Error('A configuração dos modelos 3D é inválida.'); }
+  if (!config?.lutadores) throw new Error('A configuração dos modelos 3D não foi carregada.');
+  return Object.fromEntries(Object.entries(config.lutadores).filter(([, lutador]) =>
+    Array.isArray(lutador?.modelos3d) && lutador.modelos3d.length === 2
+      && lutador.modelos3d.every(url => typeof url === 'string' && url.startsWith('/') && !url.startsWith('//'))
+  ).map(([id, lutador]) => [id, lutador.modelos3d]));
+}
+
+function erroNaEtapa(erro, etapa) {
+  if (erro?.etapa3d) return erro;
+  const falha = new Error(erro?.message || String(erro || 'Não foi possível preparar o 3D.'));
+  falha.etapa3d = etapa;
+  falha.cause = erro;
+  return falha;
+}
 
 function suportado() {
   try { return Engine.isSupported(); } catch { return false; }
 }
 
-async function baixar(url) {
-  const r = await fetch(url, { credentials: 'same-origin', cache: 'force-cache' });
-  if (!r.ok) throw new Error(`Recurso 3D indisponível: ${url}`);
-  return r.arrayBuffer();
+async function baixar(url, sinal) {
+  const controle = new AbortController();
+  const cancelar = () => controle.abort();
+  let expirou = false;
+  const prazo = setTimeout(() => { expirou = true; controle.abort(); }, 90000);
+  sinal.addEventListener('abort', cancelar, { once: true });
+  if (sinal.aborted) cancelar();
+  try {
+    // Revalidar a URL evita reutilizar um modelo antigo após uma publicação.
+    const r = await fetch(url, { credentials: 'same-origin', cache: 'no-cache', signal: controle.signal });
+    if (!r.ok) throw new Error(`Não foi possível baixar o modelo 3D (HTTP ${r.status}).`);
+    return await r.arrayBuffer();
+  } catch (erro) {
+    if (expirou) throw new Error('O download do modelo 3D excedeu 90 segundos. Confira a conexão e tente novamente.');
+    throw erro;
+  } finally {
+    clearTimeout(prazo);
+    sinal.removeEventListener('abort', cancelar);
+  }
 }
 
-function criar(canvas, { cenario, lutadores }) {
-  const engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true, antialias: true });
-  // Celular: limita a resolução interna (cada pixel a mais custa bateria).
-  engine.setHardwareScalingLevel(Math.max(1, (window.devicePixelRatio || 1) / 1.5));
-  const scene = new Scene(engine);
-  const camera = criarCameraLuta(scene);
-  const apresentacao = criarApresentacao(scene);
-  const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const efeitos = criarEfeitos(scene, KOSim, reduzido);
-  const sf4 = criarEfeitosSF4(scene, KOSim, reduzido, { letreiros: false });
-  const modelos = [null, null];
-  let arena = null, encerrado = false, ultimoF = null;
-  const redimensionar = () => engine.resize();
-  addEventListener('resize', redimensionar);
+function criar(canvas, { cenario, lutadores, aoFalhar } = {}) {
+  let engine, scene, camera, apresentacao, efeitos, sf4;
+  const modelos = [null, null], controle = new AbortController();
+  let arena = null, encerrado = false, ultimoF = null, preparado = false, falha = null;
+  let etapa = 'configuração', rejeitarCarga;
+  const redimensionar = () => {
+    if (encerrado) return;
+    try { engine.resize(); } catch (erro) { falhar(erro, 'redimensionamento'); }
+  };
+  const interrupcao = new Promise((_, rejeitar) => { rejeitarCarga = rejeitar; });
+  // O observador pode falhar antes de a promessa de carga ser registrada.
+  interrupcao.catch(() => {});
 
-  const pronto = (async () => {
-    arena = await criarArena(cenario, scene, apresentacao);
+  function liberar() {
+    if (encerrado) return;
+    encerrado = true;
+    controle.abort();
+    removeEventListener('resize', redimensionar);
+    canvas?.removeEventListener('webglcontextlost', contextoPerdido);
+    for (const recurso of [...modelos.filter(Boolean), arena, scene, engine]) {
+      try { if (recurso?.descartar) recurso.descartar(); else recurso?.dispose(); }
+      catch (erro) { console.warn('K.O: falha ao liberar um recurso 3D.', erro); }
+    }
+  }
+
+  function falhar(erro, origem) {
+    if (encerrado || falha) return;
+    falha = erroNaEtapa(erro, origem);
+    rejeitarCarga(falha);
+    liberar();
+    if (preparado && typeof aoFalhar === 'function') {
+      try { aoFalhar(falha); }
+      catch (erro) { console.error('K.O: falha ao mostrar o erro do 3D.', erro); }
+    }
+  }
+
+  function contextoPerdido(evento) {
+    evento.preventDefault();
+    falhar(new Error('O navegador interrompeu o contexto 3D. Tente carregar a luta novamente.'), 'contexto WebGL');
+  }
+
+  let catalogo;
+  try {
+    catalogo = lerModelos();
+    if (!Array.isArray(lutadores) || lutadores.length !== 2 || lutadores.some(id => !catalogo[id])) {
+      throw new Error('Os dois lutadores precisam de modelos 3D disponíveis.');
+    }
+    etapa = 'contexto WebGL';
+    engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true, antialias: true });
+    // Celular: limita a resolução interna (cada pixel a mais custa bateria).
+    engine.setHardwareScalingLevel(Math.max(1, (window.devicePixelRatio || 1) / 1.5));
+    canvas.addEventListener('webglcontextlost', contextoPerdido);
+    etapa = 'apresentação';
+    scene = new Scene(engine);
+    camera = criarCameraLuta(scene);
+    apresentacao = criarApresentacao(scene);
+    const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)');
+    efeitos = criarEfeitos(scene, KOSim, reduzido);
+    sf4 = criarEfeitosSF4(scene, KOSim, reduzido, { letreiros: false });
+    addEventListener('resize', redimensionar);
+  } catch (erro) {
+    liberar();
+    throw erroNaEtapa(erro, etapa);
+  }
+
+  const carga = (async () => {
+    etapa = 'arena';
+    const novaArena = await criarArena(cenario, scene, apresentacao);
+    if (encerrado) { novaArena?.descartar(); return; }
+    arena = novaArena;
     for (const lado of [0, 1]) {
-      const buffer = await baixar(MODELOS[lutadores[lado]][lado]);
+      etapa = lado === 0 ? 'modelo do jogador' : 'modelo do adversário';
+      const buffer = await baixar(catalogo[lutadores[lado]][lado], controle.signal);
       if (encerrado) return;
-      modelos[lado] = await carregarModelo(buffer, lutadores[lado], KOSim, scene);
-      apresentacao.prepararModelo(modelos[lado]);
+      const modelo = await carregarModelo(buffer, lutadores[lado], KOSim, scene);
+      if (encerrado) { modelo.descartar(); return; }
+      modelos[lado] = modelo;
+      apresentacao.prepararModelo(modelo);
     }
     // Primeira compilação dos shaders antes da luta (sem engasgo no 1º golpe).
+    etapa = 'shaders';
     engine.resize();
     await scene.whenReadyAsync();
+    if (!encerrado) preparado = true;
   })();
+  const pronto = Promise.race([carga, interrupcao]).catch(erro => {
+    if (encerrado && !falha) return;
+    falha = falha || erroNaEtapa(erro, etapa);
+    liberar();
+    throw falha;
+  });
 
   return {
     pronto,
     // Chamado a cada passo do motor, com os eventos daquele passo.
     eventos(evs, s) {
-      if (encerrado) return;
-      efeitos.eventos(evs.filter(e => e.t !== 'acerto' && e.t !== 'defendeu'), s.f, s);
-      sf4.eventos(evs, s);
+      if (encerrado || !preparado) return;
+      try {
+        efeitos.eventos(evs.filter(e => e.t !== 'acerto' && e.t !== 'defendeu'), s.f, s);
+        sf4.eventos(evs, s);
+      } catch (erro) { falhar(erro, 'efeitos'); }
     },
     // Chamado a cada quadro de tela.
     desenhar(s) {
-      if (encerrado || !modelos[0] || !modelos[1]) return;
-      const passos = ultimoF === null ? 0 : Math.max(0, s.f - ultimoF);
-      ultimoF = s.f;
-      s.p.forEach((p, i) => modelos[i].atualizar(descreverPose(p, KOSim, s)));
-      arena?.atualizar(s.f);
-      sf4.atualizar(s, passos, camera);
-      enquadrarCameraLuta(camera, engine, s, KOSim, sf4.camera(s));
-      efeitos.atualizar(s.f, s);
-      scene.render();
+      if (encerrado || !preparado) return;
+      try {
+        const passos = ultimoF === null ? 0 : Math.max(0, s.f - ultimoF);
+        ultimoF = s.f;
+        s.p.forEach((p, i) => modelos[i].atualizar(descreverPose(p, KOSim, s)));
+        arena?.atualizar(s.f);
+        sf4.atualizar(s, passos, camera);
+        enquadrarCameraLuta(camera, engine, s, KOSim, sf4.camera(s));
+        efeitos.atualizar(s.f, s);
+        scene.render();
+      } catch (erro) { falhar(erro, 'renderização'); }
     },
-    limpar() { efeitos.limpar(); sf4.limpar(); ultimoF = null; },
-    descartar() {
+    limpar() {
       if (encerrado) return;
-      encerrado = true;
-      removeEventListener('resize', redimensionar);
-      modelos.forEach(m => m?.descartar()); arena?.descartar();
-      scene.dispose(); engine.dispose();
+      try { efeitos.limpar(); sf4.limpar(); ultimoF = null; }
+      catch (erro) { falhar(erro, 'efeitos'); }
+    },
+    descartar() {
+      liberar();
+      rejeitarCarga(new Error('Carregamento 3D cancelado.'));
     },
   };
 }
 
 window.KO3D = {
   // O 3D só entra quando o aparelho aguenta e os dois lutadores têm modelo.
-  disponivel: (lutadores) => suportado() && lutadores.every(id => MODELOS[id]),
+  disponivel: (lutadores) => {
+    try {
+      const modelos = lerModelos();
+      return suportado() && lutadores.every(id => modelos[id]);
+    } catch { return false; }
+  },
   criar,
 };

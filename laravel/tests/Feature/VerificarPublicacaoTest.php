@@ -35,4 +35,18 @@ class VerificarPublicacaoTest extends TestCase
         Schema::table('jogadores', fn ($table) => $table->dropColumn('pin_hash'));
         $this->artisan('ko:verificar-publicacao')->expectsOutputToContain('migração do PIN')->assertFailed();
     }
+
+    public function test_personagem_nao_pode_ser_liberado_sem_os_dois_modelos(): void
+    {
+        $this->configurar();
+        config(['ko.lutadores.uivo.pronto' => true]);
+        $this->artisan('ko:verificar-publicacao')->expectsOutputToContain('Configure os dois modelos 3D antes de liberar: uivo')->assertFailed();
+    }
+
+    public function test_detecta_modelo_ausente_da_publicacao(): void
+    {
+        $this->configurar();
+        config(['ko.lutadores.pipoca.modelos3d.1' => '/modelos/ausente.glb']);
+        $this->artisan('ko:verificar-publicacao')->expectsOutputToContain('Modelo 3D ausente: pipoca')->assertFailed();
+    }
 }

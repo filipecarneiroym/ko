@@ -144,6 +144,13 @@ button, a.botao { touch-action: manipulation; min-height: 48px; }
 #tela-3d { width: min(100vw, calc(100dvh * 16 / 9)); aspect-ratio: 16 / 9; height: auto; display: none; background: #000; touch-action: none; }
 .graficos-3d #tela-3d { display: block; }
 .graficos-3d #tela { background: transparent; }
+.painel-graficos { z-index: 4; background: #100b1f; }
+.painel-graficos p { margin: 0; font: 600 15px/1.5 system-ui, sans-serif; }
+.painel-graficos details { max-width: 100%; color: var(--apagado); font: 13px/1.5 system-ui, sans-serif; overflow-wrap: anywhere; }
+.painel-graficos summary { cursor: pointer; padding: 8px; }
+.carregando-3d { width: 32px; height: 32px; border: 3px solid #ffffff30; border-top-color: var(--amarelo); border-radius: 50%; animation: carregar-3d 1s linear infinite; }
+@keyframes carregar-3d { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .carregando-3d { animation: none; } }
 
 .controles { position: absolute; inset: 0; touch-action: none; -webkit-touch-callout: none; }
 .versus-local .direcional, .versus-local .botoes { display: none; }
@@ -234,12 +241,16 @@ button, a.botao { touch-action: manipulation; min-height: 48px; }
 .escolha header { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
 .escolha h2 { margin: 0; font-size: clamp(18px, 4.5vmin, 28px); color: var(--amarelo); text-shadow: 2px 2px 0 var(--contorno); text-transform: uppercase; }
 .recado { margin: 0; color: var(--rosa); font-family: system-ui, sans-serif; font-weight: 800; }
-.grade { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
+/* Grade centralizada que se ajusta ao número de lutadores: uma carta fica
+   sozinha no meio e as demais vão entrando pelas laterais. */
+.grade { display: flex; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center; gap: clamp(6px, 1.2vmin, 14px); width: 100%; }
 .carta {
-  position: relative; aspect-ratio: 4 / 5; border-radius: 10px; padding: 0; cursor: pointer; overflow: hidden;
+  position: relative; flex: 0 0 auto; width: clamp(104px, 16vmin, 152px); aspect-ratio: 4 / 5; border-radius: 10px; padding: 0; cursor: pointer; overflow: hidden;
   border: 3px solid var(--contorno); background: linear-gradient(180deg, #3a2470, #1d1240);
   color: #fff; font: inherit; display: grid; place-items: center;
 }
+/* Com um só lutador a carta cresce para o retrato aparecer bem. */
+.grade:has(.carta:only-child) .carta { width: clamp(148px, 34vmin, 236px); }
 .carta canvas { width: 100%; height: 100%; object-fit: cover; }
 .carta .nome { position: absolute; left: 0; right: 0; bottom: 0; padding: 2px; font-size: clamp(9px, 2.2vmin, 13px); background: rgba(10, 5, 30, 0.75); text-transform: uppercase; }
 .carta .silhueta { font-size: 34px; color: rgba(255, 255, 255, 0.18); }
@@ -270,14 +281,16 @@ button, a.botao { touch-action: manipulation; min-height: 48px; }
     background: var(--fundo); color: var(--amarelo); font-size: 22px; text-transform: uppercase;
   }
   .gire-celular { width: 60px; height: 100px; border: 5px solid var(--amarelo); border-radius: 12px; animation: girar 1.8s ease-in-out infinite; }
-  .grade { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .carta { width: clamp(96px, 26vmin, 150px); }
+  .grade:has(.carta:only-child) .carta { width: clamp(150px, 46vmin, 220px); }
   .escolha { max-height: none; align-self: start; }
   .escolha footer { grid-template-columns: 1fr; padding-bottom: env(safe-area-inset-bottom); }
 }
 @keyframes girar { 0%, 20% { transform: rotate(0); } 50%, 80% { transform: rotate(-90deg); } 100% { transform: rotate(0); } }
 @media (max-height: 420px) {
-  .grade { grid-template-columns: repeat(8, 1fr); gap: 4px; }
-  .carta { aspect-ratio: 1; }
+  .grade { gap: 4px; }
+  .carta { width: clamp(84px, 13vmin, 124px); aspect-ratio: 1; }
+  .grade:has(.carta:only-child) .carta { width: clamp(112px, 22vmin, 168px); }
   .escolha footer { gap: 8px; }
   .botao-grande { font-size: 18px; padding: 12px 16px; }
 }

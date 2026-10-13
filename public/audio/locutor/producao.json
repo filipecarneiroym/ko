@@ -1,0 +1,64 @@
+{
+  "voz": "pt-BR-AntonioNeural",
+  "rate": "+4%",
+  "pitch": "-22Hz",
+  "filtros_ffmpeg": "silenceremove=start_periods=1:start_duration=0.015:start_threshold=-42dB,areverse,silenceremove=start_periods=1:start_duration=0.015:start_threshold=-48dB,areverse,highpass=f=65,lowpass=f=10000,equalizer=f=130:t=q:w=0.9:g=3,equalizer=f=2400:t=q:w=1:g=2,acompressor=threshold=0.18:ratio=3:attack=4:release=65:makeup=1.6,apad=pad_dur=0.14,aecho=0.75:0.35:53|91:0.12|0.07,loudnorm=I=-14:TP=-2:LRA=7,alimiter=limit=0.84:level=false",
+  "edge_tts": "7.3.1",
+  "imageio_ffmpeg": "0.6.0",
+  "chamadas": {
+    "round-1": {
+      "texto": "Round um!",
+      "arquivo": "round-1.mp3",
+      "tempo": 1.18,
+      "duracao": 0.681,
+      "pico": 0.73842,
+      "bytes": 11948,
+      "sha256": "c79722c6385d52d724c4baa24d9a96b4876e6633b665c6875f384117501b3307"
+    },
+    "round-2": {
+      "texto": "Round dois!",
+      "arquivo": "round-2.mp3",
+      "tempo": 1.18,
+      "duracao": 0.832,
+      "pico": 0.74778,
+      "bytes": 14252,
+      "sha256": "09e53263f48301298d8417922a5fd034221f8c25477b1a202060f6d164d885b7"
+    },
+    "round-3": {
+      "texto": "Round três!",
+      "arquivo": "round-3.mp3",
+      "tempo": 1.18,
+      "duracao": 0.829,
+      "pico": 0.75006,
+      "bytes": 14252,
+      "sha256": "be7ef0e88d75c7c0172f11c56f014c8eb9ca250b7544957540e0cb31cba39453"
+    },
+    "round-final": {
+      "texto": "Round final!",
+      "arquivo": "round-final.mp3",
+      "tempo": 1.18,
+      "duracao": 0.836,
+      "pico": 0.75284,
+      "bytes": 14252,
+      "sha256": "6a8b6aa1c58d73482efebb14fb469b8eb3ff82744076329b53ef84f5303c4fe0"
+    },
+    "lutem": {
+      "texto": "Lutem!",
+      "arquivo": "lutem.mp3",
+      "tempo": 1,
+      "duracao": 0.652,
+      "pico": 0.75574,
+      "bytes": 11564,
+      "sha256": "9969dd993f0d7d531d389c721819260e3f23461353ec600ca05a8cd77d1f6e42"
+    },
+    "ko": {
+      "texto": "Ká! Ô!",
+      "arquivo": "ko.mp3",
+      "tempo": 1,
+      "duracao": 1.515,
+      "pico": 0.75369,
+      "bytes": 25388,
+      "sha256": "a7a0c3ae2bba339fe6cdf8b81aa12db02c65a967c680d2b2d0db36bc1a41fa05"
+    }
+  }
+}

@@ -103,6 +103,122 @@ test('defesa segura soco e a rasteira passa por baixo da defesa em pé', () => {
   assert.ok(s.p[1].vida < vida, 'rasteira deveria passar pela defesa em pé');
 });
 
+test('defesa permite avançar e recuar mais devagar nos dois lados', () => {
+  for (const lado of [0, 1]) for (const frente of [true, false]) {
+    const s = prontaParaLutar(['pipoca', 'pipoca']);
+    const l = s.p[lado], x = l.x;
+    const direcao = (l.face === 1) === frente ? B.R : B.L;
+    const entrada = [0, 0]; entrada[lado] = direcao;
+    const normal = structuredClone(s);
+    K.passo(normal, entrada);
+    entrada[lado] |= B.D_;
+    for (let i = 0; i < 12; i++) K.passo(s, entrada);
+    assert.equal(l.estado, 'defesa');
+    assert.equal(Math.sign(l.x - x), direcao === B.R ? 1 : -1);
+    assert.equal(l.x - x, l.vx * 12);
+    assert.ok(Math.abs(l.vx) >= Math.abs(normal.p[lado].vx) * 0.55);
+    assert.ok(Math.abs(l.vx) <= Math.abs(normal.p[lado].vx) * 0.65);
+    assert.ok(Number.isInteger(l.x) && Number.isInteger(l.vx));
+    assert.equal(l.y, 0);
+  }
+});
+
+test('caminhar na guarda continua bloqueando socos, avançando ou recuando', () => {
+  for (const lado of [0, 1]) for (const frente of [true, false]) {
+    const s = prontaParaLutar(['pipoca', 'pipoca']); colar(s);
+    const defensor = s.p[lado], vida = defensor.vida;
+    const direcao = (defensor.face === 1) === frente ? B.R : B.L;
+    const entrada = [0, 0]; entrada[lado] = B.D_ | direcao; entrada[1 - lado] = B.P;
+    K.passo(s, entrada); entrada[1 - lado] = 0;
+    let bloqueou = false;
+    for (let i = 0; i < 8 && !bloqueou; i++) {
+      K.passo(s, entrada);
+      bloqueou = s.ev.some((e) => e.t === 'defendeu' && e.lado === lado);
+    }
+    assert.ok(bloqueou, `lado ${lado}, ${frente ? 'avançando' : 'recuando'}`);
+    assert.equal(defensor.vida, vida);
+    assert.equal(defensor.estado, 'defesa');
+    assert.ok(defensor.stun > 0);
+    assert.equal(defensor.vx, 0, 'o impacto interrompe a caminhada');
+  }
+});
+
+test('defesa agachada fica no lugar mesmo segurando direção', () => {
+  for (const lado of [0, 1]) for (const direcao of [B.L, B.R]) {
+    const s = prontaParaLutar(['pipoca', 'pipoca']);
+    const l = s.p[lado], x = l.x, entrada = [0, 0]; entrada[lado] = B.D_ | B.D | direcao;
+    for (let i = 0; i < 12; i++) K.passo(s, entrada);
+    assert.equal(l.estado, 'defesaBaixa');
+    assert.equal(l.x, x); assert.equal(l.vx, 0); assert.equal(l.y, 0);
+  }
+});
+
+test('soltar a defesa recupera a caminhada e toque duplo na guarda não corre', () => {
+  for (const lado of [0, 1]) {
+    const s = prontaParaLutar(['pipoca', 'pipoca']);
+    const l = s.p[lado], frente = l.face === 1 ? B.R : B.L, entrada = [0, 0];
+    entrada[lado] = frente; K.passo(s, entrada); const normal = l.vx;
+    entrada[lado] |= B.D_; K.passo(s, entrada); const guarda = l.vx;
+    entrada[lado] = B.D_; K.passo(s, entrada);
+    assert.equal(l.vx, 0, 'soltar o direcional interrompe a caminhada na guarda');
+    entrada[lado] = B.D_ | frente; K.passo(s, entrada);
+    assert.equal(l.estado, 'defesa'); assert.equal(l.vx, guarda);
+    entrada[lado] = frente; K.passo(s, entrada);
+    assert.equal(l.estado, 'andando'); assert.equal(l.vx, normal);
+  }
+});
+
+test('caminhada defensiva respeita as paredes e a separação entre lutadores', () => {
+  const s = prontaParaLutar(['pipoca', 'pipoca']);
+  roteiro(s, [[B.D_ | B.L, B.D_ | B.R, 180]]);
+  assert.equal(s.p[0].x, 18 * K.U);
+  assert.equal(s.p[1].x, (K.LARGURA - 18) * K.U);
+  for (let i = 0; i < 200; i++) {
+    K.passo(s, [B.D_ | B.R, B.D_ | B.L]);
+    assert.ok(s.p[0].x >= 18 * K.U && s.p[1].x <= (K.LARGURA - 18) * K.U);
+    assert.ok(s.p[1].x - s.p[0].x >= 26 * K.U, 'as guardas não atravessam os corpos');
+    assert.equal(s.p[0].y, 0); assert.equal(s.p[1].y, 0);
+  }
+});
+
+test('impacto na guarda impede caminhada e mantém só o empurrão até recuperar', () => {
+  const s = prontaParaLutar(['pipoca', 'pipoca']); colar(s);
+  K.passo(s, [B.P, B.D_ | B.L]);
+  for (let i = 0; i < 8 && !s.p[1].stun; i++) K.passo(s, [0, B.D_ | B.L]);
+  assert.ok(s.p[1].stun > 0);
+  const parada = structuredClone(s);
+  while (s.p[1].stun > 0) {
+    K.passo(s, [0, B.D_ | B.L]); K.passo(parada, [0, B.D_]);
+    assert.equal(s.p[1].x, parada.p[1].x, 'direção não altera o recuo durante o impacto');
+    assert.equal(s.p[1].estado, 'defesa'); assert.equal(s.p[1].vx, 0);
+  }
+  K.passo(s, [0, B.D_ | B.L]);
+  assert.ok(s.p[1].vx < 0, 'a caminhada volta depois da recuperação');
+});
+
+test('direção com defesa não interrompe introdução, ataque ou atordoamento', () => {
+  const intro = K.novo({ lutadores: ['pipoca', 'pipoca'] });
+  const x = intro.p[0].x;
+  roteiro(intro, [[B.D_ | B.R, 0, 20]]);
+  assert.equal(intro.fase, 'intro'); assert.equal(intro.p[0].x, x);
+
+  const ataque = prontaParaLutar(['pipoca', 'pipoca']);
+  K.passo(ataque, [B.P, 0]); const xAtaque = ataque.p[0].x;
+  roteiro(ataque, [[B.D_ | B.R, 0, 4]]);
+  assert.equal(ataque.p[0].estado, 'golpe'); assert.equal(ataque.p[0].x, xAtaque);
+
+  const dano = prontaParaLutar(['pipoca', 'pipoca']); colar(dano);
+  K.passo(dano, [B.P, 0]);
+  for (let i = 0; i < 8 && dano.p[1].estado !== 'dano'; i++) K.passo(dano, [0, 0]);
+  assert.equal(dano.p[1].estado, 'dano');
+  const neutra = structuredClone(dano);
+  while (dano.p[1].estado === 'dano') {
+    K.passo(dano, [0, B.D_ | B.L]); K.passo(neutra, [0, 0]);
+    assert.equal(dano.p[1].x, neutra.p[1].x);
+    assert.equal(dano.p[1].estado, neutra.p[1].estado);
+  }
+});
+
 test('especial com barra cheia vira Super', () => {
   const s = prontaParaLutar();
   s.p[0].poder = K.PODER_MAX;

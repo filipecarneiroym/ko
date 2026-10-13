@@ -31,7 +31,7 @@ class ResultadoTest extends TestCase
     private function relato(array $mudar = []): array
     {
         return [...[
-            'numero' => 1, 'lutador_host' => 'pipoca', 'lutador_convidado' => 'uivo', 'cenario' => 'praia',
+            'numero' => 1, 'lutador_host' => 'pipoca', 'lutador_convidado' => 'pipoca', 'cenario' => 'praia',
             'vencedor' => 'convidado', 'rounds_host' => 1, 'rounds_convidado' => 2,
         ], ...$mudar];
     }
@@ -90,6 +90,15 @@ class ResultadoTest extends TestCase
         $this->enviar($this->host, $this->relato(['rounds_host' => 2, 'rounds_convidado' => 2]))->assertStatus(422);
         $this->enviar($this->host, $this->relato(['vencedor' => 'host']))->assertStatus(422);
         $this->assertSame(0, Partida::query()->count());
+    }
+
+    public function test_personagem_sem_modelo_publicado_nao_entra_no_resultado(): void
+    {
+        $this->enviar($this->host, $this->relato(['lutador_host' => 'uivo']))->assertJsonValidationErrors('lutador_host');
+        $this->enviar($this->amigo, $this->relato(['lutador_convidado' => 'maromba']))->assertJsonValidationErrors('lutador_convidado');
+        config(['ko.lutadores.uivo.pronto' => true]);
+        $this->enviar($this->host, $this->relato(['lutador_host' => 'uivo']))->assertJsonValidationErrors('lutador_host');
+        $this->assertDatabaseCount('partidas', 0);
     }
 
     public function test_quem_nao_e_da_sala_nao_manda_resultado(): void

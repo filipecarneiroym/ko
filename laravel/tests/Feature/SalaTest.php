@@ -78,4 +78,21 @@ class SalaTest extends TestCase
         $this->get('/jogar/treino')->assertOk();
         $this->get('/jogar/outro')->assertNotFound();
     }
+
+    public function test_todos_os_modos_recebem_apenas_a_pipoca_publicada_em_3d(): void
+    {
+        $sala = Sala::criarPara($this->host);
+        $this->actingAs($this->host);
+
+        foreach (['/jogar/cpu', '/jogar/treino', '/jogar/versus', '/sala/'.$sala->codigo] as $url) {
+            $pagina = $this->get($url)->assertOk();
+            preg_match('/<script[^>]+id="ko-config"[^>]*>(.*?)<\/script>/s', $pagina->getContent(), $json);
+            $elenco = json_decode($json[1], true, flags: JSON_THROW_ON_ERROR)['lutadores'];
+            $this->assertSame(['pipoca'], array_keys($elenco), $url);
+            $this->assertCount(2, $elenco['pipoca']['modelos3d']);
+        }
+
+        // A retirada da seleção não apaga as artes dos próximos personagens.
+        $this->assertArrayHasKey('arte', config('ko.lutadores.uivo'));
+    }
 }
