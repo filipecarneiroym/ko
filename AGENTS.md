@@ -77,3 +77,11 @@ um arquivo .cjs; `page.goto` para a mesma URL só mudando hash não recarrega;
    **Manter as fotos/artes de todos os outros personagens** (entram depois,
    um por vez, seguindo o padrão de refinamento).
 6. Depois da aprovação da Pipoca: próximo personagem em 3D.
+
+## Publicação (Render: ko-rat6.onrender.com)
+O Render publica a partir do GitHub (`filipecarneiroym/ko`, branch `main`).
+O `Dockerfile` em uso é o que o usuário criou no GitHub (php:8.2-apache, banco
+SQLite novo a cada publicação, porta 80, **sem o relay do online**). A versão
+com relay/WebSocket e Apache na porta 10000 está no histórico (commit 263bf0f)
+e documentada em `deploy/render/README.md`; só trocar quando o usuário for
+testar o online e tiver as variáveis/disco configurados no painel.
