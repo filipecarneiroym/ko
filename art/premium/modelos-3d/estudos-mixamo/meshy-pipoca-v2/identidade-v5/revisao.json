@@ -1,0 +1,148 @@
+{
+  "source": "art\\premium\\modelos-3d\\estudos-mixamo\\meshy-pipoca-v2\\meshy-bunny-boxer-v2.glb",
+  "sourceSha256": "73b05d051c130f57f9bf08bd85ad84341b2988590131f11d4cbe376b620ebf3e",
+  "materials": {
+    "materiais": {
+      "pelagem": {
+        "acabamento": "pelagem curta direcional creme e brilho difuso",
+        "roughness": [
+          0.66,
+          0.79
+        ],
+        "bump_m": 0.00095,
+        "subsurface": 0.012,
+        "alpha": false,
+        "nodes": 19
+      },
+      "tecido": {
+        "acabamento": "indigo acetinado com trama",
+        "roughness": [
+          0.3,
+          0.39
+        ],
+        "trama_mm": 0.85,
+        "alpha": false,
+        "nodes": 22
+      },
+      "couro": {
+        "acabamento": "couro vermelho granulado com reflexo amplo e contido",
+        "roughness": [
+          0.37,
+          0.48
+        ],
+        "coat": 0.035,
+        "metallic": 0,
+        "alpha": false,
+        "nodes": 13
+      },
+      "tecido_top": {
+        "acabamento": "indigo fosco com trama",
+        "roughness": [
+          0.45,
+          0.54
+        ],
+        "trama_mm": 0.85,
+        "alpha": false,
+        "nodes": 22
+      }
+    },
+    "texturas_externas": 0,
+    "top_separado": true,
+    "limites": "Procedurais locais para estudo. Assar Base Color/Normal/Roughness apos retopologia e UV finais. Nao exportados automaticamente para glTF."
+  },
+  "straps": [
+    0.346,
+    0.347
+  ],
+  "hems": {
+    "-1": 34,
+    "1": 32
+  },
+  "waist": {
+    "angles": 35,
+    "top": [
+      0.054,
+      0.106
+    ]
+  },
+  "tail": {
+    "rim_m": [
+      0.056,
+      0.092
+    ]
+  },
+  "contours": {
+    "openEdgesBefore": 1465,
+    "openEdgesAfter": 0,
+    "islandsDissolved": 12,
+    "vertices": 50408,
+    "faces": 92733,
+    "perMaterial": {
+      "pelagem": 47255,
+      "interior_orelha": 2145,
+      "tecido": 14274,
+      "tecido_top": 4390,
+      "faixas": 15055,
+      "couro": 9438,
+      "pupila": 349,
+      "sobrancelha": 170
+    }
+  },
+  "face": {
+    "objects": 20,
+    "blush": {
+      "centres": [
+        [
+          -0.09,
+          -0.1244,
+          0.505
+        ],
+        [
+          0.09,
+          -0.122,
+          0.505
+        ]
+      ]
+    }
+  },
+  "details": {
+    "toenails": 8
+  },
+  "version": 5,
+  "draft": false,
+  "workfile": "art\\premium\\modelos-3d\\estudos-mixamo\\meshy-pipoca-v2\\identidade-v5\\pipoca-identidade-v5.blend",
+  "reference": "art\\premium\\modelos-3d\\referencias\\pipoca-referencia-v1.png",
+  "views": [
+    {
+      "view": "frente",
+      "file": "frente.png",
+      "sha256": "cd596e44bf3eccd19d505bf7b61710f7fa654c791d3ac767490c2eb878f1b21e"
+    },
+    {
+      "view": "tres-quartos",
+      "file": "tres-quartos.png",
+      "sha256": "8fccba422eb2b53e7bbe64022f6920c5710f3fece1223336513eda37a329a2b3"
+    },
+    {
+      "view": "perfil",
+      "file": "perfil.png",
+      "sha256": "8c8fe20e413adebb318c8ed01b71bd5e89e55957e509787b2ffd487eccf69a49"
+    },
+    {
+      "view": "costas",
+      "file": "costas.png",
+      "sha256": "d335bbe7af00901b093ff088999957079ac65a73032d880a69056ba5e84fc3fb"
+    },
+    {
+      "view": "rosto",
+      "file": "rosto.png",
+      "sha256": "70872df5a7c2dc66cb3f6803c6a75786d2014ef5d401d6946b97af7d6f419888"
+    },
+    {
+      "view": "rosto-34",
+      "file": "rosto-34.png",
+      "sha256": "cc5ad6b2f978d914a63b0ed138a368d77e8bc9ea94e94a5a5d56aeba7d54c589"
+    }
+  ],
+  "blender": "5.2.2 LTS"
+}
