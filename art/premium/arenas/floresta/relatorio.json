@@ -1,0 +1,41 @@
+{
+  "modelos": {
+    "tree_stump_02": {
+      "triangulos": 3000,
+      "dimensoes_m": [
+        1.522,
+        1.392,
+        0.52
+      ],
+      "bytes": 251768
+    },
+    "rock_moss_set_01": {
+      "triangulos": 3998,
+      "dimensoes_m": [
+        8.036,
+        6.948,
+        1.779
+      ],
+      "bytes": 210284
+    },
+    "fern_02": {
+      "triangulos": 3000,
+      "dimensoes_m": [
+        1.973,
+        1.724,
+        0.426
+      ],
+      "bytes": 419840
+    }
+  },
+  "arquivos": {
+    "ambiente.hdr": 1911073,
+    "chao_cor.jpg": 539978,
+    "chao_normal.jpg": 688013,
+    "chao_rugosidade.jpg": 249556,
+    "fern_02.glb": 419840,
+    "fundo.jpg": 3912619,
+    "rock_moss_set_01.glb": 210284,
+    "tree_stump_02.glb": 251768
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "modelos": {
+    "wooden_crate_01": {
+      "triangulos": 1499,
+      "dimensoes_m": [
+        0.82,
+        0.408,
+        0.348
+      ],
+      "bytes": 165132
+    },
+    "Barrel_01": {
+      "triangulos": 2000,
+      "dimensoes_m": [
+        0.563,
+        0.563,
+        0.88
+      ],
+      "bytes": 187664
+    }
+  },
+  "arquivos": {
+    "ambiente.hdr": 1662953,
+    "Barrel_01.glb": 187664,
+    "chao_cor.jpg": 361481,
+    "chao_normal.jpg": 371632,
+    "chao_rugosidade.jpg": 330179,
+    "fundo.jpg": 1824184,
+    "wooden_crate_01.glb": 165132
+  }
+}

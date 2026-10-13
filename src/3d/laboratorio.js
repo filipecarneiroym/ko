@@ -24,7 +24,7 @@ let estado = KOSim.novo({ lutadores: ['pipoca', 'uivo'], treino: true });
 // Luta Pipoca azul × Pipoca vermelha: contra a máquina (KOCPU) ou 2 jogadores.
 let luta = null, cpu = null;
 // Acesso de teste ao estado da prévia (laboratório; não existe no jogo).
-globalThis.__laboratorio3d = { get estado() { return estado; } };
+globalThis.__laboratorio3d = { get estado() { return estado; }, get scene() { return scene; } };
 const teclas = new Set(), pulsos = new Map(), toques = new Map();
 const modelos = [null, null];
 const controles = globalThis.KOControle?.criar();
@@ -92,7 +92,8 @@ function enquadrarCamera() {
   // as lutadoras ficam quase planas, o cenário ganha profundidade. A
   // distância é a que enquadra a mesma meia-altura do plano de luta.
   const distancia = metadeAltura * zoom / Math.tan(camera.fov / 2);
-  camera.position.set(cx + d.x, cy + d.y + distancia * .14, -distancia);
+  // Quase na horizontal (como no SF4): o fundo ocupa a metade de cima.
+  camera.position.set(cx + d.x, cy + d.y + distancia * .05, -distancia);
   camera.setTarget(new Vector3(cx + d.x, cy + d.y, 0));
   camera.maxZ = distancia + 160;   // inclui o fundo 360° das arenas realistas
 }

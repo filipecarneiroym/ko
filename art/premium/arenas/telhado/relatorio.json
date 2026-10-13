@@ -1,0 +1,31 @@
+{
+  "modelos": {
+    "exterior_aircon_unit": {
+      "triangulos": 4000,
+      "dimensoes_m": [
+        1.8,
+        0.375,
+        0.927
+      ],
+      "bytes": 706252
+    },
+    "modular_airduct_circular_01": {
+      "triangulos": 2999,
+      "dimensoes_m": [
+        4.17,
+        1.464,
+        1.324
+      ],
+      "bytes": 213392
+    }
+  },
+  "arquivos": {
+    "ambiente.hdr": 1624479,
+    "chao_cor.jpg": 528516,
+    "chao_normal.jpg": 255958,
+    "chao_rugosidade.jpg": 247140,
+    "exterior_aircon_unit.glb": 706252,
+    "fundo.jpg": 1201288,
+    "modular_airduct_circular_01.glb": 213392
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "modelos": {
+    "boulder_01": {
+      "triangulos": 23859,
+      "dimensoes_m": [
+        1.275,
+        1.838,
+        1.01
+      ],
+      "bytes": 1901628
+    }
+  },
+  "arquivos": {
+    "ambiente.hdr": 1577804,
+    "boulder_01.glb": 1901628,
+    "chao_cor.jpg": 397450,
+    "chao_normal.jpg": 441887,
+    "chao_rugosidade.jpg": 102379,
+    "fundo.jpg": 1616596
+  }
+}

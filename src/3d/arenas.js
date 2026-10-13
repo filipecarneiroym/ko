@@ -9,7 +9,7 @@ import { GlowLayer } from '@babylonjs/core/Layers/glowLayer.js';
 import { PointLight } from '@babylonjs/core/Lights/pointLight.js';
 import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem.js';
 import { criarArenaAcademia } from './arena-academia.js';
-import { criarArenaNeve } from './arena-neve.js';
+import { criarArenaRealista, CONFIG as REALISTAS } from './arena-realista.js';
 
 // As seis arenas do jogo em 3D, com a identidade de cada cenário 2D
 // (CENARIOS em ko-arte.js). Lutadores em z = 0; câmera ortográfica em z < 0
@@ -492,9 +492,13 @@ const CONSTRUTORES = { praia, telhado, floresta, feira, neve };
 
 // Assíncrona: as arenas realistas carregam recursos (foto 360°, HDR, modelos).
 export async function criarArena(nome, scene, apresentacao) {
-  if (nome === 'neve') {
-    const arena = await criarArenaNeve(scene, apresentacao);
-    return { nome, atualizar: arena.atualizar, descartar: arena.descartar };
+  // Versão realista (foto 360°, HDR, PBR); as versões desenhadas abaixo
+  // ficam como reserva se os recursos não carregarem.
+  if (REALISTAS[nome]) {
+    try {
+      const arena = await criarArenaRealista(nome, scene, apresentacao);
+      return { nome, atualizar: arena.atualizar, descartar: arena.descartar };
+    } catch (erro) { console.warn('Arena realista indisponível, usando a desenhada:', erro); }
   }
   if (nome === 'academia') {
     const arena = criarArenaAcademia(scene, apresentacao);

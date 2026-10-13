@@ -42,7 +42,7 @@ const ARENAS = ['academia', 'praia', 'telhado', 'floresta', 'feira', 'neve'];
     await page.evaluate(() => { const s = globalThis.__laboratorio3d.estado; s.p[0].x = 150 * 16; s.p[1].x = 234 * 16; });
     for (const nome of ARENAS) {
       await page.selectOption('#arena', nome);
-      if (nome === 'neve') await page.waitForFunction(() => globalThis.__arenaPronta === 'neve', null, { timeout: 120000 });
+      await page.waitForFunction(n => globalThis.__arenaPronta === n, nome, { timeout: 120000 });
       await page.waitForTimeout(3000);
       await page.locator('canvas').screenshot({ path: path.join(saida, `${nome}.png`) });
       console.log('arena', nome, await page.evaluate(() => document.querySelector('#estado-3d').textContent.match(/(\d+) FPS/)?.[1]));

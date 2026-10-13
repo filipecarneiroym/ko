@@ -1,0 +1,48 @@
+{
+  "forest_slope": {
+    "tipo": "hdri",
+    "nome": "Forest Slope",
+    "autores": [
+      "Andreas Mischok"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/forest_slope"
+  },
+  "forest_leaves_02": {
+    "tipo": "textura",
+    "nome": "Forest Leaves 02",
+    "autores": [
+      "Rob Tuytel"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/forest_leaves_02"
+  },
+  "tree_stump_02": {
+    "tipo": "modelo",
+    "nome": "Tree Stump 02",
+    "autores": [
+      "Rob Tuytel"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/tree_stump_02"
+  },
+  "rock_moss_set_01": {
+    "tipo": "modelo",
+    "nome": "Rock Moss Set 01",
+    "autores": [
+      "Kless Gyzen"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/rock_moss_set_01"
+  },
+  "fern_02": {
+    "tipo": "modelo",
+    "nome": "Fern 02",
+    "autores": [
+      "Rob Tuytel",
+      "Rico Cilliers"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/fern_02"
+  }
+}

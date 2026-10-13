@@ -1,0 +1,20 @@
+{
+  "basement_boxing_ring": {
+    "tipo": "hdri",
+    "nome": "Basement Boxing Ring",
+    "autores": [
+      "Sergej Majboroda"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/basement_boxing_ring"
+  },
+  "rubber_tiles": {
+    "tipo": "textura",
+    "nome": "Rubber Tiles",
+    "autores": [
+      "Amal Kumar"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/rubber_tiles"
+  }
+}

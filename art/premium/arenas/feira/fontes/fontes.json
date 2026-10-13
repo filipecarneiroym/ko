@@ -1,0 +1,38 @@
+{
+  "outdoor_umbrellas": {
+    "tipo": "hdri",
+    "nome": "Outdoor Umbrellas",
+    "autores": [
+      "Sergej Majboroda"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/outdoor_umbrellas"
+  },
+  "cobblestone_floor_04": {
+    "tipo": "textura",
+    "nome": "Cobblestone Floor 04",
+    "autores": [
+      "Rob Tuytel"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/cobblestone_floor_04"
+  },
+  "wooden_crate_01": {
+    "tipo": "modelo",
+    "nome": "Wooden Crate 01",
+    "autores": [
+      "James Ray Cock"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/wooden_crate_01"
+  },
+  "Barrel_01": {
+    "tipo": "modelo",
+    "nome": "Barrel_01",
+    "autores": [
+      "Jorge Camacho"
+    ],
+    "licenca": "CC0 1.0 (Poly Haven)",
+    "pagina": "https://polyhaven.com/a/Barrel_01"
+  }
+}
