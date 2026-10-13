@@ -105,6 +105,10 @@ function criar(canvas, { cenario, lutadores, aoFalhar } = {}) {
     }
     etapa = 'contexto WebGL';
     engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true, antialias: true });
+    // iPhone/iPad (Safari) falham ao criar "uniform buffers" (bug conhecido do WebGL no
+    // iOS 16.7+/17: "Unable to create uniform buffer"). Desligar os UBOs usa o caminho de
+    // uniforms simples e deixa o 3D rodar nesses aparelhos.
+    engine.disableUniformBuffers = true;
     // Celular: limita a resolução interna (cada pixel a mais custa bateria).
     engine.setHardwareScalingLevel(Math.max(1, (window.devicePixelRatio || 1) / 1.5));
     canvas.addEventListener('webglcontextlost', contextoPerdido);

@@ -238,6 +238,9 @@ async function importar(e) {
 try {
   if (!Engine.isSupported()) throw new Error('WebGL indisponível');
   engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true });
+  // iPhone/iPad (Safari) falham ao criar "uniform buffers" no iOS 16.7+/17; desligar
+  // os UBOs contorna o "Unable to create uniform buffer".
+  engine.disableUniformBuffers = true;
   engine.setHardwareScalingLevel(Math.max(1, window.devicePixelRatio / 1.5));
   scene = new Scene(engine); scene.clearColor.set(.025, .015, .06, 1);
   camera = criarCameraLuta(scene);

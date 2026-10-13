@@ -16,13 +16,13 @@
     "src/3d/efeitos-sf4.js": "e7e27c0e256cc496d397996834a84ed608fa491c3615a976adb3355d790e973e",
     "src/3d/efeitos.js": "28f2254b416dfc4e630ad1e0c171a90c52b7b151de5b1c956ed13118cbf5a4e4",
     "src/3d/estado-visual.mjs": "6a5388a61074de405228b3bfe7d02d68255cf8feb0b9c2e419f37ac9396f1541",
-    "src/3d/jogo-3d.js": "90f0e4959ac620ded3e91d7fdc7b8066c2de0dd7b09e0d52dc828b105c54ca38",
-    "src/3d/laboratorio.js": "6363d730b2d681999ff3be5744ffdab263376e7bf9837b490201699f392762c7",
+    "src/3d/jogo-3d.js": "5d7d14ca40a1d9dc4f0c651e16018edf68a5832fdafb3daf695e7c33e331a9ea",
+    "src/3d/laboratorio.js": "b0ab886937ff702c690bbb3ea0044d6de458482259369f7d8bb6030a7aa00b8d",
     "src/3d/modelo-glb.js": "bd90c28c725c1fdb59d351f7d355f2f200b60d2723a8e9e77096a427e078f5d3",
     "src/3d/perfil-pipoca.mjs": "effca8a992370c7fe15a90f05e570b5ac9b677f69ad879b44de49c6b58e9884a"
   },
   "saida": {
     "caminho": "public/js/ko-laboratorio-3d.js",
-    "sha256": "837b4f41efd367d63a3346c2b6951ef31761d712d4d13e1ecd8ca9a490fb76b2"
+    "sha256": "064b4f7250fe45c51f8b9eff8005aedc269701732ebdbbcbb2a2be202d5cbde2"
   }
 }
