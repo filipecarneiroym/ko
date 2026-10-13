@@ -9,6 +9,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { montarEstudoVisual } from './gerar-estudo-visual.mjs';
 import { carregarPipocaV5, retargetarClips, VARIANTES } from '../../src/producao3d/pipoca-v5.mjs';
+import { criarGolpesV5 } from '../../src/producao3d/pipoca-v5-golpes.mjs';
 import { exportarGlb } from './glb.mjs';
 import { validarGlb } from '../../src/3d/contrato-glb.mjs';
 
@@ -21,7 +22,13 @@ export function gerarPipocaV5() {
   const relatorio = { aprovadoFinal: false, fonteMalha: JSON.parse(readFileSync(resolve(pastaV5, 'relatorio.json'), 'utf8')), arquivos: {} };
   for (const variante of Object.keys(VARIANTES)) {
     const v5 = carregarPipocaV5(pastaV5, variante);
-    const clips = retargetarClips(v13.clips, v13.ossos, v5.ossos);
+    const herdados = retargetarClips(v13.clips, v13.ossos, v5.ossos);
+    // Golpes refeitos à mão no esqueleto da v5 substituem os herdados.
+    const golpes = criarGolpesV5(v5.ossos, herdados.find(c => c.nome === 'parado'), K);
+    const falhas = Object.entries(golpes.relatorio).flatMap(([nome, js]) => js.filter(j => !j.ok).map(j => `${nome}/${j.lado}`));
+    assert.deepEqual(falhas, [], `Pé fora da caixa do motor: ${falhas.join(', ')}`);
+    relatorio.contato = golpes.relatorio;
+    const clips = herdados.map(c => golpes.clips[c.nome] ?? c);
     const dados = { nome: 'pipoca', ...v5, clips,
       extras: { status: 'pipoca-v5-jogo', variante, aprovadoFinal: false,
         animacoes: v13.extras.animacoes, retarget: 'v13 -> v5 (rotações; comprimentos da v5; pelve escalada pela perna)' } };

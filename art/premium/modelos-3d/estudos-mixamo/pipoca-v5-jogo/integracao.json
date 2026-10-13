@@ -32,7 +32,7 @@
     "azul": {
       "caminho": "public/modelos/estudos/pipoca-v5-azul.glb",
       "bytes": 5672140,
-      "sha256": "8e728a8c0565cd7017bb635a025ebaaa85b5133ad3d6dd38895c817c1608b501",
+      "sha256": "5b0cee5e0196b2fe669b4fbf4202fadcd052dd644aec5eaf9e2f115112e6ec85",
       "triangulos": 28346,
       "materiais": 1,
       "ossos": 20,
@@ -43,7 +43,7 @@
     "vermelha": {
       "caminho": "public/modelos/estudos/pipoca-v5-vermelha.glb",
       "bytes": 5686680,
-      "sha256": "f4e88b072d8510aa7b59cb3580cbe60007c71a5167af54767ea10db32d2c871d",
+      "sha256": "bca3311df90bb51eaa60b254adc3e8c794a00455a458aad324cc6a2b84b04425",
       "triangulos": 28346,
       "materiais": 1,
       "ossos": 20,
@@ -51,5 +51,187 @@
       "dentroDoTeto": true,
       "glbDentroDoAlvo": true
     }
+  },
+  "contato": {
+    "k1": [
+      {
+        "lado": "E",
+        "caixa": {
+          "x0": 0.16666666666666666,
+          "x1": 1.4166666666666667,
+          "y0": 0.75,
+          "y1": 1.25
+        },
+        "quadros": [
+          {
+            "q": 6,
+            "dentro": true,
+            "tornozelo": [
+              1.24,
+              1.02,
+              -0.204
+            ]
+          },
+          {
+            "q": 7,
+            "dentro": true,
+            "tornozelo": [
+              1.25,
+              1.02,
+              -0.204
+            ]
+          },
+          {
+            "q": 8,
+            "dentro": true,
+            "tornozelo": [
+              1.26,
+              1.02,
+              -0.204
+            ]
+          }
+        ],
+        "ok": true
+      },
+      {
+        "lado": "D",
+        "caixa": {
+          "x0": 0.16666666666666666,
+          "x1": 1.4166666666666667,
+          "y0": 0.75,
+          "y1": 1.25
+        },
+        "quadros": [
+          {
+            "q": 12,
+            "dentro": true,
+            "tornozelo": [
+              1.233,
+              1.038,
+              -0.003
+            ]
+          },
+          {
+            "q": 13,
+            "dentro": true,
+            "tornozelo": [
+              1.238,
+              1.039,
+              -0.002
+            ]
+          },
+          {
+            "q": 14,
+            "dentro": true,
+            "tornozelo": [
+              1.243,
+              1.04,
+              -0.002
+            ]
+          }
+        ],
+        "ok": true
+      }
+    ],
+    "k2": [
+      {
+        "lado": "E",
+        "caixa": {
+          "x0": 0.08333333333333333,
+          "x1": 1.4166666666666667,
+          "y0": 1.1666666666666667,
+          "y1": 1.9166666666666667
+        },
+        "quadros": [
+          {
+            "q": 7,
+            "dentro": true,
+            "tornozelo": [
+              1,
+              1.82,
+              -0.164
+            ]
+          },
+          {
+            "q": 8,
+            "dentro": true,
+            "tornozelo": [
+              1.005,
+              1.815,
+              -0.164
+            ]
+          },
+          {
+            "q": 9,
+            "dentro": true,
+            "tornozelo": [
+              1.015,
+              1.805,
+              -0.164
+            ]
+          },
+          {
+            "q": 10,
+            "dentro": true,
+            "tornozelo": [
+              1.02,
+              1.8,
+              -0.164
+            ]
+          }
+        ],
+        "ok": true
+      }
+    ],
+    "ck": [
+      {
+        "lado": "E",
+        "caixa": {
+          "x0": 0.16666666666666666,
+          "x1": 1.5833333333333333,
+          "y0": 0,
+          "y1": 0.4166666666666667
+        },
+        "quadros": [
+          {
+            "q": 6,
+            "dentro": true,
+            "tornozelo": [
+              0.999,
+              0.141,
+              -0.283
+            ]
+          },
+          {
+            "q": 7,
+            "dentro": true,
+            "tornozelo": [
+              1.003,
+              0.142,
+              -0.283
+            ]
+          },
+          {
+            "q": 8,
+            "dentro": true,
+            "tornozelo": [
+              1.009,
+              0.144,
+              -0.282
+            ]
+          },
+          {
+            "q": 9,
+            "dentro": true,
+            "tornozelo": [
+              1.012,
+              0.145,
+              -0.282
+            ]
+          }
+        ],
+        "ok": true
+      }
+    ]
   }
 }
