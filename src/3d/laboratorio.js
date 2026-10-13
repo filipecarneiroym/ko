@@ -14,14 +14,17 @@ import { criarEfeitos } from './efeitos.js';
 import { criarCaixas } from './caixas.js';
 import { criarApresentacao } from './apresentacao.js';
 import { criarArenaAcademia } from './arena-academia.js';
+import { criarEfeitosSF4 } from './efeitos-sf4.js';
 
 const canvas = document.querySelector('#arena-3d');
 const aviso = document.querySelector('#estado-3d');
-let engine, scene, camera, efeitos, apresentacao, anterior = 0, acumulado = 0, indicador = 0;
+let engine, scene, camera, efeitos, sf4, apresentacao, anterior = 0, acumulado = 0, indicador = 0;
 let suspenso = false, preservado = false, encerrado = false, carregando = false, operacaoModelo = null;
 let estado = KOSim.novo({ lutadores: ['pipoca', 'uivo'], treino: true });
 // Luta Pipoca azul × Pipoca vermelha: contra a máquina (KOCPU) ou 2 jogadores.
 let luta = null, cpu = null;
+// Acesso de teste ao estado da prévia (laboratório; não existe no jogo).
+globalThis.__laboratorio3d = { get estado() { return estado; } };
 const teclas = new Set(), pulsos = new Map(), toques = new Map();
 const modelos = [null, null];
 const controles = globalThis.KOControle?.criar();
@@ -35,7 +38,7 @@ const teclas2 = new Set();
 const limparEntrada = () => { teclas.clear(); teclas2.clear(); pulsos.clear(); toques.clear(); };
 const reiniciar = () => {
   if (carregando || encerrado) return;
-  limparEntrada(); efeitos?.limpar();
+  limparEntrada(); efeitos?.limpar(); sf4?.limpar();
   estado = KOSim.novo(luta ? { lutadores: ['pipoca', 'pipoca'], treino: false } : { lutadores: ['pipoca', 'uivo'], treino: true });
   cpu = luta?.modo === 'cpu' ? globalThis.KOCPU.criar(KOSim, luta.nivel) : null;
 };
@@ -79,10 +82,17 @@ function enquadrarCamera() {
   const alturaPulo = Math.max(...estado.p.map(p => p.y / KOSim.U / 24));
   const metadeAltura = Math.max(2.3, 1.4 + alturaPulo, (Math.abs(xs[1] - xs[0]) + 4) / (2 * aspecto));
   const metadeLargura = metadeAltura * aspecto;
-  camera.position.set(centro, 3.6, -13);
-  camera.setTarget(new Vector3(centro, 1.5 + Math.max(0, alturaPulo - .9) / 2, 0));
-  camera.orthoLeft = -metadeLargura; camera.orthoRight = metadeLargura;
-  camera.orthoTop = metadeAltura; camera.orthoBottom = -metadeAltura;
+  const pedido = sf4?.camera(estado);
+  let cx = centro, cy = 1.5 + Math.max(0, alturaPulo - .9) / 2, zoom = 1;
+  if (pedido?.foco) {
+    const k = 1 - pedido.zoom;  // quanto mais zoom, mais perto do foco
+    cx += (pedido.foco.x - cx) * Math.min(1, k * 2.5); cy += (pedido.foco.y - cy) * Math.min(1, k * 2.5); zoom = pedido.zoom;
+  }
+  const d = pedido?.desloc || Vector3.Zero();
+  camera.position.set(cx + d.x, 3.6 + d.y, -13);
+  camera.setTarget(new Vector3(cx + d.x, cy + d.y, 0));
+  camera.orthoLeft = -metadeLargura * zoom; camera.orthoRight = metadeLargura * zoom;
+  camera.orthoTop = metadeAltura * zoom; camera.orthoBottom = -metadeAltura * zoom;
 }
 function retomar() { anterior = performance.now(); acumulado = 0; limparEntrada(); redimensionar(); }
 function atualizarImportadores() {
@@ -211,7 +221,7 @@ async function iniciarLuta() {
       antigos.forEach(m => m?.descartar());
       luta = { modo, nivel };
       // Nova luta já com as duas Pipocas (reiniciar ignora pedidos durante o carregamento).
-      limparEntrada(); efeitos?.limpar();
+      limparEntrada(); efeitos?.limpar(); sf4?.limpar();
       estado = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: false });
       cpu = modo === 'cpu' ? globalThis.KOCPU.criar(KOSim, nivel) : null;
       const avisoModelo = document.querySelector('#estado-modelos');
@@ -257,6 +267,7 @@ try {
   criarArenaAcademia(scene, apresentacao);
   const bonecos = [manequim(0, '#ffb12b'), manequim(1, '#6aa8ff')];
   efeitos = criarEfeitos(scene, KOSim, window.matchMedia('(prefers-reduced-motion: reduce)'));
+  sf4 = criarEfeitosSF4(scene, KOSim, window.matchMedia('(prefers-reduced-motion: reduce)'));
   const caixas = criarCaixas(scene, KOSim);
   const exibirCaixas = document.querySelector('#exibir-caixas');
   anterior = performance.now();
@@ -266,7 +277,12 @@ try {
     const agora = performance.now(), dt = Math.min(100, agora - anterior); anterior = agora;
     if (suspenso || preservado || document.hidden || carregando || encerrado) { acumulado = 0; return; }
     const pads = controles?.atualizar();
-    acumulado += dt;
+    // Câmera lenta do KO: só espaça os passos na tela; o resultado não muda.
+    const lento = sf4.camera(estado).lento;
+    acumulado += dt * lento;
+    let passos = 0;
+    // Pausa de teste: congela o motor (efeitos param no quadro do evento).
+    if (globalThis.__laboratorio3d?.pausado) acumulado = 0;
     while (acumulado >= 1000 / 60) {
       let entrada = 0;
       for (const tecla of teclas) entrada |= KOSim.B[mapa[tecla]];
@@ -279,8 +295,13 @@ try {
       for (const tecla of teclas2) entrada2 |= KOSim.B[mapa2[tecla]];
       if (cpu) entrada2 = cpu(estado, 1);
       KOSim.passo(estado, [entrada | (pads?.[0]?.bits || 0), entrada2]);
-      efeitos.eventos(estado.ev, estado.f, estado); acumulado -= 1000 / 60;
+      // Impactos e defesas agora são da camada SF4 (tinta); o módulo antigo
+      // segue com cenoura, toca, poeira e Chuva de Cenouras.
+      efeitos.eventos(estado.ev.filter(e => e.t !== 'acerto' && e.t !== 'defendeu'), estado.f, estado);
+      sf4.eventos(estado.ev, estado);
+      acumulado -= 1000 / 60; passos++;
     }
+    sf4.atualizar(estado, passos, camera);
     estado.p.forEach((p, i) => {
       const b = bonecos[i];
       const pose = descreverPose(p, KOSim, estado);
