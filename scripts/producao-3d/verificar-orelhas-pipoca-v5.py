@@ -7,6 +7,7 @@ O miolo de cada região deve estar inteiramente coral, e o verso fica creme.
 from pathlib import Path
 import json
 import hashlib
+import math
 import sys
 
 import bpy
@@ -40,7 +41,9 @@ def main():
     kd.balance()
     (mu, mv), (ru, rv) = FIG.EAR_MARKUP_ANCHOR
     mpp = FIG.EAR_RENDER['ortho'] / FIG.EAR_RENDER['width']
-    tolerance = 2.0
+    # 2 px plus its diagonal grid neighbour (sqrt 5 = 2.236 px, ~1.6 mm):
+    # pixel distances on the grid jump from 2.0 straight to 2.236.
+    tolerance = 2.25
     counts = {k: 0 for k in ('marcados', 'coral', 'falhasNoMiolo', 'foraDoContorno', 'coralNoVerso')}
     missing_max = extra_max = 0.0
     for v in range(mask.shape[0]):
@@ -102,6 +105,53 @@ def main():
                     quarter_failures.append({'p': list(p), 'u': u, 'v': v,
                                              'distanciaContinuaPx': kd.find((u-.5, v-.5, 0))[2],
                                              'distanciaPixelPx': kd.find((float(int(u)), float(int(v)), 0))[2]})
+    # Side and oblique views (user: no paint outside the dark inner area of
+    # the ear, checked from several angles). Every visible ear face is
+    # classified by whether it faces the inside of the cup (FIG.ear_cup_facing,
+    # mean over its vertices). Clear outer surfaces (back, top of the rolled
+    # rim) must not be coral; clear inner walls hidden from the front (the
+    # curled fold) must be coral. Faces near the crest (|cos| small) are the
+    # border itself and are not judged.
+    ids, facing = FIG.ear_cup_facing(mesh)
+    counts['amostrasLaterais'] = counts['coralForaDaConcha'] = counts['cremeDentroDaConcha'] = 0
+    side_failures = []
+    centre = Vector((0, -.03, .79))
+    views = [(Vector((math.sin(math.radians(a)), -math.cos(math.radians(a)), e)).normalized(), a, e)
+             for a in (-90, -60, -45, 45, 60, 90) for e in (0, .35)]
+    views.append((Vector((0, -.6, .8)).normalized(), 0, 'cima'))
+    for view, angle, elevation in views:
+        right = view.cross(Vector((0, 0, 1))).normalized() if abs(view.z) < .9 else Vector((1, 0, 0))
+        up = right.cross(view).normalized()
+        for a in np.arange(-.2, .2, .0025):
+            for b in np.arange(-.17, .17, .0025):
+                origin = centre+view*2+right*a+up*b
+                p, _, face, _ = tree.ray_cast(origin, -view, 4)
+                if p is None or p.z < .66 or abs(p.x) < .02:
+                    continue
+                cos = float(np.mean(facing[list(mesh.polygons[face].vertices)]))
+                is_coral = mesh.polygons[face].material_index == coral
+                counts['amostrasLaterais'] += 1
+                bad = None
+                front = tree.ray_cast(Vector((p.x, -1, p.z)), Vector((0, 1, 0)), 2)[0]
+                u = (p.x/mpp+FIG.EAR_RENDER['width']/2-ru)*FIG.EAR_MARKUP_SCALE+mu
+                v = ((FIG.EAR_RENDER['z']-p.z)/mpp+FIG.EAR_RENDER['height']/2-rv)*FIG.EAR_MARKUP_SCALE+mv
+                # Marked, or on the drawn line itself (faces cut by the border
+                # leave coral fragments along it; same band as the front check).
+                marked_front = (front is not None and abs(front.y-p.y) < .001
+                                and 0 <= u < mask.shape[1] and 0 <= v < mask.shape[0]
+                                and (mask[int(v), int(u)] or kd.find((u-.5, v-.5, 0))[2] <= tolerance+1))
+                # Marked and seen from the front: judged pixel by pixel against
+                # the markup above (at the tip and base the C model is loose).
+                if is_coral and cos < -.2 and not marked_front:
+                    counts['coralForaDaConcha'] += 1
+                    bad = 'coralForaDaConcha'
+                elif not is_coral and cos > .3:
+                    if front is not None and p.y-front.y > .008:
+                        counts['cremeDentroDaConcha'] += 1
+                        bad = 'cremeDentroDaConcha'
+                if bad and len(side_failures) < 12:
+                    side_failures.append({'tipo': bad, 'vista': [angle, elevation], 'p': [round(c, 4) for c in p],
+                                          'cos': round(cos, 3)})
     from collections import defaultdict
     edge_faces = defaultdict(list)
     painted_faces = {f.index for f in mesh.polygons if f.material_index == coral}
@@ -138,10 +188,11 @@ def main():
         'suavizacao': 'Campo de distância contínuo; filtro binomial sigma 1 px, dentro do traço.',
         **counts,
         'falhasTresQuartosAmostras': quarter_failures,
+        'falhasLateraisAmostras': side_failures,
         'maiorDesvioInteriorPx': round(missing_max, 3),
         'maiorDesvioExteriorPx': round(extra_max, 3),
         'arestasAbertas': open_edges,
-        'aprovado': bool(counts['marcados'] and counts['amostrasTresQuartos']) and components == 2 and not (counts['falhasNoMiolo'] or counts['foraDoContorno'] or counts['coralNoVerso'] or counts['falhasTresQuartos'] or open_edges),
+        'aprovado': bool(counts['marcados'] and counts['amostrasTresQuartos'] and counts['amostrasLaterais']) and components == 2 and not (counts['falhasNoMiolo'] or counts['foraDoContorno'] or counts['coralNoVerso'] or counts['falhasTresQuartos'] or counts['coralForaDaConcha'] or counts['cremeDentroDaConcha'] or open_edges),
     }
     (OUT/'verificacao-orelhas.json').write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n', encoding='utf8')
     print('PIPOCA_EARS_CHECK', json.dumps(report, ensure_ascii=False), flush=True)

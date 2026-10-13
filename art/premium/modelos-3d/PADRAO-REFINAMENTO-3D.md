@@ -67,11 +67,24 @@ Rodar: `blender -b --python scripts/producao-3d/concluir-aparencia-meshy-pipoca-
   separados que surgem quando o traço cruza uma dobra deixam a borda
   listrada em três quartos; sua remoção deve continuar dentro da faixa do
   traço e passar novamente pela conferência de pixels.
+- **A marcação de frente não vê as paredes escondidas.** Projetar só o
+  traço deixou creme a dobra enrolada da borda interna, que de lado é
+  claramente "lado de dentro da orelha" (usuário: conferir de vários
+  ângulos laterais). Regra final (`ear_cup_facing` + `ear_field`):
+  pintar onde (está no traço **e** é visível de frente, folga de 1 mm) **ou**
+  (está escondido de frente a mais de 6 mm **e** a normal aponta para o
+  centro do "C" do corte da orelha naquela altura). O verso e o topo da
+  borda enrolada apontam para fora do C e ficam creme; a troca de sinal cai
+  na crista da borda. Oclusão ambiente e relevo não separaram a concha rasa.
+- O verificador também olha de 13 vistas laterais/oblíquas/de cima:
+  zero coral fora da concha (cos < −0,2, fora do traço) e zero creme nas
+  paredes internas escondidas (cos > 0,3, > 8 mm atrás da frente).
 - Valide o **arquivo salvo**, lançando um raio por pixel da marcação e
   lendo o material da primeira face atingida, também pelo verso. Execute
   `blender -b --python scripts/producao-3d/verificar-orelhas-pipoca-v5.py`.
   O miolo deve ter zero falhas e o exterior zero vazamentos; a faixa de
-  2 pixels do próprio traço admite a suavização da borda. O relatório
+  2,25 pixels do próprio traço (2 px + vizinho diagonal √5) admite a
+  suavização da borda. O relatório
   `verificacao-orelhas.json` vincula os hashes do `.blend` e da marcação.
   Também exige duas conchas conectadas e confere as superfícies demarcadas
   visíveis em três quartos nos dois lados.

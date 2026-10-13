@@ -740,6 +740,41 @@ def _markup_mask(path):
     return ~outside
 
 
+def ear_cup_facing(mesh):
+    """Per ear vertex: does its normal face the inside of the cup?
+
+    Valid from every angle (user: no paint outside the dark inner area, seen
+    from the sides). Each ear's cross-section is a C; the inner surface faces
+    the C's centroid, the back and the top of the rolled rim face away, so
+    the sign flips on the rim's crest. Projecting the front markup alone left
+    the curled inner fold cream (hidden from the front) and ragged strips
+    beside it. Returns (vertex ids, cosine to the centroid per vertex)."""
+    co = np.array([v.co[:] for v in mesh.vertices])
+    nr = np.array([v.normal[:] for v in mesh.vertices])
+    facing = np.zeros(len(co))
+    ids = []
+    for side in (-1, 1):
+        idx = np.where((co[:, 2] > .64) & (np.sign(co[:, 0]) == side))[0]
+        ids += list(idx)
+        e = co[idx]
+        c = e.mean(0)
+        a0 = np.linalg.svd(e-c, full_matrices=False)[2][0]
+        hgt = (e-c)@a0
+        bins = np.linspace(hgt.min(), hgt.max(), 40)
+        mids, cents = [], []
+        for b0, b1 in zip(bins, bins[1:]):
+            m = (hgt >= b0) & (hgt < b1)
+            if m.sum() > 10:
+                mids.append((b0+b1)/2)
+                cents.append(e[m].mean(0))
+        mids, cents = np.array(mids), np.array(cents)
+        centre = np.c_[[np.interp(hgt, mids, cents[:, k]) for k in range(3)]].T
+        to_c = centre-e
+        to_c /= np.linalg.norm(to_c, axis=1)[:, None]
+        facing[idx] = (nr[idx]*to_c).sum(1)
+    return np.array(ids), facing
+
+
 def ear_field(mesh, root):
     """Coral interior on each ear: the user's marked area, projected from the
     front onto the ear's surface. A smoothed, bilinear signed-distance field
@@ -777,7 +812,7 @@ def ear_field(mesh, root):
         v = ((EAR_RENDER['z']-z)/mpp+EAR_RENDER['height']/2-rv)*EAR_MARKUP_SCALE+mv
         return u, v
 
-    def which(p):
+    def marked(p):
         u, v = to_markup(p.x, p.z)
         u, v = u-.5, v-.5
         if not 0 <= u < w-1 or not 0 <= v < h-1:
@@ -787,6 +822,35 @@ def ear_field(mesh, root):
         value = ((1-tx)*(1-ty)*sdf[y, x]+tx*(1-ty)*sdf[y, x+1]
                  +(1-tx)*ty*sdf[y+1, x]+tx*ty*sdf[y+1, x+1])
         return float(value)*metres_per_markup_pixel
+
+    co = np.array([v.co[:] for v in mesh.vertices])
+    ids, facing = ear_cup_facing(mesh)
+    vkd = KDTree(len(ids))
+    for k, i in enumerate(ids):
+        vkd.insert(co[i], k)
+    vkd.balance()
+
+    tree = BVHTree.FromPolygons([v.co for v in mesh.vertices], [list(f.vertices) for f in mesh.polygons])
+
+    def which(p):
+        near = vkd.find_range(p, .009)
+        if not near:
+            return -.05
+        wts = np.exp(-.5*(np.array([n[2] for n in near])/.003)**2)
+        inner = float(wts@facing[ids[[n[1] for n in near]]]/wts.sum())
+        # Where the markup was drawn (surface seen from the front) it rules:
+        # the rim's inner slope stays cream as marked. Surfaces hidden from
+        # the front (the curled inner fold) follow the cup alone.
+        # Marked and seen from the front: painted, whatever small sculpt
+        # bumps do to the C test (they left cream specks in the cup).
+        hit = tree.ray_cast(Vector((p.x, -1, p.z)), Vector((0, 1, 0)), 2)[0]
+        # 6 mm: at 3 mm the hidden wall's coral bled up to 3.6 mm onto the
+        # visible rim slope (linear interpolation across the faces).
+        hidden = (p.y-hit.y-.006) if hit else -.05
+        # 1 mm slack (under the drawn line's ~2 mm width): on the medial
+        # side the line is the fold's silhouette, and points right on it
+        # were left cream between painted neighbours.
+        return max(min(marked(p)+.001, -hidden), min(hidden, .01*inner))
 
     def interior(face):
         # Cut both shells, then select connected patches. Even a geometric

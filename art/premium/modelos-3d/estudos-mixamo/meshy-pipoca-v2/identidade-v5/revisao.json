@@ -77,20 +77,20 @@
     "earShells": {
       "frontPatches": 2,
       "hiddenFolds": 0,
-      "backPatchesRemoved": 2,
-      "backFacesRemoved": 470,
-      "edgeIslandsRemoved": 5,
-      "edgeIslandFacesRemoved": 74
+      "backPatchesRemoved": 1,
+      "backFacesRemoved": 7,
+      "edgeIslandsRemoved": 0,
+      "edgeIslandFacesRemoved": 0
     },
     "islandsDissolved": 12,
-    "vertices": 50588,
-    "faces": 92907,
+    "vertices": 50249,
+    "faces": 92571,
     "perMaterial": {
-      "pelagem": 47784,
-      "interior_orelha": 1792,
-      "tecido": 14056,
-      "tecido_top": 4386,
-      "faixas": 14972,
+      "pelagem": 45890,
+      "interior_orelha": 3347,
+      "tecido": 14057,
+      "tecido_top": 4387,
+      "faixas": 14973,
       "couro": 9411,
       "pupila": 340,
       "sobrancelha": 166
@@ -130,37 +130,37 @@
     {
       "view": "frente",
       "file": "frente.png",
-      "sha256": "d1f461c123367302cb879dbce92145f9a13b518cd263957dac9d667603a3d09e"
+      "sha256": "ff9c89f22a13c8955c19c3fa0005174bd52a093c4da0646ef6f7bcd70691c384"
     },
     {
       "view": "tres-quartos",
       "file": "tres-quartos.png",
-      "sha256": "404e2e6fcf3d82fa86854dcb11ba4c363c3265d69fbb11302b46c89211bacca4"
+      "sha256": "1e411ad24949a46fe99142511ab7e6ea180fd87c1ea98f2ad45d9c037063be35"
     },
     {
       "view": "perfil",
       "file": "perfil.png",
-      "sha256": "cc4d57c19dbc5b3b8c2713cf8af595e9c2f898274943b5cd5e9197468e9b7ad0"
+      "sha256": "b2a1b79fdf53a4d8aa74a60a90a26b368e4789b0d1a04ecf6de9390659eaacd9"
     },
     {
       "view": "costas",
       "file": "costas.png",
-      "sha256": "8acab04b7dead17b6de89b2b2956809179ad2e6af83297c876598b8dcbc2724d"
+      "sha256": "b013806e5a37808d2f80dfbef5794f4175b5b7b45790123081859fd354b28cb2"
     },
     {
       "view": "rosto",
       "file": "rosto.png",
-      "sha256": "8efcbbe9817730a6935c0713c857d49df1cbe840eb442d753d76236e019b5954"
+      "sha256": "0b449918214ab60d257e90747478ecd18cfa25b6fa7721987d7a780063a8d5da"
     },
     {
       "view": "rosto-34",
       "file": "rosto-34.png",
-      "sha256": "0c76e6129ed93a678c5f6f1d35a95e4bfb55e1df40b867732acbc07c531285ae"
+      "sha256": "66554872522c80168702a84d2db126d85c36eb7ee2ce930a3dec2571447c6161"
     },
     {
       "view": "orelhas",
       "file": "orelhas-final.png",
-      "sha256": "51f05e738bd41c2a27e63eccedf0460ec804fe75576a0152975786a37e1369e2"
+      "sha256": "aa8ae89dc76ac2abefad32e1843a864f025a9e2e2d28de799d03ad0febe66aef"
     }
   ],
   "blender": "5.2.2 LTS"
