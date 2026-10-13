@@ -13,11 +13,14 @@
     <script src="/js/ko-arte.js?v={{ filemtime(public_path('js/ko-arte.js')) }}" defer></script>
     <script src="/js/ko-voz.js?v={{ filemtime(public_path('js/ko-voz.js')) }}" defer></script>
     <script src="/js/ko-cpu.js?v={{ filemtime(public_path('js/ko-cpu.js')) }}" defer></script>
+    {{-- Gráficos 3D (Babylon.js): opcional; sem ele a luta usa a arte 2D. --}}
+    <script src="/js/ko-jogo-3d.js?v={{ filemtime(public_path('js/ko-jogo-3d.js')) }}" defer></script>
     <script src="/js/ko.js?v={{ filemtime(public_path('js/ko.js')) }}" defer></script>
 @endpush
 
 @section('conteudo')
 <div id="jogo" class="jogo">
+    <canvas id="tela-3d" aria-hidden="true"></canvas>
     <canvas id="tela" width="384" height="216" aria-label="Arena da luta"></canvas>
     <div id="controles" class="controles" hidden>
         {{-- Direcional em cruz e quatro botões em losango, como nos controles clássicos. --}}

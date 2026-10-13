@@ -1799,6 +1799,12 @@
     const nomes = opc.nomes;
     moverCamera(s);
     ctx.setTransform(R, 0, 0, R, 0, 0);
+    // Gráficos 3D: arena, lutadores e efeitos vêm do renderizador 3D por baixo;
+    // aqui fica só o placar, sobre fundo transparente.
+    const so3d = !!opc.somenteHud;
+    if (so3d) { ctx.clearRect(0, 0, W, H); parts.length = 0; aneis.length = 0; impactos.length = 0; tremor = superFlash = 0; }
+    const final = !so3d && s.fase === 'final' ? FINAIS[s.p[s.vencedor].id] : null;
+    if (!so3d) {
     ctx.save();
     if (tremor > 0) { if (!movimentoReduzido.matches) ctx.translate((Math.random() - 0.5) * tremor, (Math.random() - 0.5) * tremor); tremor = Math.max(0, tremor - 0.6); }
     ctx.scale(cam.zoom, cam.zoom);
@@ -1813,7 +1819,6 @@
       ctx.strokeStyle = `rgba(255,255,255,${0.8 * a})`; ctx.lineWidth = 0.8;
       for (let i = 0; i < 9; i++) { const x0 = ((i * 53 + tAnim * 0.6) % (W + 60)) - 30; ctx.beginPath(); ctx.moveTo(x0, CHAO + 2 + (i % 3) * 4); ctx.lineTo(x0 + 18, CHAO + 2 + (i % 3) * 4); ctx.stroke(); }
     }
-    const final = s.fase === 'final' ? FINAIS[s.p[s.vencedor].id] : null;
     let extraVitima = null;
     if (final) final.fundo(ctx, s.fT);
     if (superFlash > 0) { ctx.fillStyle = `rgba(10,5,30,${Math.min(0.6, superFlash / 30)})`; ctx.fillRect(-W, -H, W * 3, H * 3); superFlash--; }
@@ -1847,6 +1852,7 @@
     }
     ctx.restore();
     ctx.restore();
+    }
 
     if (flash > 0) { if (!movimentoReduzido.matches) { ctx.fillStyle = `rgba(255,255,255,${Math.min(0.22, flash / 12)})`; ctx.fillRect(0, 0, W, H); } flash--; }
     placar(ctx, s, nomes);

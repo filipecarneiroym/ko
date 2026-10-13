@@ -139,6 +139,11 @@ button, a.botao { touch-action: manipulation; min-height: 48px; }
   width: min(100vw, calc(100dvh * 16 / 9)); height: auto; aspect-ratio: 16 / 9;
   background: #000;
 }
+/* Gráficos 3D: o canvas 3D fica por baixo, no mesmo lugar; o 2D vira só placar. */
+#tela, #tela-3d { grid-area: 1 / 1; }
+#tela-3d { width: min(100vw, calc(100dvh * 16 / 9)); aspect-ratio: 16 / 9; height: auto; display: none; background: #000; touch-action: none; }
+.graficos-3d #tela-3d { display: block; }
+.graficos-3d #tela { background: transparent; }
 
 .controles { position: absolute; inset: 0; touch-action: none; -webkit-touch-callout: none; }
 .versus-local .direcional, .versus-local .botoes { display: none; }

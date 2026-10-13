@@ -25,8 +25,9 @@ class SecurityHeaders
         // O jogo não usa nada de fora: CSP valendo de verdade. Só o relay da luta fica liberado.
         $relay = parse_url(RelayEndereco::para($request));
         $origemRelay = $relay['scheme'].'://'.$relay['host'].(isset($relay['port']) ? ':'.$relay['port'] : '');
-        // Texturas incorporadas no GLB são decodificadas por URLs blob locais.
-        $origensImagens = $request->routeIs('laboratorio.3d') ? "'self' data: blob:" : "'self' data:";
+        // Texturas incorporadas no GLB são decodificadas por URLs blob locais:
+        // laboratório e páginas de luta (gráficos 3D).
+        $origensImagens = $request->routeIs('laboratorio.3d', 'jogar.local', 'sala.show') ? "'self' data: blob:" : "'self' data:";
         $response->headers->set('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; "
             ."img-src {$origensImagens}; connect-src 'self' {$origemRelay}; manifest-src 'self'; worker-src 'self'; "
             ."object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'");

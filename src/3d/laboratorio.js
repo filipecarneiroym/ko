@@ -2,8 +2,6 @@ import { Engine } from '@babylonjs/core/Engines/engine.js';
 import { Scene } from '@babylonjs/core/scene.js';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector.js';
 import { Color3 } from '@babylonjs/core/Maths/math.color.js';
-import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera.js';
-import { Camera } from '@babylonjs/core/Cameras/camera.js';
 import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder.js';
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode.js';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
@@ -15,6 +13,7 @@ import { criarCaixas } from './caixas.js';
 import { criarApresentacao } from './apresentacao.js';
 import { criarArena, ARENAS } from './arenas.js';
 import { criarEfeitosSF4 } from './efeitos-sf4.js';
+import { criarCameraLuta, enquadrarCameraLuta } from './camera-luta.js';
 
 const canvas = document.querySelector('#arena-3d');
 const aviso = document.querySelector('#estado-3d');
@@ -74,29 +73,7 @@ function redimensionar() {
   engine.resize();
   enquadrarCamera();
 }
-function enquadrarCamera() {
-  const aspecto = Math.max(.2, engine.getRenderWidth() / engine.getRenderHeight());
-  const xs = estado.p.map(p => (p.x / KOSim.U - KOSim.LARGURA / 2) / 24);
-  const centro = (xs[0] + xs[1]) / 2;
-  // O enquadramento depende do estado da luta; FPS e hitstop não movem a câmera.
-  const alturaPulo = Math.max(...estado.p.map(p => p.y / KOSim.U / 24));
-  const metadeAltura = Math.max(2.3, 1.4 + alturaPulo, (Math.abs(xs[1] - xs[0]) + 4) / (2 * aspecto));
-  const pedido = sf4?.camera(estado);
-  let cx = centro, cy = 1.5 + Math.max(0, alturaPulo - .9) / 2, zoom = 1;
-  if (pedido?.foco) {
-    const k = 1 - pedido.zoom;  // quanto mais zoom, mais perto do foco
-    cx += (pedido.foco.x - cx) * Math.min(1, k * 2.5); cy += (pedido.foco.y - cy) * Math.min(1, k * 2.5); zoom = pedido.zoom;
-  }
-  const d = pedido?.desloc || Vector3.Zero();
-  // Perspectiva com lente fechada (teleobjetiva), como em Street Fighter IV:
-  // as lutadoras ficam quase planas, o cenário ganha profundidade. A
-  // distância é a que enquadra a mesma meia-altura do plano de luta.
-  const distancia = metadeAltura * zoom / Math.tan(camera.fov / 2);
-  // Quase na horizontal (como no SF4): o fundo ocupa a metade de cima.
-  camera.position.set(cx + d.x, cy + d.y + distancia * .05, -distancia);
-  camera.setTarget(new Vector3(cx + d.x, cy + d.y, 0));
-  camera.maxZ = distancia + 160;   // inclui o fundo 360° das arenas realistas
-}
+function enquadrarCamera() { enquadrarCameraLuta(camera, engine, estado, KOSim, sf4?.camera(estado)); }
 function retomar() { anterior = performance.now(); acumulado = 0; limparEntrada(); redimensionar(); }
 function atualizarImportadores() {
   document.querySelectorAll('[data-modelo], #testar-blockouts, #testar-guarda-pipoca, #iniciar-luta').forEach(el => { el.disabled = carregando || suspenso || encerrado; });
@@ -263,9 +240,7 @@ try {
   engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true });
   engine.setHardwareScalingLevel(Math.max(1, window.devicePixelRatio / 1.5));
   scene = new Scene(engine); scene.clearColor.set(.025, .015, .06, 1);
-  camera = new FreeCamera('lateral', new Vector3(0, 3.6, -13), scene);
-  camera.setTarget(new Vector3(0, 1.5, 0)); camera.mode = Camera.PERSPECTIVE_CAMERA;
-  camera.fov = .4; camera.minZ = .5;   // ~23°: teleobjetiva de jogo de luta 2,5D
+  camera = criarCameraLuta(scene);
   redimensionar();
   apresentacao = criarApresentacao(scene);
   // Arena escolhida (seis cenários 3D); a animação ambiente segue o tempo real.

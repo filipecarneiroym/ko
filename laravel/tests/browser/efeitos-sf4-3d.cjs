@@ -21,6 +21,7 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
     page.on('console', m => { if (m.type() === 'error') { erros.push(m.text()); console.log('CONSOLE', m.text().slice(0, 300)); } });
     await page.route(`${origem}/**`, async rota => {
       const caminho = new URL(rota.request().url()).pathname;
+      if (caminho.startsWith('/arenas/')) return rota.fulfill({ status: 200, body: fs.readFileSync(path.join(root, 'public', caminho)) });
       if (caminho.startsWith('/modelos/')) return rota.fulfill({ status: 200, contentType: 'model/gltf-binary', body: fs.readFileSync(path.join(root, 'public', caminho)) });
       if (caminho === '/laboratorio.js') return rota.fulfill({ contentType: 'text/javascript; charset=utf-8', body: bundle.outputFiles[0].text });
       for (const nome of ['ko-sim.js', 'ko-cpu.js']) if (caminho === '/' + nome) return rota.fulfill({ contentType: 'text/javascript; charset=utf-8', body: fs.readFileSync(path.join(root, 'public/js', nome)) });
