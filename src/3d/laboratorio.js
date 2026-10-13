@@ -13,25 +13,39 @@ import { LIMITE_GLB } from './contrato-glb.mjs';
 import { criarEfeitos } from './efeitos.js';
 import { criarCaixas } from './caixas.js';
 import { criarApresentacao } from './apresentacao.js';
+import { criarArenaAcademia } from './arena-academia.js';
 
 const canvas = document.querySelector('#arena-3d');
 const aviso = document.querySelector('#estado-3d');
 let engine, scene, camera, efeitos, apresentacao, anterior = 0, acumulado = 0, indicador = 0;
 let suspenso = false, preservado = false, encerrado = false, carregando = false, operacaoModelo = null;
 let estado = KOSim.novo({ lutadores: ['pipoca', 'uivo'], treino: true });
+// Luta Pipoca azul × Pipoca vermelha: contra a máquina (KOCPU) ou 2 jogadores.
+let luta = null, cpu = null;
 const teclas = new Set(), pulsos = new Map(), toques = new Map();
 const modelos = [null, null];
 const controles = globalThis.KOControle?.criar();
 const ciclo = new AbortController();
 const ouvir = (alvo, evento, fn, opcoes = {}) => alvo?.addEventListener(evento, fn, { ...opcoes, signal: ciclo.signal });
 const mapa = { KeyA: 'L', KeyD: 'R', KeyW: 'U', KeyS: 'D', KeyJ: 'P', KeyK: 'K', KeyL: 'D_', KeyI: 'S' };
-const limparEntrada = () => { teclas.clear(); pulsos.clear(); toques.clear(); };
-const reiniciar = () => { if (carregando || encerrado) return; limparEntrada(); efeitos?.limpar(); estado = KOSim.novo({ lutadores: ['pipoca', 'uivo'], treino: true }); };
+// Jogador 2 no mesmo teclado (modo 2 jogadores): setas + 1/2/3/0 do teclado numérico ou N/M/,/.
+const mapa2 = { ArrowLeft: 'L', ArrowRight: 'R', ArrowUp: 'U', ArrowDown: 'D', Numpad1: 'P', Numpad2: 'K', Numpad3: 'D_', Numpad0: 'S',
+  KeyN: 'P', KeyM: 'K', Comma: 'D_', Period: 'S' };
+const teclas2 = new Set();
+const limparEntrada = () => { teclas.clear(); teclas2.clear(); pulsos.clear(); toques.clear(); };
+const reiniciar = () => {
+  if (carregando || encerrado) return;
+  limparEntrada(); efeitos?.limpar();
+  estado = KOSim.novo(luta ? { lutadores: ['pipoca', 'pipoca'], treino: false } : { lutadores: ['pipoca', 'uivo'], treino: true });
+  cpu = luta?.modo === 'cpu' ? globalThis.KOCPU.criar(KOSim, luta.nivel) : null;
+};
 function teclado(e) {
   if (carregando || suspenso || encerrado) return;
-  if (!mapa[e.code] || (e.type === 'keydown' && e.target.closest?.('input,select,textarea,[contenteditable="true"]'))) return;
+  const segundo = luta?.modo === 'versus' && mapa2[e.code] && !mapa[e.code];
+  if ((!mapa[e.code] && !segundo) || (e.type === 'keydown' && e.target.closest?.('input,select,textarea,[contenteditable="true"]'))) return;
   e.preventDefault();
-  if (e.type === 'keydown') teclas.add(e.code); else teclas.delete(e.code);
+  const alvo = segundo ? teclas2 : teclas;
+  if (e.type === 'keydown') alvo.add(e.code); else alvo.delete(e.code);
 }
 function material(nome, cor) {
   const m = new StandardMaterial(nome, scene);
@@ -72,7 +86,7 @@ function enquadrarCamera() {
 }
 function retomar() { anterior = performance.now(); acumulado = 0; limparEntrada(); redimensionar(); }
 function atualizarImportadores() {
-  document.querySelectorAll('[data-modelo], #testar-blockouts, #testar-guarda-pipoca').forEach(el => { el.disabled = carregando || suspenso || encerrado; });
+  document.querySelectorAll('[data-modelo], #testar-blockouts, #testar-guarda-pipoca, #iniciar-luta').forEach(el => { el.disabled = carregando || suspenso || encerrado; });
   const botao = document.querySelector('#testar-blockouts');
   if (botao) {
     botao.textContent = carregando ? 'Carregando modelos…' : 'Teste técnico de articulação';
@@ -178,6 +192,37 @@ async function testarGuardaPipoca() {
     } finally { if (!instalado) novo?.descartar(); }
   });
 }
+async function iniciarLuta() {
+  const modo = document.querySelector('#modo-luta')?.value === 'versus' ? 'versus' : 'cpu';
+  const nivel = document.querySelector('#nivel-maquina')?.value || 'medio';
+  if (modo === 'cpu' && !globalThis.KOCPU?.PERFIS[nivel]) return;
+  await executarCarregamento('Preparando Pipoca azul e Pipoca vermelha…', async operacao => {
+    const novos = [];
+    let instalados = false;
+    try {
+      for (const cor of ['azul', 'vermelha']) {
+        const buffer = await aguardarCarregamento(baixarModelo(`/modelos/estudos/pipoca-v5-${cor}.glb`, operacao), operacao);
+        const novo = await aguardarCarregamento(carregarModelo(buffer, 'pipoca', KOSim, scene), operacao, m => m.descartar());
+        novos.push(novo); verificarCarregamento(operacao);
+        apresentacao.prepararModelo(novo);
+      }
+      const antigos = modelos.slice();
+      modelos.splice(0, 2, ...novos); instalados = true;
+      antigos.forEach(m => m?.descartar());
+      luta = { modo, nivel };
+      // Nova luta já com as duas Pipocas (reiniciar ignora pedidos durante o carregamento).
+      limparEntrada(); efeitos?.limpar();
+      estado = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: false });
+      cpu = modo === 'cpu' ? globalThis.KOCPU.criar(KOSim, nivel) : null;
+      const avisoModelo = document.querySelector('#estado-modelos');
+      if (avisoModelo) avisoModelo.textContent = modo === 'cpu'
+        ? `Luta contra a máquina (${globalThis.KOCPU.PERFIS[nivel].nome}). Você é a Pipoca azul.`
+        : 'Luta 2 jogadores: jogador 1 azul (A/D/W/S, J/K/L/I), jogador 2 vermelha (setas, N/M/vírgula/ponto). Controles também funcionam.';
+    } finally {
+      if (!instalados) novos.forEach(m => m.descartar());
+    }
+  });
+}
 async function importar(e) {
   const arquivo = e.target.files?.[0];
   if (!arquivo || encerrado) return;
@@ -209,6 +254,7 @@ try {
   camera.setTarget(new Vector3(0, 1.5, 0)); camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
   redimensionar();
   apresentacao = criarApresentacao(scene);
+  criarArenaAcademia(scene, apresentacao);
   const bonecos = [manequim(0, '#ffb12b'), manequim(1, '#6aa8ff')];
   efeitos = criarEfeitos(scene, KOSim, window.matchMedia('(prefers-reduced-motion: reduce)'));
   const caixas = criarCaixas(scene, KOSim);
@@ -229,7 +275,10 @@ try {
         entrada |= KOSim.B[botao];
         if (quadros <= 1) pulsos.delete(botao); else pulsos.set(botao, quadros - 1);
       }
-      KOSim.passo(estado, [entrada | (pads?.[0]?.bits || 0), pads?.[1]?.bits || 0]);
+      let entrada2 = pads?.[1]?.bits || 0;
+      for (const tecla of teclas2) entrada2 |= KOSim.B[mapa2[tecla]];
+      if (cpu) entrada2 = cpu(estado, 1);
+      KOSim.passo(estado, [entrada | (pads?.[0]?.bits || 0), entrada2]);
       efeitos.eventos(estado.ev, estado.f, estado); acumulado -= 1000 / 60;
     }
     estado.p.forEach((p, i) => {
@@ -249,7 +298,8 @@ try {
     scene.render();
     if (agora - indicador > 500) {
       const fps = engine.getFps();
-      aviso.textContent = `Protótipo · ${Number.isFinite(fps) ? Math.round(fps) : '…'} FPS · ${estado.fase} · vida ${estado.p[0].vida} / ${estado.p[1].vida}`;
+      const rotulo = luta ? `Pipoca azul × Pipoca vermelha (${luta.modo === 'cpu' ? 'máquina ' + globalThis.KOCPU.PERFIS[luta.nivel].nome : '2 jogadores'}) · round ${estado.round} · ${estado.rounds[0]}–${estado.rounds[1]}` : 'Protótipo';
+      aviso.textContent = `${rotulo} · ${Number.isFinite(fps) ? Math.round(fps) : '…'} FPS · ${estado.fase} · vida ${estado.p[0].vida} / ${estado.p[1].vida}`;
       indicador = agora;
     }
   });
@@ -272,6 +322,7 @@ try {
   ouvir(document.querySelector('#reiniciar-3d'), 'click', reiniciar);
   ouvir(document.querySelector('#testar-blockouts'), 'click', testarBlockouts);
   ouvir(document.querySelector('#testar-guarda-pipoca'), 'click', testarGuardaPipoca);
+  ouvir(document.querySelector('#iniciar-luta'), 'click', iniciarLuta);
   document.querySelectorAll('[data-modelo]').forEach(el => ouvir(el, 'change', importar));
   ouvir(window, 'pagehide', e => { if (e.persisted) { preservado = true; cancelarCarregamento('Teste interrompido ao sair da página. Tente novamente.'); limparEntrada(); } else encerrar(); });
   ouvir(window, 'pageshow', e => { if (e.persisted && !encerrado) { preservado = false; retomar(); } });

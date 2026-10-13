@@ -32,9 +32,16 @@ estado da simulação manda (posição, face, estado, quadro, hitstop). Nada é
 - Revisão visual golpe a golpe (frente, perfil, câmera de luta).
 
 ## Fase 3 — Variante vermelha e efeitos
-- Pipoca da máquina: top e short vermelhos com listras brancas.
-- Cenoura bumerangue, Super da toca, Chuva de Cenouras, impactos, defesa,
-  poeira: efeitos separados da malha, no relógio da simulação.
+- Pipoca da máquina: top e short vermelhos com listras brancas. (feito)
+- **Efeitos no estilo Street Fighter IV** (pedido do usuário): impactos
+  com pinceladas de tinta (sumi-e) e faíscas grandes, intensidade por força
+  do golpe (fraco/forte/Super); defesa com escudo/faísca própria; poeira e
+  ondas no chão; congelamento de impacto (o hitstop do motor) com leve
+  tremor de câmera; especiais com rastro de tinta; Super com corte de
+  câmera, fundo escurecido, nome do golpe em pincelada e flash; KO com
+  câmera lenta e tinta. Tudo no relógio da simulação, sem mudar regra.
+- Especiais e Supers da Pipoca: Cenoura bumerangue, Super da toca,
+  Chuva de Cenouras — efeitos separados da malha.
 
 ## Fase 4 — Arenas 3D (mapas de luta)
 - Todas as arenas do jogo passam a ser 3D: academia, feira, floresta, neve,

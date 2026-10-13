@@ -51,6 +51,7 @@ export function criarApresentacao(scene) {
   let encerrado=false;
   scene.onDisposeObservable.addOnce(()=>{encerrado=true;});
   return {
+    projetarSombra(malha) { sombras.addShadowCaster(malha,false); },
     prepararModelo(modelo) {
       for(const malha of modelo.malhas||[]) {
         if(preparados.has(malha))continue;
