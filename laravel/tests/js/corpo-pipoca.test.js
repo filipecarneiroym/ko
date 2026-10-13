@@ -75,7 +75,7 @@ test('corpo troca regiões rígidas e preserva todos os triângulos de rosto, lu
   assert.ok(corpo.extras.corpo.superficies.filter(s=>/^(top|short|faixa|barra)/.test(s.nome)).every(s=>!s.tampas),'Roupa usa cascas abertas');
 });
 
-test('peso misto cobre cotovelos, joelhos e cintura com duas influências normalizadas', async () => {
+test('peso misto cobre cotovelos, joelhos e cintura com influências normalizadas', async () => {
   const [, { criarPipocaCorpoV2 }, { criarRig }] = await modulos;
   const ossos=criarRig(),corpo=criarPipocaCorpoV2(ossos),pares=new Set();
   let mistos=0;
@@ -84,8 +84,9 @@ test('peso misto cobre cotovelos, joelhos e cintura com duas influências normal
     assert.ok(pesos.every(v=>v>=0&&v<=1));assert.ok(Math.abs(pesos.reduce((s,v)=>s+v,0)-1)<1e-12);
     assert.ok(juntas.every(v=>Number.isInteger(v)&&v>=0&&v<ossos.length));
     const ativas=juntas.filter((_,j)=>pesos[j]>1e-8);
-    assert.ok(ativas.length<=2);
-    if(ativas.length===2){mistos++;pares.add(ativas.map(i=>ossos[i].nome).sort().join(':'));}
+    assert.ok(ativas.length<=(p.material===1?3:2));
+    if(ativas.length===3)assert.deepEqual(ativas.map(i=>ossos[i].nome).sort(),['coxa_D','coxa_E','quadril'],'A terceira influência fica restrita à entreperna do short');
+    if(ativas.length>1){mistos++;pares.add(ativas.map(i=>ossos[i].nome).sort().join(':'));}
   }
   assert.equal(mistos,corpo.extras.corpo.verticesMistos);assert.ok(mistos>500);
   for(const par of [['quadril','tronco'],['tronco','peito'],['braco_E','antebraco_E'],['braco_D','antebraco_D'],['coxa_E','canela_E'],['coxa_D','canela_D']])assert.ok(pares.has(par.sort().join(':')),`Transição ${par.join('/')}`);
@@ -149,52 +150,18 @@ test('GLB preserva byte a byte os 31 clips e inverse bind do rig anterior', asyn
   assert.deepEqual(db.extras.marcha,da.extras.marcha,'Metadados da passada permanecem iguais');
 });
 
-function segmentoAtravessaTriangulo(a,b,tri) {
-  const e1=subtrair(tri[1],tri[0]),e2=subtrair(tri[2],tri[0]),dir=subtrair(b,a);
-  const p=cruzar(dir,e2),det=e1.reduce((s,v,i)=>s+v*p[i],0),eps=1e-8;
-  if(Math.abs(det)<1e-10)return false;
-  const inv=1/det,t=subtrair(a,tri[0]),u=t.reduce((s,v,i)=>s+v*p[i],0)*inv;
-  if(u<=eps||u>=1-eps)return false;
-  const q=cruzar(t,e1),v=dir.reduce((s,v,i)=>s+v*q[i],0)*inv;
-  if(v<=eps||u+v>=1-eps)return false;
-  const distancia=e2.reduce((s,v,i)=>s+v*q[i],0)*inv;
-  return distancia>eps&&distancia<1-eps;
-}
-
 test('short não apresenta faces atravessadas nos ciclos e movimentos revisados', async () => {
   const [,,,,{criarEstudoCorpo},,{exportarGlb}]=await modulos;
-  const [{NullEngine},{Scene},{carregarModelo}]=await Promise.all([
-    import('@babylonjs/core/Engines/nullEngine.js'),
-    import('@babylonjs/core/scene.js'),
-    import('../../../src/3d/modelo-glb.js'),
-  ]);
-  const dados=criarEstudoCorpo(...fontes(),K),bytes=exportarGlb(dados),engine=new NullEngine(),scene=new Scene(engine);
-  let modelo;
-  try {
-    modelo=await carregarModelo(bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.length),'pipoca',K,scene);
-    const roupa=scene.meshes.find(m=>m.material?.name==='pipoca_tecido_indigo');
-    const indices=roupa.getIndices(),triangulos=Array.from({length:indices.length/3},(_,i)=>Array.from(indices.slice(i*3,i*3+3)));
-    const primeiro=triangulos.length-dados.extras.corpo.superficies.find(s=>s.nome==='short-continuo').triangulos;
-    for(const [clip,duracao,passo]of[['andando',12,.125],['parado',104,.5],['p1',12,.5],['p2',18,.5],['defesa',60,1],['dano',12,.5]]) {
-    const grupo=scene.animationGroups.find(g=>g.name===clip);
-    grupo.start(false);grupo.pause();
-    const fps=grupo.targetedAnimations[0].animation.framePerSecond;
-    for(let q=0;q<=duracao;q+=passo) {
-      grupo.goToFrame(q*fps/60);roupa.computeWorldMatrix(true);roupa.skeleton.prepare(true);
-      const p=roupa.getPositionData(true,false);
-      const vertices=triangulos.map(tri=>tri.map(i=>Array.from(p.slice(i*3,i*3+3))));
-      const limites=vertices.map(v=>[...Array.from({length:3},(_,k)=>Math.min(...v.map(p=>p[k]))),...Array.from({length:3},(_,k)=>Math.max(...v.map(p=>p[k])))]);
-      for(let i=primeiro;i<triangulos.length;i++)for(let j=i+1;j<triangulos.length;j++) {
-        const li=limites[i],lj=limites[j];
-        if(li[3]<lj[0]||lj[3]<li[0]||li[4]<lj[1]||lj[4]<li[1]||li[5]<lj[2]||lj[5]<li[2])continue;
-        if(triangulos[i].some(v=>triangulos[j].includes(v)))continue;
-        const a=vertices[i],b=vertices[j];
-        let cruza=false;
-        for(let s=0;s<3;s++)cruza ||= segmentoAtravessaTriangulo(a[s],a[(s+1)%3],b)||segmentoAtravessaTriangulo(b[s],b[(s+1)%3],a);
-        assert.equal(cruza,false,`Triângulo ${i} cruza triângulo ${j} no clip ${clip}, quadro ${q}`);
-      }
-    }
-    grupo.stop();
-    }
-  } finally {modelo?.descartar();scene.dispose();engine.dispose();}
+  const {verificarRoupa}=await import('../../../scripts/producao-3d/verificar-roupa-pipoca.mjs');
+  const dados=criarEstudoCorpo(...fontes(),K);
+  const resultado=await verificarRoupa({
+    bufferModelo:exportarGlb(dados),passo:.25,
+    quadrosPorClip:{andando:Array.from({length:97},(_,i)=>i*.125)},
+  });
+  assert.equal(resultado.short.contornos,3,'Cintura e duas barras permanecem abertas');
+  assert.equal(resultado.short.naoManifold.length,0);
+  assert.equal(resultado.short.windingIncoerente.length,0);
+  assert.ok(resultado.amostras>900,'Verifica todos os movimentos a cada quarto de quadro e a marcha a cada oitavo');
+  for(const clip of resultado.clips)assert.equal(clip.posesComCruzamentos,0,`${clip.clip}: ${JSON.stringify(clip.falhas[0])}`);
+  assert.equal(resultado.passou,true);
 });

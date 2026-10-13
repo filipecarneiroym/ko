@@ -46,6 +46,35 @@ Rodar: `blender -b --python scripts/producao-3d/concluir-aparencia-meshy-pipoca-
   face não pertence à região deixa emendas inúteis: rachaduras e anéis de
   sombreamento (era a falha abaixo da batata da perna e as marcas no braço).
   Mesmo assim, coloque as restrições espaciais (portões) primeiro.
+- **Orelhas (e qualquer interior de concha):** primeiro, a concha esculpida
+  (relevo 3D σ 12 mm, suavizado de novo σ 6 mm; concha = relevo < 0, só na
+  face da frente, fora o vinco orelha-testa) como proposta.
+- **Quando o usuário marca a área sobre um render, a marcação é a medida.**
+  Salve o print em `referencias/`, alinhe-o ao render pela silhueta (Pipoca:
+  pontas das orelhas + vão entre elas → escala e deslocamento), preencha o
+  contorno vermelho e use a distância assinada até a borda (KD tree dos
+  pixels da borda) como campo, projetado pela mesma câmera, só na superfície
+  visível de frente. Ver `ear_field` e `referencias/marcacao-orelhas-pipoca.png`.
+- Na marcação da orelha, suavize o campo de distância em **1 pixel da
+  marcação** e amostre por interpolação bilinear, preservando o traço.
+  Corte as duas superfícies e selecione os **componentes conectados da
+  concha**: mantenha os vistos de frente e suas dobras ocultas; retire os
+  componentes vistos exclusivamente pelo verso. Não recorte pela normal
+  de cada face, pela distância ao primeiro raio nem pela média das normais
+  dos quatro vértices próximos: isso criava cunhas creme nas dobras, visíveis
+  de frente ou em três quartos.
+  Preserve uma concha pintada contínua por orelha. Fragmentos minúsculos
+  separados que surgem quando o traço cruza uma dobra deixam a borda
+  listrada em três quartos; sua remoção deve continuar dentro da faixa do
+  traço e passar novamente pela conferência de pixels.
+- Valide o **arquivo salvo**, lançando um raio por pixel da marcação e
+  lendo o material da primeira face atingida, também pelo verso. Execute
+  `blender -b --python scripts/producao-3d/verificar-orelhas-pipoca-v5.py`.
+  O miolo deve ter zero falhas e o exterior zero vazamentos; a faixa de
+  2 pixels do próprio traço admite a suavização da borda. O relatório
+  `verificacao-orelhas.json` vincula os hashes do `.blend` e da marcação.
+  Também exige duas conchas conectadas e confere as superfícies demarcadas
+  visíveis em três quartos nos dois lados.
 - **Nada decidido por face inteira.** Todo limite visível tem de ser um campo
   contínuo cortado no zero. Testes por face (ex.: "face virada para a frente"
   ou "centro acima de z" na orelha) fazem a borda seguir a triangulação

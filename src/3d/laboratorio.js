@@ -4,7 +4,6 @@ import { Vector3 } from '@babylonjs/core/Maths/math.vector.js';
 import { Color3 } from '@babylonjs/core/Maths/math.color.js';
 import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera.js';
 import { Camera } from '@babylonjs/core/Cameras/camera.js';
-import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight.js';
 import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder.js';
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode.js';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
@@ -13,10 +12,11 @@ import { carregarModelo } from './modelo-glb.js';
 import { LIMITE_GLB } from './contrato-glb.mjs';
 import { criarEfeitos } from './efeitos.js';
 import { criarCaixas } from './caixas.js';
+import { criarApresentacao } from './apresentacao.js';
 
 const canvas = document.querySelector('#arena-3d');
 const aviso = document.querySelector('#estado-3d');
-let engine, scene, camera, efeitos, anterior = 0, acumulado = 0, indicador = 0;
+let engine, scene, camera, efeitos, apresentacao, anterior = 0, acumulado = 0, indicador = 0;
 let suspenso = false, preservado = false, encerrado = false, carregando = false, operacaoModelo = null;
 let estado = KOSim.novo({ lutadores: ['pipoca', 'uivo'], treino: true });
 const teclas = new Set(), pulsos = new Map(), toques = new Map();
@@ -55,8 +55,18 @@ function encerrar() {
 function redimensionar() {
   if (!engine || encerrado) return;
   engine.resize();
+  enquadrarCamera();
+}
+function enquadrarCamera() {
   const aspecto = Math.max(.2, engine.getRenderWidth() / engine.getRenderHeight());
-  const metadeLargura = Math.max(8.5, 3.8 * aspecto), metadeAltura = metadeLargura / aspecto;
+  const xs = estado.p.map(p => (p.x / KOSim.U - KOSim.LARGURA / 2) / 24);
+  const centro = (xs[0] + xs[1]) / 2;
+  // O enquadramento depende do estado da luta; FPS e hitstop não movem a câmera.
+  const alturaPulo = Math.max(...estado.p.map(p => p.y / KOSim.U / 24));
+  const metadeAltura = Math.max(2.3, 1.4 + alturaPulo, (Math.abs(xs[1] - xs[0]) + 4) / (2 * aspecto));
+  const metadeLargura = metadeAltura * aspecto;
+  camera.position.set(centro, 3.6, -13);
+  camera.setTarget(new Vector3(centro, 1.5 + Math.max(0, alturaPulo - .9) / 2, 0));
   camera.orthoLeft = -metadeLargura; camera.orthoRight = metadeLargura;
   camera.orthoTop = metadeAltura; camera.orthoBottom = -metadeAltura;
 }
@@ -140,6 +150,7 @@ async function testarBlockouts() {
         const buffer = await aguardarCarregamento(baixarModelo(`/modelos/blockout/${id}-v1.glb`, operacao), operacao);
         const novo = await aguardarCarregamento(carregarModelo(buffer, id, KOSim, scene), operacao, m => m.descartar());
         novos.push(novo); verificarCarregamento(operacao);
+        apresentacao.prepararModelo(novo);
       }
       // Só substitui a dupla quando os dois arquivos foram validados e preparados.
       const antigos = modelos.slice();
@@ -156,13 +167,14 @@ async function testarGuardaPipoca() {
   await executarCarregamento('Preparando os movimentos da Pipoca…', async operacao => {
     let novo, instalado = false;
     try {
-      const buffer = await aguardarCarregamento(baixarModelo('/modelos/estudos/pipoca-corpo-v10.glb', operacao), operacao);
+      const buffer = await aguardarCarregamento(baixarModelo('/modelos/estudos/pipoca-direcao-visual-v13.glb', operacao), operacao);
       novo = await aguardarCarregamento(carregarModelo(buffer, 'pipoca', KOSim, scene), operacao, m => m.descartar());
       verificarCarregamento(operacao);
+      apresentacao.prepararModelo(novo);
       const antigo = modelos[0]; modelos[0] = novo; instalado = true;
       antigo?.descartar();
       const avisoModelo = document.querySelector('#estado-modelos');
-      if (avisoModelo) avisoModelo.textContent = 'Movimentos da Pipoca carregados: guarda, dois socos, defesa alta, reação aos golpes e passada. Use os controles para testar. Modelo provisório; os demais movimentos continuam em revisão.';
+      if (avisoModelo) avisoModelo.textContent = 'Pipoca carregada. Teste socos, chutes, ataques baixos e aéreos, salto, defesa, cenoura e Super. Aparência e movimentos em refinamento.';
     } finally { if (!instalado) novo?.descartar(); }
   });
 }
@@ -179,6 +191,7 @@ async function importar(e) {
       verificarCarregamento(operacao);
       const novo = await aguardarCarregamento(carregarModelo(buffer, estado.p[lado].id, KOSim, scene), operacao, m => m.descartar());
       verificarCarregamento(operacao);
+      apresentacao.prepararModelo(novo);
       modelos[lado]?.descartar(); modelos[lado] = novo;
       const avisoModelo = document.querySelector('#estado-modelos');
       if (avisoModelo) avisoModelo.textContent = `${KOSim.LUTADORES[estado.p[lado].id].nome}: modelo de teste carregado. A identidade e os movimentos ainda precisam de revisão visual.`;
@@ -195,9 +208,7 @@ try {
   camera = new FreeCamera('lateral', new Vector3(0, 3.6, -13), scene);
   camera.setTarget(new Vector3(0, 1.5, 0)); camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
   redimensionar();
-  new HemisphericLight('luz', new Vector3(.3, 1, -.5), scene);
-  const piso = MeshBuilder.CreateGround('piso', { width: 16, height: 7 }, scene);
-  piso.material = material('piso', '#292339');
+  apresentacao = criarApresentacao(scene);
   const bonecos = [manequim(0, '#ffb12b'), manequim(1, '#6aa8ff')];
   efeitos = criarEfeitos(scene, KOSim, window.matchMedia('(prefers-reduced-motion: reduce)'));
   const caixas = criarCaixas(scene, KOSim);
@@ -219,7 +230,7 @@ try {
         if (quadros <= 1) pulsos.delete(botao); else pulsos.set(botao, quadros - 1);
       }
       KOSim.passo(estado, [entrada | (pads?.[0]?.bits || 0), pads?.[1]?.bits || 0]);
-      efeitos.eventos(estado.ev, estado.f); acumulado -= 1000 / 60;
+      efeitos.eventos(estado.ev, estado.f, estado); acumulado -= 1000 / 60;
     }
     estado.p.forEach((p, i) => {
       const b = bonecos[i];
@@ -233,7 +244,8 @@ try {
       b.braco.position.x = janela ? 1.05 : .65;
       b.perna.rotation.z = janela && p.golpe?.includes('k') ? -.9 : 0;
     });
-    efeitos.atualizar(estado.f); caixas.atualizar(estado, !!exibirCaixas?.checked);
+    enquadrarCamera();
+    efeitos.atualizar(estado.f, estado); caixas.atualizar(estado, !!exibirCaixas?.checked);
     scene.render();
     if (agora - indicador > 500) {
       const fps = engine.getFps();

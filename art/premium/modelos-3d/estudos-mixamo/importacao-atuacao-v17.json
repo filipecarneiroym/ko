@@ -1,0 +1,81 @@
+{
+  "caminho": "public/modelos/estudos/pipoca-direcao-visual-v13.glb",
+  "aprovadoFinal": false,
+  "sha256Glb": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+  "estados": {
+    "rolando": {
+      "duracaoQuadros": 24,
+      "passoQuadros": 0.0625,
+      "amostras": 770,
+      "pisoMinimo": -0.0004923850065097213,
+      "apoioMaximo": 0.00039985779810053064,
+      "erroLuvasNominal": 0
+    },
+    "agarrando": {
+      "duracaoQuadros": 30,
+      "passoQuadros": 0.0625,
+      "amostras": 962,
+      "pisoMinimo": -0.000010444498911965638,
+      "apoioMaximo": 0.000011680802034409486,
+      "erroLuvasNominal": 1.5539332141032385e-7
+    },
+    "agarrado": {
+      "duracaoQuadros": 30,
+      "passoQuadros": 0.0625,
+      "amostras": 962,
+      "pisoMinimo": -0.0000023215970941237174,
+      "apoioMaximo": 0.000002708252739504728,
+      "erroLuvasNominal": 0
+    },
+    "tonto": {
+      "duracaoQuadros": 60,
+      "passoQuadros": 0.125,
+      "amostras": 962,
+      "pisoMinimo": -2.554670004428772e-7,
+      "apoioMaximo": 3.500980175873855e-7,
+      "erroLuvasNominal": 0
+    },
+    "vitoria": {
+      "duracaoQuadros": 100,
+      "passoQuadros": 0.125,
+      "amostras": 1602,
+      "pisoMinimo": -5.559740046123807e-8,
+      "apoioMaximo": 1.4466410755327046e-7,
+      "erroLuvasNominal": 0
+    },
+    "derrotado": {
+      "duracaoQuadros": 100,
+      "passoQuadros": 0.125,
+      "amostras": 1602,
+      "pisoMinimo": 0.00018252321751788259,
+      "apoioMaximo": 0,
+      "erroLuvasNominal": 0
+    },
+    "final": {
+      "duracaoQuadros": 200,
+      "passoQuadros": 0.125,
+      "amostras": 3202,
+      "pisoMinimo": 8.522267336275036e-8,
+      "apoioMaximo": 2.9802322387695312e-8,
+      "erroLuvasNominal": 0
+    },
+    "vitimaFinal": {
+      "duracaoQuadros": 200,
+      "passoQuadros": 0.125,
+      "amostras": 3202,
+      "pisoMinimo": -0.0003297015791758895,
+      "apoioMaximo": 0.000029345831922990235,
+      "erroLuvasNominal": 0
+    }
+  },
+  "amostras": 13264,
+  "pendentes": [
+    "Contato de duas luvas por vítima e por distância de agarrão.",
+    "Validação visual de rolagem, silhueta, mãos/joelhos e expressões.",
+    "Transições de entrada contextual (tonto→vitimaFinal, vitimaFinal→derrotado)."
+  ],
+  "limites": [
+    "Apoios e alvos nominais não validam contato de duas luvas em todas as vítimas/distâncias.",
+    "Sem aprovação artística automática por contagem de clips."
+  ]
+}

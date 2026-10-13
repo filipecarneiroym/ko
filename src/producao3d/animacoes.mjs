@@ -20,11 +20,42 @@ export function criarAnimacoes(id, ossos, simulador) {
     braco_D: [-.24,0,.94], antebraco_D: [-.20,0,1.29], mao_D: [0,0,-.12],
     orelha_E: [0,0,lobo ? -.08 : -.12], orelha_D: [0,0,.08], cauda: [0,0,.08],
   }, deslocamento: [0,0,0] };
-  const baixo = ajustar(guarda, { coxa_E:[0,0,.6],coxa_D:[0,0,.6],canela_E:[0,0,-1.05],canela_D:[0,0,-1.05],pe_E:[0,0,.45],pe_D:[0,0,.45],tronco:[0,0,-.18] }, [0,-.26,0]);
+  // Corrige a simetria restante do agachado: a perna que parecia para trás passa a puxar
+  // a parte inferior para frente do quadril, mantendo o short e a cintura compactos.
+  const baixo = ajustar(guarda, {
+    quadril:[0,0,.04],
+    coxa_E:[0,0,-.72],
+    coxa_D:[0,0,.72],
+    canela_E:[0,0,-1.10],
+    canela_D:[0,0,-1.10],
+    pe_E:[0,0,-.48],
+    pe_D:[0,0,.48],
+    tronco:[0,0,-.10],
+  }, [0,-.22,0]);
   const deitado = ajustar(guarda, { quadril:[0,0,-Math.PI/2], tronco:[0,0,.05],braco_E:[.1,0,.1],braco_D:[-.1,0,.1],antebraco_E:[0,0,.25],antebraco_D:[0,0,.25],coxa_E:[0,0,.1],coxa_D:[0,0,.1] }, [0,-.73,0]);
+  function forcarSimetriaPernas(p) {
+    for (const [esquerda, direita] of [['coxa_E','coxa_D'], ['canela_E','canela_D'], ['pe_E','pe_D']]) {
+      const esquerdaV = p.r[esquerda] || [0,0,0];
+      const direitaV = p.r[direita] || [0,0,0];
+      const modulo = Math.max(Math.abs(esquerdaV[2]), Math.abs(direitaV[2]), 0.12);
+      const referencia = Math.abs(esquerdaV[2]) >= Math.abs(direitaV[2]) ? esquerdaV : direitaV;
+      const sinal = referencia[2] >= 0 ? -1 : 1;
+      p.r[esquerda] = [0, 0, -modulo * (referencia[2] === 0 ? 1 : Math.sign(referencia[2]))];
+      p.r[direita] = [0, 0, modulo * (referencia[2] === 0 ? 1 : Math.sign(referencia[2]))];
+      p.r[esquerda][0] = Math.abs(esquerdaV[0]) <= 1e-6 ? 0 : esquerdaV[0];
+      p.r[esquerda][1] = Math.abs(esquerdaV[1]) <= 1e-6 ? 0 : esquerdaV[1];
+      p.r[direita][0] = Math.abs(direitaV[0]) <= 1e-6 ? 0 : direitaV[0];
+      p.r[direita][1] = Math.abs(direitaV[1]) <= 1e-6 ? 0 : direitaV[1];
+      if (esquerda === 'pe_E' || esquerda === 'pe_D') {
+        p.r[esquerda][2] = -Math.abs(modulo) * (sinal > 0 ? 1 : -1);
+        p.r[direita][2] = Math.abs(modulo) * (sinal > 0 ? 1 : -1);
+      }
+    }
+    return p;
+  }
   const clips = [];
   function clip(nome, duracaoQuadros, chaves) {
-    const frames = [...chaves].sort((a,b) => a[0]-b[0]);
+    const frames = [...chaves].sort((a,b) => a[0]-b[0]).map(([q,p]) => [q, forcarSimetriaPernas(clone(p))]);
     if (frames[0]?.[0] !== 0 || frames.at(-1)?.[0] !== duracaoQuadros || frames.some((f,i) => i && f[0] <= frames[i-1][0])) throw new Error(`Quadros inválidos: ${nome}`);
     const tempos = frames.map(([q]) => q/60);
     const canais = ossos.map((osso,indice) => ({ osso:indice,tipo:'rotation',tempos,valores:frames.flatMap(([,p]) => quaternion(p.r[osso.nome] || [0,0,0])) }));
@@ -51,7 +82,14 @@ export function criarAnimacoes(id, ossos, simulador) {
     }));
   }
   clip('agachado',60,[[0,baixo],[30,ajustar(baixo,{cabeca:[0,0,.025]})],[60,baixo]]);
-  const encolhido = ajustar(guarda,{coxa_E:[0,0,1.1],coxa_D:[0,0,.6],canela_E:[0,0,-1.25],canela_D:[0,0,-1.1],orelha_E:[0,0,-.25],orelha_D:[0,0,-.20]});
+  // Mantém o rolamento e as poses curtas em espelho estrito: cada lado recebe o mesmo
+  // módulo e sinal oposto para não empurrar a perna para o lado errado.
+  const encolhido = ajustar(guarda,{
+    coxa_E:[0,0,-1.1], coxa_D:[0,0,1.1],
+    canela_E:[0,0,-1.25], canela_D:[0,0,1.25],
+    pe_E:[0,0,-.48], pe_D:[0,0,.48],
+    orelha_E:[0,0,-.25], orelha_D:[0,0,.25],
+  });
   clip('pulo',44,[[0,guarda],[10,encolhido],[26,encolhido],[44,guarda]]);
   clip('pousando',4,[[0,ajustar(baixo,{},[0,-.12,0])],[4,guarda]]);
   const protegendo = ajustar(guarda,{braco_E:[.30,0,1.23],braco_D:[-.30,0,1.23],antebraco_E:[.10,0,1.53],antebraco_D:[-.10,0,1.53],cabeca:[0,0,.1]});

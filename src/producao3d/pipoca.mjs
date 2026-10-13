@@ -133,16 +133,17 @@ export function criarPipoca(ossos) {
         m.elipsoide([.034, .533, lado * .230], [.106, .112, .105], PELO, canela, arredondado);
         m.elipsoide([-.004, .331, lado * .236], [.096, .219, .102], PELO, canela, arredondado);
 
-        segmento([0, .103, lado * .24], [.010, .274, lado * .237], .080, .077, PELO, pe);
-        anel([.009, .267, lado * .237], .077, .009, VERMELHO, pe, { eixo: 'y' });
-        anel([.004, .130, lado * .239], .078, .005, PELO, pe, { eixo: 'y' });
         m.elipsoide([.104, .077, lado * .240], [.228, .077, .111], PELO, pe, arredondado);
-        anel([.119, .075, lado * .240], .095, .008, VERMELHO, pe, {
-            eixo: 'x', escala: [.69, 1, 1.075],
-        });
-        anel([.227, .067, lado * .240], .092, .007, VERMELHO, pe, {
-            eixo: 'x', escala: [.63, 1, 1.045],
-        });
+        for (const [x, raio] of [[.025,.088],[.065,.094],[.105,.095],[.145,.092],[.185,.085],[.225,.075]]) {
+            anel([x, .075, lado * .240], raio, .009, PELO, pe, {
+                eixo: 'x', escala: [.69, 2, 1.075],
+            });
+        }
+        for (const [x, raio] of [[.008,.086],[.245,.068]]) {
+            anel([x, .075, lado * .240], raio, .0025, VERMELHO, pe, {
+                eixo: 'x', escala: [.69, 2, 1.075],
+            });
+        }
         for (const dedo of [-1, 0, 1]) {
             const z = lado * .240 + dedo * .065;
             m.elipsoide([.302, .057, z], [.071, .054, .041], PELO, pe, detalhe);
@@ -169,7 +170,7 @@ export function criarPipoca(ossos) {
             material('pipoca_pelo_e_faixas_creme', [.91, .856, .77], .91),
             material('pipoca_tecido_indigo', [.039, .055, .255], .61),
             material('pipoca_luvas_vermelhas', [.63, .013, .026], .30),
-            material('pipoca_orelhas_e_nariz_rosa', [.75, .208, .235], .74),
+            material('pipoca_orelhas_e_nariz_rosa', [.91, .32, .36], .74),
             material('pipoca_pupilas_e_sobrancelhas', [.029, .018, .015], .48),
             material('pipoca_iris_ambar', [.90, .338, .025], .27),
         ],

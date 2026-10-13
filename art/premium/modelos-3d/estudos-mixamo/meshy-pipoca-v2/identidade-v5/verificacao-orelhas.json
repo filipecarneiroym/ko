@@ -1,0 +1,22 @@
+{
+  "workfile": "art\\premium\\modelos-3d\\estudos-mixamo\\meshy-pipoca-v2\\identidade-v5\\pipoca-identidade-v5.blend",
+  "sha256Blend": "ff9df0b94cf08fdafba85fbdad2b5143728a6a6787abf4398c06cd94a60ff2fc",
+  "marcacao": "art/premium/modelos-3d/referencias/marcacao-orelhas-pipoca.png",
+  "sha256Marcacao": "fe849577dbba8086d8a1858a8f399059653ce0b856b626c291226af103f1ae83",
+  "amostragem": "Um raio por pixel da marcação, na câmera original; primeiro material visível.",
+  "toleranciaBordaPxMarcacao": 2.0,
+  "suavizacao": "Campo de distância contínuo; filtro binomial sigma 1 px, dentro do traço.",
+  "marcados": 53300,
+  "coral": 53120,
+  "falhasNoMiolo": 0,
+  "foraDoContorno": 0,
+  "coralNoVerso": 0,
+  "amostrasTresQuartos": 7283,
+  "falhasTresQuartos": 0,
+  "conchasContinuas": 2,
+  "falhasTresQuartosAmostras": [],
+  "maiorDesvioInteriorPx": 2.0,
+  "maiorDesvioExteriorPx": 1.0,
+  "arestasAbertas": 0,
+  "aprovado": true
+}

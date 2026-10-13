@@ -1,0 +1,145 @@
+{
+  "source": "art\\premium\\modelos-3d\\estudos-mixamo\\meshy-pipoca-v2\\meshy-bunny-boxer-v2.glb",
+  "sourceSha256": "73b05d051c130f57f9bf08bd85ad84341b2988590131f11d4cbe376b620ebf3e",
+  "materials": {
+    "materiais": {
+      "pelagem": {
+        "acabamento": "pelagem curta direcional creme e brilho difuso",
+        "roughness": [
+          0.66,
+          0.79
+        ],
+        "bump_m": 0.00095,
+        "subsurface": 0.012,
+        "alpha": false,
+        "nodes": 19
+      },
+      "tecido": {
+        "acabamento": "indigo acetinado com trama",
+        "roughness": [
+          0.3,
+          0.39
+        ],
+        "trama_mm": 0.85,
+        "alpha": false,
+        "nodes": 22
+      },
+      "couro": {
+        "acabamento": "couro vermelho granulado com reflexo amplo e contido",
+        "roughness": [
+          0.37,
+          0.48
+        ],
+        "coat": 0.035,
+        "metallic": 0,
+        "alpha": false,
+        "nodes": 13
+      },
+      "tecido_top": {
+        "acabamento": "indigo fosco com trama",
+        "roughness": [
+          0.45,
+          0.54
+        ],
+        "trama_mm": 0.85,
+        "alpha": false,
+        "nodes": 22
+      }
+    },
+    "texturas_externas": 0,
+    "top_separado": true,
+    "limites": "Procedurais locais para estudo. Assar Base Color/Normal/Roughness apos retopologia e UV finais. Nao exportados automaticamente para glTF."
+  },
+  "straps": [
+    0.346,
+    0.347
+  ],
+  "hems": {
+    "-1": 27,
+    "1": 26
+  },
+  "contours": {
+    "islandsDissolved": 11,
+    "vertices": 56236,
+    "faces": 98653,
+    "perMaterial": {
+      "pelagem": 53281,
+      "interior_orelha": 1973,
+      "tecido": 16946,
+      "tecido_top": 4297,
+      "faixas": 14218,
+      "couro": 8192,
+      "pupila": 363,
+      "sobrancelha": 326
+    }
+  },
+  "face": {
+    "objects": 18,
+    "blush": {
+      "centres": [
+        [
+          -0.09,
+          -0.1244,
+          0.505
+        ],
+        [
+          0.09,
+          -0.122,
+          0.505
+        ]
+      ]
+    }
+  },
+  "details": {
+    "toenails": 8
+  },
+  "version": 5,
+  "draft": true,
+  "workfile": "art\\premium\\modelos-3d\\estudos-mixamo\\meshy-pipoca-v2\\identidade-v5\\refinamento-olhos-v1\\pipoca-identidade-v5.blend",
+  "reference": "art\\premium\\modelos-3d\\referencias\\pipoca-referencia-v1.png",
+  "views": [
+    {
+      "view": "frente",
+      "file": "frente.png",
+      "sha256": "b37f1338a5bdafd0bfe2073df1929cdd099ab3210b570264eab20f9864c441f5"
+    },
+    {
+      "view": "perfil",
+      "file": "perfil.png",
+      "sha256": "f23a4e885812e5cb54e25c2e86296ede9d97a3303456c5f9ffb88c82e5bea49b"
+    },
+    {
+      "view": "costas",
+      "file": "costas.png",
+      "sha256": "38aeacdcf81306174a83fe1eba107250b37a23a4acf4dd1a9be1b0dd2d6b7814"
+    },
+    {
+      "view": "rosto",
+      "file": "rosto.png",
+      "sha256": "78b2c1dc41e81f3ea5484f2c1fa2773bbbf0959b0881affd384f1a9563a85e34"
+    },
+    {
+      "view": "olhos-frente",
+      "file": "olhos-frente.png",
+      "sha256": "b39000991cbaf07e69109d0afa71c79e785dd4faffdac4dd81083c0cf1a5eb28"
+    },
+    {
+      "view": "olhos-34-direito",
+      "file": "olhos-34-direito.png",
+      "sha256": "6d738c73c4461e22d3d006b0a4f28ba0e940de2b59230e5866a31177b16d99fa"
+    },
+    {
+      "view": "olhos-34-esquerdo",
+      "file": "olhos-34-esquerdo.png",
+      "sha256": "c9ea073910685fcd3f2b9b8db3d393020ffaf427029da92f84adaceab4e1c907"
+    }
+  ],
+  "blender": "5.2.2 LTS",
+  "workfileSha256": "54b2267653ed520c07ba0c7f18a345696c62f5713c15c7030b0254d29ea7c59e",
+  "refinement": {
+    "scope": "Pintura do topo dos olhos contida sob o delineado brilhante; mapa da sobrancelha atualizado após suavização.",
+    "linerRadius": 0.0042,
+    "paintRadiusRatio": 0.72,
+    "sourceScriptSha256": "e09bf2831a371348ce86cee962184db4c8d1c5fc09799324b15c9e557b91b3ce"
+  }
+}

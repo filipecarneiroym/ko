@@ -1,0 +1,243 @@
+{
+  "caminho": "public/modelos/estudos/pipoca-direcao-visual-v13.glb",
+  "aprovadoFinal": false,
+  "sha256Glb": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+  "passoQuadros": 0.0625,
+  "golpes": {
+    "cp": {
+      "duracaoQuadros": 10,
+      "amostras": 322,
+      "apoioMaximo": 1.7120130796843852e-7,
+      "solaMaxima": 5.316965712154342e-8,
+      "pisoMinimo": 9.297978209588109e-8,
+      "contatos": [
+        {
+          "quadro": 3,
+          "face": 1,
+          "extremidade": "mao_E",
+          "caixaVisual": [
+            0.7430310249328613,
+            1.1187156438827515,
+            0.8602161407470703,
+            1.2585021257400513
+          ],
+          "caixaMotor": [
+            6,
+            -28,
+            22,
+            9
+          ]
+        },
+        {
+          "quadro": 3,
+          "face": -1,
+          "extremidade": "mao_E",
+          "caixaVisual": [
+            0.7430310249328613,
+            1.1187156438827515,
+            0.8602161407470703,
+            1.2585021257400513
+          ],
+          "caixaMotor": [
+            6,
+            -28,
+            22,
+            9
+          ]
+        }
+      ]
+    },
+    "ck": {
+      "duracaoQuadros": 26,
+      "amostras": 834,
+      "apoioMaximo": 0.0000830167431724888,
+      "solaMaxima": 0.00008198469271292197,
+      "pisoMinimo": -0.00008176989649655297,
+      "contatos": [
+        {
+          "quadro": 6,
+          "face": 1,
+          "extremidade": "pe_E",
+          "caixaVisual": [
+            0.8942943811416626,
+            1.3940088748931885,
+            0.1252310872077942,
+            0.3065476715564728
+          ],
+          "caixaMotor": [
+            4,
+            -10,
+            34,
+            10
+          ]
+        },
+        {
+          "quadro": 6,
+          "face": -1,
+          "extremidade": "pe_E",
+          "caixaVisual": [
+            0.8942943811416625,
+            1.3940088748931885,
+            0.1252310872077942,
+            0.3065476715564728
+          ],
+          "caixaMotor": [
+            4,
+            -10,
+            34,
+            10
+          ]
+        }
+      ]
+    },
+    "ap": {
+      "duracaoQuadros": 20,
+      "amostras": 642,
+      "apoioMaximo": 0,
+      "solaMaxima": 0,
+      "pisoMinimo": -0.04897381737828255,
+      "contatos": [
+        {
+          "quadro": 4,
+          "face": 1,
+          "extremidade": "mao_E",
+          "caixaVisual": [
+            0.7423194646835327,
+            1.1414860486984253,
+            1.2551870346069336,
+            1.5518954992294312
+          ],
+          "caixaMotor": [
+            4,
+            -40,
+            22,
+            14
+          ]
+        },
+        {
+          "quadro": 4,
+          "face": -1,
+          "extremidade": "mao_E",
+          "caixaVisual": [
+            0.7423194646835327,
+            1.1414860486984253,
+            1.2551870346069336,
+            1.5518954992294312
+          ],
+          "caixaMotor": [
+            4,
+            -40,
+            22,
+            14
+          ]
+        }
+      ]
+    },
+    "ak": {
+      "duracaoQuadros": 22,
+      "amostras": 706,
+      "apoioMaximo": 0,
+      "solaMaxima": 0,
+      "pisoMinimo": -0.04897378012537956,
+      "contatos": [
+        {
+          "quadro": 5,
+          "face": 1,
+          "extremidade": "pe_E",
+          "caixaVisual": [
+            0.774294376373291,
+            1.274008870124817,
+            0.8452311754226685,
+            1.0265476703643799
+          ],
+          "caixaMotor": [
+            2,
+            -26,
+            28,
+            12
+          ]
+        },
+        {
+          "quadro": 5,
+          "face": -1,
+          "extremidade": "pe_E",
+          "caixaVisual": [
+            0.774294376373291,
+            1.274008870124817,
+            0.8452311754226685,
+            1.0265476703643799
+          ],
+          "caixaMotor": [
+            2,
+            -26,
+            28,
+            12
+          ]
+        }
+      ]
+    },
+    "esp": {
+      "duracaoQuadros": 30,
+      "amostras": 962,
+      "apoioMaximo": 2.9802322387695312e-8,
+      "solaMaxima": 2.5524101943119604e-8,
+      "pisoMinimo": 8.522267336275036e-8,
+      "contatos": [],
+      "lancamento": {
+        "quadro": 10,
+        "pulso": [
+          0.7500000596046448,
+          1.9999998807907104
+        ]
+      }
+    },
+    "sup": {
+      "duracaoQuadros": 62,
+      "amostras": 2178,
+      "apoioMaximo": 0.0007761856364204016,
+      "solaMaxima": 0.0006943075085814598,
+      "pisoMinimo": -0.0006940927123650908,
+      "contatos": [
+        {
+          "quadro": 44,
+          "face": 1,
+          "extremidade": "mao_E",
+          "caixaVisual": [
+            0.15225873887538907,
+            0.5031904578208923,
+            2.28014874458313,
+            2.6866719722747803
+          ],
+          "caixaMotor": [
+            -16,
+            -86,
+            32,
+            86
+          ]
+        },
+        {
+          "quadro": 44,
+          "face": -1,
+          "extremidade": "mao_E",
+          "caixaVisual": [
+            0.15225873887538904,
+            0.5031904578208923,
+            2.28014874458313,
+            2.6866719722747803
+          ],
+          "caixaMotor": [
+            -16,
+            -86,
+            32,
+            86
+          ]
+        }
+      ]
+    }
+  },
+  "amostras": 5644,
+  "limites": [
+    "Contatos técnicos não aprovam deformações, atuação ou acabamento artístico.",
+    "Ocultação do super pertence a p.sumido; o arquivo não cria eventos de gameplay."
+  ]
+}

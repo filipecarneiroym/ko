@@ -1,0 +1,31 @@
+IMAGE-TO-3D BRIEF: PIPOCA
+
+Identity authority:
+- Primary image: art/premium/elenco/pipoca-v1.png
+- Supporting front/profile/back sheet: art/premium/modelos-3d/referencias/pipoca-referencia-v1.png
+- The primary image controls Pipoca's face, proportions, colors, costume, and personality. Use the turnaround only to infer hidden sides. Do not redesign the character.
+
+Generate one complete, watertight, full-body 3D character mesh of the same adult female anthropomorphic white rabbit boxer. Use a neutral relaxed A-pose with arms slightly away from the torso, straight elbows, feet grounded and comfortably apart. Keep both long ears entirely inside the model bounds. Face and body point forward. Do not use the boxing guard pose from the primary image.
+
+Preserve these recognizable features:
+- White/cream rabbit fur, broad expressive cheeks and short muzzle, pink nose, amber-orange eyes, dark shaped eyebrows and lashes, confident friendly expression.
+- Two long upright ears with clearly visible coral-pink inner surfaces.
+- Athletic feminine anatomy matching the reference, with natural shoulder, waist, hip, knee, ankle, and foot transitions. Keep the head and ears in the same proportions as the reference.
+- Royal indigo-blue crop top and matching boxing shorts, white side stripes, wide white waistband and small centered buckle.
+- Bright red boxing gloves with distinct cuffs.
+- White cloth wraps around both ankles and feet with narrow red accent bands. Keep rabbit toes visible; no shoes.
+- Small round white tail attached at the lower back.
+
+Model requirements:
+- Create a real volumetric 3D mesh, not a flat image plane, bas-relief, bust, or posed poster.
+- Keep the body, clothing, gloves, eyes, ears, and tail as clean separable mesh/material regions where possible. Clothing must follow the body without large gaps or intersections.
+- Use clean, even topology suitable for later retopology, UV unwrap, skinning, and animation. Avoid floating fragments, accidental cylinders, fused fingers/toes, holes, and self-intersections.
+- No background, floor, pedestal, text, labels, logo, watermark, extra jewelry, or extra costume pieces.
+- Use a neutral studio presentation only if the tool requires a preview; export the character asset itself.
+
+Export preference:
+1. Textured GLB or glTF with separate materials and UVs.
+2. FBX or OBJ with textures as a secondary option.
+3. STL only as a geometry-only sculpting intermediate. STL does not preserve the character's colors, materials, textures, or rig, so do not use it as the final game asset.
+
+Before accepting the result, inspect the face, front silhouette, profile, back, gloves, shorts, ankle wraps, and toes. Reject a result that resembles only the broad species/costume but changes Pipoca's identity.

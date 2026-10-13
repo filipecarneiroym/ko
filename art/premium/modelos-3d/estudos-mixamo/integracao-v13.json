@@ -1,0 +1,690 @@
+{
+  "aprovadoFinal": false,
+  "caminho": "public/modelos/estudos/pipoca-direcao-visual-v13.glb",
+  "bytes": 7603172,
+  "sha256": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+  "fontesDiretas": [
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/guarda-v4.json",
+      "sha256": "d57ea6794371708ecac3c0c41ffdad62f19ae0a762315b77d1ec2360c8524d67"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/jab-v5.json",
+      "sha256": "a9c6e66365face578c8084afaa3404caf13e7f5b362d1d6bee2201c9d60ed764"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/soco-forte-v6.json",
+      "sha256": "85359f8c841ade7cdee22a765037db052648167f7551b44c682bd1285179a66f"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/defesa-v7.json",
+      "sha256": "47ecb4c6f512609bd04579871b4ab64bd69538aeae8b9c3f451da31a3b8e49a4"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/reacao-v8.json",
+      "sha256": "f13d7245156a080cabde8534f48e6807d3c5b1228e81ffcec60f87b29f0f56fc"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/andando-v9.json",
+      "sha256": "709570e8631eb5c6b2c862d7efcb700935f1eb6b0581e324da59c399915552bb"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/chute-v11.json",
+      "sha256": "15e0091c57c18c8afbbdbd35fe1bd8ee23d1343044ee083f5b4563b89860e4eb"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/chute-forte-v12.json",
+      "sha256": "b11620e9a908b4a63a1fc5bd012b72711098ddcceeb88b0195e03781b7decaf6"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/posturas-v14.json",
+      "sha256": "6ce704194e210ab1d9b738dc483f1a87b75c01eed8f3321fb1ff2f0e4c73e985"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/tecnicas-v15.json",
+      "sha256": "663d67d110695f3029642ff36f296c20937bf5c787e23c11139f07a6790ce071"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/estados-v16.json",
+      "sha256": "57921d4c442798060321801a07fba94aca858859a336d6da775b89cece551386"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/atuacao-v17.json",
+      "sha256": "7a7690db84a7c2419875cb3128df342919988dc01c4f58926cca8c6d9e1b768d"
+    },
+    {
+      "caminho": "src/producao3d/pipoca-visual-v3.mjs",
+      "sha256": "71a4edd6ce669887f8e94774dfb9701c9e7647509f5b64ea4acf6aad3cb1a5f8"
+    },
+    {
+      "caminho": "src/producao3d/pipoca-corpo-v2.mjs",
+      "sha256": "6a2ddd999ac34a3481cf160b135313acf6facdcc0645dbaed685347379c4a089"
+    },
+    {
+      "caminho": "src/producao3d/pipoca.mjs",
+      "sha256": "66649056c77b73d8b36756c306945d3d28e58d1d2a57e30f9db4a6153baa0727"
+    },
+    {
+      "caminho": "src/producao3d/pipoca-figurino.mjs",
+      "sha256": "af3bd697e2cf56e634b06aee39e8f68bbe8ebf504df0da8055f68d53f43eaf39"
+    },
+    {
+      "caminho": "src/producao3d/pipoca-pelagem.mjs",
+      "sha256": "bad8b0e6c3bdf67100292151743e153e6db07dc4d435dc3631e59ee7f2dd4ab4"
+    },
+    {
+      "caminho": "src/producao3d/pipoca-posturas.mjs",
+      "sha256": "873522d73eb27be9627723c0f36f9a6a32bd67965892d6eb799e41a525736f8a"
+    },
+    {
+      "caminho": "src/producao3d/pipoca-tecnicas.mjs",
+      "sha256": "13d9be375e9459f1aaee896583064962732eb7001c03e9c458d22e8da77c1015"
+    },
+    {
+      "caminho": "src/producao3d/pipoca-estados.mjs",
+      "sha256": "292d3a644ebe77c7f0662aa34fc043391d9a7a70b6647687142dc8d1f7e28ab5"
+    },
+    {
+      "caminho": "src/producao3d/pipoca-atuacao.mjs",
+      "sha256": "3744937e24b202d36c9224ce201feefea13c81211c7955d05d525c5eb0e0a83a"
+    },
+    {
+      "caminho": "scripts/producao-3d/gerar-estudo-visual.mjs",
+      "sha256": "c54831a8b1ead10c4a17d5fbd0964cf718954b4e3c5c2bddaed2aa53323b544d"
+    },
+    {
+      "caminho": "scripts/producao-3d/glb.mjs",
+      "sha256": "45def2308a63132e5dcb565187fb1d34faa63815a9bbc90fa88ec42639dcfe90"
+    }
+  ],
+  "geometria": {
+    "vertices": 17955,
+    "triangulos": 29666,
+    "primitivas": 6,
+    "materiais": 6
+  },
+  "texturas": [
+    {
+      "nome": "pipoca_indigo_faixas_v2",
+      "largura": 512,
+      "altura": 512,
+      "bytesPng": 5691,
+      "memoriaRgba8ComMipmapsEstimada": 1398102
+    },
+    {
+      "nome": "pipoca_microrelevo_pelagem_prova_v1",
+      "largura": 512,
+      "altura": 512,
+      "bytesPng": 437050,
+      "memoriaRgba8ComMipmapsEstimada": 1398102
+    }
+  ],
+  "metasTecnicas": {
+    "triangulosAlvo": 25000,
+    "triangulosTeto": 40000,
+    "glbBytesAlvo": 8388608,
+    "materiaisAlvo": 4,
+    "triangulosDentroDoTeto": true,
+    "glbDentroDoAlvo": true,
+    "materiaisDentroDoAlvo": false,
+    "desempenhoEmAparelhosFisicosMedido": false
+  },
+  "sha256Simulacao": "aa7ea83e1c9398f6977be2728d7d031780a49df7cc9b8a2b044601d2b02a3304",
+  "ossos": 20,
+  "clips": 31,
+  "corpo": {
+    "versao": 2,
+    "superficies": [
+      {
+        "nome": "pele-torso",
+        "material": 0,
+        "aneis": 11,
+        "vertices": 266,
+        "triangulos": 528,
+        "tampas": true
+      },
+      {
+        "nome": "top",
+        "material": 1,
+        "aneis": 4,
+        "vertices": 96,
+        "triangulos": 144,
+        "tampas": false
+      },
+      {
+        "nome": "faixa-cintura",
+        "material": 0,
+        "aneis": 2,
+        "vertices": 48,
+        "triangulos": 48,
+        "tampas": false
+      },
+      {
+        "nome": "pele-braco-E",
+        "material": 0,
+        "aneis": 9,
+        "vertices": 216,
+        "triangulos": 384,
+        "tampas": false
+      },
+      {
+        "nome": "pele-perna-E",
+        "material": 0,
+        "aneis": 10,
+        "vertices": 240,
+        "triangulos": 432,
+        "tampas": false
+      },
+      {
+        "nome": "barra-short-E",
+        "material": 0,
+        "aneis": 2,
+        "vertices": 48,
+        "triangulos": 48,
+        "tampas": false
+      },
+      {
+        "nome": "pele-braco-D",
+        "material": 0,
+        "aneis": 9,
+        "vertices": 216,
+        "triangulos": 384,
+        "tampas": false
+      },
+      {
+        "nome": "pele-perna-D",
+        "material": 0,
+        "aneis": 10,
+        "vertices": 240,
+        "triangulos": 432,
+        "tampas": false
+      },
+      {
+        "nome": "barra-short-D",
+        "material": 0,
+        "aneis": 2,
+        "vertices": 48,
+        "triangulos": 48,
+        "tampas": false
+      },
+      {
+        "nome": "short-continuo",
+        "material": 1,
+        "aneis": 9,
+        "vertices": 216,
+        "triangulos": 362,
+        "tampas": false,
+        "uniao": "Cintura e pernas compartilham vértices; apenas cintura e duas barras permanecem abertas."
+      }
+    ],
+    "verticesMistos": 934,
+    "rigPreservado": true,
+    "partesPreservadas": [
+      "cabeca",
+      "mandibula",
+      "orelha_E",
+      "orelha_D",
+      "mao_E",
+      "mao_D",
+      "pe_E",
+      "pe_D",
+      "cauda"
+    ],
+    "tecnica": "Lofts com anéis compartilhados e normais suaves; até duas influências no corpo e três na entreperna do short."
+  },
+  "rosto": {
+    "versao": 3,
+    "partes": [
+      {
+        "nome": "cranio-bochechas-focinho",
+        "tecnica": "superficie-unica",
+        "junta": "cabeca"
+      },
+      {
+        "nome": "olhos-amendoados",
+        "tecnica": "placas-projetadas-na-face",
+        "projecaoMaximaMetros": 0.04,
+        "distanciaIrisEscleraMetros": 0.009
+      },
+      {
+        "nome": "sobrancelhas-e-sorriso",
+        "tecnica": "fitas-curvas-projetadas"
+      },
+      {
+        "nome": "orelhas-organicas",
+        "tecnica": "laminas-concavas-continuas",
+        "componentesExternos": 2,
+        "alturaMaximaMetros": 3.218,
+        "transicaoCabecaOrelha": [
+          2.385,
+          2.57
+        ],
+        "espessuraInteriorRosaMetros": 0.0022
+      },
+      {
+        "nome": "silhueta-pelagem-bochechas",
+        "tecnica": "ondulacoes-suaves-integradas",
+        "deslocamentoMaximoMetros": 0.017,
+        "mapaPelagem": false
+      }
+    ],
+    "referencias": [
+      "art/premium/elenco/pipoca-v1.png",
+      "art/premium/modelos-3d/referencias/pipoca-referencia-v1.png"
+    ],
+    "rigPreservado": true,
+    "componentesExternosPreservados": true,
+    "anatomia": "Crânio, bochechas e focinho contínuos; olhos baixos projetados na superfície e sorriso curto."
+  },
+  "figurino": {
+    "versao": 2,
+    "referencia": "art/premium/modelos-3d/referencias/pipoca-referencia-v1.png",
+    "alcas": {
+      "primeiroVertice": 312,
+      "primeiroTriangulo": 506,
+      "vertices": 44,
+      "triangulos": 48,
+      "ligacao": "Duas arestas por alça compartilham vértices do anel superior do top.",
+      "ajuste": "Alças projetadas sobre a malha real dos ombros; afastamento vertical de 10 mm e pesos interpolados da pele."
+    },
+    "partes": [
+      {
+        "nome": "fivela",
+        "material": 4,
+        "primeiroVertice": 1028,
+        "primeiroTriangulo": 1368,
+        "vertices": 16,
+        "triangulos": 8
+      }
+    ],
+    "faixa": {
+      "alturaMetros": 0.045,
+      "tecnica": "Estampa no próprio tecido; nenhuma camada geométrica sobre a cintura."
+    },
+    "listras": {
+      "quantidade": 4,
+      "larguraAngular": 0.028,
+      "tecnica": "Duas faixas por lateral em textura PNG autocontida sobre a triangulação original."
+    },
+    "textura": {
+      "largura": 512,
+      "altura": 512,
+      "mimeType": "image/png",
+      "uv": "Ângulo espelhado dos quadris e altura em repouso; sem costura ou duplicação de vértices.",
+      "faixaElastica": "Nervuras e duas linhas de costura discretas na estampa."
+    },
+    "fivela": {
+      "material": 4,
+      "larguraMetros": 0.053,
+      "alturaMetros": 0.034
+    },
+    "tecidoComponentes": 2,
+    "rigPreservado": true,
+    "rostoPreservado": true,
+    "limites": [
+      "Alças e acabamentos ainda sem costura ou trama texturizada.",
+      "Revisão artística final e poses restantes continuam pendentes."
+    ]
+  },
+  "pelagem": {
+    "versao": 1,
+    "status": "prova-opcional-nao-aprovada",
+    "resolucao": 512,
+    "intensidade": 1,
+    "periodoMetros": 0.18,
+    "verticesCostura": 855,
+    "polos": 408,
+    "componentes": {
+      "longitudinal-membro": 40,
+      "radial-cabeca": 1,
+      "neutra": 4
+    },
+    "geometriaTriangularPreservada": true,
+    "limites": [
+      "Microrelevo de superfície; não substitui pelagem da referência nem altera a silhueta.",
+      "Prova visual opcional, pendente de comparação no renderizador real."
+    ]
+  },
+  "posturas": {
+    "versao": 14,
+    "clips": [
+      "agachado",
+      "defesaBaixa",
+      "pulo",
+      "pousando"
+    ],
+    "origem": "IK autoral sobre guarda v4",
+    "passoQuadros": 0.5,
+    "trajetoriaVerticalPertenceAoMotor": true,
+    "aprovadoFinal": false
+  },
+  "tecnicas": {
+    "versao": 15,
+    "nomes": [
+      "cp",
+      "ck",
+      "ap",
+      "ak",
+      "esp",
+      "sup"
+    ],
+    "regras": {
+      "raizJogavelImovel": true,
+      "pelveDentroDaRaiz": "Até8cm para trás na postura baixa v14; não move modelo-pipoca.",
+      "janelaCriacaoCenoura": 10,
+      "visibilidadeSuper": "p.sumido; não controlada pelo clip",
+      "apoio": "Dois pés no chão em cp/esp/sup; D apoia ck. ap/ak usam puloq8 sem ancorar os pés ao chão.",
+      "amostragemQuadros": {
+        "cp": 0.25,
+        "ck": 0.25,
+        "ap": 0.25,
+        "ak": 0.25,
+        "esp": 0.25,
+        "sup": ".125; .03125 entreq42–44"
+      }
+    },
+    "pendentes": [],
+    "aprovadoFinal": false
+  },
+  "estados": {
+    "versao": 16,
+    "nomes": [
+      "corrida",
+      "recuo",
+      "quebra",
+      "caido",
+      "levantando"
+    ],
+    "corrida": {
+      "clip": "corrida",
+      "duracaoQuadros": 8,
+      "distanciaCiclo": 1.7916666666666667,
+      "velocidadeMetrosQuadro": 0.22395833333333334,
+      "velocidadeMotor": 86,
+      "alturaBalanco": 0.15
+    },
+    "regras": {
+      "unidadesMetro": 384,
+      "pes": {
+        "E": [
+          0.3807239092990129,
+          0.12000000052898019,
+          -0.33448202968310436
+        ],
+        "D": [
+          -0.40851453284597344,
+          0.12000018803288637,
+          0.1482539376610028
+        ]
+      },
+      "centros": {
+        "E": 0.11447689509277369,
+        "D": -0.11353576022017947
+      },
+      "corrida": {
+        "clip": "corrida",
+        "duracaoQuadros": 8,
+        "distanciaCiclo": 1.7916666666666667,
+        "velocidadeMetrosQuadro": 0.22395833333333334,
+        "velocidadeMotor": 86,
+        "alturaBalanco": 0.15
+      },
+      "recuo": {
+        "velocidadeMetrosQuadro": 0.234375,
+        "alturaBalanco": 0.11,
+        "passos": {
+          "E": [
+            {
+              "de": 0,
+              "ate": 2,
+              "apoio": false,
+              "inicio": 0.3807239092990129,
+              "fim": -0.81875
+            },
+            {
+              "de": 2,
+              "ate": 6,
+              "apoio": true,
+              "mundo": -0.81875
+            },
+            {
+              "de": 6,
+              "ate": 10,
+              "apoio": false,
+              "inicio": -0.81875,
+              "fim": -2.69375
+            },
+            {
+              "de": 10,
+              "ate": 14,
+              "apoio": true,
+              "mundo": -2.69375
+            },
+            {
+              "de": 14,
+              "ate": 16,
+              "apoio": false,
+              "inicio": -2.69375,
+              "fim": -3.8380260907009873
+            },
+            {
+              "de": 16,
+              "ate": 18,
+              "apoio": true,
+              "mundo": -3.8380260907009873
+            }
+          ],
+          "D": [
+            {
+              "de": 0,
+              "ate": 2,
+              "apoio": true,
+              "mundo": -0.40851453284597344
+            },
+            {
+              "de": 2,
+              "ate": 6,
+              "apoio": false,
+              "inicio": -0.40851453284597344,
+              "fim": -1.85625
+            },
+            {
+              "de": 6,
+              "ate": 10,
+              "apoio": true,
+              "mundo": -1.85625
+            },
+            {
+              "de": 10,
+              "ate": 14,
+              "apoio": false,
+              "inicio": -1.85625,
+              "fim": -3.73125
+            },
+            {
+              "de": 14,
+              "ate": 16,
+              "apoio": true,
+              "mundo": -3.73125
+            },
+            {
+              "de": 16,
+              "ate": 18,
+              "apoio": false,
+              "inicio": -3.73125,
+              "fim": -4.627264532845974
+            }
+          ]
+        }
+      },
+      "quebra": {
+        "alturaBalanco": 0.065,
+        "passos": {
+          "E": [
+            {
+              "de": 0,
+              "ate": 5,
+              "apoio": false,
+              "inicio": 0.3807239092990129,
+              "fim": -0.19219275736765373
+            },
+            {
+              "de": 5,
+              "ate": 16,
+              "apoio": true,
+              "mundo": -0.19219275736765373
+            }
+          ],
+          "D": [
+            {
+              "de": 0,
+              "ate": 5,
+              "apoio": true,
+              "mundo": -0.40851453284597344
+            },
+            {
+              "de": 5,
+              "ate": 10,
+              "apoio": false,
+              "inicio": -0.40851453284597344,
+              "fim": -0.9814311995126401
+            },
+            {
+              "de": 10,
+              "ate": 16,
+              "apoio": true,
+              "mundo": -0.9814311995126401
+            }
+          ]
+        }
+      },
+      "amostragemQuadros": {
+        "corrida": 0.125,
+        "recuo": 0.0625,
+        "quebra": 0.125,
+        "caido": 0.03125,
+        "levantando": 0.03125
+      },
+      "raizJogavel": "Posição, parede, velocidade, hitstop e orientação pertencem ao KSim.",
+      "queda": "Envelope da pele impede penetração; contato de corpo no chão e apoio dos pés na segunda metade da subida. Não aprova atuação artística."
+    },
+    "pendentes": [
+      "rolando",
+      "agarrando",
+      "agarrado",
+      "tonto",
+      "vitoria",
+      "derrotado",
+      "final",
+      "vitimaFinal"
+    ],
+    "limites": [
+      "Queda e primeira metade da subida exigem direção de atuação e revisão de contatos de mão/joelho.",
+      "Rig, piso e fonte autoral não equivalem à aprovação de arte e silhueta."
+    ],
+    "aprovadoFinal": false
+  },
+  "atuacao": {
+    "versao": 17,
+    "nomes": [
+      "rolando",
+      "agarrando",
+      "agarrado",
+      "tonto",
+      "vitoria",
+      "derrotado",
+      "final",
+      "vitimaFinal"
+    ],
+    "regras": {
+      "raizJogavelImovel": true,
+      "rolando": {
+        "velocidadeMotor": 88,
+        "ultimoQuadroMovimento": 16,
+        "giro": [
+          2,
+          14
+        ],
+        "retornoApoios": [
+          16,
+          24
+        ]
+      },
+      "agarrando": {
+        "contatoNominal": [
+          4,
+          8
+        ],
+        "lancamentoMotor": 10,
+        "pulsosContato": {
+          "E": [
+            1.08,
+            1.53,
+            -0.14
+          ],
+          "D": [
+            0.88,
+            1.53,
+            0.3
+          ]
+        },
+        "distanciaMotorPixels": [
+          26,
+          36
+        ],
+        "ajustadoPorVitima": false
+      },
+      "agarrado": {
+        "lancamentoMotor": 10,
+        "ultimos20quadros": "Reserva do contrato; KSim já troca para dano/voo no quadro10."
+      },
+      "final": {
+        "identidade": "Comanda a Chuva de Cenouras, guarda e comemoração de boxeadora; não anima eventos de gameplay.",
+        "contatosVfx": [
+          36,
+          42,
+          48,
+          54,
+          60,
+          66,
+          72,
+          78,
+          84,
+          90,
+          96,
+          102,
+          108,
+          114,
+          120,
+          126,
+          132,
+          138
+        ],
+        "relogio": "s.fT, inclusive hitstop",
+        "terminaNaGuarda": true
+      },
+      "entradaDerrotadoDepoisDeVitimaFinal": "Usar pose final do derrotado; a vítima já está deitada no fim do Final.",
+      "amostragemQuadros": "1/8q em rolagem/agarrão; 1/4q nas atuações; chaves adaptativas nos contatos do corpo com o piso."
+    },
+    "pendentes": [
+      "Contato de duas luvas por vítima e por distância de agarrão.",
+      "Validação visual de rolagem, silhueta, mãos/joelhos e expressões.",
+      "Transições de entrada contextual (tonto→vitimaFinal, vitimaFinal→derrotado)."
+    ],
+    "limites": [
+      "Ter31fontes autorais não significa aprovação premium final.",
+      "Vítima do Final reage à faixa de impactos; outros finalizadores terão direção visual própria.",
+      "Sem áudio, expressão facial esculpida ou trama/pelagem final."
+    ],
+    "aprovadoFinal": false
+  },
+  "referenciasVisuais": [
+    "art/premium/elenco/pipoca-v1.png",
+    "art/premium/modelos-3d/referencias/pipoca-referencia-v1.png"
+  ],
+  "limites": [
+    "Direção visual em construção; sem equivalência de acabamento com a ilustração.",
+    "Pelagem, tecido e expressões ainda precisam de produção artística.",
+    "Os movimentos sem relatório específico de revisão permanecem como estudos."
+  ]
+}

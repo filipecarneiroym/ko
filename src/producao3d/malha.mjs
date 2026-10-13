@@ -80,7 +80,9 @@ export function criarMalha() {
   }
   function torus(centro, raio, espessura, material, junta, opcoes = {}) {
     const p = [], n = [], indices = [], segmentos = opcoes.segmentos || 24, lados = opcoes.aneis || 10;
-    const r = opcoes.eixo === 'x' ? [0, 0, Math.PI / 2] : opcoes.eixo === 'z' ? [Math.PI / 2, 0, 0] : [0, 0, 0];
+    const rotacoes = { x: [0, 0, Math.PI / 2], y: [0, 0, 0], z: [Math.PI / 2, 0, 0] };
+    const r = rotacoes[opcoes.eixo || 'z'];
+    if (!r) throw new Error(`Eixo de toro inválido: ${opcoes.eixo}`);
     const escala = opcoes.escala || [1, 1, 1];
     for (let i = 0; i <= segmentos; i++) for (let j = 0; j <= lados; j++) {
       const a = i / segmentos * 2 * Math.PI, b = j / lados * 2 * Math.PI;

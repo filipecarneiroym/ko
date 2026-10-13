@@ -1,8 +1,8 @@
 {
   "aprovadoFinal": false,
   "caminho": "public/modelos/estudos/pipoca-corpo-v10.glb",
-  "bytes": 1263204,
-  "sha256": "5957e10e18b28f7bb1f02f0bebe1ecfa154936d7f89b80c7f109592bb408198c",
+  "bytes": 1263232,
+  "sha256": "e78c875d602e70c45892fc0ad51aa74f993770a5cee55b1554baa48377e0d136",
   "clips": 31,
   "ossos": 20,
   "restPosePreservada": true,
@@ -94,7 +94,7 @@
         "uniao": "Cintura e pernas compartilham vértices; apenas cintura e duas barras permanecem abertas."
       }
     ],
-    "verticesMistos": 960,
+    "verticesMistos": 982,
     "rigPreservado": true,
     "partesPreservadas": [
       "cabeca",
@@ -107,7 +107,7 @@
       "pe_D",
       "cauda"
     ],
-    "tecnica": "Lofts com anéis compartilhados, normais suaves e até duas influências por vértice."
+    "tecnica": "Lofts com anéis compartilhados e normais suaves; até duas influências no corpo e três na entreperna do short."
   },
   "vertices": 13102,
   "triangulos": 19610,

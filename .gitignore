@@ -54,3 +54,8 @@ Thumbs.db
 .vscode/
 .fleet/
 .zed/
+
+# Cache Python e cópias automáticas do Blender
+__pycache__/
+*.py[cod]
+*.blend[0-9]*

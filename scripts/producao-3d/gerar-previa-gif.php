@@ -5,11 +5,12 @@ $raiz = dirname(__DIR__, 2);
 $pasta = $raiz . '/art/premium/modelos-3d/estudos-mixamo';
 $modo = $argv[1] ?? 'guarda';
 function quadrosDaPrevia(string $modo, string $pasta): array {
-    if ($modo === 'corpo') {
-        $diretorio = $pasta . '/previa-corpo-v10';
+    if (in_array($modo, ['corpo', 'visual'], true)) {
+        $visual = $modo === 'visual';
+        $diretorio = $pasta . ($visual ? '/previa-visual-v13' : '/previa-corpo-v10');
         $manifesto = json_decode(file_get_contents($diretorio . '/quadros.json'), true, flags: JSON_THROW_ON_ERROR);
-        if (count($manifesto['quadros']) !== 102) throw new RuntimeException('Prévia do corpo incompleta.');
-        $modelo = dirname(__DIR__, 2) . '/public/modelos/estudos/pipoca-corpo-v10.glb';
+        if (count($manifesto['quadros']) !== ($visual ? 155 : 102)) throw new RuntimeException('Prévia incompleta.');
+        $modelo = dirname(__DIR__, 2) . '/public/modelos/estudos/' . ($visual ? 'pipoca-direcao-visual-v13.glb' : 'pipoca-corpo-v10.glb');
         if (($manifesto['sha256Glb'] ?? null) !== hash_file('sha256', $modelo)) throw new RuntimeException('Renderize novamente a prévia: o GLB foi alterado.');
         return array_map(static fn($q, $i) => ['caminho' => $diretorio . '/' . sprintf('%03d.png', $i), 'atraso' => $q['atraso']], $manifesto['quadros'], array_keys($manifesto['quadros']));
     }
@@ -112,6 +113,7 @@ $nome = match ($modo) {
     'chutes' => 'pipoca-chutes-v11-lento.gif', 'chute-forte' => 'pipoca-chute-forte-v12-lento.gif',
     'vida' => 'pipoca-movimentos-v9.gif',
     'corpo' => 'pipoca-corpo-v10-movimentos.gif',
+    'visual' => 'pipoca-direcao-visual-v13.gif',
 };
 $destino = $pasta . '/' . $nome;
 file_put_contents($destino, $saida);

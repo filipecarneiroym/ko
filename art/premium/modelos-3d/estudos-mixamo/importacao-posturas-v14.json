@@ -1,0 +1,101 @@
+{
+  "caminho": "public/modelos/estudos/pipoca-direcao-visual-v13.glb",
+  "aprovadoFinal": false,
+  "sha256Glb": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+  "passoQuadros": 0.25,
+  "amostras": 1352,
+  "resultados": [
+    {
+      "clip": "agachado",
+      "face": 1,
+      "amostras": 241,
+      "erroApoio": 1.7120130796843852e-7,
+      "solaMinima": 9.297978209588109e-8,
+      "volumeMinimo": 9.297978209588109e-8,
+      "joelhoMinimo": 0.48361146450042725,
+      "recolhimento": 0,
+      "reducaoAlturaCabeca": 0.5971990823745728
+    },
+    {
+      "clip": "defesaBaixa",
+      "face": 1,
+      "amostras": 241,
+      "erroApoio": 1.7120130796843852e-7,
+      "solaMinima": 9.297978209588109e-8,
+      "volumeMinimo": 9.297978209588109e-8,
+      "joelhoMinimo": 0.48361146450042725,
+      "recolhimento": 0,
+      "reducaoAlturaCabeca": 0.5971990823745728
+    },
+    {
+      "clip": "pulo",
+      "face": 1,
+      "amostras": 177,
+      "erroApoio": 0,
+      "solaMinima": 1.0952467732749938e-7,
+      "volumeMinimo": 1.0952467732749938e-7,
+      "joelhoMinimo": 0.4172917902469635,
+      "recolhimento": 0.25000008195638657,
+      "reducaoAlturaCabeca": 2.384185791015625e-7
+    },
+    {
+      "clip": "pousando",
+      "face": 1,
+      "amostras": 17,
+      "erroApoio": 0.0004081325368924199,
+      "solaMinima": -0.0003299588861409575,
+      "volumeMinimo": -0.0003299588861409575,
+      "joelhoMinimo": 0.27769047021865845,
+      "recolhimento": 0,
+      "reducaoAlturaCabeca": 0.1872614622116089
+    },
+    {
+      "clip": "agachado",
+      "face": -1,
+      "amostras": 241,
+      "erroApoio": 1.7120130796843852e-7,
+      "solaMinima": 9.297978209588109e-8,
+      "volumeMinimo": 9.297978209588109e-8,
+      "joelhoMinimo": 0.48361146450042725,
+      "recolhimento": 0,
+      "reducaoAlturaCabeca": 0.5971990823745728
+    },
+    {
+      "clip": "defesaBaixa",
+      "face": -1,
+      "amostras": 241,
+      "erroApoio": 1.7120130796843852e-7,
+      "solaMinima": 9.297978209588109e-8,
+      "volumeMinimo": 9.297978209588109e-8,
+      "joelhoMinimo": 0.48361146450042725,
+      "recolhimento": 0,
+      "reducaoAlturaCabeca": 0.5971990823745728
+    },
+    {
+      "clip": "pulo",
+      "face": -1,
+      "amostras": 177,
+      "erroApoio": 0,
+      "solaMinima": 1.0952467732749938e-7,
+      "volumeMinimo": 1.0952467732749938e-7,
+      "joelhoMinimo": 0.4172917902469635,
+      "recolhimento": 0.25000008195638657,
+      "reducaoAlturaCabeca": 2.384185791015625e-7
+    },
+    {
+      "clip": "pousando",
+      "face": -1,
+      "amostras": 17,
+      "erroApoio": 0.0004081325368924199,
+      "solaMinima": -0.0003299588861409575,
+      "volumeMinimo": -0.0003299588861409575,
+      "joelhoMinimo": 0.27769047021865845,
+      "recolhimento": 0,
+      "reducaoAlturaCabeca": 0.1872614622116089
+    }
+  ],
+  "limites": [
+    "Roupa, expressões e transições exigem revisão separada.",
+    "Pulo verificado no lugar; trajetória vertical e pulo duplo pertencem ao motor."
+  ]
+}

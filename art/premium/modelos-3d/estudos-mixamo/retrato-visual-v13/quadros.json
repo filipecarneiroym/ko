@@ -1,0 +1,28 @@
+{
+  "origem": "Revisão do rosto pelo importador real.",
+  "caminhoModelo": "public/modelos/estudos/pipoca-direcao-visual-v13.glb",
+  "sha256Glb": "47d361fc8e9a37217a0123522b436a1b5a4fd6e15dd961f6571ca3c8fc3ac4b7",
+  "quadros": [
+    {
+      "clip": "parado",
+      "quadro": 0,
+      "atraso": 30,
+      "x": 0,
+      "vista": "tres-quartos"
+    },
+    {
+      "clip": "parado",
+      "quadro": 0,
+      "atraso": 30,
+      "x": 0,
+      "vista": "frontal"
+    },
+    {
+      "clip": "parado",
+      "quadro": 0,
+      "atraso": 30,
+      "x": 0,
+      "vista": "perfil"
+    }
+  ]
+}

@@ -39,20 +39,25 @@ export async function carregarModelo(buffer, id, simulador, scene) {
     for (const grupo of container.animationGroups) grupo.stop();
     const nosDosOssos = [...new Set(container.skeletons.flatMap(esqueleto =>
       esqueleto.bones.map(osso => osso.getTransformNode()).filter(Boolean)))];
-    const marcha = documento.extras?.marcha;
-    const distanciaCiclo = marcha?.clip === 'andando' && Number.isFinite(marcha.distanciaCiclo)
-      && marcha.distanciaCiclo > .1 && marcha.distanciaCiclo < 10 ? marcha.distanciaCiclo : null;
+    const ciclosPorDistancia = new Map();
+    for (const [nome, fonte] of [['andando', documento.extras?.marcha], ['corrida', documento.extras?.estadosPipoca?.corrida]]) {
+      if (fonte?.clip === nome && Number.isFinite(fonte.distanciaCiclo)
+        && fonte.distanciaCiclo > .1 && fonte.distanciaCiclo < 10) ciclosPorDistancia.set(nome, fonte.distanciaCiclo);
+    }
     let faseMarcha = 0, ultimoX = null, ultimaFace = null;
+    const malhas = Object.freeze(container.meshes.filter(m => m.getTotalVertices() > 0));
     let atual = null;
     let transicao = null;
     return {
+      get malhas() { return malhas; },
       atualizar(pose) {
         raiz.position.set(pose.x, pose.y, 0);
         raiz.rotation.y = pose.face > 0 ? 0 : Math.PI;
         raiz.setEnabled(pose.visivel);
         const grupo = grupos.get(pose.clip);
         if (!grupo) return;
-        const marchaAtiva = distanciaCiclo && grupo.name === 'andando';
+        const distanciaCiclo = ciclosPorDistancia.get(grupo.name);
+        const marchaAtiva = !!distanciaCiclo;
         if (marchaAtiva) {
           // A distância real dirige a passada: recuo inverte o ciclo, parede e
           // hitstop congelam. Ler a raiz evita depender dos FPS ou de vx desejado.
@@ -66,11 +71,17 @@ export async function carregarModelo(buffer, id, simulador, scene) {
         if (grupo !== atual) {
           // Suavizar a emenda dos socos e o relaxamento da defesa pelo relógio
           // do novo estado. Entrar em defesa aplica a proteção imediatamente.
+          const emendaChute = atual?.name === 'p2' && grupo.name === 'k2';
+          const fimTransicao = emendaChute ? 6 : 4;
           const suavizar = atual?.name === 'p1' && grupo.name === 'p2'
+            || emendaChute
             || atual?.name === 'defesa' && grupo.name === 'parado';
-          transicao = id === 'pipoca' && suavizar && pose.quadro < 4 ? {
+          transicao = id === 'pipoca' && suavizar && pose.quadro < fimTransicao ? {
             inicio: Math.max(0, pose.quadro),
-            ossos: nosDosOssos.map(no => ({
+            fim: fimTransicao,
+            // A perna de apoio continua na IK do chute. Suavizar também quadril
+            // e pernas deslocaria a sola entre duas poses com o pé ancorado.
+            ossos: nosDosOssos.filter(no => !emendaChute || !/^(quadril|coxa_[ED]|canela_[ED]|pe_[ED])$/.test(no.name)).map(no => ({
               no, posicao: no.position.clone(), escala: no.scaling.clone(),
               rotacao: no.rotationQuaternion?.clone() || Quaternion.FromEulerVector(no.rotation),
             })),
@@ -78,9 +89,9 @@ export async function carregarModelo(buffer, id, simulador, scene) {
           atual?.stop(); grupo.start(false); grupo.pause(); atual = grupo;
         }
         grupo.goToFrame(marchaAtiva ? grupo.from + faseMarcha : quadroDoClip(pose, grupo));
-        if (transicao && pose.quadro >= 4) transicao = null;
+        if (transicao && pose.quadro >= transicao.fim) transicao = null;
         if (transicao) {
-          const t = Math.max(0, Math.min(1, (pose.quadro - transicao.inicio) / (4 - transicao.inicio)));
+          const t = Math.max(0, Math.min(1, (pose.quadro - transicao.inicio) / (transicao.fim - transicao.inicio)));
           const peso = t * t * (3 - 2 * t);
           for (const { no, posicao, escala, rotacao } of transicao.ossos) {
             Vector3.LerpToRef(posicao, no.position, peso, no.position);

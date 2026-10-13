@@ -1,0 +1,1230 @@
+{
+  "aprovadoFinal": false,
+  "descricao": "Cenoura, Super, ataques baixos, ataque aéreo e Final calculados pelo KOSim real. Uivo usa blockout antigo, sem refinamento.",
+  "caminhoModelo": "public/modelos/estudos/pipoca-direcao-visual-v13.glb",
+  "sha256Glb": "47d361fc8e9a37217a0123522b436a1b5a4fd6e15dd961f6571ca3c8fc3ac4b7",
+  "sha256Simulacao": "aa7ea83e1c9398f6977be2728d7d031780a49df7cc9b8a2b044601d2b02a3304",
+  "quadros": [
+    {
+      "cenario": "cenoura",
+      "arquivo": "000.png",
+      "quadro": 0,
+      "fase": "luta",
+      "tempoFase": 0,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 0,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 0,
+          "x": 4480,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": [
+        {
+          "t": "round",
+          "n": 1
+        }
+      ]
+    },
+    {
+      "cenario": "cenoura",
+      "arquivo": "001.png",
+      "quadro": 6,
+      "fase": "luta",
+      "tempoFase": 6,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "esp",
+          "quadro": 6,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 6,
+          "x": 4480,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "cenoura",
+      "arquivo": "002.png",
+      "quadro": 11,
+      "fase": "luta",
+      "tempoFase": 11,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "esp",
+          "quadro": 11,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 11,
+          "x": 4480,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [
+        {
+          "tipo": "cenoura",
+          "dono": 0,
+          "x": 2824,
+          "y": 768,
+          "quadro": 2
+        }
+      ],
+      "eventos": []
+    },
+    {
+      "cenario": "cenoura",
+      "arquivo": "003.png",
+      "quadro": 18,
+      "fase": "luta",
+      "tempoFase": 18,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "esp",
+          "quadro": 18,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 18,
+          "x": 4480,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [
+        {
+          "tipo": "cenoura",
+          "dono": 0,
+          "x": 3524,
+          "y": 768,
+          "quadro": 9
+        }
+      ],
+      "eventos": []
+    },
+    {
+      "cenario": "cenoura",
+      "arquivo": "004.png",
+      "quadro": 32,
+      "fase": "luta",
+      "tempoFase": 25,
+      "hitstop": 1,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "esp",
+          "quadro": 25,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "dano",
+          "golpe": null,
+          "quadro": 0,
+          "x": 4480,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [
+        {
+          "tipo": "cenoura",
+          "dono": 0,
+          "x": 4224,
+          "y": 768,
+          "quadro": 16
+        }
+      ],
+      "eventos": []
+    },
+    {
+      "cenario": "cenoura",
+      "arquivo": "005.png",
+      "quadro": 44,
+      "fase": "luta",
+      "tempoFase": 36,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 6,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "dano",
+          "golpe": null,
+          "quadro": 11,
+          "x": 4560,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [
+        {
+          "tipo": "cenoura",
+          "dono": 0,
+          "x": 5324,
+          "y": 768,
+          "quadro": 27
+        }
+      ],
+      "eventos": []
+    },
+    {
+      "cenario": "cenoura",
+      "arquivo": "006.png",
+      "quadro": 60,
+      "fase": "luta",
+      "tempoFase": 47,
+      "hitstop": 3,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 17,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "dano",
+          "golpe": null,
+          "quadro": 0,
+          "x": 4560,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [
+        {
+          "tipo": "cenoura",
+          "dono": 0,
+          "x": 4824,
+          "y": 768,
+          "quadro": 38
+        }
+      ],
+      "eventos": []
+    },
+    {
+      "cenario": "cenoura",
+      "arquivo": "007.png",
+      "quadro": 80,
+      "fase": "luta",
+      "tempoFase": 64,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 34,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "dano",
+          "golpe": null,
+          "quadro": 17,
+          "x": 4480,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [
+        {
+          "tipo": "cenoura",
+          "dono": 0,
+          "x": 3124,
+          "y": 768,
+          "quadro": 55
+        }
+      ],
+      "eventos": []
+    },
+    {
+      "cenario": "super",
+      "arquivo": "008.png",
+      "quadro": 0,
+      "fase": "luta",
+      "tempoFase": 0,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 0,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 0,
+          "x": 3360,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": [
+        {
+          "t": "round",
+          "n": 1
+        }
+      ]
+    },
+    {
+      "cenario": "super",
+      "arquivo": "009.png",
+      "quadro": 24,
+      "fase": "luta",
+      "tempoFase": 1,
+      "hitstop": 1,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "sup",
+          "quadro": 1,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 1,
+          "x": 3360,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "super",
+      "arquivo": "010.png",
+      "quadro": 29,
+      "fase": "luta",
+      "tempoFase": 5,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "sup",
+          "quadro": 5,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 5,
+          "x": 3360,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "super",
+      "arquivo": "011.png",
+      "quadro": 32,
+      "fase": "luta",
+      "tempoFase": 8,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "sup",
+          "quadro": 8,
+          "x": 2432,
+          "y": 0,
+          "sumido": 1
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 8,
+          "x": 3360,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "super",
+      "arquivo": "012.png",
+      "quadro": 50,
+      "fase": "luta",
+      "tempoFase": 26,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "sup",
+          "quadro": 26,
+          "x": 3360,
+          "y": 0,
+          "sumido": 1
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 26,
+          "x": 3360,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "super",
+      "arquivo": "013.png",
+      "quadro": 64,
+      "fase": "luta",
+      "tempoFase": 40,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "sup",
+          "quadro": 40,
+          "x": 3360,
+          "y": 0,
+          "sumido": 1
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 40,
+          "x": 3360,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "super",
+      "arquivo": "014.png",
+      "quadro": 70,
+      "fase": "luta",
+      "tempoFase": 44,
+      "hitstop": 12,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "sup",
+          "quadro": 44,
+          "x": 3152,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "dano",
+          "golpe": null,
+          "quadro": 0,
+          "x": 3568,
+          "y": 1,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "super",
+      "arquivo": "015.png",
+      "quadro": 88,
+      "fase": "luta",
+      "tempoFase": 50,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "sup",
+          "quadro": 50,
+          "x": 3152,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "dano",
+          "golpe": null,
+          "quadro": 6,
+          "x": 3784,
+          "y": 991,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "super",
+      "arquivo": "016.png",
+      "quadro": 110,
+      "fase": "luta",
+      "tempoFase": 72,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 10,
+          "x": 3152,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "dano",
+          "golpe": null,
+          "quadro": 28,
+          "x": 4136,
+          "y": 1541,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "baixo",
+      "arquivo": "017.png",
+      "quadro": 0,
+      "fase": "luta",
+      "tempoFase": 0,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 0,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 0,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": [
+        {
+          "t": "round",
+          "n": 1
+        }
+      ]
+    },
+    {
+      "cenario": "baixo",
+      "arquivo": "018.png",
+      "quadro": 3,
+      "fase": "luta",
+      "tempoFase": 3,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "cp",
+          "quadro": 2,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 3,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "baixo",
+      "arquivo": "019.png",
+      "quadro": 6,
+      "fase": "luta",
+      "tempoFase": 4,
+      "hitstop": 4,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "cp",
+          "quadro": 3,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "dano",
+          "golpe": null,
+          "quadro": 0,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "baixo",
+      "arquivo": "020.png",
+      "quadro": 12,
+      "fase": "luta",
+      "tempoFase": 6,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "ck",
+          "quadro": 2,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "dano",
+          "golpe": null,
+          "quadro": 2,
+          "x": 2952,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "baixo",
+      "arquivo": "021.png",
+      "quadro": 20,
+      "fase": "luta",
+      "tempoFase": 10,
+      "hitstop": 2,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "ck",
+          "quadro": 6,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "caido",
+          "golpe": null,
+          "quadro": 0,
+          "x": 3000,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "baixo",
+      "arquivo": "022.png",
+      "quadro": 28,
+      "fase": "luta",
+      "tempoFase": 16,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "ck",
+          "quadro": 12,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "caido",
+          "golpe": null,
+          "quadro": 6,
+          "x": 3120,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "aereo",
+      "arquivo": "023.png",
+      "quadro": 0,
+      "fase": "luta",
+      "tempoFase": 0,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 0,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 0,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": [
+        {
+          "t": "round",
+          "n": 1
+        }
+      ]
+    },
+    {
+      "cenario": "aereo",
+      "arquivo": "024.png",
+      "quadro": 5,
+      "fase": "luta",
+      "tempoFase": 5,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "pulo",
+          "golpe": null,
+          "quadro": 5,
+          "x": 2336,
+          "y": 660,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 5,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "aereo",
+      "arquivo": "025.png",
+      "quadro": 10,
+      "fase": "luta",
+      "tempoFase": 10,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "ap",
+          "quadro": 5,
+          "x": 2336,
+          "y": 1095,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 10,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "aereo",
+      "arquivo": "026.png",
+      "quadro": 18,
+      "fase": "luta",
+      "tempoFase": 18,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "ap",
+          "quadro": 13,
+          "x": 2336,
+          "y": 1323,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 18,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "aereo",
+      "arquivo": "027.png",
+      "quadro": 25,
+      "fase": "luta",
+      "tempoFase": 25,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "pulo",
+          "golpe": null,
+          "quadro": 0,
+          "x": 2336,
+          "y": 1050,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 25,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "aereo",
+      "arquivo": "028.png",
+      "quadro": 36,
+      "fase": "luta",
+      "tempoFase": 36,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "pousando",
+          "golpe": null,
+          "quadro": 1,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 36,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "aereo",
+      "arquivo": "029.png",
+      "quadro": 55,
+      "fase": "luta",
+      "tempoFase": 55,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 16,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 55,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "final",
+      "arquivo": "030.png",
+      "quadro": 1,
+      "fase": "final",
+      "tempoFase": 0,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "final",
+          "golpe": null,
+          "quadro": 1,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "vitimaFinal",
+          "golpe": null,
+          "quadro": 1,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": [
+        {
+          "t": "golpeFinal",
+          "lado": 0,
+          "id": "pipoca"
+        }
+      ]
+    },
+    {
+      "cenario": "final",
+      "arquivo": "031.png",
+      "quadro": 18,
+      "fase": "final",
+      "tempoFase": 17,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "final",
+          "golpe": null,
+          "quadro": 18,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "vitimaFinal",
+          "golpe": null,
+          "quadro": 18,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "final",
+      "arquivo": "032.png",
+      "quadro": 36,
+      "fase": "final",
+      "tempoFase": 35,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "final",
+          "golpe": null,
+          "quadro": 36,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "vitimaFinal",
+          "golpe": null,
+          "quadro": 36,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "final",
+      "arquivo": "033.png",
+      "quadro": 60,
+      "fase": "final",
+      "tempoFase": 59,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "final",
+          "golpe": null,
+          "quadro": 60,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "vitimaFinal",
+          "golpe": null,
+          "quadro": 60,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "final",
+      "arquivo": "034.png",
+      "quadro": 90,
+      "fase": "final",
+      "tempoFase": 89,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "final",
+          "golpe": null,
+          "quadro": 90,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "vitimaFinal",
+          "golpe": null,
+          "quadro": 90,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "final",
+      "arquivo": "035.png",
+      "quadro": 120,
+      "fase": "final",
+      "tempoFase": 119,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "final",
+          "golpe": null,
+          "quadro": 120,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "vitimaFinal",
+          "golpe": null,
+          "quadro": 120,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "final",
+      "arquivo": "036.png",
+      "quadro": 142,
+      "fase": "final",
+      "tempoFase": 141,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "final",
+          "golpe": null,
+          "quadro": 142,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "vitimaFinal",
+          "golpe": null,
+          "quadro": 142,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "final",
+      "arquivo": "037.png",
+      "quadro": 201,
+      "fase": "fim",
+      "tempoFase": 0,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "vitoria",
+          "golpe": null,
+          "quadro": 1,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "uivo",
+          "estado": "derrotado",
+          "golpe": null,
+          "quadro": 1,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": [
+        {
+          "t": "vitoria",
+          "vencedor": 0,
+          "final": 1
+        }
+      ]
+    }
+  ],
+  "pedidosExternos": []
+}

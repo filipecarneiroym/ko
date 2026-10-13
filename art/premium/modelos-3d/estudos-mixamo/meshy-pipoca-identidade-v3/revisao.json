@@ -1,0 +1,427 @@
+{
+  "stage": "visual identity review before rigging",
+  "approved": false,
+  "source": "art\\premium\\modelos-3d\\estudos-mixamo\\meshy-pipoca-refinamento-v1.blend",
+  "sourceSha256": "f64530b8c9447897bd85e4fe3a8dfd24e16086694a170ce8d5c32b3ebcf756da",
+  "reference": "art\\premium\\elenco\\pipoca-v1.png",
+  "referenceSha256": "aaac8e7e1bf7067529ef02828d225ab41b6b915bf33c899adc19a4cf8ef87bec",
+  "workfile": "art\\premium\\modelos-3d\\estudos-mixamo\\meshy-pipoca-identidade-v3\\pipoca-identidade-v3.blend",
+  "blender": "5.2.2 LTS",
+  "bodyAdjustments": {
+    "feetWidenedVertices": 4702,
+    "neckAdjustedVertices": 836
+  },
+  "sourceSurfaceMaterialFaces": {
+    "pelagem": 63517,
+    "faixas": 7253,
+    "couro": 7451,
+    "tecido": 16021
+  },
+  "face": {
+    "objects": [
+      "Pipoca identidade | Interior coral contínuo orelha próxima",
+      "Pipoca identidade | Interior coral contínuo orelha oposta face interna",
+      "Pipoca identidade | Esclera próximo",
+      "Pipoca identidade | Pálpebras creme próximo",
+      "Pipoca identidade | Íris âmbar próximo",
+      "Pipoca identidade | Pupila próximo",
+      "Pipoca identidade | Delineado superior próximo",
+      "Pipoca identidade | Delineado inferior próximo",
+      "Pipoca identidade | Cílio 1 próximo",
+      "Pipoca identidade | Cílio 2 próximo",
+      "Pipoca identidade | Cílio 3 próximo",
+      "Pipoca identidade | Sobrancelha próximo",
+      "Pipoca identidade | Brilho 1 próximo",
+      "Pipoca identidade | Brilho 2 próximo",
+      "Pipoca identidade | Esclera oposto",
+      "Pipoca identidade | Pálpebras creme oposto",
+      "Pipoca identidade | Íris âmbar oposto",
+      "Pipoca identidade | Pupila oposto",
+      "Pipoca identidade | Delineado superior oposto",
+      "Pipoca identidade | Delineado inferior oposto",
+      "Pipoca identidade | Cílio 1 oposto",
+      "Pipoca identidade | Cílio 2 oposto",
+      "Pipoca identidade | Cílio 3 oposto",
+      "Pipoca identidade | Sobrancelha oposto",
+      "Pipoca identidade | Brilho 1 oposto",
+      "Pipoca identidade | Brilho 2 oposto",
+      "Pipoca identidade | Nariz rosa",
+      "Pipoca identidade | Narina -1",
+      "Pipoca identidade | Narina 1"
+    ],
+    "diagnostics": {
+      "vertices_ajustados": 1187,
+      "deslocamento_maximo": 0.03179,
+      "vertices_tufos_suavizados": 858,
+      "estrategia": "crânio e orelhas Meshy preservados; órbitas suavizadas; tufos superiores arredondados; boca/focinho nativos intactos",
+      "vertices_sobrancelha_antiga_removidos": 304,
+      "faces_interior_orelhas": 0,
+      "vertices_ampliacao_cabeca": 11177,
+      "orientacao_cabeca": "+X/-Y, aproximadamente 45 graus; guarda original preservada",
+      "olhos": "ovais verticais assentados; convexidade .006; transição creme mínima sem aro superior",
+      "ampliacao_cabeca": "10% horizontal com transição no pescoço e base das orelhas; 2,5% vertical",
+      "interior_orelhas": "lâminas contínuas projetadas, margem creme; superfície externa oposta creme",
+      "expressao": "sobrancelhas arqueadas, delineado e três cílios por olho; sorriso nativo Meshy preservado",
+      "boca": "geometria nativa preservada até Z=.462; nenhuma linha ou sorriso novo; ampliação afim constante na boca",
+      "objetos_criados": 29,
+      "cranio_substituido": false,
+      "topologia": "estudo visual; retopologia e deformação ainda pendentes",
+      "limite_inferior_edicao_z": 0.39
+    }
+  },
+  "visibleObjects": [
+    {
+      "name": "Pipoca identidade | Interior coral contínuo orelha próxima",
+      "type": "MESH",
+      "vertices": 2025
+    },
+    {
+      "name": "Pipoca identidade | Interior coral contínuo orelha oposta face interna",
+      "type": "MESH",
+      "vertices": 1525
+    },
+    {
+      "name": "Pipoca identidade | Esclera próximo",
+      "type": "MESH",
+      "vertices": 641
+    },
+    {
+      "name": "Pipoca identidade | Pálpebras creme próximo",
+      "type": "MESH",
+      "vertices": 256
+    },
+    {
+      "name": "Pipoca identidade | Íris âmbar próximo",
+      "type": "MESH",
+      "vertices": 641
+    },
+    {
+      "name": "Pipoca identidade | Pupila próximo",
+      "type": "MESH",
+      "vertices": 641
+    },
+    {
+      "name": "Pipoca identidade | Delineado superior próximo",
+      "type": "MESH",
+      "vertices": 392
+    },
+    {
+      "name": "Pipoca identidade | Delineado inferior próximo",
+      "type": "MESH",
+      "vertices": 392
+    },
+    {
+      "name": "Pipoca identidade | Cílio 1 próximo",
+      "type": "MESH",
+      "vertices": 104
+    },
+    {
+      "name": "Pipoca identidade | Cílio 2 próximo",
+      "type": "MESH",
+      "vertices": 104
+    },
+    {
+      "name": "Pipoca identidade | Cílio 3 próximo",
+      "type": "MESH",
+      "vertices": 104
+    },
+    {
+      "name": "Pipoca identidade | Sobrancelha próximo",
+      "type": "MESH",
+      "vertices": 328
+    },
+    {
+      "name": "Pipoca identidade | Brilho 1 próximo",
+      "type": "MESH",
+      "vertices": 1000
+    },
+    {
+      "name": "Pipoca identidade | Brilho 2 próximo",
+      "type": "MESH",
+      "vertices": 1000
+    },
+    {
+      "name": "Pipoca identidade | Esclera oposto",
+      "type": "MESH",
+      "vertices": 641
+    },
+    {
+      "name": "Pipoca identidade | Pálpebras creme oposto",
+      "type": "MESH",
+      "vertices": 256
+    },
+    {
+      "name": "Pipoca identidade | Íris âmbar oposto",
+      "type": "MESH",
+      "vertices": 641
+    },
+    {
+      "name": "Pipoca identidade | Pupila oposto",
+      "type": "MESH",
+      "vertices": 641
+    },
+    {
+      "name": "Pipoca identidade | Delineado superior oposto",
+      "type": "MESH",
+      "vertices": 392
+    },
+    {
+      "name": "Pipoca identidade | Delineado inferior oposto",
+      "type": "MESH",
+      "vertices": 392
+    },
+    {
+      "name": "Pipoca identidade | Cílio 1 oposto",
+      "type": "MESH",
+      "vertices": 104
+    },
+    {
+      "name": "Pipoca identidade | Cílio 2 oposto",
+      "type": "MESH",
+      "vertices": 104
+    },
+    {
+      "name": "Pipoca identidade | Cílio 3 oposto",
+      "type": "MESH",
+      "vertices": 104
+    },
+    {
+      "name": "Pipoca identidade | Sobrancelha oposto",
+      "type": "MESH",
+      "vertices": 328
+    },
+    {
+      "name": "Pipoca identidade | Brilho 1 oposto",
+      "type": "MESH",
+      "vertices": 1000
+    },
+    {
+      "name": "Pipoca identidade | Brilho 2 oposto",
+      "type": "MESH",
+      "vertices": 1000
+    },
+    {
+      "name": "Pipoca identidade | Nariz rosa",
+      "type": "MESH",
+      "vertices": 1000
+    },
+    {
+      "name": "Pipoca identidade | Narina -1",
+      "type": "MESH",
+      "vertices": 104
+    },
+    {
+      "name": "Pipoca identidade | Narina 1",
+      "type": "MESH",
+      "vertices": 104
+    },
+    {
+      "name": "Pipoca | continuous white waistband",
+      "type": "MESH",
+      "vertices": 194
+    },
+    {
+      "name": "Pipoca | waistband piping",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | waistband piping.001",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | D shorts stripe -1",
+      "type": "MESH",
+      "vertices": 28
+    },
+    {
+      "name": "Pipoca | D shorts stripe 1",
+      "type": "MESH",
+      "vertices": 28
+    },
+    {
+      "name": "Pipoca | E shorts stripe -1",
+      "type": "MESH",
+      "vertices": 36
+    },
+    {
+      "name": "Pipoca | E shorts stripe 1",
+      "type": "MESH",
+      "vertices": 38
+    },
+    {
+      "name": "Pipoca | waistband square label",
+      "type": "MESH",
+      "vertices": 482
+    },
+    {
+      "name": "Pipoca | label indigo border",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | E instep bandage edge -0.005",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | E instep bandage edge 0.028",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | E instep bandage edge 0.06",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | E instep bandage edge 0.095",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | E red instep trim",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | E red ankle trim",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | E toenail 1",
+      "type": "MESH",
+      "vertices": 266
+    },
+    {
+      "name": "Pipoca | E toenail 2",
+      "type": "MESH",
+      "vertices": 266
+    },
+    {
+      "name": "Pipoca | E toenail 3",
+      "type": "MESH",
+      "vertices": 266
+    },
+    {
+      "name": "Pipoca | E toenail 4",
+      "type": "MESH",
+      "vertices": 266
+    },
+    {
+      "name": "Pipoca | D instep bandage edge -0.005",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | D instep bandage edge 0.028",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | D instep bandage edge 0.06",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | D instep bandage edge 0.095",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | D red instep trim",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | D red ankle trim",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | D toenail 2",
+      "type": "MESH",
+      "vertices": 266
+    },
+    {
+      "name": "Pipoca | D toenail 3",
+      "type": "MESH",
+      "vertices": 266
+    },
+    {
+      "name": "Pipoca | D toenail 4",
+      "type": "MESH",
+      "vertices": 266
+    },
+    {
+      "name": "Pipoca | pes",
+      "type": "MESH",
+      "vertices": 2731
+    },
+    {
+      "name": "Pipoca | faixas-pes",
+      "type": "MESH",
+      "vertices": 2782
+    },
+    {
+      "name": "Pipoca | corpo",
+      "type": "MESH",
+      "vertices": 21416
+    },
+    {
+      "name": "Pipoca | luvas",
+      "type": "MESH",
+      "vertices": 4980
+    },
+    {
+      "name": "Pipoca | punhos",
+      "type": "MESH",
+      "vertices": 1475
+    },
+    {
+      "name": "Pipoca | short",
+      "type": "MESH",
+      "vertices": 7315
+    },
+    {
+      "name": "Pipoca | orelhas",
+      "type": "MESH",
+      "vertices": 5688
+    },
+    {
+      "name": "Pipoca | top",
+      "type": "MESH",
+      "vertices": 2748
+    },
+    {
+      "name": "Pipoca | cos",
+      "type": "MESH",
+      "vertices": 1454
+    },
+    {
+      "name": "Pipoca | cabeca",
+      "type": "MESH",
+      "vertices": 5648
+    }
+  ],
+  "views": [
+    {
+      "view": "frente",
+      "file": "frente.png"
+    },
+    {
+      "view": "rosto",
+      "file": "rosto.png"
+    }
+  ],
+  "orbit360": [],
+  "limitations": [
+    "No artistic approval is implied by this file or its renders.",
+    "The original combat stance is preserved; a neutral A pose and deformable retopology are not yet produced.",
+    "The source UV layer is kept for editing. Procedural shading needs baking after final topology is approved.",
+    "No rig, weights or combat clips have been created. Existing game assets remain unchanged."
+  ],
+  "workfileSha256": "b8c7b9cade3570f89c2a3292f4775839f2e8b4c4bed02c3e1d17006bebaf16b1"
+}

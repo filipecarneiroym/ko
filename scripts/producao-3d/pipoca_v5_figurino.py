@@ -568,8 +568,11 @@ def cut(obj, mats, region_list, ear=None, head_regions=()):
     old = obj.data
     obj.data = new
     bpy.data.meshes.remove(old)
+    if ear is not None:
+        report['earShells'] = _retain_front_ear_shells(new, index['interior_orelha'], index['pelagem'])
+    final_material_ids = np.array([f.material_index for f in new.polygons])
     return {**report, 'islandsDissolved': islands, 'vertices': len(new.vertices), 'faces': len(new.polygons),
-            'perMaterial': {k: int(np.sum(np.array(mat_ids) == i)) for k, i in index.items()}}
+            'perMaterial': {k: int(np.sum(final_material_ids == i)) for k, i in index.items()}}
 
 
 def close_open_edges(bm, passes=6):
@@ -630,80 +633,165 @@ def close_open_edges(bm, passes=6):
 
 
 # --- Orelhas ---------------------------------------------------------------
-# Below the petal's own lower tip (~.64): at .66 it sliced the tip flat.
-EAR_BASE_Z = .63
+def _retain_front_ear_shells(mesh, coral, fur):
+    """Keep the entire marked concha, including folds seen from other angles.
+
+    The projected mask cuts separate front/back patches. Classify complete
+    patches by ray visibility; individual face normals would leave cream
+    wedges on folds. Fully hidden small folds stay coral with their concha.
+    """
+    from collections import defaultdict
+    coral_faces = {f.index for f in mesh.polygons if f.material_index == coral}
+    edge_faces = defaultdict(list)
+    for i in coral_faces:
+        for edge in mesh.polygons[i].edge_keys:
+            edge_faces[tuple(sorted(edge))].append(i)
+    tree = BVHTree.FromPolygons([v.co for v in mesh.vertices], [list(f.vertices) for f in mesh.polygons])
+    seen = set()
+    front_patches = {-1: [], 1: []}
+    report = {'frontPatches': 0, 'hiddenFolds': 0, 'backPatchesRemoved': 0, 'backFacesRemoved': 0,
+              'edgeIslandsRemoved': 0, 'edgeIslandFacesRemoved': 0}
+    for start in sorted(coral_faces):
+        if start in seen:
+            continue
+        component, queue = set(), [start]
+        seen.add(start)
+        while queue:
+            i = queue.pop()
+            component.add(i)
+            for edge in mesh.polygons[i].edge_keys:
+                for neighbor in edge_faces[tuple(sorted(edge))]:
+                    if neighbor not in seen:
+                        seen.add(neighbor)
+                        queue.append(neighbor)
+        front = back = False
+        for i in sorted(component):
+            p = mesh.polygons[i].center
+            if not front:
+                hit = tree.ray_cast(Vector((p.x, -1, p.z)), Vector((0, 1, 0)), 2)[2]
+                front = hit in component
+            if not back:
+                hit = tree.ray_cast(Vector((p.x, 1, p.z)), Vector((0, -1, 0)), 2)[2]
+                back = hit in component
+            if front and back:
+                raise ValueError('A marcação une frente e verso de uma orelha; revisar a separação das conchas.')
+        if back:
+            for i in component:
+                mesh.polygons[i].material_index = fur
+            report['backPatchesRemoved'] += 1
+            report['backFacesRemoved'] += len(component)
+        elif front:
+            side = 1 if sum(mesh.polygons[i].center.x for i in component) > 0 else -1
+            front_patches[side].append(component)
+        else:
+            report['hiddenFolds'] += 1
+    for patches in front_patches.values():
+        if not patches:
+            raise ValueError('A demarcação deve produzir uma concha frontal em cada orelha.')
+        main = max(patches, key=lambda patch: sum(mesh.polygons[i].area for i in patch))
+        report['frontPatches'] += 1
+        for patch in patches:
+            if patch is main:
+                continue
+            # The hand-drawn stroke crosses the same fold several times in
+            # projection. Tiny detached fragments make a striped edge in 3/4;
+            # retain one continuous painted concha per ear, within that stroke.
+            for i in patch:
+                mesh.polygons[i].material_index = fur
+            report['edgeIslandsRemoved'] += 1
+            report['edgeIslandFacesRemoved'] += len(patch)
+    return report
 
 
-def ear_field(mesh):
-    """Coral interior on each ear: inset from the measured outline (cream
-    rim ~20% of the half width), on the front (concave) face only."""
-    co = np.array([v.co[:] for v in mesh.vertices])
-    normals = np.array([v.normal[:] for v in mesh.vertices])
-    sel = co[:, 2] > .64
-    edges = np.array([e for e in mesh.edge_keys if sel[e[0]] and sel[e[1]]])
-    deg = np.bincount(edges.ravel(), minlength=len(co))[:, None].clip(1)
-    for _ in range(40):  # sheet-smoothed normals: folds average out
-        acc = np.zeros_like(normals)
-        np.add.at(acc, edges[:, 0], normals[edges[:, 1]])
-        np.add.at(acc, edges[:, 1], normals[edges[:, 0]])
-        normals = .5*normals+.5*acc/deg
-    fields = {}
-    for side in (-1, 1):
-        idx = np.where(sel & (np.sign(co[:, 0]) == side))[0]
-        e = co[idx]
-        c = e.mean(0)
-        _, _, vt = np.linalg.svd(e-c, full_matrices=False)
-        a0 = vt[0] if vt[0][2] > 0 else -vt[0]
-        a1 = vt[1]
-        a2 = vt[2] if vt[2][1] < 0 else -vt[2]   # towards the camera (-Y)
-        u, v = (e-c)@a0, (e-c)@a1
-        bins = np.linspace(u.min(), u.max(), 26)
-        mids, lo, hi = [], [], []
-        for b0, b1 in zip(bins, bins[1:]):
-            m = (u >= b0) & (u < b1)
-            if m.sum() > 8:
-                mids.append((b0+b1)/2)
-                lo.append(v[m].min())
-                hi.append(v[m].max())
-        mids, lo, hi = map(np.array, (mids, lo, hi))
-        span = u.max()-u.min()
-        umin = float(u.min())
-        medial = -1.0 if float(a1[0])*side > 0 else 1.0   # +a1 or -a1 points to the head
+# The coral is exactly the area the user marked in red on the ears render
+# (referencias/marcacao-orelhas-pipoca.png). That screenshot is registered to
+# the render (identidade-v5/orelhas.png: ortho camera at z .76, scale .5 over
+# 1000 px, i.e. .5 mm per px) by the two ear tips and the notch between the
+# ears: markup px (269, 437) = render px (496, 644), markup/render = .6944.
+EAR_MARKUP = 'art/premium/modelos-3d/referencias/marcacao-orelhas-pipoca.png'
+EAR_MARKUP_ANCHOR = ((269, 437), (496, 644))
+EAR_MARKUP_SCALE = .6944
+EAR_RENDER = dict(width=1000, height=900, ortho=.5, z=.76)
 
-        def field(p, c=c, a0=a0, a1=a1, mids=mids, lo=lo, hi=hi, span=span, umin=umin, medial=medial):
-            # User markup: a petal pointed at both ends, widest a little above
-            # the middle, its lower point drawn toward the head side.
-            q = np.array(p[:])-c
-            pu, pv = float(q@a0), float(q@a1)
-            f = (pu-umin)/span
-            if f <= .10 or f >= .965:
-                return -1.0
-            centre = float(np.interp(pu, mids, (lo+hi)/2))
-            half = float(np.interp(pu, mids, (hi-lo)/2))
-            shape = math.sin(math.pi*(f-.10)/.865)**.85
-            shape *= 1-.25*smoothstep(.55, .95, f)        # finer upper point
-            centre += medial*half*.30*(1-smoothstep(.25, .65, f))
-            return .68*half*shape-abs(pv-centre)
-        fields[side] = (field, a2)
 
-    # Front face and height as continuous fields too: deciding them per face
-    # left the coral edge following the triangles (ragged ear base).
+def _markup_mask(path):
+    """Filled red outlines of the markup (line included), as a bool image."""
+    from collections import deque
+    img = bpy.data.images.load(str(path), check_existing=False)
+    w, h = img.size
+    px = np.array(img.pixels[:]).reshape(h, w, 4)[::-1, :, :3]
+    bpy.data.images.remove(img)
+    red = (px[:, :, 0] > .75) & (px[:, :, 1] < .25) & (px[:, :, 2] < .25)
+    line = red.copy()
+    for dy in (-1, 0, 1):        # close 1 px gaps in the hand-drawn line
+        for dx in (-1, 0, 1):
+            line |= np.roll(np.roll(red, dy, 0), dx, 1)
+    outside = np.zeros_like(line)
+    queue = deque((y, x) for y in range(h) for x in range(w)
+                  if (y in (0, h-1) or x in (0, w-1)) and not line[y, x])
+    for y, x in queue:
+        outside[y, x] = True
+    while queue:
+        y, x = queue.popleft()
+        for ny, nx in ((y+1, x), (y-1, x), (y, x+1), (y, x-1)):
+            if 0 <= ny < h and 0 <= nx < w and not outside[ny, nx] and not line[ny, nx]:
+                outside[ny, nx] = True
+                queue.append((ny, nx))
+    return ~outside
+
+
+def ear_field(mesh, root):
+    """Coral interior on each ear: the user's marked area, projected from the
+    front onto the ear's surface. A smoothed, bilinear signed-distance field
+    draws the border; whole back patches are removed after the cut."""
     from mathutils.kdtree import KDTree
-    ids = np.where(sel)[0]
-    kd = KDTree(len(ids))
-    for k, i in enumerate(ids):
-        kd.insert(co[i], k)
+    mask = _markup_mask(root/EAR_MARKUP)
+    h, w = mask.shape
+    edge = mask & ~(np.roll(mask, 1, 0) & np.roll(mask, -1, 0) & np.roll(mask, 1, 1) & np.roll(mask, -1, 1))
+    ys, xs = np.where(edge)
+    if not len(xs):
+        raise ValueError('A marcação das orelhas não contém um contorno vermelho preenchido.')
+    kd = KDTree(len(xs))
+    for k, (u, v) in enumerate(zip(xs, ys)):
+        kd.insert((int(u), int(v), 0), k)
     kd.balance()
+    # The boundary lies halfway between inside/outside pixel centres. A
+    # one-pixel binomial blur removes hand-drawn pixel steps without changing
+    # the marked shape; bilinear sampling keeps the field continuous.
+    distance = np.array([kd.find((u, v, 0))[2] for v in range(h) for u in range(w)]).reshape(h, w)
+    sdf = np.where(mask, distance+.5, -(distance-.5))
+    kernel = np.array([1, 4, 6, 4, 1], dtype=float)/16
+    for axis in (0, 1):
+        padding = [(0, 0), (0, 0)]
+        padding[axis] = (2, 2)
+        extended = np.pad(sdf, padding, mode='edge')
+        sdf = sum(weight*(extended[k:k+h, :] if axis == 0 else extended[:, k:k+w])
+                  for k, weight in enumerate(kernel))
+
+    (mu, mv), (ru, rv) = EAR_MARKUP_ANCHOR
+    mpp = EAR_RENDER['ortho']/EAR_RENDER['width']        # metres per render px
+    metres_per_markup_pixel = mpp/EAR_MARKUP_SCALE
+
+    def to_markup(x, z):
+        u = (x/mpp+EAR_RENDER['width']/2-ru)*EAR_MARKUP_SCALE+mu
+        v = ((EAR_RENDER['z']-z)/mpp+EAR_RENDER['height']/2-rv)*EAR_MARKUP_SCALE+mv
+        return u, v
 
     def which(p):
-        field, a2 = fields[1 if p.x > 0 else -1]
-        near = kd.find_n(p, 4)
-        w = np.array([1/max(d, 1e-5) for _, _, d in near])
-        n = (w[:, None]*normals[ids[[k for _, k, _ in near]]]).sum(0)/w.sum()
-        return min(field(p), .02*float(n@a2), p.z-EAR_BASE_Z)
+        u, v = to_markup(p.x, p.z)
+        u, v = u-.5, v-.5
+        if not 0 <= u < w-1 or not 0 <= v < h-1:
+            return -.05
+        x, y = int(u), int(v)
+        tx, ty = u-x, v-y
+        value = ((1-tx)*(1-ty)*sdf[y, x]+tx*(1-ty)*sdf[y, x+1]
+                 +(1-tx)*ty*sdf[y+1, x]+tx*ty*sdf[y+1, x+1])
+        return float(value)*metres_per_markup_pixel
 
     def interior(face):
-        return face.center.z > EAR_BASE_Z-.01
+        # Cut both shells, then select connected patches. Even a geometric
+        # normal gate would leave cream triangles on the concha's folds.
+        return face.center.z > .64
     return which, interior
 
 

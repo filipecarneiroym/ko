@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { criarEstudoMarcha } from './gerar-estudo-marcha.mjs';
+import { criarEstudoCorpo } from './gerar-estudo-corpo.mjs';
 import { exportarGlb } from './glb.mjs';
 import { validarGlb } from '../../src/3d/contrato-glb.mjs';
 
@@ -45,7 +45,7 @@ function substituirChute(dados, clip, nome, simulador) {
 }
 
 export function criarEstudoChutes(guarda, jab, forte, defesa, reacao, marcha, k1, k2, simulador) {
-  let dados = criarEstudoMarcha(guarda, jab, forte, defesa, reacao, marcha, simulador);
+  let dados = criarEstudoCorpo(guarda, jab, forte, defesa, reacao, marcha, simulador);
   // substituirChute é uma função pura: o retorno precisa ser capturado, senão o
   // GLB mantém o placeholder k1/k2 da marcha e ignora os canais dos chutes.
   for (const [clip, nome] of [[k1, 'k1'], [k2, 'k2']]) dados = substituirChute(dados, clip, nome, simulador);
@@ -64,6 +64,7 @@ export function criarEstudoChutes(guarda, jab, forte, defesa, reacao, marcha, k1
     assert.equal(simulador.LUTADORES.pipoca.golpes[nome].janelas.length, lados.length, `${nome} com janela por perna`);
   }
   dados.extras.status = 'estudo-guarda-socos-defesa-reacao-marcha-chutes';
+  assert.ok(dados.extras.corpo.verticesMistos > 0, 'Os chutes preservam o corpo contínuo e seus pesos graduais');
   dados.extras.animacoes = 'Guarda, dois socos, defesa, reação, marcha e chutes por IK; outros 23 clips preservados.';
   dados.extras.chutes = {
     k1: { ladoJanelas: LADO_POR_JANELA.k1, alturaJanelas: ['media', 'media'], duracaoQuadros: k1.duracaoQuadros,
@@ -102,7 +103,7 @@ export function gerarEstudoChutes() {
       janelas: K.LUTADORES.pipoca.golpes[c.nome].janelas.map(j => [j.de, j.ate]),
     })),
     preservados: dados.clips.filter(c => !REVISADOS.includes(c.nome)).map(c => c.nome),
-    limites: ['Arte provisória e pesos rígidos.', 'Alcance e alturas validados no importador; leitura visual ainda pendente.',
+    limites: ['Corpo com pesos graduais; acabamento artístico ainda em revisão.', 'Alcance e alturas validados no importador; leitura visual ainda pendente.',
       'Corrida e demais clips permanecem em revisão.'] };
   writeFileSync(resolve(pasta, 'integracao-v12.json'), JSON.stringify(relatorio, null, 2) + '\n');
   console.log(JSON.stringify(relatorio));

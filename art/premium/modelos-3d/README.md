@@ -1,6 +1,8 @@
 # Produção dos primeiros lutadores 3D
 
-O primeiro par é Pipoca e Uivo. Este diretório contém o contrato de produção, não modelos prontos. A busca no repositório em 11/10/2026 não encontrou arquivos GLB, glTF, Blender, FBX, OBJ, DAE, STL, USD ou USDZ de lutadores. Os manequins em `src/3d/laboratorio.js` são geometria de teste e não atendem à identidade visual solicitada.
+O trabalho atual concentra-se em concluir a Pipoca antes de refinar os demais personagens. Já existem arquivos Blender, fontes de movimento e GLBs animáveis; a versão em revisão no laboratório é `public/modelos/estudos/pipoca-direcao-visual-v13.glb`. Ela ainda não tem aprovação artística final nem o acabamento da ilustração. Uivo conserva o blockout anterior.
+
+O [registro dos estudos](estudos-mixamo/README.md) descreve a integração e os comandos de reprodução. O [guia dos personagens](GUIA-PERSONAGENS.md) e a [direção visual](direcao-visual.json) registram os critérios comuns e a identidade específica de Pipoca. Os relatórios e capturas devem corresponder ao SHA do GLB que avaliam; a presença de 31 clips não significa que todos estejam refinados.
 
 `contrato.json` registra as referências atuais, seus hashes, nomes de animação e tempos reais do motor. As duas referências foram abertas e comparadas visualmente antes desta especificação. A arte atual é a fonte de identidade; desenhos antigos de `ko-arte.js` servem somente para consultar regras e encenação existentes. A menção anterior a Canvas 2D em `SPEC.md` não revoga a aprovação posterior de Babylon.js descrita em `PROPOSTA-RENDERIZADOR.md`.
 

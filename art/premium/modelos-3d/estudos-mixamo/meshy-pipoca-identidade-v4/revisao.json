@@ -1,0 +1,1697 @@
+{
+  "stage": "appearance refinement after original concept comparison",
+  "version": 4,
+  "date": "2026-10-12",
+  "draft": false,
+  "artisticApprovalByUser": false,
+  "productionReview": "pending rendered-view inspection",
+  "readyForRetopologyPlanning": false,
+  "source": "art\\premium\\modelos-3d\\estudos-mixamo\\meshy-pipoca-refinamento-v1.blend",
+  "sourceSha256": "f64530b8c9447897bd85e4fe3a8dfd24e16086694a170ce8d5c32b3ebcf756da",
+  "previousVersion": "art\\premium\\modelos-3d\\estudos-mixamo\\meshy-pipoca-identidade-v3\\pipoca-identidade-v3.blend",
+  "preservedSources": {
+    "art\\premium\\modelos-3d\\estudos-mixamo\\meshy-pipoca-refinamento-v1.blend": "f64530b8c9447897bd85e4fe3a8dfd24e16086694a170ce8d5c32b3ebcf756da",
+    "art\\premium\\modelos-3d\\estudos-mixamo\\meshy-pipoca-identidade-v3\\pipoca-identidade-v3.blend": "b8c7b9cade3570f89c2a3292f4775839f2e8b4c4bed02c3e1d17006bebaf16b1",
+    "art\\premium\\elenco\\pipoca-v1.png": "aaac8e7e1bf7067529ef02828d225ab41b6b915bf33c899adc19a4cf8ef87bec"
+  },
+  "productionSources": {
+    "scripts\\producao-3d\\concluir-aparencia-meshy-pipoca.py": "971f7758f42a55b4f097f4e1ceecb1f63718f890bd97e5d9d0ea71279d2101e2",
+    "scripts\\producao-3d\\refinar-identidade-meshy-pipoca.py": "2317fc67d5a88c812d9f5a6987c4279b452a2a0c51a37bf29e17409b09499a4b",
+    "scripts\\producao-3d\\pipoca_materiais.py": "4d11248569a5bb1ed86e35f8c3d0868acbe7fcbdd31400e0e80e121c5d9a9780",
+    "scripts\\producao-3d\\pipoca_rosto_meshy.py": "6ab7eac532327a568ffa84744508785765f675b45e7f4b2b4e6b1fe6ef9cce7b",
+    "scripts\\producao-3d\\pipoca_rosto_meshy_v4.py": "30ecedf350c0de603f1d79062106b99528fd677bcaffc19dd779549d7a806b2f",
+    "scripts\\producao-3d\\pipoca_figurino_meshy_v4.py": "734066aaac94a44c36c723d834d36e4b11e103e5ec8d339810d4acd73f2092c7",
+    "scripts\\producao-3d\\pipoca_superficie_meshy_v4.py": "4679aa4764622de11e3db4e295c01c51c394b0c6f538c6bacfb6178f9a82701c"
+  },
+  "reference": "art\\premium\\elenco\\pipoca-v1.png",
+  "referenceSha256": "aaac8e7e1bf7067529ef02828d225ab41b6b915bf33c899adc19a4cf8ef87bec",
+  "workfile": "art\\premium\\modelos-3d\\estudos-mixamo\\meshy-pipoca-identidade-v4\\pipoca-identidade-v4.blend",
+  "workfileSha256": "91aa62d68fb5e6c76642ec3249cc8ca0b93689eaead7a657a3a9505ef0be0f0f",
+  "blender": "5.2.2 LTS",
+  "body": {
+    "feetWidenedVertices": 4702,
+    "neckAdjustedVertices": 836,
+    "meshyTailsReplaced": {
+      "removedFaces": 13088,
+      "rimEdges": 208,
+      "patchVertices": 4207,
+      "hipFitSamples": 635,
+      "foldsBefore": 3841,
+      "resampledVertices": 5065,
+      "foldFaces": 1085,
+      "foldFacesLeft": 299,
+      "foldRimEdges": 610,
+      "secondPass": 4002
+    },
+    "neckSoftenedVertices": 1165,
+    "taubinSmoothedVertices": 31822,
+    "weldedSkin": {
+      "welded": [
+        "Pipoca | corpo",
+        "Pipoca | cabeca",
+        "Pipoca | orelhas",
+        "Pipoca | pes"
+      ],
+      "mergedVertices": 229
+    },
+    "tail": {
+      "center": [
+        0.02,
+        0.1874,
+        -0.08
+      ],
+      "radius": 0.065,
+      "vertices": 2562
+    }
+  },
+  "face": {
+    "objects": [
+      "Pipoca identidade | V4 Esclera próximo",
+      "Pipoca identidade | V4 Íris âmbar próximo",
+      "Pipoca identidade | V4 Pupila próximo",
+      "Pipoca identidade | V4 Delineado superior próximo",
+      "Pipoca identidade | V4 Pálpebra inferior próximo",
+      "Pipoca identidade | V4 Cílio 1 próximo",
+      "Pipoca identidade | V4 Cílio 2 próximo",
+      "Pipoca identidade | V4 Cílio 3 próximo",
+      "Pipoca identidade | V4 Cílio 4 próximo",
+      "Pipoca identidade | V4 Sobrancelha próximo",
+      "Pipoca identidade | V4 Brilho 0 próximo",
+      "Pipoca identidade | V4 Brilho 1 próximo",
+      "Pipoca identidade | V4 Esclera oposto",
+      "Pipoca identidade | V4 Íris âmbar oposto",
+      "Pipoca identidade | V4 Pupila oposto",
+      "Pipoca identidade | V4 Delineado superior oposto",
+      "Pipoca identidade | V4 Pálpebra inferior oposto",
+      "Pipoca identidade | V4 Cílio 1 oposto",
+      "Pipoca identidade | V4 Cílio 2 oposto",
+      "Pipoca identidade | V4 Cílio 3 oposto",
+      "Pipoca identidade | V4 Cílio 4 oposto",
+      "Pipoca identidade | V4 Sobrancelha oposto",
+      "Pipoca identidade | V4 Brilho 0 oposto",
+      "Pipoca identidade | V4 Brilho 1 oposto",
+      "Pipoca identidade | V4 Nariz rosa",
+      "Pipoca identidade | V4 Sorriso",
+      "Pipoca identidade | V4 Filtro labial",
+      "Pipoca identidade | V4 Lábio inferior"
+    ],
+    "diagnostics": {
+      "oldBrowVerticesRemoved": 304,
+      "smoothedVertices": 5160,
+      "mouth": "Native muzzle and smile volumes preserved; jaw surface relaxed.",
+      "headSmoothedVertices": 7766,
+      "mouthSlit": {
+        "strayEdgesFilled": 10,
+        "slitFacesRemoved": 804,
+        "rimEdges": 28,
+        "patchFaces": 2
+      },
+      "chin": {
+        "mouth": [
+          0.1458,
+          -0.0908,
+          0.414
+        ],
+        "ironedVertices": 583
+      },
+      "ears": [
+        {
+          "side": -1,
+          "beforeDeg": 61.5,
+          "afterDeg": 25.0
+        },
+        {
+          "side": 1,
+          "beforeDeg": 68.3,
+          "afterDeg": 25.0
+        }
+      ],
+      "blush": {
+        "centres": [
+          [
+            0.0383,
+            -0.1184,
+            0.4505
+          ],
+          [
+            0.166,
+            0.0162,
+            0.4505
+          ]
+        ],
+        "radius": 0.036,
+        "strength": 0.55
+      },
+      "enlargedHeadVertices": 12095,
+      "changes": [
+        "Almond eyes conform to the skull without floating eyelid plates.",
+        "Upper lashes, arched brows and amber irises follow the concept.",
+        "Ear inserts have an inset cream margin.",
+        "Smile follows the native muzzle; jaw and cheek tips softened."
+      ]
+    }
+  },
+  "garmentBoundaries": {
+    "vertices": 50984,
+    "faces": 93975,
+    "wristBands": "independent oblique planes",
+    "top": "U scoop front, low back panel, surface-snapped racerback straps",
+    "gloveFaces": {
+      "E": 4307,
+      "D": 3550
+    }
+  },
+  "outfit": {
+    "topSeamChains": 17,
+    "cuffSeamChains": 20,
+    "footDetails": 10,
+    "waistbandRibs": 96
+  },
+  "materials": {
+    "materiais": {
+      "pelagem": {
+        "acabamento": "pelagem curta direcional creme e brilho difuso",
+        "roughness": [
+          0.66,
+          0.79
+        ],
+        "bump_m": 0.00095,
+        "subsurface": 0.012,
+        "alpha": false,
+        "nodes": 19
+      },
+      "tecido": {
+        "acabamento": "indigo acetinado com trama",
+        "roughness": [
+          0.3,
+          0.39
+        ],
+        "trama_mm": 0.85,
+        "alpha": false,
+        "nodes": 22
+      },
+      "couro": {
+        "acabamento": "couro vermelho granulado com reflexo amplo e contido",
+        "roughness": [
+          0.37,
+          0.48
+        ],
+        "coat": 0.035,
+        "metallic": 0,
+        "alpha": false,
+        "nodes": 13
+      },
+      "tecido_top": {
+        "acabamento": "indigo fosco com trama",
+        "roughness": [
+          0.45,
+          0.54
+        ],
+        "trama_mm": 0.85,
+        "alpha": false,
+        "nodes": 22
+      }
+    },
+    "texturas_externas": 0,
+    "top_separado": true,
+    "limites": "Procedurais locais para estudo. Assar Base Color/Normal/Roughness apos retopologia e UV finais. Nao exportados automaticamente para glTF."
+  },
+  "fur": {
+    "skipped": "spindle locks read as scratches; groom later with hair cards"
+  },
+  "views": [
+    {
+      "view": "frente",
+      "file": "frente.png",
+      "sha256": "82936cf590d4d33a7464b5226d6148405074660f9674a99010ae90d981e939fe",
+      "camera": {
+        "location": [
+          0,
+          -5,
+          0
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        900,
+        1200
+      ]
+    },
+    {
+      "view": "tres-quartos",
+      "file": "tres-quartos.png",
+      "sha256": "8777ffc2254b7d39c665a9107bab8ef325a3717f0f0636ab0e0ee9bc9660b06c",
+      "camera": {
+        "location": [
+          2.2,
+          -5,
+          0.1
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        900,
+        1200
+      ]
+    },
+    {
+      "view": "perfil",
+      "file": "perfil.png",
+      "sha256": "df4d356686e1bf7134b57e00e1373011891294b840666dfdb89f6cf6f12233b0",
+      "camera": {
+        "location": [
+          5,
+          0,
+          0
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        900,
+        1200
+      ]
+    },
+    {
+      "view": "costas",
+      "file": "costas.png",
+      "sha256": "8bf1f13fa580ab47e872bba3e8c47cf18cc75d65959f8dc1c2e777f26d121043",
+      "camera": {
+        "location": [
+          0,
+          5,
+          0
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        900,
+        1200
+      ]
+    },
+    {
+      "view": "rosto",
+      "file": "rosto.png",
+      "sha256": "dee8a58d904469bba508b0676967bb37574e7e4468a5b142823c2f758f444870",
+      "camera": {
+        "location": [
+          0.35,
+          -5,
+          0.46
+        ],
+        "target": [
+          0,
+          -0.03,
+          0.47
+        ],
+        "orthoScale": 0.95
+      },
+      "resolution": [
+        900,
+        1200
+      ]
+    }
+  ],
+  "orbit360": [
+    {
+      "view": "giro-360/000",
+      "file": "giro-360/000.png",
+      "sha256": "d4a7025762bedf910372dca981c6dab58faf4b8dfba728e1ce8b7283e28b1d2f",
+      "camera": {
+        "location": [
+          0.0,
+          -5.0,
+          0.04
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        600,
+        800
+      ],
+      "degrees": 0.0
+    },
+    {
+      "view": "giro-360/001",
+      "file": "giro-360/001.png",
+      "sha256": "c1a031d310754ef77f385765f6398a61c3129cc8f6786ec97f5b1cb6c27f66e2",
+      "camera": {
+        "location": [
+          1.913417161825449,
+          -4.619397662556434,
+          0.04
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        600,
+        800
+      ],
+      "degrees": 22.5
+    },
+    {
+      "view": "giro-360/002",
+      "file": "giro-360/002.png",
+      "sha256": "3bd3019aff43bcaed489be0c479bd94ea0d59f47b48d0611863b3952a099a87e",
+      "camera": {
+        "location": [
+          3.5355339059327378,
+          -3.5355339059327378,
+          0.04
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        600,
+        800
+      ],
+      "degrees": 45.0
+    },
+    {
+      "view": "giro-360/003",
+      "file": "giro-360/003.png",
+      "sha256": "43fd102f43663b25b0dff71642a5cb4c9ebbdd35a3910c8d4709c0c3a90a9455",
+      "camera": {
+        "location": [
+          4.619397662556434,
+          -1.9134171618254492,
+          0.04
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        600,
+        800
+      ],
+      "degrees": 67.5
+    },
+    {
+      "view": "giro-360/004",
+      "file": "giro-360/004.png",
+      "sha256": "963838a445219357e2c32c2a5e59bf69df8ce2764f7bf0ac6b9fccb9ef7cd56c",
+      "camera": {
+        "location": [
+          5.0,
+          -3.061616997868383e-16,
+          0.04
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        600,
+        800
+      ],
+      "degrees": 90.0
+    },
+    {
+      "view": "giro-360/005",
+      "file": "giro-360/005.png",
+      "sha256": "d6e0a26d08ce60b22812e189586d1e4085adeabe72663b4b9cc7995c3fdf37a0",
+      "camera": {
+        "location": [
+          4.619397662556434,
+          1.9134171618254485,
+          0.04
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        600,
+        800
+      ],
+      "degrees": 112.5
+    },
+    {
+      "view": "giro-360/006",
+      "file": "giro-360/006.png",
+      "sha256": "d109ab34f752ee83639c1871d9544fb33a1500b934eae5c402da036ed38ed6b8",
+      "camera": {
+        "location": [
+          3.5355339059327378,
+          3.5355339059327373,
+          0.04
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        600,
+        800
+      ],
+      "degrees": 135.0
+    },
+    {
+      "view": "giro-360/007",
+      "file": "giro-360/007.png",
+      "sha256": "772b2355f96a7cb97845f7f22fabd19ae7c4ab6f402e4c2f8212529117de4f82",
+      "camera": {
+        "location": [
+          1.9134171618254494,
+          4.619397662556434,
+          0.04
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        600,
+        800
+      ],
+      "degrees": 157.5
+    },
+    {
+      "view": "giro-360/008",
+      "file": "giro-360/008.png",
+      "sha256": "fad0abf2e0c3340916135df44d9598dd12247bfc858c08d9e0a29ec38b82a729",
+      "camera": {
+        "location": [
+          6.123233995736766e-16,
+          5.0,
+          0.04
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        600,
+        800
+      ],
+      "degrees": 180.0
+    },
+    {
+      "view": "giro-360/009",
+      "file": "giro-360/009.png",
+      "sha256": "07236f21d6f86c88a5f6809ef0c21bd17309fe82bc9ba5d031c1a70a8c445118",
+      "camera": {
+        "location": [
+          -1.9134171618254483,
+          4.619397662556434,
+          0.04
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        600,
+        800
+      ],
+      "degrees": 202.5
+    },
+    {
+      "view": "giro-360/010",
+      "file": "giro-360/010.png",
+      "sha256": "842f3e829d3cdde2ef34cff1773813b9adca5b025862b9f8496eacdf539ed73f",
+      "camera": {
+        "location": [
+          -3.5355339059327373,
+          3.5355339059327386,
+          0.04
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        600,
+        800
+      ],
+      "degrees": 225.0
+    },
+    {
+      "view": "giro-360/011",
+      "file": "giro-360/011.png",
+      "sha256": "b3d349c73b60b1c6a86457a9488be453634bb47e709eb32eea96cb9d6a4e7c8a",
+      "camera": {
+        "location": [
+          -4.619397662556432,
+          1.9134171618254516,
+          0.04
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        600,
+        800
+      ],
+      "degrees": 247.5
+    },
+    {
+      "view": "giro-360/012",
+      "file": "giro-360/012.png",
+      "sha256": "a19786a08bf5c31a07dd1aff78fd420a2f30b3028f918d939845f302f3857367",
+      "camera": {
+        "location": [
+          -5.0,
+          9.184850993605148e-16,
+          0.04
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        600,
+        800
+      ],
+      "degrees": 270.0
+    },
+    {
+      "view": "giro-360/013",
+      "file": "giro-360/013.png",
+      "sha256": "0a59591f6904c65369fc4bbc36e554aa9efe24b2794ba66691a496cd0d5eb1e5",
+      "camera": {
+        "location": [
+          -4.619397662556433,
+          -1.91341716182545,
+          0.04
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        600,
+        800
+      ],
+      "degrees": 292.5
+    },
+    {
+      "view": "giro-360/014",
+      "file": "giro-360/014.png",
+      "sha256": "462b17e5b1682eb35b66dc25a1ff913461936e11c99d1d266c7fa0e991f6a876",
+      "camera": {
+        "location": [
+          -3.5355339059327386,
+          -3.535533905932737,
+          0.04
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        600,
+        800
+      ],
+      "degrees": 315.0
+    },
+    {
+      "view": "giro-360/015",
+      "file": "giro-360/015.png",
+      "sha256": "d80652debe026b61a106fd18ed45783d93e2bdd1e2bf769c2de3b5a84f0f4cec",
+      "camera": {
+        "location": [
+          -1.913417161825452,
+          -4.619397662556432,
+          0.04
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "orthoScale": 2.22
+      },
+      "resolution": [
+        600,
+        800
+      ],
+      "degrees": 337.5
+    }
+  ],
+  "visibleObjects": [
+    {
+      "name": "Pipoca identidade | V4 Esclera próximo",
+      "type": "MESH",
+      "vertices": 769
+    },
+    {
+      "name": "Pipoca identidade | V4 Íris âmbar próximo",
+      "type": "MESH",
+      "vertices": 769
+    },
+    {
+      "name": "Pipoca identidade | V4 Pupila próximo",
+      "type": "MESH",
+      "vertices": 769
+    },
+    {
+      "name": "Pipoca identidade | V4 Delineado superior próximo",
+      "type": "MESH",
+      "vertices": 520
+    },
+    {
+      "name": "Pipoca identidade | V4 Pálpebra inferior próximo",
+      "type": "MESH",
+      "vertices": 520
+    },
+    {
+      "name": "Pipoca identidade | V4 Cílio 1 próximo",
+      "type": "MESH",
+      "vertices": 104
+    },
+    {
+      "name": "Pipoca identidade | V4 Cílio 2 próximo",
+      "type": "MESH",
+      "vertices": 104
+    },
+    {
+      "name": "Pipoca identidade | V4 Cílio 3 próximo",
+      "type": "MESH",
+      "vertices": 104
+    },
+    {
+      "name": "Pipoca identidade | V4 Cílio 4 próximo",
+      "type": "MESH",
+      "vertices": 104
+    },
+    {
+      "name": "Pipoca identidade | V4 Sobrancelha próximo",
+      "type": "MESH",
+      "vertices": 392
+    },
+    {
+      "name": "Pipoca identidade | V4 Brilho 0 próximo",
+      "type": "MESH",
+      "vertices": 1000
+    },
+    {
+      "name": "Pipoca identidade | V4 Brilho 1 próximo",
+      "type": "MESH",
+      "vertices": 1000
+    },
+    {
+      "name": "Pipoca identidade | V4 Esclera oposto",
+      "type": "MESH",
+      "vertices": 769
+    },
+    {
+      "name": "Pipoca identidade | V4 Íris âmbar oposto",
+      "type": "MESH",
+      "vertices": 769
+    },
+    {
+      "name": "Pipoca identidade | V4 Pupila oposto",
+      "type": "MESH",
+      "vertices": 769
+    },
+    {
+      "name": "Pipoca identidade | V4 Delineado superior oposto",
+      "type": "MESH",
+      "vertices": 520
+    },
+    {
+      "name": "Pipoca identidade | V4 Pálpebra inferior oposto",
+      "type": "MESH",
+      "vertices": 520
+    },
+    {
+      "name": "Pipoca identidade | V4 Cílio 1 oposto",
+      "type": "MESH",
+      "vertices": 104
+    },
+    {
+      "name": "Pipoca identidade | V4 Cílio 2 oposto",
+      "type": "MESH",
+      "vertices": 104
+    },
+    {
+      "name": "Pipoca identidade | V4 Cílio 3 oposto",
+      "type": "MESH",
+      "vertices": 104
+    },
+    {
+      "name": "Pipoca identidade | V4 Cílio 4 oposto",
+      "type": "MESH",
+      "vertices": 104
+    },
+    {
+      "name": "Pipoca identidade | V4 Sobrancelha oposto",
+      "type": "MESH",
+      "vertices": 392
+    },
+    {
+      "name": "Pipoca identidade | V4 Brilho 0 oposto",
+      "type": "MESH",
+      "vertices": 1000
+    },
+    {
+      "name": "Pipoca identidade | V4 Brilho 1 oposto",
+      "type": "MESH",
+      "vertices": 1000
+    },
+    {
+      "name": "Pipoca identidade | V4 Nariz rosa",
+      "type": "MESH",
+      "vertices": 1000
+    },
+    {
+      "name": "Pipoca identidade | V4 Sorriso",
+      "type": "MESH",
+      "vertices": 1352
+    },
+    {
+      "name": "Pipoca identidade | V4 Filtro labial",
+      "type": "MESH",
+      "vertices": 88
+    },
+    {
+      "name": "Pipoca identidade | V4 Lábio inferior",
+      "type": "MESH",
+      "vertices": 136
+    },
+    {
+      "name": "Pipoca | continuous white waistband",
+      "type": "MESH",
+      "vertices": 194
+    },
+    {
+      "name": "Pipoca | waistband piping",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | waistband piping.001",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | D shorts stripe -1",
+      "type": "MESH",
+      "vertices": 28
+    },
+    {
+      "name": "Pipoca | D shorts stripe 1",
+      "type": "MESH",
+      "vertices": 28
+    },
+    {
+      "name": "Pipoca | E shorts stripe -1",
+      "type": "MESH",
+      "vertices": 36
+    },
+    {
+      "name": "Pipoca | E shorts stripe 1",
+      "type": "MESH",
+      "vertices": 38
+    },
+    {
+      "name": "Pipoca | waistband square label",
+      "type": "MESH",
+      "vertices": 482
+    },
+    {
+      "name": "Pipoca | label indigo border",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | E toenail 1",
+      "type": "MESH",
+      "vertices": 266
+    },
+    {
+      "name": "Pipoca | E toenail 2",
+      "type": "MESH",
+      "vertices": 266
+    },
+    {
+      "name": "Pipoca | E toenail 3",
+      "type": "MESH",
+      "vertices": 266
+    },
+    {
+      "name": "Pipoca | E toenail 4",
+      "type": "MESH",
+      "vertices": 266
+    },
+    {
+      "name": "Pipoca | D toenail 2",
+      "type": "MESH",
+      "vertices": 266
+    },
+    {
+      "name": "Pipoca | D toenail 3",
+      "type": "MESH",
+      "vertices": 266
+    },
+    {
+      "name": "Pipoca | D toenail 4",
+      "type": "MESH",
+      "vertices": 266
+    },
+    {
+      "name": "Pipoca | E red ankle band",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | E wrap edge 0.03",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | E wrap edge 0.065",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | E wrap edge 0.1",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | E red instep strap",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | D red ankle band",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | D wrap edge 0.03",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | D wrap edge 0.065",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | D wrap edge 0.1",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | D red instep strap",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 0",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 1",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 2",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 3",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 4",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 5",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 6",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 7",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 8",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 9",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 10",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 11",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 12",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 13",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 14",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 15",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 top neckline armholes and hem seam 16",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 0",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 1",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 2",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 3",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 4",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 5",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 6",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 7",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 8",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 9",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 10",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 11",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 12",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 13",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 14",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 15",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 16",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 17",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 18",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 fitted glove cuff seam 19",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 00",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 01",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 02",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 03",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 04",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 05",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 06",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 07",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 08",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 09",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 10",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 11",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 12",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 13",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 14",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 15",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 16",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 17",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 18",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 19",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 20",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 21",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 22",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 23",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 24",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 25",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 26",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 27",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 28",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 29",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 30",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 31",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 32",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 33",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 34",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 35",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 36",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 37",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 38",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 39",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 40",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 41",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 42",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 43",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 44",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 45",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 46",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 47",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 48",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 49",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 50",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 51",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 52",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 53",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 54",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 55",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 56",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 57",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 58",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 59",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 60",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 61",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 62",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 63",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 64",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 65",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 66",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 67",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 68",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 69",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 70",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 71",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 72",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 73",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 74",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 75",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 76",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 77",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 78",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 79",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 80",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 81",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 82",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 83",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 84",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 85",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 86",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 87",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 88",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 89",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 90",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 91",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 92",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 93",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 94",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | v4 waistband rib 95",
+      "type": "CURVE",
+      "vertices": null
+    },
+    {
+      "name": "Pipoca | faixas-pes",
+      "type": "MESH",
+      "vertices": 2731
+    },
+    {
+      "name": "Pipoca | punhos",
+      "type": "MESH",
+      "vertices": 1261
+    },
+    {
+      "name": "Pipoca | luvas",
+      "type": "MESH",
+      "vertices": 4220
+    },
+    {
+      "name": "Pipoca | short",
+      "type": "MESH",
+      "vertices": 7727
+    },
+    {
+      "name": "Pipoca | interior_orelha",
+      "type": "MESH",
+      "vertices": 3038
+    },
+    {
+      "name": "Pipoca | top",
+      "type": "MESH",
+      "vertices": 3658
+    },
+    {
+      "name": "Pipoca | cos",
+      "type": "MESH",
+      "vertices": 1038
+    },
+    {
+      "name": "Pipoca | pele",
+      "type": "MESH",
+      "vertices": 31606
+    },
+    {
+      "name": "Pipoca | cauda",
+      "type": "MESH",
+      "vertices": 2562
+    }
+  ],
+  "nextSteps": [
+    "Neutral A pose and deformable retopology.",
+    "UV layout and baking of authored materials.",
+    "Skeleton, weights and motion transfer from existing animation studies."
+  ],
+  "limitations": [
+    "This editable sculpt is not a final game GLB.",
+    "No neutral pose, rig or combat clips created for the Meshy copy.",
+    "Rear outfit details inferred from auxiliary concept sheet.",
+    "Mobile performance and deformation checks follow topology and integration."
+  ]
+}

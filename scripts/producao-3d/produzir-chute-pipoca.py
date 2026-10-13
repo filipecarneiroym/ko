@@ -40,6 +40,18 @@ ancoras = {lado: rig.pose.bones[f'pe_{lado}'].head.copy() for lado in ['E', 'D']
 # marcha v9 (molde validado), e o chute gira do repouso até o alvo pela diagonal
 # local medida no importador (dedo_mundo_rest).
 orientacoes_pes = {lado: rig.pose.bones[f'pe_{lado}'].matrix.to_quaternion().copy() for lado in ['E', 'D']}
+# A IK parte da própria dobra e torção da guarda. Resolver sempre a partir do
+# repouso do rig escolheria outra rotação axial, que saltaria ao e voltar a zero.
+orientacoes_guarda = {b.name: b.matrix.to_quaternion().copy() for b in rig.pose.bones}
+direcoes_guarda = {}
+polos_guarda = {}
+for lado in ['E', 'D']:
+    coxa, canela, pe = (rig.pose.bones[f'{n}_{lado}'] for n in ['coxa', 'canela', 'pe'])
+    direcoes_guarda[f'coxa_{lado}'] = (canela.head - coxa.head).normalized()
+    direcoes_guarda[f'canela_{lado}'] = (pe.head - canela.head).normalized()
+    eixo = (pe.head - coxa.head).normalized()
+    dobra = canela.head - coxa.head
+    polos_guarda[lado] = (dobra - eixo * dobra.dot(eixo)).normalized()
 # Direção local do dedo do pé medida no importador real (probe-pes2): o pé
 # estende numa diagonal do frame do osso (não num eixo puro nem no tail).
 # (x, y, z) no frame Blender, após conversão glTF -> Blender.
@@ -57,7 +69,7 @@ def suave(t):
     t = max(0, min(1, t))
     return t * t * (3 - 2 * t)
 
-def resolver(lado, alvo, polo):
+def resolver(lado, alvo, polo, extensao):
     # IK de dois segmentos (coxa/canela) levando o cabeçote do pé a `alvo`.
     coxa, canela, pe = (rig.pose.bones[f'{n}_{lado}'] for n in ['coxa', 'canela', 'pe'])
     h = coxa.head.copy()
@@ -68,6 +80,9 @@ def resolver(lado, alvo, polo):
         raise RuntimeError(f'{nome_clip} fora do alcance no quadro {cena.frame_current}: {d:.4f}, limite {a + b:.4f}. '
                            f'h={tuple(round(v,3) for v in h)} alvo={tuple(round(v,3) for v in alvo)} '
                            f'ancora={tuple(round(v,3) for v in ancoras.get(lado, Vector()))}')
+    # Na preparação/recuperação, a direção do joelho converge continuamente à
+    # guarda, inclusive entre as chaves. O polo autoral só domina na extensão.
+    polo = polos_guarda[lado].lerp(polo.normalized(), suave(extensao))
     p = polo - eixo * polo.dot(eixo)
     if p.length < 1e-6:
         p = Vector((0, 0, 1))
@@ -75,10 +90,7 @@ def resolver(lado, alvo, polo):
     u = (a * a - b * b + d * d) / (2 * d)
     joelho = h + eixo * u + p * max(0.0, a * a - u * u) ** .5
     for nome, direcao in [(f'coxa_{lado}', joelho - h), (f'canela_{lado}', alvo - joelho)]:
-        osso = rig.pose.bones[nome]
-        filho = canela if nome.startswith('coxa') else pe
-        direcao_rest = (filho.bone.head_local - osso.bone.head_local).normalized()
-        orientar(nome, direcao_rest.rotation_difference(direcao.normalized()) @ rest[nome])
+        orientar(nome, direcoes_guarda[nome].rotation_difference(direcao.normalized()) @ orientacoes_guarda[nome])
 
 def perfil(q, de, ate, preparo, stick, retorno):
     # Sem recolho negativo: a perna de apoio nunca descola do chão.
@@ -105,7 +117,6 @@ inclinacao = 0.11 if forte else 0.06
 yaw_max = 0.25
 pitch_pe = -.10 if forte else .14
 polo_chute = {'E': Vector((0.0, .55, -.30)), 'D': Vector((0.0, -.55, -.30))}
-polo_apoio = {'E': Vector((.15, .18, -.60)), 'D': Vector((.15, -.18, -.60))}
 
 acao = bpy.data.actions.new(f'pipoca_{nome_arquivo.replace("-", "_")}_estudo_v{versao}')
 acao.use_fake_user = True
@@ -139,7 +150,9 @@ for q in amostras:
     alvo = None
     if e > 0 and chute:
         apoio = 'D' if chute == 'E' else 'E'
-        resolver(apoio, ancoras[apoio], polo_apoio[apoio])
+        # Manter o plano da dobra da guarda evita girar o joelho do apoio ao
+        # redor da perna, sem necessidade para sustentar o impulso do quadril.
+        resolver(apoio, ancoras[apoio], polos_guarda[apoio], e)
         # Apoio com a sola nivelada na orientação mundial da guarda (molde v9).
         orientar(f'pe_{apoio}', orientacoes_pes[apoio])
         coxa = rig.pose.bones[f'coxa_{chute}']
@@ -148,11 +161,12 @@ for q in amostras:
         pe_inicial = ancoras[chute]
         contato = Vector((alcance[0], h.y, alcance[1]))
         alvo = pe_inicial.lerp(contato, e)
-        resolver(chute, alvo, polo_chute[chute])
+        resolver(chute, alvo, polo_chute[chute], e)
         # Chute: da diagonal local do dedo medida no importador, gira o pé do
         # repouso (rotação mínima) até o dedo apontar (1, 0, pitch) no mundo.
         desejado = Vector((1.0, 0.0, pitch_pe)).normalized()
-        orientar(f'pe_{chute}', dedo_mundo_rest[chute].rotation_difference(desejado) @ orientacoes_pes[chute])
+        contato_pe = dedo_mundo_rest[chute].rotation_difference(desejado) @ orientacoes_pes[chute]
+        orientar(f'pe_{chute}', orientacoes_pes[chute].slerp(contato_pe, e))
     for lado in ['E', 'D']:
         pe = rig.pose.bones[f'pe_{lado}']
         esperado = (alvo if (e > 0 and chute and lado == chute) else ancoras[lado])

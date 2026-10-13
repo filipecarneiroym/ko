@@ -42,6 +42,25 @@ function criarShortUnido(cintura, pernas) {
     const frente=Math.max(0,Math.cos(2*Math.PI*s/segmentos));
     partes[0].posicoes[((cintura.length-1)*segmentos+s)*3]+=.03*frente*frente;
   }
+  // A base da cintura acompanha a coxa lateral, sem alterar o perfil em repouso.
+  // Isso distribui a dobra pela ponte em vez de comprimi-la contra a borda da perna.
+  for(let s=0;s<segmentos;s++) {
+    const lateral=Math.sin(2*Math.PI*s/segmentos),coxa=.4*lateral*lateral;
+    const v=((cintura.length-1)*segmentos+s)*4;
+    partes[0].juntas[v+1]=partes[lateral>0?2:1].juntas[1];
+    partes[0].pesos[v]=1-coxa;partes[0].pesos[v+1]=coxa;
+  }
+  // Na costura frontal interna, uma pequena terceira influência da coxa oposta
+  // suaviza a entreperna. Ela desaparece antes do centro e da metade traseira.
+  for(let i=1;i<partes.length;i++)for(let s=0;s<segmentos;s++) {
+    const angulo=2*Math.PI*s/segmentos;
+    const interna=Math.max(0,(i===1?1:-1)*Math.sin(angulo));
+    const frente=Math.max(0,Math.cos(angulo));
+    const mistura=.145*interna*interna*frente*frente;
+    const v=s*4;
+    partes[i].juntas[v+2]=partes[i===1?2:1].juntas[1];
+    partes[i].pesos[v+1]-=mistura;partes[i].pesos[v+2]=mistura;
+  }
   const p = unirPrimitivas(partes)[0];
   const quadril = (cintura.length-1)*segmentos;
   const e = partes[0].posicoes.length/3;
@@ -106,12 +125,14 @@ export function criarPipocaCorpoV2(ossos) {
   construir('pele-torso',torso,0,true);
   const casca = (aneis, distancia) => aneis.map(a => ({ ...a, centro: [...a.centro], raios: a.raios.map(r => r + distancia), ossos: [...a.ossos], pesos: [...a.pesos] }));
   // A roupa é uma casca aberta da mesma superfície e usa as mesmas influências.
-  construir('top',casca(torso.slice(5,9),.009),1);
+  construir('top',casca(torso.slice(5,9),.018),1);
   // Perfil descendente: cintura estreita, abertura de quadril mais ampla.
+  // Cintura mais compacta e alinhada ao quadril; a dobra do short fica centrada sem
+  // estourar para trás em poses baixas.
   const cintura = [
-    anel([-.012,1.16,0],[.199,.294],['quadril','tronco'],[.9,.1]),
-    anel([-.010,1.115,0],[.215,.318],['quadril'],[1]),
-    anel([-.006,1.065,0],[.220,.330],['quadril'],[1]),
+    anel([-.010,1.16,0],[.188,.276],['quadril','tronco'],[.9,.1]),
+    anel([-.008,1.115,0],[.196,.298],['quadril'],[1]),
+    anel([-.004,1.065,0],[.208,.318],['quadril'],[1]),
   ];
   construir('faixa-cintura',casca([
     anel([-.011,1.125,0],[.201,.295],['quadril'],[1]),
@@ -143,8 +164,10 @@ export function criarPipocaCorpoV2(ossos) {
       anel(ponto(.030,.53,.230),[.107,.105],[c,k],[.5,.5]),
       anel(ponto(.023,.47,.232),[.103,.100],[c,k],[.15,.85]),
       anel(ponto(.006,.35,.236),[.105,.108],[k],[1]),
-      anel(ponto(.003,.23,.238),[.082,.084],[k,p],[.9,.1]),
-      anel(ponto(.001,.17,.240),[.077,.079],[k,p],[.4,.6]),
+      // O pivô do pé fica em 0,12 m: os anéis acima dele pertencem à canela.
+      // Uma influência alta do pé aqui dobrava a pele sobre si nos chutes.
+      anel(ponto(.003,.23,.238),[.082,.084],[k],[1]),
+      anel(ponto(.001,.17,.240),[.077,.079],[k,p],[.95,.05]),
     ];
     construir(`pele-perna-${lado}`,perna,0);
     pernasShort.push(casca(perna.slice(0,3),.012));
@@ -165,7 +188,7 @@ export function criarPipocaCorpoV2(ossos) {
     status: 'estudo-corpo-fluido', aprovadoFinal: false,
     corpo: { versao: 2, superficies, verticesMistos, rigPreservado: true,
       partesPreservadas: ['cabeca','mandibula','orelha_E','orelha_D','mao_E','mao_D','pe_E','pe_D','cauda'],
-      tecnica: 'Lofts com anéis compartilhados, normais suaves e até duas influências por vértice.' },
+      tecnica: 'Lofts com anéis compartilhados e normais suaves; até duas influências no corpo e três na entreperna do short.' },
     limites: ['Estudo de superfície corporal; ainda requer revisão artística e de dobras.', 'Rosto, luvas, pés, orelhas e cauda anteriores preservados.', 'Uniões sob roupas e ombros exigem inspeção em todas as poses; sem pelagem ou tecido texturizado.'],
   } };
 }

@@ -104,14 +104,14 @@ const origem = 'http://127.0.0.1:8039';
     falharGuarda = false;
     const uivoAntes = await page.screenshot({ clip: { x: 422, y: 0, width: 422, height: 390 } });
     await botaoGuarda.click();
-    await page.waitForFunction(() => document.querySelector('#estado-modelos').textContent.includes('Movimentos da Pipoca carregados'));
+    await page.waitForFunction(() => document.querySelector('#estado-modelos').textContent.includes('Pipoca carregada'));
     await page.waitForTimeout(1000);
     assert.notDeepEqual(await canvas.screenshot(), antesGuarda, 'A nova guarda troca a apresentação da Pipoca');
     assert.deepEqual(await page.screenshot({ clip: { x: 422, y: 0, width: 422, height: 390 } }), uivoAntes, 'Carregar a guarda conserva Uivo');
     await page.screenshot({ path: path.join(root, '.browser-check/pipoca-movimentos-laboratorio.png') });
     await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: false })));
     assert.deepEqual(erros, [], 'Download, substituição, cancelamento e retry não geram erros JS sem tratamento');
-    assert.ok(pedidos.every(url => ['/modelos/blockout/pipoca-v1.glb', '/modelos/blockout/uivo-v1.glb', '/modelos/estudos/pipoca-corpo-v10.glb'].includes(url)));
+    assert.ok(pedidos.every(url => ['/modelos/blockout/pipoca-v1.glb', '/modelos/blockout/uivo-v1.glb', '/modelos/estudos/pipoca-direcao-visual-v13.glb'].includes(url)));
     console.log('PASS estudos 3D opt-in: dupla atômica, falha preserva modelos, aviso de reprovação visual, cancelamento, timeout e retry');
   } finally { await browser.close(); }
 })().catch(erro => { console.error(erro); process.exitCode = 1; });

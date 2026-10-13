@@ -1,0 +1,71 @@
+{
+  "caminho": "public/modelos/estudos/pipoca-direcao-visual-v13.glb",
+  "aprovadoFinal": false,
+  "sha256Glb": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+  "passoQuadros": 0.0625,
+  "amostras": 9866,
+  "corrida": {
+    "clip": "corrida",
+    "duracaoQuadros": 8,
+    "distanciaCiclo": 1.7916666666666667,
+    "velocidadeMetrosQuadro": 0.22395833333333334,
+    "velocidadeMotor": 86,
+    "alturaBalanco": 0.15
+  },
+  "estados": {
+    "corrida": {
+      "duracaoQuadros": 8,
+      "passoQuadros": 0.0625,
+      "amostras": 258,
+      "erroApoioMaximo": 0.00033412677679653646,
+      "erroSolaApoioMaximo": 0.0003047031059395522,
+      "erroTrajetoriaMaximo": 0.0007784071529604278,
+      "pisoMinimo": -0.0003047031059395522,
+      "pisoMaximo": 2.6731839852800476e-7
+    },
+    "recuo": {
+      "duracaoQuadros": 18,
+      "passoQuadros": 0.03125,
+      "amostras": 1154,
+      "erroApoioMaximo": 0.0002033708293447509,
+      "erroSolaApoioMaximo": 0.00019029839313589036,
+      "erroTrajetoriaMaximo": 0.0008828856908952267,
+      "pisoMinimo": -0.00019029839313589036,
+      "pisoMaximo": 2.6388832452539646e-7
+    },
+    "quebra": {
+      "duracaoQuadros": 16,
+      "passoQuadros": 0.0625,
+      "amostras": 514,
+      "erroApoioMaximo": 0.00009433558715237782,
+      "erroSolaApoioMaximo": 0.0000713460030965507,
+      "erroTrajetoriaMaximo": 0.00028746574878441727,
+      "pisoMinimo": -0.0000713460030965507,
+      "pisoMaximo": 2.536532122121571e-7
+    },
+    "caido": {
+      "duracaoQuadros": 46,
+      "passoQuadros": 0.015625,
+      "amostras": 5890,
+      "erroApoioMaximo": 0,
+      "erroSolaApoioMaximo": 0,
+      "erroTrajetoriaMaximo": 0,
+      "pisoMinimo": 0.00038950820453464985,
+      "pisoMaximo": 0.0005065074074082077
+    },
+    "levantando": {
+      "duracaoQuadros": 16,
+      "passoQuadros": 0.015625,
+      "amostras": 2050,
+      "erroApoioMaximo": 0.0003998577950154812,
+      "erroSolaApoioMaximo": 0,
+      "erroTrajetoriaMaximo": 0,
+      "pisoMinimo": -0.000016968886484391987,
+      "pisoMaximo": 0.0006707377033308148
+    }
+  },
+  "limites": [
+    "Queda e primeira metade da subida exigem direção de atuação e revisão de contatos de mão/joelho.",
+    "Rig, piso e fonte autoral não equivalem à aprovação de arte e silhueta."
+  ]
+}

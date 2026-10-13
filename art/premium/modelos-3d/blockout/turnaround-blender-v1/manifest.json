@@ -1,0 +1,23 @@
+{
+  "fonte": "art/premium/modelos-3d/blockout/pipoca-v1.blend",
+  "referencia": "art/premium/elenco/pipoca-v1.png",
+  "resolucao": [
+    900,
+    1200
+  ],
+  "vistas": [
+    {
+      "vista": "frente",
+      "arquivo": "000-frente.png"
+    },
+    {
+      "vista": "perfil",
+      "arquivo": "001-perfil.png"
+    },
+    {
+      "vista": "costas",
+      "arquivo": "002-costas.png"
+    }
+  ],
+  "origemAlterada": false
+}

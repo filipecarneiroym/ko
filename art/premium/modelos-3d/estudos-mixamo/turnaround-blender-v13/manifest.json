@@ -1,0 +1,25 @@
+{
+  "fonte": "public\\modelos\\estudos\\pipoca-direcao-visual-v13.glb",
+  "referencia": "art/premium/elenco/pipoca-v1.png",
+  "sha256Fonte": "d566f9480fed094e49780cabd703fdf825411aec1c5b572388d5fc908e852ecd",
+  "blender": "5.2.2 LTS",
+  "resolucao": [
+    900,
+    1200
+  ],
+  "vistas": [
+    {
+      "vista": "frente",
+      "arquivo": "000-frente.png"
+    },
+    {
+      "vista": "perfil",
+      "arquivo": "001-perfil.png"
+    },
+    {
+      "vista": "costas",
+      "arquivo": "002-costas.png"
+    }
+  ],
+  "origemAlterada": false
+}

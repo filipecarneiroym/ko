@@ -1,0 +1,1466 @@
+{
+  "personagem": "pipoca",
+  "modelo": "public/modelos/estudos/pipoca-direcao-visual-v13.glb",
+  "sha256Glb": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+  "sha256Simulacao": "aa7ea83e1c9398f6977be2728d7d031780a49df7cc9b8a2b044601d2b02a3304",
+  "aprovadoFinal": false,
+  "total": 31,
+  "fontesAutoraisIntegradas": 31,
+  "estudosGenericos": 0,
+  "estudosPendentes": 0,
+  "integrados": [
+    "parado",
+    "andando",
+    "corrida",
+    "agachado",
+    "pulo",
+    "pousando",
+    "defesa",
+    "defesaBaixa",
+    "dano",
+    "caido",
+    "levantando",
+    "rolando",
+    "recuo",
+    "quebra",
+    "agarrando",
+    "agarrado",
+    "tonto",
+    "vitoria",
+    "derrotado",
+    "final",
+    "vitimaFinal",
+    "p1",
+    "p2",
+    "k1",
+    "k2",
+    "cp",
+    "ck",
+    "ap",
+    "ak",
+    "esp",
+    "sup"
+  ],
+  "genericos": [],
+  "fontesDivergentes": [],
+  "clips": [
+    {
+      "nome": "parado",
+      "duracaoQuadros": 104,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": false,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "179893e7623355f6a7574d588bf07597800634867594048a3fcb957fc4203c3e",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/guarda-v4.json",
+        "sha256Fonte": "d57ea6794371708ecac3c0c41ffdad62f19ae0a762315b77d1ec2360c8524d67",
+        "sha256Clip": "179893e7623355f6a7574d588bf07597800634867594048a3fcb957fc4203c3e",
+        "integracaoPendente": false
+      },
+      "evidencias": [],
+      "verificacaoTecnicaAtual": false,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "andando",
+      "duracaoQuadros": 12,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": false,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "0b97a77ae85c2c65a5083002b83b1d3cd2bbaa408f5a7cd4296f6d3a7f3609da",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/andando-v9.json",
+        "sha256Fonte": "709570e8631eb5c6b2c862d7efcb700935f1eb6b0581e324da59c399915552bb",
+        "sha256Clip": "0b97a77ae85c2c65a5083002b83b1d3cd2bbaa408f5a7cd4296f6d3a7f3609da",
+        "integracaoPendente": false
+      },
+      "evidencias": [],
+      "verificacaoTecnicaAtual": false,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "corrida",
+      "duracaoQuadros": 8,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "d58f8a9e6a034ebf281f75b290550e808a2796b650659b6fff159c19385cbab1",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/estados-v16.json",
+        "sha256Fonte": "57921d4c442798060321801a07fba94aca858859a336d6da775b89cece551386",
+        "sha256Clip": "d58f8a9e6a034ebf281f75b290550e808a2796b650659b6fff159c19385cbab1",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-estados-v16.json",
+          "atual": true,
+          "sha256Relatorio": "7a4ed3443adf93f200d827f37441630e3be59bf9ba2ea8a788c1136a30b05dc4"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "agachado",
+      "duracaoQuadros": 60,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "c72e6808a9bdcf4233b4bb52e5eb40ec3e79fda26e235468e8e496924c276b43",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/posturas-v14.json",
+        "sha256Fonte": "6ce704194e210ab1d9b738dc483f1a87b75c01eed8f3321fb1ff2f0e4c73e985",
+        "sha256Clip": "c72e6808a9bdcf4233b4bb52e5eb40ec3e79fda26e235468e8e496924c276b43",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-posturas-v14.json",
+          "atual": true,
+          "sha256Relatorio": "d4ef2c4d27fdd3487816bbf5f47015b7b28bfb1584f89824d461ddb9c3b3949e"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "pulo",
+      "duracaoQuadros": 44,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "e2184e2e5470348a6ec4a136c40d0da7b8be42de6a7a248bbb7250e331df214a",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/posturas-v14.json",
+        "sha256Fonte": "6ce704194e210ab1d9b738dc483f1a87b75c01eed8f3321fb1ff2f0e4c73e985",
+        "sha256Clip": "e2184e2e5470348a6ec4a136c40d0da7b8be42de6a7a248bbb7250e331df214a",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-posturas-v14.json",
+          "atual": true,
+          "sha256Relatorio": "d4ef2c4d27fdd3487816bbf5f47015b7b28bfb1584f89824d461ddb9c3b3949e"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "pousando",
+      "duracaoQuadros": 4,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "24aeffb918b3c2c541cce57e30efc243193214b87961b66759334a06e6a16c0e",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/posturas-v14.json",
+        "sha256Fonte": "6ce704194e210ab1d9b738dc483f1a87b75c01eed8f3321fb1ff2f0e4c73e985",
+        "sha256Clip": "24aeffb918b3c2c541cce57e30efc243193214b87961b66759334a06e6a16c0e",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-posturas-v14.json",
+          "atual": true,
+          "sha256Relatorio": "d4ef2c4d27fdd3487816bbf5f47015b7b28bfb1584f89824d461ddb9c3b3949e"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "defesa",
+      "duracaoQuadros": 60,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": false,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "55b163d3706be6b139b0163d6d7b6195d491c4ef0f0f676544ad1fd6115b8f5b",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/defesa-v7.json",
+        "sha256Fonte": "47ecb4c6f512609bd04579871b4ab64bd69538aeae8b9c3f451da31a3b8e49a4",
+        "sha256Clip": "55b163d3706be6b139b0163d6d7b6195d491c4ef0f0f676544ad1fd6115b8f5b",
+        "integracaoPendente": false
+      },
+      "evidencias": [],
+      "verificacaoTecnicaAtual": false,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "defesaBaixa",
+      "duracaoQuadros": 60,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "b70be1ec9aaa29fc52de821a18521357b4acfe0e85965a2453366e65d0a10436",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/posturas-v14.json",
+        "sha256Fonte": "6ce704194e210ab1d9b738dc483f1a87b75c01eed8f3321fb1ff2f0e4c73e985",
+        "sha256Clip": "b70be1ec9aaa29fc52de821a18521357b4acfe0e85965a2453366e65d0a10436",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-posturas-v14.json",
+          "atual": true,
+          "sha256Relatorio": "d4ef2c4d27fdd3487816bbf5f47015b7b28bfb1584f89824d461ddb9c3b3949e"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "dano",
+      "duracaoQuadros": 12,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": false,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "5754c232e471f449bb178b8604f2b9573639bd5a372a3c51e654059296c658e0",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/reacao-v8.json",
+        "sha256Fonte": "f13d7245156a080cabde8534f48e6807d3c5b1228e81ffcec60f87b29f0f56fc",
+        "sha256Clip": "5754c232e471f449bb178b8604f2b9573639bd5a372a3c51e654059296c658e0",
+        "integracaoPendente": false
+      },
+      "evidencias": [],
+      "verificacaoTecnicaAtual": false,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "caido",
+      "duracaoQuadros": 46,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "cedc6baf4f01e38d3010073c9c4ed66bf3340b648401f3cb56a8e13202ff93f5",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/estados-v16.json",
+        "sha256Fonte": "57921d4c442798060321801a07fba94aca858859a336d6da775b89cece551386",
+        "sha256Clip": "cedc6baf4f01e38d3010073c9c4ed66bf3340b648401f3cb56a8e13202ff93f5",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-estados-v16.json",
+          "atual": true,
+          "sha256Relatorio": "7a4ed3443adf93f200d827f37441630e3be59bf9ba2ea8a788c1136a30b05dc4"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": [
+        "Envelope sem penetração não valida mão/joelho de apoio ou atuação da primeira metade da subida."
+      ]
+    },
+    {
+      "nome": "levantando",
+      "duracaoQuadros": 16,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "50d0bcf68af2a7346e796031eec51556a8383062b61f77b8e38cd469e6836afc",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/estados-v16.json",
+        "sha256Fonte": "57921d4c442798060321801a07fba94aca858859a336d6da775b89cece551386",
+        "sha256Clip": "50d0bcf68af2a7346e796031eec51556a8383062b61f77b8e38cd469e6836afc",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-estados-v16.json",
+          "atual": true,
+          "sha256Relatorio": "7a4ed3443adf93f200d827f37441630e3be59bf9ba2ea8a788c1136a30b05dc4"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": [
+        "Envelope sem penetração não valida mão/joelho de apoio ou atuação da primeira metade da subida."
+      ]
+    },
+    {
+      "nome": "rolando",
+      "duracaoQuadros": 24,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "a022090752ba262c3053141e0d2bd0fb8d685f48aed3a3dbea7af3d218253f85",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/atuacao-v17.json",
+        "sha256Fonte": "7a7690db84a7c2419875cb3128df342919988dc01c4f58926cca8c6d9e1b768d",
+        "sha256Clip": "a022090752ba262c3053141e0d2bd0fb8d685f48aed3a3dbea7af3d218253f85",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-atuacao-v17.json",
+          "atual": true,
+          "sha256Relatorio": "c4cbfbe38c9c917a678933f1b00a2d32cb4408e11937a67d36c946375764c15a"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "recuo",
+      "duracaoQuadros": 18,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "76016398f9e26b24fbc710e5ee328bb30420178c2fb158468e73b6c2d127c51d",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/estados-v16.json",
+        "sha256Fonte": "57921d4c442798060321801a07fba94aca858859a336d6da775b89cece551386",
+        "sha256Clip": "76016398f9e26b24fbc710e5ee328bb30420178c2fb158468e73b6c2d127c51d",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-estados-v16.json",
+          "atual": true,
+          "sha256Relatorio": "7a4ed3443adf93f200d827f37441630e3be59bf9ba2ea8a788c1136a30b05dc4"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "quebra",
+      "duracaoQuadros": 16,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "7dbcf59fcdd7d4350347e57e76d90ef54d2fe1bc56a3a4fbd8e3dc8dad1309de",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/estados-v16.json",
+        "sha256Fonte": "57921d4c442798060321801a07fba94aca858859a336d6da775b89cece551386",
+        "sha256Clip": "7dbcf59fcdd7d4350347e57e76d90ef54d2fe1bc56a3a4fbd8e3dc8dad1309de",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-estados-v16.json",
+          "atual": true,
+          "sha256Relatorio": "7a4ed3443adf93f200d827f37441630e3be59bf9ba2ea8a788c1136a30b05dc4"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "agarrando",
+      "duracaoQuadros": 30,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "2b906017c37ffae4357dc045b5d5e3b546cecec710ea543a2a1d75e7af749749",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/atuacao-v17.json",
+        "sha256Fonte": "7a7690db84a7c2419875cb3128df342919988dc01c4f58926cca8c6d9e1b768d",
+        "sha256Clip": "2b906017c37ffae4357dc045b5d5e3b546cecec710ea543a2a1d75e7af749749",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-atuacao-v17.json",
+          "atual": true,
+          "sha256Relatorio": "c4cbfbe38c9c917a678933f1b00a2d32cb4408e11937a67d36c946375764c15a"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "agarrado",
+      "duracaoQuadros": 30,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "4948325412ee4c8558f8d9578ffb925bb2b3a40a61497ae0495d31b544310d7d",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/atuacao-v17.json",
+        "sha256Fonte": "7a7690db84a7c2419875cb3128df342919988dc01c4f58926cca8c6d9e1b768d",
+        "sha256Clip": "4948325412ee4c8558f8d9578ffb925bb2b3a40a61497ae0495d31b544310d7d",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-atuacao-v17.json",
+          "atual": true,
+          "sha256Relatorio": "c4cbfbe38c9c917a678933f1b00a2d32cb4408e11937a67d36c946375764c15a"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "tonto",
+      "duracaoQuadros": 60,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "e311bd00b6d954ce4567774ec2ec9fbf7a257bb53f92d6a336a8c93e6d956a75",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/atuacao-v17.json",
+        "sha256Fonte": "7a7690db84a7c2419875cb3128df342919988dc01c4f58926cca8c6d9e1b768d",
+        "sha256Clip": "e311bd00b6d954ce4567774ec2ec9fbf7a257bb53f92d6a336a8c93e6d956a75",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-atuacao-v17.json",
+          "atual": true,
+          "sha256Relatorio": "c4cbfbe38c9c917a678933f1b00a2d32cb4408e11937a67d36c946375764c15a"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "vitoria",
+      "duracaoQuadros": 100,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "f74a5828ff0bd7b2944f26fcb7cfc3036486ec7de4cda23fa0b3a3b089df09f7",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/atuacao-v17.json",
+        "sha256Fonte": "7a7690db84a7c2419875cb3128df342919988dc01c4f58926cca8c6d9e1b768d",
+        "sha256Clip": "f74a5828ff0bd7b2944f26fcb7cfc3036486ec7de4cda23fa0b3a3b089df09f7",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-atuacao-v17.json",
+          "atual": true,
+          "sha256Relatorio": "c4cbfbe38c9c917a678933f1b00a2d32cb4408e11937a67d36c946375764c15a"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "derrotado",
+      "duracaoQuadros": 100,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "01cd579f7809e4cb930ece5a2f3009d4c899c78ea71cc132a9827d7a74064350",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/atuacao-v17.json",
+        "sha256Fonte": "7a7690db84a7c2419875cb3128df342919988dc01c4f58926cca8c6d9e1b768d",
+        "sha256Clip": "01cd579f7809e4cb930ece5a2f3009d4c899c78ea71cc132a9827d7a74064350",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-atuacao-v17.json",
+          "atual": true,
+          "sha256Relatorio": "c4cbfbe38c9c917a678933f1b00a2d32cb4408e11937a67d36c946375764c15a"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "final",
+      "duracaoQuadros": 200,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "caa6252f8ca229152deec21a83a931065be1a36e15540d60a01c1bdac7e162c1",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/atuacao-v17.json",
+        "sha256Fonte": "7a7690db84a7c2419875cb3128df342919988dc01c4f58926cca8c6d9e1b768d",
+        "sha256Clip": "caa6252f8ca229152deec21a83a931065be1a36e15540d60a01c1bdac7e162c1",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-atuacao-v17.json",
+          "atual": true,
+          "sha256Relatorio": "c4cbfbe38c9c917a678933f1b00a2d32cb4408e11937a67d36c946375764c15a"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "vitimaFinal",
+      "duracaoQuadros": 200,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "693b6ff2562c7a749f9e7c03ca5c9beb977adaebdd362fac6991f568483242b3",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/atuacao-v17.json",
+        "sha256Fonte": "7a7690db84a7c2419875cb3128df342919988dc01c4f58926cca8c6d9e1b768d",
+        "sha256Clip": "693b6ff2562c7a749f9e7c03ca5c9beb977adaebdd362fac6991f568483242b3",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-atuacao-v17.json",
+          "atual": true,
+          "sha256Relatorio": "c4cbfbe38c9c917a678933f1b00a2d32cb4408e11937a67d36c946375764c15a"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "p1",
+      "duracaoQuadros": 12,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": false,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "7e38bf8d9e3752d0b5675fca29b512e357da2a651769c81c14a7e3ef0f7339a3",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/jab-v5.json",
+        "sha256Fonte": "a9c6e66365face578c8084afaa3404caf13e7f5b362d1d6bee2201c9d60ed764",
+        "sha256Clip": "7e38bf8d9e3752d0b5675fca29b512e357da2a651769c81c14a7e3ef0f7339a3",
+        "integracaoPendente": false
+      },
+      "evidencias": [],
+      "verificacaoTecnicaAtual": false,
+      "janelasAtivas": [
+        {
+          "de": 3,
+          "ate": 5,
+          "caixa": [
+            6,
+            -50,
+            24,
+            10
+          ]
+        }
+      ],
+      "limites": []
+    },
+    {
+      "nome": "p2",
+      "duracaoQuadros": 18,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": false,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "2c1534d21e1d8879631dce7a656ba4335d17694e5f3af36ff08a3aa66c44c3ba",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/soco-forte-v6.json",
+        "sha256Fonte": "85359f8c841ade7cdee22a765037db052648167f7551b44c682bd1285179a66f",
+        "sha256Clip": "2c1534d21e1d8879631dce7a656ba4335d17694e5f3af36ff08a3aa66c44c3ba",
+        "integracaoPendente": false
+      },
+      "evidencias": [],
+      "verificacaoTecnicaAtual": false,
+      "janelasAtivas": [
+        {
+          "de": 5,
+          "ate": 7,
+          "caixa": [
+            6,
+            -48,
+            28,
+            12
+          ]
+        }
+      ],
+      "limites": []
+    },
+    {
+      "nome": "k1",
+      "duracaoQuadros": 24,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": false,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "9f308bb9cb2cd1f2d9a96f8dbb4b3f842cc74c8f98fbf8402112a3d8ae3b87e0",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/chute-v11.json",
+        "sha256Fonte": "15e0091c57c18c8afbbdbd35fe1bd8ee23d1343044ee083f5b4563b89860e4eb",
+        "sha256Clip": "9f308bb9cb2cd1f2d9a96f8dbb4b3f842cc74c8f98fbf8402112a3d8ae3b87e0",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-chutes-v13.json",
+          "atual": true,
+          "sha256Relatorio": "b2770c9dc7380b2953d09fa1f982c66b27be89c676826265356f7f16f660fcc6"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [
+        {
+          "de": 6,
+          "ate": 8,
+          "caixa": [
+            4,
+            -30,
+            30,
+            12
+          ]
+        },
+        {
+          "de": 12,
+          "ate": 14,
+          "caixa": [
+            4,
+            -30,
+            30,
+            12
+          ]
+        }
+      ],
+      "limites": []
+    },
+    {
+      "nome": "k2",
+      "duracaoQuadros": 28,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": false,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "01dc86c42a0f2cb63358eaee1c713a68ccd59331053a22ff6c07d314a3cfd83d",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/chute-forte-v12.json",
+        "sha256Fonte": "b11620e9a908b4a63a1fc5bd012b72711098ddcceeb88b0195e03781b7decaf6",
+        "sha256Clip": "01dc86c42a0f2cb63358eaee1c713a68ccd59331053a22ff6c07d314a3cfd83d",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-chutes-v13.json",
+          "atual": true,
+          "sha256Relatorio": "b2770c9dc7380b2953d09fa1f982c66b27be89c676826265356f7f16f660fcc6"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [
+        {
+          "de": 7,
+          "ate": 10,
+          "caixa": [
+            2,
+            -46,
+            32,
+            18
+          ]
+        }
+      ],
+      "limites": []
+    },
+    {
+      "nome": "cp",
+      "duracaoQuadros": 10,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "a8b4b509a4a36975adbceb1839072dc158cc7753baae926b0f83f6111adaa11e",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/tecnicas-v15.json",
+        "sha256Fonte": "663d67d110695f3029642ff36f296c20937bf5c787e23c11139f07a6790ce071",
+        "sha256Clip": "a8b4b509a4a36975adbceb1839072dc158cc7753baae926b0f83f6111adaa11e",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-tecnicas-v15.json",
+          "atual": true,
+          "sha256Relatorio": "ce9c309039c894b46d18567d4b78d0a9562b7ef74c0cd1808ad0b89c58dfc063"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [
+        {
+          "de": 3,
+          "ate": 5,
+          "caixa": [
+            6,
+            -28,
+            22,
+            9
+          ]
+        }
+      ],
+      "limites": []
+    },
+    {
+      "nome": "ck",
+      "duracaoQuadros": 26,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "4b585170d405f6f94eb7910e2e70f96ac3ba0b89ac5d9e7e0a480989da65a556",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/tecnicas-v15.json",
+        "sha256Fonte": "663d67d110695f3029642ff36f296c20937bf5c787e23c11139f07a6790ce071",
+        "sha256Clip": "4b585170d405f6f94eb7910e2e70f96ac3ba0b89ac5d9e7e0a480989da65a556",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-tecnicas-v15.json",
+          "atual": true,
+          "sha256Relatorio": "ce9c309039c894b46d18567d4b78d0a9562b7ef74c0cd1808ad0b89c58dfc063"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [
+        {
+          "de": 6,
+          "ate": 9,
+          "caixa": [
+            4,
+            -10,
+            34,
+            10
+          ]
+        }
+      ],
+      "limites": []
+    },
+    {
+      "nome": "ap",
+      "duracaoQuadros": 20,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "4fbf50ffcb14f2cbafb96278111deb1616d34a78aa7693f30ce5e71d3c85ff7b",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/tecnicas-v15.json",
+        "sha256Fonte": "663d67d110695f3029642ff36f296c20937bf5c787e23c11139f07a6790ce071",
+        "sha256Clip": "4fbf50ffcb14f2cbafb96278111deb1616d34a78aa7693f30ce5e71d3c85ff7b",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-tecnicas-v15.json",
+          "atual": true,
+          "sha256Relatorio": "ce9c309039c894b46d18567d4b78d0a9562b7ef74c0cd1808ad0b89c58dfc063"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [
+        {
+          "de": 4,
+          "ate": 14,
+          "caixa": [
+            4,
+            -40,
+            22,
+            14
+          ]
+        }
+      ],
+      "limites": []
+    },
+    {
+      "nome": "ak",
+      "duracaoQuadros": 22,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "07599b17e90943ebc1cb6ff861bb3138911c0e4232c4bbfec9dcbed32f5cc649",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/tecnicas-v15.json",
+        "sha256Fonte": "663d67d110695f3029642ff36f296c20937bf5c787e23c11139f07a6790ce071",
+        "sha256Clip": "07599b17e90943ebc1cb6ff861bb3138911c0e4232c4bbfec9dcbed32f5cc649",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-tecnicas-v15.json",
+          "atual": true,
+          "sha256Relatorio": "ce9c309039c894b46d18567d4b78d0a9562b7ef74c0cd1808ad0b89c58dfc063"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [
+        {
+          "de": 5,
+          "ate": 16,
+          "caixa": [
+            2,
+            -26,
+            28,
+            12
+          ]
+        }
+      ],
+      "limites": []
+    },
+    {
+      "nome": "esp",
+      "duracaoQuadros": 30,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "6593c6dd54df3b5b1fe32f4bcb83a1e3db560291101d5144a3766382d8d3d4d4",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/tecnicas-v15.json",
+        "sha256Fonte": "663d67d110695f3029642ff36f296c20937bf5c787e23c11139f07a6790ce071",
+        "sha256Clip": "6593c6dd54df3b5b1fe32f4bcb83a1e3db560291101d5144a3766382d8d3d4d4",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-tecnicas-v15.json",
+          "atual": true,
+          "sha256Relatorio": "ce9c309039c894b46d18567d4b78d0a9562b7ef74c0cd1808ad0b89c58dfc063"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [],
+      "limites": []
+    },
+    {
+      "nome": "sup",
+      "duracaoQuadros": 62,
+      "status": "fonte-autoral-integrada; revisão artística pendente",
+      "fonteIntegrada": true,
+      "declaradoNosExtras": true,
+      "aprovadoFinal": false,
+      "sha256ClipGlb": "ae70d4dad297e08122b3c66dace53caefc01ec68ae0b35330c62cf958391f41e",
+      "fonte": {
+        "caminho": "art/premium/modelos-3d/estudos-mixamo/tecnicas-v15.json",
+        "sha256Fonte": "663d67d110695f3029642ff36f296c20937bf5c787e23c11139f07a6790ce071",
+        "sha256Clip": "ae70d4dad297e08122b3c66dace53caefc01ec68ae0b35330c62cf958391f41e",
+        "integracaoPendente": false
+      },
+      "evidencias": [
+        {
+          "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-tecnicas-v15.json",
+          "atual": true,
+          "sha256Relatorio": "ce9c309039c894b46d18567d4b78d0a9562b7ef74c0cd1808ad0b89c58dfc063"
+        }
+      ],
+      "verificacaoTecnicaAtual": true,
+      "janelasAtivas": [
+        {
+          "de": 44,
+          "ate": 50,
+          "caixa": [
+            -16,
+            -86,
+            32,
+            86
+          ]
+        }
+      ],
+      "limites": []
+    }
+  ],
+  "fontes": [
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/guarda-v4.json",
+      "sha256": "d57ea6794371708ecac3c0c41ffdad62f19ae0a762315b77d1ec2360c8524d67",
+      "versao": null,
+      "nomes": [
+        "parado"
+      ],
+      "sha256Geometria": null
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/jab-v5.json",
+      "sha256": "a9c6e66365face578c8084afaa3404caf13e7f5b362d1d6bee2201c9d60ed764",
+      "versao": null,
+      "nomes": [
+        "p1"
+      ],
+      "sha256Geometria": null
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/soco-forte-v6.json",
+      "sha256": "85359f8c841ade7cdee22a765037db052648167f7551b44c682bd1285179a66f",
+      "versao": null,
+      "nomes": [
+        "p2"
+      ],
+      "sha256Geometria": null
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/defesa-v7.json",
+      "sha256": "47ecb4c6f512609bd04579871b4ab64bd69538aeae8b9c3f451da31a3b8e49a4",
+      "versao": null,
+      "nomes": [
+        "defesa"
+      ],
+      "sha256Geometria": null
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/reacao-v8.json",
+      "sha256": "f13d7245156a080cabde8534f48e6807d3c5b1228e81ffcec60f87b29f0f56fc",
+      "versao": null,
+      "nomes": [
+        "dano"
+      ],
+      "sha256Geometria": null
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/andando-v9.json",
+      "sha256": "709570e8631eb5c6b2c862d7efcb700935f1eb6b0581e324da59c399915552bb",
+      "versao": null,
+      "nomes": [
+        "andando"
+      ],
+      "sha256Geometria": null
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/chute-v11.json",
+      "sha256": "15e0091c57c18c8afbbdbd35fe1bd8ee23d1343044ee083f5b4563b89860e4eb",
+      "versao": null,
+      "nomes": [
+        "k1"
+      ],
+      "sha256Geometria": null
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/chute-forte-v12.json",
+      "sha256": "b11620e9a908b4a63a1fc5bd012b72711098ddcceeb88b0195e03781b7decaf6",
+      "versao": null,
+      "nomes": [
+        "k2"
+      ],
+      "sha256Geometria": null
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/posturas-v14.json",
+      "sha256": "6ce704194e210ab1d9b738dc483f1a87b75c01eed8f3321fb1ff2f0e4c73e985",
+      "versao": 14,
+      "nomes": [
+        "agachado",
+        "defesaBaixa",
+        "pulo",
+        "pousando"
+      ],
+      "sha256Geometria": null
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/tecnicas-v15.json",
+      "sha256": "663d67d110695f3029642ff36f296c20937bf5c787e23c11139f07a6790ce071",
+      "versao": 15,
+      "nomes": [
+        "cp",
+        "ck",
+        "ap",
+        "ak",
+        "esp",
+        "sup"
+      ],
+      "sha256Geometria": null
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/estados-v16.json",
+      "sha256": "57921d4c442798060321801a07fba94aca858859a336d6da775b89cece551386",
+      "versao": 16,
+      "nomes": [
+        "corrida",
+        "recuo",
+        "quebra",
+        "caido",
+        "levantando"
+      ],
+      "sha256Geometria": "380372a2095dbd1c337251ac8f4555a14f92a4814e6795c03bae7981e0a7f29b"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/atuacao-v17.json",
+      "sha256": "7a7690db84a7c2419875cb3128df342919988dc01c4f58926cca8c6d9e1b768d",
+      "versao": 17,
+      "nomes": [
+        "rolando",
+        "agarrando",
+        "agarrado",
+        "tonto",
+        "vitoria",
+        "derrotado",
+        "final",
+        "vitimaFinal"
+      ],
+      "sha256Geometria": "380372a2095dbd1c337251ac8f4555a14f92a4814e6795c03bae7981e0a7f29b"
+    }
+  ],
+  "evidencias": [
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-chutes-v13.json",
+      "sha256Relatorio": "b2770c9dc7380b2953d09fa1f982c66b27be89c676826265356f7f16f660fcc6",
+      "sha256Glb": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+      "atual": true,
+      "nomes": [
+        "k1",
+        "k2"
+      ],
+      "amostras": 420,
+      "aprovadoFinal": false
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-posturas-v14.json",
+      "sha256Relatorio": "d4ef2c4d27fdd3487816bbf5f47015b7b28bfb1584f89824d461ddb9c3b3949e",
+      "sha256Glb": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+      "atual": true,
+      "nomes": [
+        "agachado",
+        "defesaBaixa",
+        "pulo",
+        "pousando"
+      ],
+      "amostras": 1352,
+      "aprovadoFinal": false
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-tecnicas-v15.json",
+      "sha256Relatorio": "ce9c309039c894b46d18567d4b78d0a9562b7ef74c0cd1808ad0b89c58dfc063",
+      "sha256Glb": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+      "atual": true,
+      "nomes": [
+        "cp",
+        "ck",
+        "ap",
+        "ak",
+        "esp",
+        "sup"
+      ],
+      "amostras": 5644,
+      "aprovadoFinal": false
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-estados-v16.json",
+      "sha256Relatorio": "7a4ed3443adf93f200d827f37441630e3be59bf9ba2ea8a788c1136a30b05dc4",
+      "sha256Glb": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+      "atual": true,
+      "nomes": [
+        "corrida",
+        "recuo",
+        "quebra",
+        "caido",
+        "levantando"
+      ],
+      "amostras": 9866,
+      "aprovadoFinal": false
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/importacao-atuacao-v17.json",
+      "sha256Relatorio": "c4cbfbe38c9c917a678933f1b00a2d32cb4408e11937a67d36c946375764c15a",
+      "sha256Glb": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+      "atual": true,
+      "nomes": [
+        "rolando",
+        "agarrando",
+        "agarrado",
+        "tonto",
+        "vitoria",
+        "derrotado",
+        "final",
+        "vitimaFinal"
+      ],
+      "amostras": 13264,
+      "aprovadoFinal": false
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/roupa-auditoria-chutes-v13.json",
+      "sha256Relatorio": "cf841925c2922d74531e1b6c2d2d85084175e5d74b8726e9699a8603d963d44b",
+      "sha256Glb": "2c1639fe98329b4260676429e56460c4c42cd36e2d2401e391a45bafc7ba7b2b",
+      "atual": false,
+      "nomes": [],
+      "amostras": 212,
+      "aprovadoFinal": false
+    }
+  ],
+  "extras": {
+    "posturas": {
+      "versao": 14,
+      "clips": [
+        "agachado",
+        "defesaBaixa",
+        "pulo",
+        "pousando"
+      ],
+      "origem": "IK autoral sobre guarda v4",
+      "passoQuadros": 0.5,
+      "trajetoriaVerticalPertenceAoMotor": true,
+      "aprovadoFinal": false
+    },
+    "tecnicas": {
+      "versao": 15,
+      "nomes": [
+        "cp",
+        "ck",
+        "ap",
+        "ak",
+        "esp",
+        "sup"
+      ],
+      "regras": {
+        "raizJogavelImovel": true,
+        "pelveDentroDaRaiz": "Até8cm para trás na postura baixa v14; não move modelo-pipoca.",
+        "janelaCriacaoCenoura": 10,
+        "visibilidadeSuper": "p.sumido; não controlada pelo clip",
+        "apoio": "Dois pés no chão em cp/esp/sup; D apoia ck. ap/ak usam puloq8 sem ancorar os pés ao chão.",
+        "amostragemQuadros": {
+          "cp": 0.25,
+          "ck": 0.25,
+          "ap": 0.25,
+          "ak": 0.25,
+          "esp": 0.25,
+          "sup": ".125; .03125 entreq42–44"
+        }
+      },
+      "pendentes": [],
+      "aprovadoFinal": false
+    },
+    "estados": {
+      "versao": 16,
+      "nomes": [
+        "corrida",
+        "recuo",
+        "quebra",
+        "caido",
+        "levantando"
+      ],
+      "corrida": {
+        "clip": "corrida",
+        "duracaoQuadros": 8,
+        "distanciaCiclo": 1.7916666666666667,
+        "velocidadeMetrosQuadro": 0.22395833333333334,
+        "velocidadeMotor": 86,
+        "alturaBalanco": 0.15
+      },
+      "regras": {
+        "unidadesMetro": 384,
+        "pes": {
+          "E": [
+            0.3807239092990129,
+            0.12000000052898019,
+            -0.33448202968310436
+          ],
+          "D": [
+            -0.40851453284597344,
+            0.12000018803288637,
+            0.1482539376610028
+          ]
+        },
+        "centros": {
+          "E": 0.11447689509277369,
+          "D": -0.11353576022017947
+        },
+        "corrida": {
+          "clip": "corrida",
+          "duracaoQuadros": 8,
+          "distanciaCiclo": 1.7916666666666667,
+          "velocidadeMetrosQuadro": 0.22395833333333334,
+          "velocidadeMotor": 86,
+          "alturaBalanco": 0.15
+        },
+        "recuo": {
+          "velocidadeMetrosQuadro": 0.234375,
+          "alturaBalanco": 0.11,
+          "passos": {
+            "E": [
+              {
+                "de": 0,
+                "ate": 2,
+                "apoio": false,
+                "inicio": 0.3807239092990129,
+                "fim": -0.81875
+              },
+              {
+                "de": 2,
+                "ate": 6,
+                "apoio": true,
+                "mundo": -0.81875
+              },
+              {
+                "de": 6,
+                "ate": 10,
+                "apoio": false,
+                "inicio": -0.81875,
+                "fim": -2.69375
+              },
+              {
+                "de": 10,
+                "ate": 14,
+                "apoio": true,
+                "mundo": -2.69375
+              },
+              {
+                "de": 14,
+                "ate": 16,
+                "apoio": false,
+                "inicio": -2.69375,
+                "fim": -3.8380260907009873
+              },
+              {
+                "de": 16,
+                "ate": 18,
+                "apoio": true,
+                "mundo": -3.8380260907009873
+              }
+            ],
+            "D": [
+              {
+                "de": 0,
+                "ate": 2,
+                "apoio": true,
+                "mundo": -0.40851453284597344
+              },
+              {
+                "de": 2,
+                "ate": 6,
+                "apoio": false,
+                "inicio": -0.40851453284597344,
+                "fim": -1.85625
+              },
+              {
+                "de": 6,
+                "ate": 10,
+                "apoio": true,
+                "mundo": -1.85625
+              },
+              {
+                "de": 10,
+                "ate": 14,
+                "apoio": false,
+                "inicio": -1.85625,
+                "fim": -3.73125
+              },
+              {
+                "de": 14,
+                "ate": 16,
+                "apoio": true,
+                "mundo": -3.73125
+              },
+              {
+                "de": 16,
+                "ate": 18,
+                "apoio": false,
+                "inicio": -3.73125,
+                "fim": -4.627264532845974
+              }
+            ]
+          }
+        },
+        "quebra": {
+          "alturaBalanco": 0.065,
+          "passos": {
+            "E": [
+              {
+                "de": 0,
+                "ate": 5,
+                "apoio": false,
+                "inicio": 0.3807239092990129,
+                "fim": -0.19219275736765373
+              },
+              {
+                "de": 5,
+                "ate": 16,
+                "apoio": true,
+                "mundo": -0.19219275736765373
+              }
+            ],
+            "D": [
+              {
+                "de": 0,
+                "ate": 5,
+                "apoio": true,
+                "mundo": -0.40851453284597344
+              },
+              {
+                "de": 5,
+                "ate": 10,
+                "apoio": false,
+                "inicio": -0.40851453284597344,
+                "fim": -0.9814311995126401
+              },
+              {
+                "de": 10,
+                "ate": 16,
+                "apoio": true,
+                "mundo": -0.9814311995126401
+              }
+            ]
+          }
+        },
+        "amostragemQuadros": {
+          "corrida": 0.125,
+          "recuo": 0.0625,
+          "quebra": 0.125,
+          "caido": 0.03125,
+          "levantando": 0.03125
+        },
+        "raizJogavel": "Posição, parede, velocidade, hitstop e orientação pertencem ao KSim.",
+        "queda": "Envelope da pele impede penetração; contato de corpo no chão e apoio dos pés na segunda metade da subida. Não aprova atuação artística."
+      },
+      "pendentes": [
+        "rolando",
+        "agarrando",
+        "agarrado",
+        "tonto",
+        "vitoria",
+        "derrotado",
+        "final",
+        "vitimaFinal"
+      ],
+      "limites": [
+        "Queda e primeira metade da subida exigem direção de atuação e revisão de contatos de mão/joelho.",
+        "Rig, piso e fonte autoral não equivalem à aprovação de arte e silhueta."
+      ],
+      "aprovadoFinal": false
+    },
+    "atuacao": {
+      "versao": 17,
+      "nomes": [
+        "rolando",
+        "agarrando",
+        "agarrado",
+        "tonto",
+        "vitoria",
+        "derrotado",
+        "final",
+        "vitimaFinal"
+      ],
+      "regras": {
+        "raizJogavelImovel": true,
+        "rolando": {
+          "velocidadeMotor": 88,
+          "ultimoQuadroMovimento": 16,
+          "giro": [
+            2,
+            14
+          ],
+          "retornoApoios": [
+            16,
+            24
+          ]
+        },
+        "agarrando": {
+          "contatoNominal": [
+            4,
+            8
+          ],
+          "lancamentoMotor": 10,
+          "pulsosContato": {
+            "E": [
+              1.08,
+              1.53,
+              -0.14
+            ],
+            "D": [
+              0.88,
+              1.53,
+              0.3
+            ]
+          },
+          "distanciaMotorPixels": [
+            26,
+            36
+          ],
+          "ajustadoPorVitima": false
+        },
+        "agarrado": {
+          "lancamentoMotor": 10,
+          "ultimos20quadros": "Reserva do contrato; KSim já troca para dano/voo no quadro10."
+        },
+        "final": {
+          "identidade": "Comanda a Chuva de Cenouras, guarda e comemoração de boxeadora; não anima eventos de gameplay.",
+          "contatosVfx": [
+            36,
+            42,
+            48,
+            54,
+            60,
+            66,
+            72,
+            78,
+            84,
+            90,
+            96,
+            102,
+            108,
+            114,
+            120,
+            126,
+            132,
+            138
+          ],
+          "relogio": "s.fT, inclusive hitstop",
+          "terminaNaGuarda": true
+        },
+        "entradaDerrotadoDepoisDeVitimaFinal": "Usar pose final do derrotado; a vítima já está deitada no fim do Final.",
+        "amostragemQuadros": "1/8q em rolagem/agarrão; 1/4q nas atuações; chaves adaptativas nos contatos do corpo com o piso."
+      },
+      "pendentes": [
+        "Contato de duas luvas por vítima e por distância de agarrão.",
+        "Validação visual de rolagem, silhueta, mãos/joelhos e expressões.",
+        "Transições de entrada contextual (tonto→vitimaFinal, vitimaFinal→derrotado)."
+      ],
+      "limites": [
+        "Ter31fontes autorais não significa aprovação premium final.",
+        "Vítima do Final reage à faixa de impactos; outros finalizadores terão direção visual própria.",
+        "Sem áudio, expressão facial esculpida ou trama/pelagem final."
+      ],
+      "aprovadoFinal": false
+    }
+  },
+  "pendentesPersonagem": [
+    "Revisão visual dos movimentos entre estados, nos dois lados e sob hitstop.",
+    "Expressões faciais, pelagem, tecido/costuras e deformações extremas.",
+    "Áudio de ações/impactos e acabamento dos estados de Final.",
+    "Apoios de mão/joelho e direção de atuação da queda e subida.",
+    "Desempenho medido em aparelhos físicos.",
+    "Contato de duas luvas por vítima e por distância de agarrão.",
+    "Validação visual de rolagem, silhueta, mãos/joelhos e expressões.",
+    "Transições de entrada contextual (tonto→vitimaFinal, vitimaFinal→derrotado)."
+  ],
+  "limites": [
+    "Fonte com hash igual prova integração do movimento, sem aprovar o acabamento premium.",
+    "Evidência sem SHA do GLB atual permanece histórica; regenerar os verificadores após mudar a geometria.",
+    "A contagem vem de canais reais comparados às fontes; a presença de um nome no contrato não o aprova."
+  ],
+  "reproducao": "node scripts/producao-3d/auditar-pipoca.mjs --modelo public/modelos/estudos/pipoca-direcao-visual-v13.glb --relatorio art/premium/modelos-3d/auditoria-pipoca-v13.json"
+}

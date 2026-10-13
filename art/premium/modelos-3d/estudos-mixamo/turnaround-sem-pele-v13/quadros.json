@@ -1,0 +1,31 @@
+{
+  "origem": "Turnaround neutro de corpo inteiro pelo importador real.",
+  "caminhoModelo": "public/modelos/estudos/pipoca-direcao-visual-v13.glb",
+  "sha256Glb": "84cfcb0b406e6e23657b3b002b6e6d91f6909f60fb41d25725ef38e547622f8d",
+  "quadros": [
+    {
+      "clip": "rest",
+      "quadro": 0,
+      "atraso": 30,
+      "x": 0,
+      "vista": "frente",
+      "face": 1
+    },
+    {
+      "clip": "rest",
+      "quadro": 0,
+      "atraso": 30,
+      "x": 0,
+      "vista": "perfil",
+      "face": 1
+    },
+    {
+      "clip": "rest",
+      "quadro": 0,
+      "atraso": 30,
+      "x": 0,
+      "vista": "costas",
+      "face": 1
+    }
+  ]
+}

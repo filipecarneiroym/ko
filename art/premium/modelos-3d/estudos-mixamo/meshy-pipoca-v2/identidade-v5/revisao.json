@@ -74,18 +74,26 @@
   "contours": {
     "openEdgesBefore": 1465,
     "openEdgesAfter": 0,
+    "earShells": {
+      "frontPatches": 2,
+      "hiddenFolds": 0,
+      "backPatchesRemoved": 2,
+      "backFacesRemoved": 470,
+      "edgeIslandsRemoved": 5,
+      "edgeIslandFacesRemoved": 74
+    },
     "islandsDissolved": 12,
-    "vertices": 50408,
-    "faces": 92733,
+    "vertices": 50588,
+    "faces": 92907,
     "perMaterial": {
-      "pelagem": 47255,
-      "interior_orelha": 2145,
-      "tecido": 14274,
-      "tecido_top": 4390,
-      "faixas": 15055,
-      "couro": 9438,
-      "pupila": 349,
-      "sobrancelha": 170
+      "pelagem": 47784,
+      "interior_orelha": 1792,
+      "tecido": 14056,
+      "tecido_top": 4386,
+      "faixas": 14972,
+      "couro": 9411,
+      "pupila": 340,
+      "sobrancelha": 166
     }
   },
   "face": {
@@ -108,6 +116,12 @@
   "details": {
     "toenails": 8
   },
+  "ears": {
+    "markup": "art/premium/modelos-3d/referencias/marcacao-orelhas-pipoca.png",
+    "markupSha256": "fe849577dbba8086d8a1858a8f399059653ce0b856b626c291226af103f1ae83",
+    "edgeSmoothingMarkupPixels": 1,
+    "projection": "frontal, campo contínuo bilinear"
+  },
   "version": 5,
   "draft": false,
   "workfile": "art\\premium\\modelos-3d\\estudos-mixamo\\meshy-pipoca-v2\\identidade-v5\\pipoca-identidade-v5.blend",
@@ -116,32 +130,37 @@
     {
       "view": "frente",
       "file": "frente.png",
-      "sha256": "cd596e44bf3eccd19d505bf7b61710f7fa654c791d3ac767490c2eb878f1b21e"
+      "sha256": "d1f461c123367302cb879dbce92145f9a13b518cd263957dac9d667603a3d09e"
     },
     {
       "view": "tres-quartos",
       "file": "tres-quartos.png",
-      "sha256": "8fccba422eb2b53e7bbe64022f6920c5710f3fece1223336513eda37a329a2b3"
+      "sha256": "404e2e6fcf3d82fa86854dcb11ba4c363c3265d69fbb11302b46c89211bacca4"
     },
     {
       "view": "perfil",
       "file": "perfil.png",
-      "sha256": "8c8fe20e413adebb318c8ed01b71bd5e89e55957e509787b2ffd487eccf69a49"
+      "sha256": "cc4d57c19dbc5b3b8c2713cf8af595e9c2f898274943b5cd5e9197468e9b7ad0"
     },
     {
       "view": "costas",
       "file": "costas.png",
-      "sha256": "d335bbe7af00901b093ff088999957079ac65a73032d880a69056ba5e84fc3fb"
+      "sha256": "8acab04b7dead17b6de89b2b2956809179ad2e6af83297c876598b8dcbc2724d"
     },
     {
       "view": "rosto",
       "file": "rosto.png",
-      "sha256": "70872df5a7c2dc66cb3f6803c6a75786d2014ef5d401d6946b97af7d6f419888"
+      "sha256": "8efcbbe9817730a6935c0713c857d49df1cbe840eb442d753d76236e019b5954"
     },
     {
       "view": "rosto-34",
       "file": "rosto-34.png",
-      "sha256": "cc5ad6b2f978d914a63b0ed138a368d77e8bc9ea94e94a5a5d56aeba7d54c589"
+      "sha256": "0c76e6129ed93a678c5f6f1d35a95e4bfb55e1df40b867732acbc07c531285ae"
+    },
+    {
+      "view": "orelhas",
+      "file": "orelhas-final.png",
+      "sha256": "51f05e738bd41c2a27e63eccedf0460ec804fe75576a0152975786a37e1369e2"
     }
   ],
   "blender": "5.2.2 LTS"

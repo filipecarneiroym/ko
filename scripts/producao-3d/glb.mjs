@@ -1,5 +1,7 @@
 // GLB autocontido: a malha usa posições de repouso no espaço da raiz, sem arquivos externos.
-const COMPONENTES = { SCALAR: 1, VEC3: 3, VEC4: 4, MAT4: 16 };
+import { inflateSync } from 'node:zlib';
+
+const COMPONENTES = { SCALAR: 1, VEC2: 2, VEC3: 3, VEC4: 4, MAT4: 16 };
 const TIPOS = { FLOAT: 5126, UNSIGNED_SHORT: 5123, UNSIGNED_INT: 5125 };
 const alinhar = n => Math.ceil(n / 4) * 4;
 
@@ -47,12 +49,71 @@ function hierarquia(ossos) {
   return absolutos;
 }
 
-export function exportarGlb({ nome, primitivas, ossos, clips = [], materiais, extras = {} }) {
+function pngAutocontido(imagem) {
+  exigir(imagem && imagem.mimeType === 'image/png' && !('uri' in imagem) && !('bufferView' in imagem), 'Imagens: use PNG binário autocontido, sem URI.');
+  exigir(ArrayBuffer.isView(imagem.dados) || imagem.dados instanceof ArrayBuffer, 'Imagem PNG: dados binários ausentes.');
+  const bytes = imagem.dados instanceof ArrayBuffer ? Buffer.from(imagem.dados) : Buffer.from(imagem.dados.buffer, imagem.dados.byteOffset, imagem.dados.byteLength);
+  exigir(bytes.length >= 57 && bytes.length <= 2 * 1024 * 1024, 'Imagem PNG: tamanho inválido ou acima de 2 MB.');
+  exigir(bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])), 'Imagem PNG: assinatura inválida.');
+  exigir(bytes.readUInt32BE(8) === 13 && bytes.toString('ascii',12,16) === 'IHDR', 'Imagem PNG: cabeçalho IHDR inválido.');
+  const largura=bytes.readUInt32BE(16),altura=bytes.readUInt32BE(20);
+  exigir(largura > 0 && altura > 0 && largura <= 2048 && altura <= 2048, 'Imagem PNG: resolução máxima de 2048 × 2048.');
+  exigir(bytes[24] === 8 && [2,6].includes(bytes[25]) && bytes[26] === 0 && bytes[27] === 0 && bytes[28] === 0, 'Imagem PNG: use RGB ou RGBA de 8 bits, sem entrelaçamento.');
+  let cursor=8,temDados=false,final=false,terminouDados=false;const dados=[];
+  while(cursor+12 <= bytes.length) {
+    const tamanho=bytes.readUInt32BE(cursor),tipo=bytes.toString('ascii',cursor+4,cursor+8);
+    exigir(cursor+12+tamanho <= bytes.length, 'Imagem PNG: chunk truncado.');
+    let crc=0xffffffff;
+    for(const byte of bytes.subarray(cursor+4,cursor+8+tamanho)) {
+      crc^=byte;for(let k=0;k<8;k++)crc=(crc>>>1)^((crc&1)?0xedb88320:0);
+    }
+    exigir(((crc^0xffffffff)>>>0) === bytes.readUInt32BE(cursor+8+tamanho), 'Imagem PNG: CRC inválido.');
+    exigir(tipo !== 'IHDR' || cursor === 8, 'Imagem PNG: IHDR repetido.');
+    exigir(['IHDR','IDAT','IEND','PLTE'].includes(tipo) || (bytes[cursor+4]&32)!==0, 'Imagem PNG: chunk crítico desconhecido.');
+    if(tipo === 'IDAT') {
+      exigir(!terminouDados, 'Imagem PNG: IDAT precisa ser contíguo.');
+      temDados=true;dados.push(bytes.subarray(cursor+8,cursor+8+tamanho));
+    } else if(temDados)terminouDados=true;
+    cursor += 12+tamanho;
+    if(tipo === 'IEND'){exigir(tamanho === 0, 'Imagem PNG: IEND inválido.');final=true;break;}
+  }
+  exigir(temDados && final && cursor === bytes.length, 'Imagem PNG: IDAT/IEND ausentes ou bytes extras.');
+  const canais=bytes[25] === 6?4:3,linha=largura*canais+1,esperado=linha*altura;
+  let pixels;
+  try {pixels=inflateSync(Buffer.concat(dados),{maxOutputLength:esperado});}
+  catch {throw new Error('Imagem PNG: IDAT comprimido inválido ou acima da resolução declarada.');}
+  exigir(pixels.length === esperado, 'Imagem PNG: quantidade de pixels inconsistente.');
+  for(let y=0;y<altura;y++)exigir(pixels[y*linha] <= 4, 'Imagem PNG: filtro de linha inválido.');
+  return bytes;
+}
+
+export function exportarGlb({ nome, primitivas, ossos, clips = [], materiais, extras = {}, imagens = [], texturas = [], samplers = [] }) {
   exigir(typeof nome === 'string' && nome.length > 0, 'Defina o nome do modelo.');
   const absolutos = hierarquia(ossos);
   exigir(Array.isArray(primitivas) && primitivas.length > 0, 'Defina pelo menos uma primitiva.');
   exigir(Array.isArray(materiais) && materiais.length > 0, 'Defina os materiais do modelo.');
   exigir(Array.isArray(clips), 'Defina a lista de animações.');
+  exigir(Array.isArray(imagens) && Array.isArray(texturas) && Array.isArray(samplers), 'Imagens, texturas e samplers devem ser listas.');
+  const pngs=imagens.map(pngAutocontido);
+  for(const sampler of samplers) {
+    exigir(sampler && typeof sampler === 'object', 'Sampler inválido.');
+    for(const [campo,permitidos]of Object.entries({magFilter:[9728,9729],minFilter:[9728,9729,9984,9985,9986,9987],wrapS:[33071,33648,10497],wrapT:[33071,33648,10497]})) {
+      if(sampler[campo] !== undefined)exigir(permitidos.includes(sampler[campo]), `Sampler: ${campo} inválido.`);
+    }
+  }
+  for(const textura of texturas) {
+    exigir(textura && Number.isInteger(textura.source) && textura.source >= 0 && textura.source < imagens.length, 'Textura: imagem source inválida.');
+    if(textura.sampler !== undefined)exigir(Number.isInteger(textura.sampler) && textura.sampler >= 0 && textura.sampler < samplers.length, 'Textura: sampler inválido.');
+    exigir(!('uri' in textura), 'Textura: URI externa não permitida.');
+  }
+  const materiaisTexturizados=new Set();
+  materiais.forEach((m,i)=> {
+    for(const mapa of [m.pbrMetallicRoughness?.baseColorTexture,m.pbrMetallicRoughness?.metallicRoughnessTexture,m.normalTexture,m.occlusionTexture,m.emissiveTexture])if(mapa !== undefined) {
+      exigir(mapa && Number.isInteger(mapa.index) && mapa.index >= 0 && mapa.index < texturas.length, `Material ${i}: índice de textura inválido.`);
+      exigir(mapa.texCoord === undefined || mapa.texCoord === 0, `Material ${i}: somente TEXCOORD_0 é suportado.`);
+      materiaisTexturizados.add(i);
+    }
+  });
   const documento = {
     asset: { version: '2.0', generator: 'K.O produção 3D local' },
     scene: 0, scenes: [{ name: nome, nodes: [0] }],
@@ -135,11 +196,25 @@ export function exportarGlb({ nome, primitivas, ossos, clips = [], materiais, ex
       JOINTS_0: accessor(primitiva.juntas, 'VEC4', TIPOS.UNSIGNED_SHORT, { target: 34962 }),
       WEIGHTS_0: accessor(primitiva.pesos, 'VEC4', TIPOS.FLOAT, { target: 34962 }),
     };
+    if(primitiva.uvs !== undefined) {
+      numeros(primitiva.uvs, vertices * 2, `Primitiva ${i}: UVs`);
+      attributes.TEXCOORD_0 = accessor(primitiva.uvs, 'VEC2', TIPOS.FLOAT, { target: 34962 });
+    }
+    exigir(!materiaisTexturizados.has(primitiva.material) || primitiva.uvs !== undefined, `Primitiva ${i}: material texturizado exige TEXCOORD_0.`);
     documento.meshes[0].primitives.push({
       attributes, indices: accessor(indices, 'SCALAR', maiorIndice <= 65535 ? TIPOS.UNSIGNED_SHORT : TIPOS.UNSIGNED_INT, { limites: true, target: 34963 }),
       material: primitiva.material, mode: 4,
     });
   }
+  if(pngs.length)documento.images=pngs.map((png,i)=> {
+    const view={buffer:0,byteOffset:comprimentoBin,byteLength:png.length};
+    const bytes=Buffer.alloc(alinhar(png.length));png.copy(bytes);partes.push(bytes);comprimentoBin+=bytes.length;
+    const imagem={mimeType:'image/png',bufferView:documento.bufferViews.length};
+    if(imagens[i].name !== undefined){exigir(typeof imagens[i].name === 'string', 'Imagem: nome inválido.');imagem.name=imagens[i].name;}
+    documento.bufferViews.push(view);return imagem;
+  });
+  if(texturas.length)documento.textures=copiarJson(texturas,'Texturas');
+  if(samplers.length)documento.samplers=copiarJson(samplers,'Samplers');
   const matrizes = absolutos.flatMap(([x, y, z]) => [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -x, -y, -z, 1]);
   documento.skins[0].inverseBindMatrices = accessor(matrizes, 'MAT4', TIPOS.FLOAT);
   const nomesClips = new Set();

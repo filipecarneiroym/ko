@@ -1,0 +1,139 @@
+{
+  "aprovadoFinal": false,
+  "modelo": "public/modelos/estudos/pipoca-direcao-visual-v13.glb",
+  "sha256Glb": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+  "sha256Simulacao": "aa7ea83e1c9398f6977be2728d7d031780a49df7cc9b8a2b044601d2b02a3304",
+  "fontesConferidas": [
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/guarda-v4.json",
+      "sha256": "d57ea6794371708ecac3c0c41ffdad62f19ae0a762315b77d1ec2360c8524d67"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/jab-v5.json",
+      "sha256": "a9c6e66365face578c8084afaa3404caf13e7f5b362d1d6bee2201c9d60ed764"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/soco-forte-v6.json",
+      "sha256": "85359f8c841ade7cdee22a765037db052648167f7551b44c682bd1285179a66f"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/defesa-v7.json",
+      "sha256": "47ecb4c6f512609bd04579871b4ab64bd69538aeae8b9c3f451da31a3b8e49a4"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/reacao-v8.json",
+      "sha256": "f13d7245156a080cabde8534f48e6807d3c5b1228e81ffcec60f87b29f0f56fc"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/andando-v9.json",
+      "sha256": "709570e8631eb5c6b2c862d7efcb700935f1eb6b0581e324da59c399915552bb"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/chute-v11.json",
+      "sha256": "15e0091c57c18c8afbbdbd35fe1bd8ee23d1343044ee083f5b4563b89860e4eb"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/chute-forte-v12.json",
+      "sha256": "b11620e9a908b4a63a1fc5bd012b72711098ddcceeb88b0195e03781b7decaf6"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/posturas-v14.json",
+      "sha256": "6ce704194e210ab1d9b738dc483f1a87b75c01eed8f3321fb1ff2f0e4c73e985"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/tecnicas-v15.json",
+      "sha256": "663d67d110695f3029642ff36f296c20937bf5c787e23c11139f07a6790ce071"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/estados-v16.json",
+      "sha256": "57921d4c442798060321801a07fba94aca858859a336d6da775b89cece551386"
+    },
+    {
+      "caminho": "art/premium/modelos-3d/estudos-mixamo/atuacao-v17.json",
+      "sha256": "7a7690db84a7c2419875cb3128df342919988dc01c4f58926cca8c6d9e1b768d"
+    },
+    {
+      "caminho": "src/producao3d/pipoca-visual-v3.mjs",
+      "sha256": "71a4edd6ce669887f8e94774dfb9701c9e7647509f5b64ea4acf6aad3cb1a5f8"
+    },
+    {
+      "caminho": "src/producao3d/pipoca-corpo-v2.mjs",
+      "sha256": "6a2ddd999ac34a3481cf160b135313acf6facdcc0645dbaed685347379c4a089"
+    },
+    {
+      "caminho": "src/producao3d/pipoca.mjs",
+      "sha256": "66649056c77b73d8b36756c306945d3d28e58d1d2a57e30f9db4a6153baa0727"
+    },
+    {
+      "caminho": "src/producao3d/pipoca-figurino.mjs",
+      "sha256": "af3bd697e2cf56e634b06aee39e8f68bbe8ebf504df0da8055f68d53f43eaf39"
+    },
+    {
+      "caminho": "src/producao3d/pipoca-pelagem.mjs",
+      "sha256": "bad8b0e6c3bdf67100292151743e153e6db07dc4d435dc3631e59ee7f2dd4ab4"
+    },
+    {
+      "caminho": "src/producao3d/pipoca-posturas.mjs",
+      "sha256": "873522d73eb27be9627723c0f36f9a6a32bd67965892d6eb799e41a525736f8a"
+    },
+    {
+      "caminho": "src/producao3d/pipoca-tecnicas.mjs",
+      "sha256": "13d9be375e9459f1aaee896583064962732eb7001c03e9c458d22e8da77c1015"
+    },
+    {
+      "caminho": "src/producao3d/pipoca-estados.mjs",
+      "sha256": "292d3a644ebe77c7f0662aa34fc043391d9a7a70b6647687142dc8d1f7e28ab5"
+    },
+    {
+      "caminho": "src/producao3d/pipoca-atuacao.mjs",
+      "sha256": "3744937e24b202d36c9224ce201feefea13c81211c7955d05d525c5eb0e0a83a"
+    },
+    {
+      "caminho": "scripts/producao-3d/gerar-estudo-visual.mjs",
+      "sha256": "c54831a8b1ead10c4a17d5fbd0964cf718954b4e3c5c2bddaed2aa53323b544d"
+    },
+    {
+      "caminho": "scripts/producao-3d/glb.mjs",
+      "sha256": "45def2308a63132e5dcb565187fb1d34faa63815a9bbc90fa88ec42639dcfe90"
+    }
+  ],
+  "verificacoes": [
+    {
+      "nome": "chutes",
+      "arquivo": "importacao-chutes-v13.json",
+      "sha256Glb": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+      "amostras": 420
+    },
+    {
+      "nome": "posturas",
+      "arquivo": "importacao-posturas-v14.json",
+      "sha256Glb": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+      "amostras": 1352
+    },
+    {
+      "nome": "tecnicas",
+      "arquivo": "importacao-tecnicas-v15.json",
+      "sha256Glb": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+      "amostras": 5644
+    },
+    {
+      "nome": "estados",
+      "arquivo": "importacao-estados-v16.json",
+      "sha256Glb": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+      "amostras": 9866
+    },
+    {
+      "nome": "atuacao",
+      "arquivo": "importacao-atuacao-v17.json",
+      "sha256Glb": "9c7aad81c63335d0193e53a5a2bec7b8dbf000391eef17ce1bb9ff92042a7408",
+      "amostras": 13264
+    }
+  ],
+  "fontesAutoraisIntegradas": 31,
+  "estudosPendentes": 0,
+  "limites": [
+    "Rodada de apoio, piso e contato; não aprova acabamento, roupa ou atuação.",
+    "Guarda, socos, defesa, reação e marcha têm testes próprios adicionais.",
+    "Revisão em GPU e desempenho em aparelhos físicos são etapas separadas."
+  ]
+}

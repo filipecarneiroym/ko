@@ -6,15 +6,17 @@
     "package-lock.json": "5e3ffb241dd273c0f53fa696d0a02cb97964759689d6a3936b2634abbbe8bc2a",
     "scripts/build-3d.mjs": "6777dbe6bfa621d2577a44a12dbbcaac5f6bd3e36a0e1630058bcb35e06ec370",
     "scripts/fontes-3d.mjs": "0c12e57821efbb0059928698eb2da7f09dba5fabb29f4dd88e18855237d9bac7",
+    "src/3d/apresentacao.js": "ddd2e294b576cf87c21268608f52bc90e27eac2be60b8126da6fd9a900f58144",
     "src/3d/caixas.js": "14ab50a1c505237c3aa4005385e121a131affe8ea212a7539f9499cd3fe82f24",
     "src/3d/contrato-glb.mjs": "0fafc4fa6b706c2b0f88155714a14aa42b0450b3eee768c28e46f4694b8cff53",
-    "src/3d/efeitos.js": "11e44211c91229b7288eb7bde7d1c7cea8f75e5a05656d6e60e7cd53462814bb",
+    "src/3d/efeitos.js": "28f2254b416dfc4e630ad1e0c171a90c52b7b151de5b1c956ed13118cbf5a4e4",
     "src/3d/estado-visual.mjs": "6a5388a61074de405228b3bfe7d02d68255cf8feb0b9c2e419f37ac9396f1541",
-    "src/3d/laboratorio.js": "b9b47ae079dc89da55e44a3b44a5fe18692b8b2a9c8435705a064b9f1f2917b7",
-    "src/3d/modelo-glb.js": "c36ce520f0edce3098f1df92b8e2c9ee605a8ed3d0d52d6c5b5c81eedcf5e127"
+    "src/3d/laboratorio.js": "be652130a606d4eca9eb422e65d1dad8f72883ea0c6d7ea07ff21ac2dbe68255",
+    "src/3d/modelo-glb.js": "bd90c28c725c1fdb59d351f7d355f2f200b60d2723a8e9e77096a427e078f5d3",
+    "src/3d/perfil-pipoca.mjs": "effca8a992370c7fe15a90f05e570b5ac9b677f69ad879b44de49c6b58e9884a"
   },
   "saida": {
     "caminho": "public/js/ko-laboratorio-3d.js",
-    "sha256": "2ca4455ffc49141792c61756d2414f50e12c5a4fd0269ffb38354524369515eb"
+    "sha256": "a65e2df695fa6e44a9d65026dc0187f04744722b4cdd759654ce4cebe904e895"
   }
 }

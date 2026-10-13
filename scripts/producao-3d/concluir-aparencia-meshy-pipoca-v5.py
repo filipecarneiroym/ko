@@ -98,7 +98,7 @@ def main():
     report['hems'] = FIG.build_hems(mesh)
     report['waist'] = FIG.build_waist(mesh)
     report['tail'] = FIG.build_tail(mesh)
-    ear = FIG.ear_field(mesh)
+    ear = FIG.ear_field(mesh, ROOT)
     order = ['pelagem', 'interior_orelha', 'tecido', 'tecido_top', 'faixas', 'couro', 'pupila', 'sobrancelha']
     body_mats = {k: mats[k] for k in order}
     report['contours'] = FIG.cut(obj, body_mats, FIG.regions(), ear,
@@ -116,16 +116,20 @@ def main():
         scene.eevee.taa_render_samples = 24 if DRAFT else 64
     scene.render.resolution_x, scene.render.resolution_y = 900, 1200
     scene.render.resolution_percentage = 70 if DRAFT else 100
-    for p in (REFERENCE,):
+    for p in (REFERENCE, ROOT/FIG.EAR_MARKUP):
         bpy.data.images.load(str(p), check_existing=True).pack()
     bpy.context.preferences.filepaths.save_version = 0
     workfile = OUTPUT/'pipoca-identidade-v5.blend'
-    bpy.ops.wm.save_as_mainfile(filepath=str(workfile))
     views = [('frente', (0, -5, 0), (0, 0, 0), 2.1), ('tres-quartos', (3.4, -3.7, .3), (0, 0, 0), 2.1),
              ('perfil', (-5, 0, 0), (0, 0, 0), 2.1), ('costas', (0, 5, 0), (0, 0, 0), 2.1),
              ('rosto', (0, -5, .52), (0, 0, .52), .62), ('rosto-34', (3, -4, .55), (0, -.05, .52), .62)]
     if DRAFT:
         views = [views[0], views[2], views[3], views[4]]
+    _, loc, target, scale = views[0]
+    camera.location = loc
+    camera.rotation_euler = (Vector(target)-Vector(loc)).to_track_quat('-Z', 'Y').to_euler()
+    camera.data.ortho_scale = scale
+    bpy.ops.wm.save_as_mainfile(filepath=str(workfile))
     shots = []
     for name, loc, target, scale in views:
         camera.location = loc
@@ -136,6 +140,18 @@ def main():
         bpy.ops.render.render(write_still=True)
         shots.append({'view': name, 'file': name+'.png', 'sha256': digest(path)})
         print('PIPOCA_V5_VIEW', name, flush=True)
+    if not DRAFT:
+        camera.location = (0, -5, FIG.EAR_RENDER['z'])
+        camera.rotation_euler = (Vector((0, 0, FIG.EAR_RENDER['z']))-camera.location).to_track_quat('-Z', 'Y').to_euler()
+        camera.data.ortho_scale = FIG.EAR_RENDER['ortho']
+        scene.render.resolution_x, scene.render.resolution_y = FIG.EAR_RENDER['width'], FIG.EAR_RENDER['height']
+        path = OUTPUT/'orelhas-final.png'
+        scene.render.filepath = str(path)
+        bpy.ops.render.render(write_still=True)
+        shots.append({'view': 'orelhas', 'file': path.name, 'sha256': digest(path)})
+        print('PIPOCA_V5_VIEW orelhas', flush=True)
+    report['ears'] = {'markup': FIG.EAR_MARKUP, 'markupSha256': digest(ROOT/FIG.EAR_MARKUP),
+                      'edgeSmoothingMarkupPixels': 1, 'projection': 'frontal, campo contínuo bilinear'}
     report.update({'version': 5, 'draft': DRAFT, 'workfile': str(workfile.relative_to(ROOT)),
                    'reference': str(REFERENCE.relative_to(ROOT)), 'views': shots,
                    'blender': bpy.app.version_string})

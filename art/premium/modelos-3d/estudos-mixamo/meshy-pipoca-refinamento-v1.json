@@ -1,0 +1,32 @@
+{
+  "source": "C:\\Users\\Windows\\Downloads\\Meshy_AI_Boxing_Bunny_1012051617_generate.glb",
+  "sourceSha256": "af1ee490ca0a42852f9cc2e974303c7814646da4bd0ba11179c63d034dbf5235",
+  "reference": "art\\premium\\elenco\\pipoca-v1.png",
+  "referenceSha256": "aaac8e7e1bf7067529ef02828d225ab41b6b915bf33c899adc19a4cf8ef87bec",
+  "workfile": "art\\premium\\modelos-3d\\estudos-mixamo\\meshy-pipoca-refinamento-v1.blend",
+  "preview": "art\\premium\\modelos-3d\\estudos-mixamo\\meshy-pipoca-refinamento-v1.png",
+  "mesh": {
+    "vertices": 47125,
+    "faces": 94242,
+    "materials": [
+      "Pipoca | soft spatial color blockout"
+    ],
+    "vertexColorContributionsPerLoop": {
+      "furCorners": 157066,
+      "fabricCorners": 113677,
+      "gloveCorners": 12249,
+      "coralCorners": 3249,
+      "projectedCorners": 76659
+    },
+    "uvLayers": 1,
+    "armatureModifiers": 0
+  },
+  "colorTransfer": "Front-facing vertex colors projected from the approved transparent concept; sides/back use a soft spatial blockout.",
+  "limitations": [
+    "The source is one mostly connected triangle mesh; spatial color masks are only a blockout.",
+    "Front projection is a review aid; pose differences cause distortion and it is not a final animated texture.",
+    "The generated UVs are for editing, not a finished fur or fabric texture layout.",
+    "No rig or weight groups are invented in this preparation step.",
+    "The source collection remains intact and hidden; only the work copy receives edits."
+  ]
+}

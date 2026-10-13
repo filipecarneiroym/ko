@@ -1,0 +1,66 @@
+{
+  "versao": 1,
+  "data": "2026-10-11",
+  "ordemProducao": ["pipoca"],
+  "politicaElenco": "Concluir a ficha completa da Pipoca antes de produzir o próximo personagem. Compartilhar critérios técnicos; preservar anatomia, silhueta, roupa e linguagem de luta de cada referência.",
+  "referenciaAcabamento": "Street Fighter IV: volume legível, poses expressivas e impacto. A identidade visual pertence às artes originais do K.O.",
+  "contratoTecnico": "art/premium/modelos-3d/contrato.json",
+  "padraoComum": {
+    "camera": "Plano de luta lateral, ambos os lados, rosto e silhueta legíveis na resolução real do celular.",
+    "materiais": "PBR; distinguir pelagem, tecido, couro das luvas e faixas sem depender de luz colorida pintada na textura.",
+    "geometria": "Normais contínuas, nenhuma interseção visível, extremidades coerentes; roupa acompanha a flexão sem romper nem revelar o corpo.",
+    "animacao": "Preparação, contato e recuperação autorais. Contato acompanha todas as janelas reais do motor; transições não atrasam a resposta.",
+    "rig": "Pode variar por anatomia. No máximo quatro influências por vértice; o contrato de estados e de tempo é compartilhado.",
+    "efeitos": "Leitura distinta de acerto, defesa, erro, especial e Super. Identidade própria por personagem, quantidade limitada e descarte de recursos.",
+    "relogio": "Estado determinístico comanda pose, posição, orientação, projétil e ocultação. Renderização nunca aplica dano ou altera o resultado.",
+    "acessibilidade": "Reduzir movimentos decorativos e flashes respeitando prefers-reduced-motion; manter as informações essenciais do combate.",
+    "validacao": "Comparar com a referência original e folha de vistas; revisar poses extremas, interpolação e transições. Nomes de clips e testes técnicos não comprovam acabamento premium."
+  },
+  "novoPersonagemCamposObrigatorios": [
+    "referenciasComHash", "especieEAnatomia", "silhuetaEProporcoes", "rostoEExpressoes",
+    "roupaEAcessorios", "paletaEMateriais", "guardaELocomocao", "golpesERecuperacoes",
+    "especialSuperEFinal", "efeitosESons", "evidenciasVisuais", "validacaoTecnica", "limitesConhecidos"
+  ],
+  "pipoca": {
+    "status": "refinamento em produção; personagem ainda não finalizado",
+    "referencias": [
+      "art/premium/elenco/pipoca-v1.png",
+      "art/premium/modelos-3d/referencias/pipoca-referencia-v1.png"
+    ],
+    "identidade": {
+      "especie": "coelha antropomórfica atlética adulta",
+      "silhueta": "orelhas longas, focinho curto, cintura atlética, coxas fortes e cauda curta; sem proporções infantis",
+      "expressao": "confiante, competitiva e simpática; olhos âmbar com sobrancelhas marcadas e sorriso de canto",
+      "pelagem": "creme clara, interior rosado das orelhas; volume curto com direção coerente nas bochechas e membros",
+      "figurino": "top atlético índigo com alças, short de boxe índigo com faixa e linhas brancas, luvas vermelhas e faixas claras nos punhos e pés",
+      "movimento": "guarda alta de boxe, socos secos com giro do tronco, passada leve, saltos elásticos; as orelhas acompanham a ação sem balançar como borracha"
+    },
+    "parametrosEstudo": {
+      "alturaCorpoMetros": 2.5,
+      "alturaOrelhasNaoAmpliaColisao": true,
+      "paleta": {"pelagem": "#e8dac4", "tecido": "#0a0e41", "luvas": "#a10307", "interiorOrelhas": "#bf353c", "iris": "#e65606"},
+      "roughness": {"pelagem": 0.94, "tecido": 0.52, "luvas": 0.32},
+      "observacao": "Valores iniciais do estudo PBR. Comparar sob a iluminação comum; não transformar cores da luz da ilustração em pigmento permanente."
+    },
+    "linguagemLuta": {
+      "perfil": "boxeadora ágil com mobilidade aérea",
+      "mecanicasExistentes": ["pulo alto", "pulo duplo", "dois socos em sequência", "dois chutes médios em k1", "chute lançador em k2", "ataques baixos e aéreos", "cenoura bumerangue", "Super da toca", "Chuva de Cenouras no Golpe Final"],
+      "fonteAtributosEGolpes": "public/js/ko-sim.js#LUTADORES.pipoca",
+      "alterarBalanceamentoParaCaberNaAnimacao": false,
+      "especial": "Cenoura criada no quadro 10, segue s.proj e continua depois do clip esp; retorno pertence ao motor.",
+      "super": "Entrada na toca, invisibilidade dos quadros 8 a 42, reaparecimento e contato nos quadros 44 a 50; movimento do mundo pertence ao motor.",
+      "final": "Encenação cômica de 200 quadros, sem sangue, seguindo o relógio da fase."
+    },
+    "conclusaoExige": [
+      "aparência e expressões fiéis às duas referências",
+      "roupa e corpo sem falhas em todas as poses e transições",
+      "31 clips revisados no importador real, nos dois lados",
+      "todos os golpes baixos, aéreos, agarrão, especial, Super e Final conferidos",
+      "efeitos e áudio próprios revisados numa partida completa",
+      "pés e mãos coerentes com o chão e com todas as janelas ativas",
+      "carregamento, suspensão, recuperação de contexto e descarte validados",
+      "desempenho medido em aparelhos físicos definidos no plano premium"
+    ],
+    "concluida": false
+  }
+}

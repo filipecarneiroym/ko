@@ -1,0 +1,35 @@
+{
+  "versao": 14,
+  "aprovadoFinal": false,
+  "sha256Simulacao": "aa7ea83e1c9398f6977be2728d7d031780a49df7cc9b8a2b044601d2b02a3304",
+  "origem": "Posturas autorais por IK sobre a guarda v4; sem movimento vertical de gameplay.",
+  "amostras": [
+    {
+      "clip": "agachado",
+      "duracaoQuadros": 60,
+      "erroMaximoAncoraEntreChaves": 1.519626234052415e-07,
+      "alturaMinimaJoelho": 0.4836115837097168
+    },
+    {
+      "clip": "defesaBaixa",
+      "duracaoQuadros": 60,
+      "erroMaximoAncoraEntreChaves": 1.519626234052415e-07,
+      "alturaMinimaJoelho": 0.4836115837097168
+    },
+    {
+      "clip": "pulo",
+      "duracaoQuadros": 44,
+      "erroMaximoAncoraEntreChaves": 0.0,
+      "alturaMinimaJoelho": 0.4172916114330292
+    },
+    {
+      "clip": "pousando",
+      "duracaoQuadros": 4,
+      "erroMaximoAncoraEntreChaves": 0.0004081195251114416,
+      "alturaMinimaJoelho": 0.27769044041633606
+    }
+  ],
+  "limites": [
+    "Exige revisão da malha atual, roupa e transições no importador real."
+  ]
+}

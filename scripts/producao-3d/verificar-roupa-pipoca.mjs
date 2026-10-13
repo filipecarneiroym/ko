@@ -77,6 +77,8 @@ function componentes(indices) {
   return grupos;
 }
 
+export { componentes as componentesDaMalha };
+
 function topologia(posicoes, indices, selecionados) {
   const arestas = new Map();
   let menorAreaDupla = Infinity, degenerados = 0;
