@@ -40,6 +40,20 @@ export function carregarPipocaV5(pasta, variante = 'azul') {
   };
 }
 
+// Sola do pé em repouso, relativa à junta do tornozelo (m, eixos do projeto):
+// calcanhar e ponta, dos dois lados. Medida na malha da v5; comprimento e
+// largura com folga (pé girado afundava ponta ou calcanhar ~1 cm). A altura
+// é exata: o pé plano da guarda fica a 0,0 cm do piso.
+// O pé não é centrado no tornozelo: avança 16 cm para fora e 6 cm para dentro.
+// Caixa inteira do pé (8 cantos): com o pé inclinado de lado, a borda acima
+// da sola desce mais que os cantos da sola.
+const sola = (z0, z1) => [-.15, .39].flatMap(x => [-.246, .02].flatMap(y => [z0, z1].map(z => new Vector3(x, y, z))));
+const SOLA = { E: sola(-.17, .07), D: sola(-.07, .17) };
+// Altura do ponto mais baixo das solas, dados lado, rotação e posição de cada tornozelo.
+export function alturaSolas(pes) {
+  return Math.min(...pes.flatMap(({ lado, G, P }) => SOLA[lado].map(s => P.add(s.applyRotationQuaternion(G)).y)));
+}
+
 // Osso -> filho que dá a direção do osso (para alinhar os dois esqueletos).
 const DIRECAO = { quadril: 'tronco', tronco: 'peito', peito: 'cabeca' };
 for (const l of 'ED') Object.assign(DIRECAO, { [`braco_${l}`]: `antebraco_${l}`, [`antebraco_${l}`]: `mao_${l}`,
@@ -103,6 +117,10 @@ export function retargetarClips(clips, ossosAntigos, ossosNovos) {
       const repouso = ossos => Math.min(ossos[idx('pe_E')].mundo[1], ossos[idx('pe_D')].mundo[1]);
       raizNova[1] += k * (tornozelo(ossosAntigos, globalAntigo, raiz) - repouso(ossosAntigos))
         - (tornozelo(ossosNovos, globalNovo, raizNova) - repouso(ossosNovos));
+      // Nenhum ponto da sola abaixo do piso (pé girado afundava ponta/calcanhar).
+      const g = [Vector3.FromArray(raizNova)];
+      for (let i = 1; i < n; i++) g.push(g[ossosNovos[i].pai].add(Vector3.FromArray(ossosNovos[i].posicao).applyRotationQuaternion(globalNovo[ossosNovos[i].pai])));
+      raizNova[1] += Math.max(0, -alturaSolas(['E', 'D'].map(lado => ({ lado, G: globalNovo[idx(`pe_${lado}`)], P: g[idx(`pe_${lado}`)] }))));
       pos.push(...raizNova);
     }
     const canais = [];

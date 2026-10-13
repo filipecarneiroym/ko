@@ -141,6 +141,30 @@ def ilhas_uv(bm, uv):
     return grupos
 
 
+def tornozelos_suaves(obj, faixa=(-.045, .045), raio=.13):
+    """Pele do tornozelo: a parte canela+pé de cada vértice perto da junta é
+    redistribuída por uma rampa suave ao longo da canela (faixa em metros da
+    v5, ~±7 cm no jogo). O calor dos ossos deixava a troca abrupta e o pé
+    apontado vincava a pele (pedido do usuário: suavizar a dobra do pé)."""
+    grupos = {g.name: g for g in obj.vertex_groups}
+    for lado in 'ED':
+        canela, pe = grupos[f'canela_{lado}'], grupos[f'pe_{lado}']
+        tornozelo = Vector(JUNTAS[f'pe_{lado}'])
+        eixo = (Vector(JUNTAS[f'canela_{lado}'])-tornozelo).normalized()   # para cima, ao joelho
+        for v in obj.data.vertices:
+            if (v.co-tornozelo).length > raio:
+                continue
+            w = {g.group: g.weight for g in v.groups}
+            soma = w.get(canela.index, 0)+w.get(pe.index, 0)
+            if soma < 1e-4:
+                continue
+            d = (v.co-tornozelo).dot(eixo)                                  # >0 acima da junta
+            t = min(1, max(0, (d-faixa[0])/(faixa[1]-faixa[0])))
+            t = t*t*(3-2*t)
+            canela.add([v.index], soma*t, 'REPLACE')
+            pe.add([v.index], soma*(1-t), 'REPLACE')
+
+
 def desdobrar(obj):
     """Costuras planejadas (pipoca_v5_uv), mínimo estiramento, densidade
     igual, cabeça e rosto x2,2 (orelhas não: ocupavam o atlas), empacotar pelo contorno."""
@@ -279,6 +303,7 @@ def main():
     bpy.ops.object.mode_set(mode='WEIGHT_PAINT')
     bpy.ops.object.vertex_group_smooth(group_select_mode='ALL', factor=.5, repeat=4)
     bpy.ops.object.mode_set(mode='OBJECT')
+    tornozelos_suaves(baixo)
     bpy.ops.object.vertex_group_limit_total(limit=4)
     bpy.ops.object.vertex_group_normalize_all(lock_active=False)
 
