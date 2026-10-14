@@ -46,15 +46,48 @@ trechos completos. Mapas locais em `tmp/analise-video-completo/minuto-*.jpg`.
   completa extra antes do contato.
 - Chute aéreo estende no quadro 5 e mantém a pose até o quadro 16,
   acompanhando a janela ativa já definida pelo motor.
-- Pé do chute aéreo alinhado à altura da caixa de acerto; segundo chute
-  comum com maior extensão da perna e menor torção do quadril.
+- Pé do chute aéreo alinhado à altura da caixa de acerto.
 - Chutes comuns e furacão normal têm rastro fino e translúcido, sem névoa
   de fogo cobrindo a perna. Os impactos continuam na camada de efeitos SF4.
-- Mantidos os dois contatos do chute comum da Lola: são parte do repertório
-  atual, não uma reprodução exata de um golpe específico do SF4.
+- Revisão do K em 14/10: no trecho do Ryu do terceiro vídeo, por volta
+  de 00:37, há uma extensão e recolhimento da mesma perna. O K comum da
+  Lola agora acompanha essa referência: uma perna chuta, a outra sustenta
+  o corpo, sem disparar automaticamente o chute da outra perna.
+  A câmera fica em -Z: olhando para +X, usa D; olhando para -X, usa E,
+  mantendo a perna que chuta voltada para a tela. A seleção é só visual.
 
-Dano, velocidade, colisão, duração e comandos não foram alterados nesta
-etapa. A aprovação visual depende de Filipe jogar.
+O K mantém duração de 24 quadros e contato nos quadros 6–8, com dano 30.
+Foi removido o segundo contato automático dos quadros 12–14 (dano 35),
+junto com sua animação. A aprovação visual depende de Filipe jogar.
+
+## P e F — revisão de 14/10
+
+O soco básico P foi refeito na v5: extensão rápida nos quadros ativos 3–5,
+cotovelo quase reto (99% do alcance anatômico), outra luva protegendo o
+rosto, recolhimento e guarda no quadro 12. Antes, a extensão era de 87%.
+A luva continua dentro da caixa do motor, sem aumentar o alcance da regra.
+O segundo soco do combo, o soco baixo e o Focus já estendiam o braço;
+os testes conferem extensão acima de 97% e recolhimento nos dois lados.
+Socos e soltura do Focus usam rastro fino e translúcido, sem chama cobrindo
+a luva. A posição do membro é atualizada antes do efeito, evitando linhas
+atravessando a arena ao iniciar o golpe.
+
+P inicia um único soco por toque; baixo + P soca agachada; no ar, P é soco
+aéreo. Novo toque após contato pode emendar no segundo soco. Segurar P
+não dispara sozinho os dois braços. F é Focus, com três níveis de carga,
+soltura, absorção de um golpe e cancelamento em passo. As regras gerais
+do Focus foram comparadas com o manual oficial da Capcom:
+https://static.capcom.com/manuals/ssfiv/SSFIV_3DS_DMNL_EN.pdf
+O manual é da edição 3DS; não determina números exatos da versão mobile.
+Os tempos e danos continuam sendo a calibração própria do K.O.
+O rosto da guarda herdada apontava cerca de 20° para baixo; durante o
+segundo soco, o giro do corpo inclinava ainda mais o olhar. Guarda,
+deslocamento, socos, chutes de chão, Hadouken e Focus agora mantêm o
+focinho na direção do adversário, com leve elevação na guarda baixa.
+Quedas, giros dos especiais e levantada preservam suas poses próprias.
+Na levantada, a guarda é fechada no último quadro efetivamente mostrado
+pelo motor (39), e a correção do piso mede também intervalos de 1/8 de
+quadro para preservar o arco rápido sem afundar o modelo entre poses.
 
 ## Segundo vídeo enviado por Filipe
 

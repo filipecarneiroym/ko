@@ -33,7 +33,8 @@ Cancelar um especial que encostou com Focus custa 500/1000. No ar, o
 cancelamento interrompe a subida e inicia o passo, descendo pela gravidade,
 sem mudar a posição instantaneamente.
 
-Os GLBs jogáveis têm 38 clipes e 20 ossos. Estudos antigos mantêm a calibração
+Os GLBs jogáveis têm 39 clipes e 20 ossos, incluindo uma variante visual do
+K para chutar com a perna voltada à tela em ambas as faces. Estudos antigos mantêm a calibração
 com que foram assados. Novos comandos usam os mesmos bits combinados dos
 quatro botões, preservando o formato das entradas online. A máquina também
 usa os novos golpes por comandos.

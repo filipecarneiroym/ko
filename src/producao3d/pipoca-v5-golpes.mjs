@@ -220,6 +220,17 @@ export function criarGolpesV5(ossos, parado, simulador) {
   const ZE = guarda.z, ZD = tras.z;
   const clips = {};
 
+  // Jab com extensão quase completa, sem hiperestender o cotovelo.
+  // A outra luva permanece protegendo o rosto e os pés ficam plantados.
+  const jab = (x, giro, inclinacao) => ({ giro, inclinacao, pelve: v(.025, 0, 0),
+    bracos: { E: { alvo: v(x, -.015, -.02), cotovelo: v(.1, -.8, -.3) } } });
+  clips.p1 = animar('p1', 12, [
+    { q: 0 }, { q: 2, ...jab(.38, -.1, -.025) },
+    { q: 3, ...jab((B1 + B2) * .995, -.22, -.055) },
+    { q: 5, ...jab((B1 + B2) * .995, -.22, -.055) },
+    { q: 8, ...jab(.35, -.06, -.015) }, { q: 12 },
+  ]);
+
   // Caminhada de luta: guarda firme, elevação baixa e sola de apoio parada
   // no mundo. A velocidade vem da distância do motor, inclusive ao recuar.
   // Duas transferências de apoio em 24 quadros, em vez do ciclo antigo de 12.
@@ -251,23 +262,27 @@ export function criarGolpesV5(ossos, parado, simulador) {
         valores: i === 0 ? raizMarcha : temposMarcha.flatMap(() => o.posicao) },
     ]) } };
 
-  // k1: dois chutes médios (24 quadros), perna E nas janelas 6-8, D em 12-14.
+  // K comum: uma extensão da perna E e recolhimento; D sustenta o corpo.
   clips.k1 = animar('k1', 24, [
     { q: 0 },
     { q: 3, giro: -.25, inclinacao: .08, pelve: v(-.03, .02, 0), pernas: { E: { tornozelo: v(.42, .82, ZE + .12), joelho: v(1, .8, 0), pe: 'plano' } } },
     { q: 6, giro: -.5, inclinacao: .26, pelve: v(.03, .03, 0), pernas: { E: { tornozelo: v(1.28, 1.02, ZE + .16), joelho: v(0, 1, 0), pe: 'esticado' } } },
     { q: 8, giro: -.5, inclinacao: .26, pelve: v(.04, .03, 0), pernas: { E: { tornozelo: v(1.3, 1.02, ZE + .16), joelho: v(0, 1, 0), pe: 'esticado' } } },
-    // Troca de pernas em 4 quadros (o motor fixa E em 6-8 e D em 12-14): a E
-    // recolhe em arco por 2 quadros (antes descia 0,8 m em 1 só) e pousa; só
-    // então a D dobra e estica. Sempre um pé no chão.
-    { q: 9, giro: -.2, inclinacao: .1, pelve: v(.03, .02, 0), pernas: { E: { tornozelo: v(.78, .72, ZE + .13), joelho: v(1, 1, 0), pe: 'plano' } } },
-    { q: 10, giro: .05, inclinacao: .06, pelve: v(.06, .01, 0) },
-    { q: 11, giro: .25, inclinacao: .16, pelve: v(.03, .02, 0), pernas: { D: { tornozelo: v(.3, .98, ZD - .1), joelho: v(1, 1.3, 0), pe: 'plano' } } },
-    { q: 12, giro: .45, inclinacao: .26, pelve: v(.03, .03, 0), pernas: { D: { tornozelo: v(1.36, 1.02, -.02), joelho: v(0, 1, 0), pe: 'esticado' } } },
-    { q: 14, giro: .45, inclinacao: .26, pelve: v(.04, .03, 0), pernas: { D: { tornozelo: v(1.38, 1.02, -.02), joelho: v(0, 1, 0), pe: 'esticado' } } },
-    { q: 15, giro: .25, inclinacao: .08, pelve: v(.03, .01, 0), pernas: { D: { tornozelo: v(.22, .72, ZD - .08), joelho: v(1, 1, 0), pe: 'plano' } } },
-    { q: 18, giro: .05, inclinacao: .02, pelve: v(.01, 0, 0) },
+    { q: 11, giro: -.25, inclinacao: .12, pelve: v(.02, .02, 0), pernas: { E: { tornozelo: v(.5, .74, ZE + .1), joelho: v(1, .8, 0), pe: 'plano' } } },
+    { q: 14, giro: -.05, inclinacao: .03, pelve: v(0, .01, 0), pernas: { E: { tornozelo: v(.36, .32, ZE + .02), joelho: v(1, .3, 0), pe: 'plano' } } },
+    { q: 16 },
     { q: 24 },
+  ]);
+  // Variante com a outra perna: a câmera fica em -Z. A v5 roda 180°
+  // ao trocar de face; selecionar D em +X e E em -X mantém o chute visível.
+  clips.k1D = animar('k1D', 24, [
+    { q: 0 },
+    { q: 3, giro: .25, inclinacao: .08, pelve: v(-.03, .02, 0), pernas: { D: { tornozelo: v(.25, .82, ZD - .12), joelho: v(1, .8, 0), pe: 'plano' } } },
+    { q: 6, giro: .5, inclinacao: .26, pelve: v(.03, .03, 0), pernas: { D: { tornozelo: v(1.28, 1.02, ZD - .16), joelho: v(0, 1, 0), pe: 'esticado' } } },
+    { q: 8, giro: .5, inclinacao: .26, pelve: v(.04, .03, 0), pernas: { D: { tornozelo: v(1.3, 1.02, ZD - .16), joelho: v(0, 1, 0), pe: 'esticado' } } },
+    { q: 11, giro: .25, inclinacao: .12, pelve: v(.02, .02, 0), pernas: { D: { tornozelo: v(.4, .74, ZD - .1), joelho: v(1, .8, 0), pe: 'plano' } } },
+    { q: 14, giro: .05, inclinacao: .03, pelve: v(0, .01, 0), pernas: { D: { tornozelo: v(-.2, .32, ZD - .02), joelho: v(1, .3, 0), pe: 'plano' } } },
+    { q: 16 }, { q: 24 },
   ]);
 
   // k2: chute alto de perna E (28 quadros), janela 7-10.
@@ -502,8 +517,8 @@ export function criarGolpesV5(ossos, parado, simulador) {
   const relatorio = {};
   for (const nome of ['k1', 'k2', 'ck']) {
     const golpe = simulador.LUTADORES.pipoca.golpes[nome];
-    relatorio[nome] = golpe.janelas.map((janela, k) => {
-      const lado = nome === 'k1' && k === 1 ? 'D' : 'E';
+    relatorio[nome] = golpe.janelas.map(janela => {
+      const lado = 'E';
       const [bx, by, bw, bh] = janela.caixa;
       const caixa = { x0: bx / PX, x1: (bx + bw) / PX, y0: -(by + bh) / PX, y1: -by / PX };
       const quadros = [];
@@ -540,7 +555,8 @@ export function emendarLevantada(clip, guarda) {
     const tamanho = canal.tipo === 'rotation' ? 4 : 3;
     const de = canal.valores.slice(32 * tamanho, 33 * tamanho), para = fonte.valores.slice(0, tamanho);
     for (let q = 33; q <= clip.duracaoQuadros; q++) {
-      const peso = suave(Math.min(1, (q - 32) / 8));
+      // 39 é o último quadro que o motor mostra antes de trocar para parado.
+      const peso = suave(Math.min(1, (q - 32) / 7));
       const valor = tamanho === 4
         ? Quaternion.Slerp(Quaternion.FromArray(de), Quaternion.FromArray(para), peso).normalize().asArray()
         : Vector3.Lerp(Vector3.FromArray(de), Vector3.FromArray(para), peso).asArray();
@@ -555,7 +571,7 @@ export function emendarLevantada(clip, guarda) {
 // para agachar, a cabeça ia junto e o olhar caía para o chão.
 // seguirGiro=false: a cabeça fica de frente para a adversária mesmo com o
 // quadril girado (soco agachado); elevar > 0 levanta o queixo (olhar no rosto dela).
-export function olharParaFrente(ossos, clip, guarda, { seguirGiro = true, elevar = 0 } = {}) {
+export function olharParaFrente(ossos, clip, guarda, { seguirGiro = true, elevar = 0, nivelar = false } = {}) {
   const n = ossos.length, cab = ossos.findIndex(o => o.nome === 'cabeca');
   const canal = (c, i, t) => c.canais.find(k => k.osso === i && k.tipo === t);
   const globais = (c, q) => {
@@ -567,6 +583,12 @@ export function olharParaFrente(ossos, clip, guarda, { seguirGiro = true, elevar
     return G;
   };
   const G0 = globais(guarda, 0);
+  // A guarda retargetada inclinava o rosto cerca de 20° para baixo.
+  // Nivelar o eixo anatômico do focinho, preservando o rolamento da cabeça.
+  const direcao = v(1, 0, 0).applyRotationQuaternion(G0[cab]);
+  const semGiro = Quaternion.RotationAxis(v(0, 1, 0), -Math.atan2(-direcao.z, direcao.x)).multiply(G0[cab]);
+  const frontal = v(1, 0, 0).applyRotationQuaternion(semGiro);
+  const neutra = Quaternion.RotationAxis(v(0, 0, 1), -Math.atan2(frontal.y, frontal.x)).multiply(semGiro);
   const rc = canal(clip, cab, 'rotation'), valores = rc.valores.slice();
   for (let q = 0; q < rc.tempos.length; q++) {
     const G = globais(clip, q);
@@ -574,7 +596,9 @@ export function olharParaFrente(ossos, clip, guarda, { seguirGiro = true, elevar
     const frente = v(1, 0, 0).applyRotationQuaternion(G[0]);
     const giro = seguirGiro ? Quaternion.RotationAxis(v(0, 1, 0), Math.atan2(-frente.z, frente.x)) : Quaternion.Identity();
     const g0frente = v(1, 0, 0).applyRotationQuaternion(G0[0]);
-    const desejada = Quaternion.RotationAxis(v(0, 0, 1), elevar).multiply(giro.multiply(Quaternion.RotationAxis(v(0, 1, 0), -Math.atan2(-g0frente.z, g0frente.x)))).multiply(G0[cab]).normalize();
+    const base = nivelar ? giro.multiply(neutra)
+      : giro.multiply(Quaternion.RotationAxis(v(0, 1, 0), -Math.atan2(-g0frente.z, g0frente.x))).multiply(G0[cab]);
+    const desejada = Quaternion.RotationAxis(v(0, 0, 1), elevar).multiply(base).normalize();
     const pai = ossos[cab].pai;
     Quaternion.Inverse(G[pai]).multiply(desejada).normalize().toArray(valores, q * 4);
   }

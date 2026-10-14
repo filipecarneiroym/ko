@@ -80,7 +80,8 @@ export async function carregarModelo(buffer, id, simulador, scene) {
         // Estudos históricos não trazem os golpes novos; só o laboratório usa
         // essa reserva. Os GLBs jogáveis exportam os clipes próprios.
         const reservas = { foc: 'p2', espEx: 'esp', dpEx: 'dp', tatsuEx: 'tatsu', ultra: 'esp' };
-        const grupo = grupos.get(pose.clip) || grupos.get(reservas[pose.clip]);
+        const nomeClip = id === 'pipoca' && pose.clip === 'k1' && pose.face > 0 && grupos.has('k1D') ? 'k1D' : pose.clip;
+        const grupo = grupos.get(nomeClip) || grupos.get(reservas[pose.clip]);
         if (!grupo) return;
         const distanciaCiclo = ciclosPorDistancia.get(grupo.name);
         const marchaAtiva = !!distanciaCiclo;
@@ -102,8 +103,8 @@ export async function carregarModelo(buffer, id, simulador, scene) {
           // as poses em 4 quadros, antes da janela ativa. Defesa e dano entram na hora.
           // (Rasteira e chute aéreo ficam de fora: a fusão perto do piso o atravessaria.)
           // Chute agachado (ck) também funde ao voltar para a guarda ou para o agachar.
-          const trocaChute = !!atual && !emendaChute && (/^(k1|k2)$/.test(grupo.name)
-            || /^(k1|k2)$/.test(atual.name) && ['parado', 'andando', 'recuo'].includes(grupo.name)
+          const trocaChute = !!atual && !emendaChute && (/^(k1|k1D|k2)$/.test(grupo.name)
+            || /^(k1|k1D|k2)$/.test(atual.name) && ['parado', 'andando', 'recuo'].includes(grupo.name)
             || atual.name === 'ck' && ['parado', 'agachado'].includes(grupo.name));
           const PASSADAS = ['parado', 'andando', 'recuo', 'pousando']; // corrida entra direto na passada certa
           const trocaPassada = !!atual && PASSADAS.includes(atual.name) && PASSADAS.includes(grupo.name);

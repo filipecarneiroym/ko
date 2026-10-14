@@ -61,13 +61,17 @@ export function criarEstudoChutes(guarda, jab, forte, defesa, reacao, marcha, k1
     }
   }
   for (const [nome, lados] of Object.entries(LADO_POR_JANELA)) {
-    assert.equal(simulador.LUTADORES.pipoca.golpes[nome].janelas.length, lados.length, `${nome} com janela por perna`);
+    const quantidade = simulador.LUTADORES.pipoca.golpes[nome].janelas.length;
+    // Os estudos históricos contêm a antiga sequência de duas pernas.
+    // A v5 substitui esse clipe; no estudo, conferir apenas as janelas ativas.
+    assert.ok(quantidade > 0 && quantidade <= lados.length, `${nome} com janela por perna disponível`);
   }
   dados.extras.status = 'estudo-guarda-socos-defesa-reacao-marcha-chutes';
   assert.ok(dados.extras.corpo.verticesMistos > 0, 'Os chutes preservam o corpo contínuo e seus pesos graduais');
   dados.extras.animacoes = 'Guarda, dois socos, defesa, reação, marcha e chutes por IK; outros 23 clips preservados.';
   dados.extras.chutes = {
-    k1: { ladoJanelas: LADO_POR_JANELA.k1, alturaJanelas: ['media', 'media'], duracaoQuadros: k1.duracaoQuadros,
+    k1: { ladoJanelas: LADO_POR_JANELA.k1.slice(0, simulador.LUTADORES.pipoca.golpes.k1.janelas.length),
+      alturaJanelas: simulador.LUTADORES.pipoca.golpes.k1.janelas.map(() => 'media'), duracaoQuadros: k1.duracaoQuadros,
       apoio: 'Perna oposta ancorada durante a extensão', impulso: 'Quadril transladado e girado dentro da raiz' },
     k2: { ladoJanelas: LADO_POR_JANELA.k2, alturaJanelas: ['alta'], duracaoQuadros: k2.duracaoQuadros,
       apoio: 'Perna oposta ancorada durante a extensão', impulso: 'Quadril transladado e girado dentro da raiz' },

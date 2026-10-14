@@ -16,20 +16,39 @@ for (const cor of ['azul', 'vermelha']) test(`chutes Lola ${cor}: pé dentro da 
     for (const golpe of ['k1', 'k2', 'ck', 'ak']) for (const face of [1, -1]) {
       const s = K.novo({ lutadores: ['pipoca', 'pipoca'], treino: true }), l = s.p[0];
       Object.assign(l, { estado: 'golpe', golpe, face, y: golpe === 'ak' ? 48 * K.U : 0 });
-      for (const [i, janela] of K.LUTADORES.pipoca.golpes[golpe].janelas.entries()) {
+      for (const janela of K.LUTADORES.pipoca.golpes[golpe].janelas) {
         for (let t = janela.de; t <= janela.ate; t++) {
           l.t = t;
           const antes = JSON.stringify(s);
           modelo.atualizar(descreverPose(l, K, s));
           assert.equal(JSON.stringify(s), antes, 'pose não muda a simulação');
-          const no = modelo.osso(golpe === 'k1' && i === 1 ? 'pe_D' : 'pe_E'), cadeia = [];
+          const no = modelo.osso(golpe === 'k1' && face > 0 ? 'pe_D' : 'pe_E'), cadeia = [];
           for (let n = no; n; n = n.parent) cadeia.unshift(n);
           for (const n of cadeia) n.computeWorldMatrix(true);
           const p = no.getAbsolutePosition(), caixa = K.caixaHit(l, janela.caixa);
+          if (golpe === 'k1') {
+            const apoio = modelo.osso(face > 0 ? 'pe_E' : 'pe_D'), pais = [];
+            for (let n = apoio; n; n = n.parent) pais.unshift(n);
+            for (const n of pais) n.computeWorldMatrix(true);
+            assert.ok(p.z < apoio.getAbsolutePosition().z, 'perna que chuta está voltada para a câmera em -Z');
+          }
           const x = (caixa.x / K.U - K.LARGURA / 2) / 24, y = caixa.y / K.U / 24;
           assert.ok(p.x >= x - .08 && p.x <= x + caixa.w / K.U / 24 + .08
             && p.y >= y - .08 && p.y <= y + caixa.h / K.U / 24 + .08,
             `${golpe} q${t}, face ${face}: pé ${p.asArray()}, caixa ${[x, y, caixa.w / K.U / 24, caixa.h / K.U / 24]}`);
+        }
+      }
+      if (golpe === 'k1') {
+        let apoio;
+        for (let t = 0; t <= 24; t += .5) {
+          l.t = t;
+          modelo.atualizar(descreverPose(l, K, s));
+          const no = modelo.osso(face > 0 ? 'pe_E' : 'pe_D'), cadeia = [];
+          for (let n = no; n; n = n.parent) cadeia.unshift(n);
+          for (const n of cadeia) n.computeWorldMatrix(true);
+          const p = no.getAbsolutePosition();
+          apoio ??= p.clone();
+          assert.ok(p.subtract(apoio).length() < .015, `K q${t}: outra perna permanece apoiada`);
         }
       }
     }

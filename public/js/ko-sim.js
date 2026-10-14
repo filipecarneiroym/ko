@@ -47,7 +47,7 @@
       altura: 60, golpes: {
         p1: { dur: 12, cancel: { P: 'p2', S: 1 }, janelas: [P({ de: 3, ate: 5, dano: 35, hs: 14, bs: 9, caixa: [6, -50, 24, 10] })] },
         p2: { dur: 18, cancel: { K: 'k2', S: 1 }, janelas: [P({ de: 5, ate: 7, dano: 50, hs: 17, bs: 11, caixa: [6, -48, 28, 12] })] },
-        k1: { dur: 24, cancel: { S: 1 }, janelas: [P({ de: 6, ate: 8, dano: 30, hs: 15, caixa: [4, -30, 30, 12] }), P({ de: 12, ate: 14, dano: 35, hs: 18, caixa: [4, -30, 30, 12] })] },
+        k1: { dur: 24, cancel: { S: 1 }, janelas: [P({ de: 6, ate: 8, dano: 30, hs: 15, caixa: [4, -30, 30, 12] })] },
         k2: { dur: 28, cancel: { S: 1 }, janelas: [P({ de: 7, ate: 10, dano: 60, hs: 22, caixa: [2, -46, 32, 18], lanca: [30, 100] })] },
         cp: { dur: 10, cancel: { P: 'cp', K: 'ck', S: 1 }, janelas: [P({ de: 3, ate: 5, dano: 25, hs: 12, bs: 8, caixa: [6, -38, 24, 20] })] },
         ck: { dur: 26, janelas: [P({ de: 6, ate: 9, dano: 45, tipo: 'baixo', derruba: 1, caixa: [4, -10, 34, 10] })] },

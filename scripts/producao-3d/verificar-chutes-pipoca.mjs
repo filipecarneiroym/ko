@@ -85,7 +85,7 @@ export async function verificarChutes(bytes, simulador = K) {
     let amostras = 0, menorSola = Infinity, maiorErroSolaApoio = 0;
     for (const nome of ['k1', 'k2']) {
       const golpe = simulador.LUTADORES.pipoca.golpes[nome];
-      assert.equal(golpe.janelas.length, LADOS[nome].length);
+      assert.ok(golpe.janelas.length > 0 && golpe.janelas.length <= LADOS[nome].length);
       const relato = { dur: golpe.dur, janelas: golpe.janelas.map(j => [j.de, j.ate]), faces: {}, alcanceMaximo: { x: -Infinity } };
       for (const face of [1, -1]) {
         const guarda = ler('parado', 0, face);

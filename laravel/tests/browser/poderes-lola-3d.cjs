@@ -42,7 +42,11 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
       ['levantar-arco', 'levantando', 10], ['levantar-pouso', 'levantando', 14],
       ['derrota-final', 'derrotado', 60], ['derrota-invertida', 'derrotado', 60, -1],
       ['fim-partida', 'derrotado', 80], ['fim-apos-final', 'derrotado', 0],
-      ['chute-duplo-primeiro', 'k1', 6], ['chute-duplo-segundo', 'k1', 12],
+      ['chute-k-contato', 'k1', 6], ['chute-k-recolhe', 'k1', 12],
+      ['chute-k-guarda', 'k1', 20], ['chute-k-invertido', 'k1', 6, -1],
+      ['soco-p-contato', 'p1', 3], ['soco-p-recolhe', 'p1', 8], ['soco-p-invertido', 'p1', 3, -1],
+      ['soco-combo-contato', 'p2', 5], ['soco-baixo-contato', 'cp', 3],
+      ['focus-solta', 'foc', 19], ['focus-solta-invertido', 'foc', 19, -1],
       ['chute-alto-preparo', 'k2', 4], ['chute-alto-contato', 'k2', 7],
       ['rasteira-preparo', 'ck', 4], ['rasteira-contato', 'ck', 6],
       ['chute-aereo-inicio', 'ak', 5], ['chute-aereo-fim', 'ak', 16],
@@ -70,17 +74,21 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
         novo.p[0].poder = KOSim.PODER_MAX; novo.p[0].revanche = KOSim.ULTRA_MAX;
         Object.assign(lab.estado, novo);
         const B = KOSim.B;
-        const comandos = { k1: B.K, ck: B.D | B.K, esp: B.S, dp: B.R | B.S, tatsu: B.L | B.S, espEx: B.S | B.P, dpEx: B.R | B.S | B.P,
+        const comandos = { p1: B.P, cp: B.D | B.P, k1: B.K, ck: B.D | B.K, esp: B.S, dp: B.R | B.S, tatsu: B.L | B.S, espEx: B.S | B.P, dpEx: B.R | B.S | B.P,
           tatsuEx: B.L | B.S | B.P, sup: B.S | B.K, ultra: B.S | B.F, foc: B.F };
         if (['caido', 'levantando', 'derrotado'].includes(golpe)) {
           Object.assign(lab.estado.p[0], { estado: golpe, golpe: null, t: quadro });
-        } else if (['k2', 'ak'].includes(golpe)) {
+        } else if (['p2', 'k2', 'ak'].includes(golpe)) {
           // Inspeção do clipe inteiro, sem a queda interromper o chute aéreo.
           Object.assign(lab.estado.p[0], { estado: 'golpe', golpe, t: quadro, y: golpe === 'ak' ? 48 * KOSim.U : 0 });
         } else KOSim.passo(lab.estado, [comandos[golpe], 0]);
         let guarda = 0;
         while ((golpe === 'foc' ? lab.estado.p[0].focoCarga < quadro : lab.estado.p[0].t < quadro) && guarda++ < 180)
           KOSim.passo(lab.estado, [golpe === 'foc' ? B.F : 0, 0]);
+        if (nome.startsWith('focus-solta')) {
+          KOSim.passo(lab.estado, [0, 0]);
+          while (lab.estado.p[0].t < 19) KOSim.passo(lab.estado, [0, 0]);
+        }
         if (nome.startsWith('fim-')) {
           Object.assign(lab.estado, { fase: 'fim', vencedor: 1, fT: quadro, finalFeito: nome === 'fim-apos-final' ? 1 : 0 });
           Object.assign(lab.estado.p[0], { estado: nome === 'fim-partida' ? 'tonto' : 'derrotado', t: 0 });
@@ -105,14 +113,22 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
         assert.equal(piso.poeira, vivo ? 5 : 0);
         if (vivo) assert.ok(piso.y > 0 && piso.y < .05, 'onda rente ao piso');
       }
-      if (['k1', 'k2', 'ck', 'ak', 'tatsu'].includes(golpe)) {
+      if (['p1', 'p2', 'cp', 'ap', 'foc', 'k1', 'k2', 'ck', 'ak', 'tatsu'].includes(golpe)) {
         const efeitos = await page.evaluate(() => {
           const scene = globalThis.__laboratorio3d.scene;
           return { particulas: scene.getParticleSystemById('golpe-nevoa-0').emitRate,
             largura: scene.getMeshByName('golpe-rastro-0').diameter };
         });
-        assert.equal(efeitos.particulas, 0, 'chutes comuns sem névoa de fogo cobrindo a perna');
+        assert.equal(efeitos.particulas, 0, 'golpes comuns sem névoa de fogo cobrindo o membro');
         assert.ok(efeitos.largura <= .08, 'rastro discreto de movimento');
+        if (['p1', 'p2', 'cp', 'foc'].includes(golpe)) {
+          const extensao = await page.evaluate(() => {
+            const rastro = globalThis.__laboratorio3d.scene.getMeshByName('golpe-rastro-0');
+            const xs = rastro.getVerticesData('position').filter((_, i) => i % 3 === 0);
+            return rastro.isEnabled() ? Math.max(...xs) - Math.min(...xs) : 0;
+          });
+          assert.ok(extensao < 1.5, 'rastro da luva não atravessa a arena');
+        }
       }
       if (['esp', 'espEx', 'ultra'].includes(golpe)) {
         const visual = await page.evaluate(() => {

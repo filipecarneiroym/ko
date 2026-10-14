@@ -31,23 +31,23 @@
   "arquivos": {
     "azul": {
       "caminho": "public/modelos/estudos/pipoca-v5-azul.glb",
-      "bytes": 6526340,
-      "sha256": "7edab3e284a0595e9a6003f6eea214df451d86e2442008fb0513c06680757079",
+      "bytes": 6807448,
+      "sha256": "3c95c212475998cf8de9f106b6056531d0240620ff4dd6ea5db8c8b95450363c",
       "triangulos": 28346,
       "materiais": 1,
       "ossos": 20,
-      "clips": 38,
+      "clips": 39,
       "dentroDoTeto": true,
       "glbDentroDoAlvo": true
     },
     "vermelha": {
       "caminho": "public/modelos/estudos/pipoca-v5-vermelha.glb",
-      "bytes": 6541076,
-      "sha256": "3dfbd7a4028c0799428458844842a238e567f2d45e08eff1007cc83a79820770",
+      "bytes": 6822184,
+      "sha256": "972d974fcac3b88f9d6bfb7bda59abb25a66d401852a8928df4360432d22778f",
       "triangulos": 28346,
       "materiais": 1,
       "ossos": 20,
-      "clips": 38,
+      "clips": 39,
       "dentroDoTeto": true,
       "glbDentroDoAlvo": true
     }
@@ -88,45 +88,6 @@
               1.299,
               1.02,
               -0.204
-            ]
-          }
-        ],
-        "ok": true
-      },
-      {
-        "lado": "D",
-        "caixa": {
-          "x0": 0.16666666666666666,
-          "x1": 1.4166666666666667,
-          "y0": 0.75,
-          "y1": 1.25
-        },
-        "quadros": [
-          {
-            "q": 12,
-            "dentro": true,
-            "tornozelo": [
-              1.128,
-              1.056,
-              0.013
-            ]
-          },
-          {
-            "q": 13,
-            "dentro": true,
-            "tornozelo": [
-              1.133,
-              1.056,
-              0.014
-            ]
-          },
-          {
-            "q": 14,
-            "dentro": true,
-            "tornozelo": [
-              1.138,
-              1.057,
-              0.014
             ]
           }
         ],

@@ -173,6 +173,11 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
     for (const nome of nomes) {
       const no = modelo.osso?.(nome);
       if (!no) continue;
+      // O efeito é calculado antes do render: ler matrizes antigas criava
+      // um rastro atravessando a arena no primeiro quadro do soco.
+      const pais = [];
+      for (let n = no; n; n = n.parent) pais.unshift(n);
+      for (const n of pais) n.computeWorldMatrix(true);
       const p = no.getAbsolutePosition(), f = p.x * l.face;
       if (f > frente) { frente = f; melhor = { p, nome }; }
     }
@@ -229,7 +234,7 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
       estado.p.forEach((l, i) => {
         const d = lados[i], modelo = modelos[i];
         const hadouken = ['esp', 'espEx', 'ultra'].includes(l.golpe);
-        const chuteComum = ['k1', 'k2', 'ck', 'ak', 'tatsu'].includes(l.golpe);
+        const golpeComum = ['p1', 'p2', 'cp', 'ap', 'foc', 'k1', 'k2', 'ck', 'ak', 'tatsu'].includes(l.golpe);
         const solta = l.golpe === 'ultra' ? 25 : 10;
         d.carga.setEnabled(!!modelo && hadouken && l.estado === 'golpe' && l.t >= 4 && l.t < solta && !l.sumido);
         if (d.carga.isEnabled()) {
@@ -253,25 +258,27 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
         if (ativo) {
           const m = membro(modelo, l);
           // Trocou de pé ou mão no meio do golpe: recomeça o rastro (sem linha ligando os dois).
-          if (m && d.ativo && d.membro !== m.nome) d.rastro.reset();
+          const trocouMembro = m && d.ativo && d.membro !== m.nome;
           if (m) {
             // Rastro acompanha a velocidade do membro: forte no estalo, some quando desacelera.
             const veloc = d.membro === m.nome ? Vector3.Distance(d.ponta.position, m.p) : 0;
-            d.mat.alpha = chuteComum ? Math.min(.38, .1 + veloc * .8) : Math.min(1, .35 + veloc * 4.5);
+            d.mat.alpha = golpeComum ? Math.min(.38, .1 + veloc * .8) : Math.min(1, .35 + veloc * 4.5);
             d.ponta.position.copyFrom(m.p); d.membro = m.nome;
+            d.ponta.computeWorldMatrix(true);
+            if (trocouMembro || veloc > 1.5) d.rastro.reset();
           }
           if (!d.ativo || d.janela !== janela) {
-            const tipo = l.golpe === 'sup' ? 'super' : hadouken ? 'especial' : chuteComum ? 'chute' : FORTES.has(l.golpe) ? 'forte' : 'fraco';
+            const tipo = l.golpe === 'sup' ? 'super' : hadouken ? 'especial' : golpeComum ? 'chute' : FORTES.has(l.golpe) ? 'forte' : 'fraco';
             d.mat.emissiveColor = Color3.FromHexString(COR[tipo]);
-            d.rastro.diameter = chuteComum ? .07 : tipo === 'fraco' ? .12 : .2;
+            d.rastro.diameter = golpeComum ? .07 : tipo === 'fraco' ? .12 : .2;
             d.rastro.reset(); d.rastro.setEnabled(true); d.rastro.start();
-            const fogo = tipo !== 'fraco' && !hadouken && !chuteComum;
+            const fogo = tipo !== 'fraco' && !hadouken && !golpeComum;
             d.nevoa.color1 = fogo ? new Color4(1, .78, .35, .8) : new Color4(.8, .92, 1, .6);
             d.nevoa.color2 = fogo ? new Color4(1, .38, .1, .6) : new Color4(.5, .7, 1, .45);
             d.nevoa.colorDead = new Color4(0, 0, 0, 0);
           }
         } else if (d.ativo) { d.rastro.stop(); d.rastro.setEnabled(false); }
-        d.nevoa.emitRate = ativo && !chuteComum && !movimentoReduzido.matches ? 140 : 0;
+        d.nevoa.emitRate = ativo && !golpeComum && !movimentoReduzido.matches ? 140 : 0;
         if (ativo) d.nevoa.emitter = d.ponta.position.clone();
         d.ativo = ativo; d.janela = janela;
 

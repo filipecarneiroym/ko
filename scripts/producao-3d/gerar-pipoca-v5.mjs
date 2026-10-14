@@ -1,6 +1,7 @@
 // Pipoca v5 jogável: malha da arte final (preparar-jogo-pipoca-v5.py) com os
 // 31 movimentos de base e sete clipes próprios: Shoryuken, furacão, três EX,
-// Ultra e Focus. A locomoção e os golpes refinados substituem os herdados.
+// Ultra e Focus, mais uma variante visual do K para a perna voltada à tela.
+// A locomoção e os golpes refinados substituem os herdados.
 // Gera as duas roupas: azul (jogador) e vermelha (máquina / jogador 2).
 //   node scripts/producao-3d/gerar-pipoca-v5.mjs
 import assert from 'node:assert/strict';
@@ -32,18 +33,21 @@ export function gerarPipocaV5() {
     const baixos = { cp: [golpes.clips.agachado, null], defesaBaixa: [golpes.clips.agachado, null], ap: [golpes.clips.pulo, 14] };
     const clips = herdados.map(c => golpes.clips[c.nome]
       ?? (baixos[c.nome] ? pernasDe(v5.ossos, c, ...baixos[c.nome]) : joelhosParaFrente(v5.ossos, c)));
-    for (const nome of ['dp', 'tatsu', 'espEx', 'dpEx', 'tatsuEx', 'ultra', 'foc']) clips.push(golpes.clips[nome]);
-    // Olhar no oponente ao agachar e defender.
+    for (const nome of ['dp', 'tatsu', 'espEx', 'dpEx', 'tatsuEx', 'ultra', 'foc', 'k1D']) clips.push(golpes.clips[nome]);
+    // Olhar na parte superior do oponente, independente do giro do quadril.
     const guardaV5 = clips.find(c => c.nome === 'parado');
-    for (const nome of ['agachado', 'cp', 'defesaBaixa', 'ck', 'defesa', 'pousando', 'recuo', 'quebra']) {
+    for (const nome of ['parado', 'andando', 'corrida', 'p1', 'p2', 'k1', 'k1D', 'k2',
+      'esp', 'espEx', 'ultra', 'foc', 'agachado', 'cp', 'defesaBaixa', 'ck', 'defesa', 'pousando', 'recuo', 'quebra']) {
       const i = clips.findIndex(c => c.nome === nome);
-      clips[i] = olharParaFrente(v5.ossos, clips[i], guardaV5, nome === 'cp' ? { seguirGiro: false, elevar: .18 } : {});
+      clips[i] = olharParaFrente(v5.ossos, clips[i], guardaV5, {
+        seguirGiro: false, nivelar: true, elevar: ['agachado', 'cp', 'defesaBaixa', 'ck'].includes(nome) ? .14 : 0,
+      });
     }
-    emendarLevantada(clips.find(c => c.nome === 'levantando'), guardaV5);
+    emendarLevantada(clips.find(c => c.nome === 'levantando'), clips.find(c => c.nome === 'parado'));
     const primitiva = v5.primitivas[0];
     for (const c of clips) if (['rolando', 'caido', 'levantando', 'derrotado', 'vitimaFinal', 'sup', 'quebra'].includes(c.nome))
       acimaDoPiso(c, v5.ossos, { posicoes: primitiva.posicoes, juntas: primitiva.juntas, pesos: primitiva.pesos },
-        ['caido', 'levantando'].includes(c.nome) ? { subdivisoes: 4, passoVertices: 1 } : {});
+        ['caido', 'levantando'].includes(c.nome) ? { subdivisoes: 8, passoVertices: 1 } : {});
     const pesAoContrario = conferirPes(v5.ossos, clips);
     assert.deepEqual(pesAoContrario, [], `Pé ao contrário: ${JSON.stringify(pesAoContrario.slice(0, 20))}`);
     const dados = { nome: 'pipoca', ...v5, clips,
@@ -52,12 +56,12 @@ export function gerarPipocaV5() {
         animacoes: v13.extras.animacoes, retarget: 'v13 -> v5 (rotações; comprimentos da v5; pelve escalada pela perna)' } };
     const bytes = exportarGlb(dados);
     const doc = validarGlb(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.length), 'pipoca', K);
-    assert.equal(doc.animations.length, 38);
+    assert.equal(doc.animations.length, 39);
     const caminho = `public/modelos/estudos/pipoca-v5-${variante}.glb`;
     writeFileSync(resolve(raiz, caminho), bytes);
     const triangulos = doc.meshes.flatMap(m => m.primitives).reduce((n, p) => n + doc.accessors[p.indices].count / 3, 0);
     relatorio.arquivos[variante] = { caminho, bytes: bytes.length, sha256: sha(bytes), triangulos,
-      materiais: doc.materials.length, ossos: 20, clips: 38,
+      materiais: doc.materials.length, ossos: 20, clips: 39,
       dentroDoTeto: triangulos <= 40000, glbDentroDoAlvo: bytes.length <= 8 * 1024 * 1024 };
   }
   writeFileSync(resolve(pastaV5, 'integracao.json'), JSON.stringify(relatorio, null, 2) + '\n');
