@@ -17,6 +17,19 @@
   const dificuldadeSalva = guarda(() => localStorage.getItem('ko-dificuldade'));
   cfg.dificuldade = KOCPU.PERFIS[dificuldadeSalva] ? dificuldadeSalva : 'medio';
   const versus = cfg.modo === 'versus';
+  // Arcade: 5 lutas seguidas contra a máquina, adversário sorteado e
+  // dificuldade subindo. Versus CPU e versus 2P escolhem os dois lutadores.
+  const arcadeModo = cfg.modo === 'arcade';
+  const contraMaquina = cfg.modo === 'cpu' || arcadeModo;
+  const escolheDois = versus || cfg.modo === 'cpu';
+  const ARCADE = ['facil', 'facil', 'medio', 'medio', 'dificil'];
+  const arcade = { etapa: 0, adversario: null };
+  function sortearAdversario(meu) {
+    const com3d = prontos.filter((id) => window.KO3D?.disponivel?.([id]) !== false);
+    const outros = com3d.filter((id) => id !== meu && id !== arcade.adversario);
+    const lista = outros.length ? outros : com3d.length ? com3d : [meu];
+    return lista[(Math.random() * lista.length) | 0];
+  }
   const pads = KOControle.criar({
     carregar: (id) => guarda(() => JSON.parse(localStorage.getItem('ko-pad:' + id))),
     salvar: (id, mapa) => guarda(() => localStorage.setItem('ko-pad:' + id, JSON.stringify(mapa))),
@@ -347,11 +360,11 @@
     const s = K.novo({ lutadores: [d.lh, d.lc], treino: cfg.modo === 'treino' });
     luta = {
       s, online, numero: d.n, cenario: d.c, atraso: d.d || 0, entradas: [[], []], minhas: [], recebidoAte: online ? d.d - 1 : -1,
-      cpu: cfg.modo === 'cpu' ? KOCPU.criar(K, cfg.dificuldade) : null, dificuldade: cfg.dificuldade, sobra: 0, ultimo: performance.now(), hashes: {}, parado: 0, aviso: '', fimEm: 0,
+      cpu: contraMaquina ? KOCPU.criar(K, arcadeModo ? ARCADE[arcade.etapa] : cfg.dificuldade) : null, dificuldade: cfg.dificuldade, sobra: 0, ultimo: performance.now(), hashes: {}, parado: 0, aviso: '', fimEm: 0,
     };
     if (online) for (let f = 0; f < luta.atraso; f++) { luta.entradas[0][f] = 0; luta.entradas[1][f] = 0; luta.minhas[f] = 0; }
     prepararGraficos(luta, [d.lh, d.lc], d.c);
-    if (!online) { nomes[0] = cfg.eu; nomes[1] = versus ? 'Jogador 2' : cfg.modo === 'cpu' ? 'CPU · ' + KOCPU.PERFIS[cfg.dificuldade].nome : 'Boneco'; }
+    if (!online) { nomes[0] = cfg.eu; nomes[1] = versus ? 'Jogador 2' : arcadeModo ? 'Luta ' + (arcade.etapa + 1) + '/' + ARCADE.length + ' · ' + KOCPU.PERFIS[ARCADE[arcade.etapa]].nome : cfg.modo === 'cpu' ? 'CPU · ' + KOCPU.PERFIS[cfg.dificuldade].nome : 'Boneco'; }
     modoJogo();
     tratarEventos(s.ev);
   }
@@ -586,6 +599,9 @@
         <div class="acoes">
           ${online && !luta.resultadoSalvo && !luta.salvando && !luta.dessincronizou ? '<button class="botao botao-sec" data-acao="confirmar">Confirmar resultado</button>' : ''}
           ${online ? `<button class="botao" data-acao="revanche" ${r[meuLado] ? 'disabled' : ''}>${r[meuLado] ? (r[1 - meuLado] ? 'Bora!' : 'Esperando o amigo…') : (r[1 - meuLado] ? 'Aceitar revanche!' : 'Revanche')}</button>`
+            : arcadeModo ? (venci && arcade.etapa + 1 >= ARCADE.length ? '<p class="vencedor-selo">🏆 Arcade completo!</p><button class="botao" data-acao="arcade-novo">Jogar o arcade de novo</button>'
+              : venci ? `<button class="botao" data-acao="arcade-proxima">Próxima luta (${arcade.etapa + 2}/${ARCADE.length})</button>`
+              : '<button class="botao" data-acao="denovo">Continuar</button>')
             : `<button class="botao" data-acao="denovo">Jogar de novo</button><button class="botao botao-sec" data-acao="trocar">Trocar lutador</button>`}
           <a class="botao botao-sec" href="${cfg.inicio}">Sair</a>
         </div>
@@ -595,6 +611,10 @@
     painel.querySelector('[data-acao="confirmar"]')?.addEventListener('click', () => salvarResultado(luta));
     painel.querySelector('[data-acao="denovo"]')?.addEventListener('click', () => comecarLocal(estadoSala.minhaEscolha));
     painel.querySelector('[data-acao="trocar"]')?.addEventListener('click', () => { encerrarLuta(); telaEscolha(); });
+    painel.querySelector('[data-acao="arcade-proxima"]')?.addEventListener('click', () => {
+      arcade.etapa++; arcade.adversario = sortearAdversario(estadoSala.minhaEscolha); comecarLocal(estadoSala.minhaEscolha);
+    });
+    painel.querySelector('[data-acao="arcade-novo"]')?.addEventListener('click', () => { arcade.etapa = 0; arcade.adversario = null; encerrarLuta(); telaEscolha(); });
     if (online && r[0] && r[1]) {
       estadoSala.revanche = [false, false]; estadoSala.numero = luta.numero + 1;
       estadoSala.euPronto = estadoSala.elePronto = false;
@@ -652,7 +672,7 @@
   };
 
   function telaEscolha(recado) {
-    if (versus) primeiroLocal = null;
+    if (escolheDois) primeiroLocal = null;
     painel.dataset.tela = 'escolha';
     painel.className = 'painel painel-escolha';
     const cartas = prontos.map((id) => {
@@ -668,7 +688,7 @@
     painel.innerHTML = `
       <div class="escolha escolha-sf4">
         <div class="palco" aria-hidden="true">${figura(1)}${figura(2)}</div>
-        <header><h2>Escolha seu lutador</h2>${recado ? `<p class="recado">${esc(recado)}</p>` : ''}</header>
+        <header><h2 id="titulo-escolha">${arcadeModo ? 'Arcade · escolha seu lutador' : 'Escolha seu lutador'}</h2>${recado ? `<p class="recado">${esc(recado)}</p>` : ''}</header>
         ${cfg.modo === 'cpu' ? `<div class="dificuldade" role="group" aria-label="Dificuldade do computador">${Object.entries(KOCPU.PERFIS).map(([id, perfil]) => `<button type="button" class="botao botao-sec" data-nivel="${id}" aria-pressed="${cfg.dificuldade === id}">${perfil.nome}</button>`).join('')}</div>` : ''}
         <div class="grade">${cartas}</div>
         <footer>
@@ -702,14 +722,14 @@
     $('#pronto').addEventListener('click', () => {
       if (!estadoSala.minhaEscolha) return;
       modoJogo(); tom(880, 0.1, 'square', 0.1);
-      if (versus) {
+      if (escolheDois) {
         if (!primeiroLocal) {
           primeiroLocal = estadoSala.minhaEscolha;
           estadoSala.minhaEscolha = null;
           marcarEscolhas();
           return;
         }
-        if (estadosPads.some((p) => !p.conectado || !p.mapeado)) return;
+        if (versus && estadosPads.some((p) => !p.conectado || !p.mapeado)) return;
       }
       if (cfg.modo !== 'online') return comecarLocal(estadoSala.minhaEscolha);
       estadoSala.euPronto = true;
@@ -758,10 +778,12 @@
       b.classList.toggle('minha', b.dataset.id === estadoSala.minhaEscolha);
       b.classList.toggle('dele', b.dataset.id === estadoSala.escolhaDele);
     });
-    const um = versus ? primeiroLocal || estadoSala.minhaEscolha : estadoSala.minhaEscolha;
-    const dois = cfg.modo === 'online' ? estadoSala.escolhaDele : versus ? (primeiroLocal ? estadoSala.minhaEscolha : null) : um;
-    const rotulo2 = cfg.modo === 'online' ? (nomes[1 - meuLado] || 'Amigo') : versus ? '2P' : cfg.modo === 'cpu' ? 'CPU' : 'Treino';
-    mostrarDestaque(1, um, versus ? '1P' : (cfg.eu || '1P'), cfg.modo === 'online' ? estadoSala.euPronto : versus && !!primeiroLocal);
+    const um = escolheDois ? primeiroLocal || estadoSala.minhaEscolha : estadoSala.minhaEscolha;
+    const dois = cfg.modo === 'online' ? estadoSala.escolhaDele : escolheDois ? (primeiroLocal ? estadoSala.minhaEscolha : null) : arcadeModo ? null : um;
+    const rotulo2 = cfg.modo === 'online' ? (nomes[1 - meuLado] || 'Amigo') : versus ? '2P' : arcadeModo ? '? · sorteio' : contraMaquina ? 'CPU' : 'Treino';
+    mostrarDestaque(1, um, versus ? '1P' : (cfg.eu || '1P'), cfg.modo === 'online' ? estadoSala.euPronto : escolheDois && !!primeiroLocal);
+    const titulo = $('#titulo-escolha');
+    if (titulo && cfg.modo === 'cpu') titulo.textContent = primeiroLocal ? 'Escolha o lutador da máquina' : 'Escolha seu lutador';
     mostrarDestaque(2, dois, rotulo2, cfg.modo === 'online' && estadoSala.elePronto);
     const det = $('#detalhe'), st = STATUS[estadoSala.minhaEscolha];
     if (det) det.innerHTML = st ? `<strong>${esc(cfg.lutadores[estadoSala.minhaEscolha].nome)}</strong><span>${esc(st.estilo)}</span>
@@ -776,6 +798,8 @@
       pronto.disabled = !estadoSala.minhaEscolha || estadoSala.euPronto || (cfg.modo === 'online' && !rede.outroAqui);
       pronto.textContent = estadoSala.euPronto ? 'Esperando o amigo…' : 'Pronto!';
       if (versus) pronto.textContent = primeiroLocal ? '2P: confirmar' : '1P: confirmar';
+      if (cfg.modo === 'cpu') pronto.textContent = primeiroLocal ? 'Lutar!' : 'Confirmar';
+      if (arcadeModo) pronto.textContent = 'Começar arcade';
     }
   }
 
@@ -785,7 +809,8 @@
     const dele = meu;
     const cenario = cfg.cenarios[(Math.random() * cfg.cenarios.length) | 0];
     estadoSala.numero++;
-    comecarLuta({ n: estadoSala.numero, lh: versus ? primeiroLocal : meu, lc: dele, c: cenario, d: 0 });
+    if (arcadeModo && !arcade.adversario) arcade.adversario = sortearAdversario(meu);
+    comecarLuta({ n: estadoSala.numero, lh: escolheDois ? primeiroLocal : meu, lc: escolheDois ? meu : arcadeModo ? arcade.adversario : dele, c: cenario, d: 0 });
   }
 
   // ---------- Menu de pausa ----------

@@ -74,6 +74,14 @@ let browser;
   await page.getByRole('button', { name: 'Entrar e jogar' }).click();
   await page.getByRole('button', { name: 'Criar sala' }).waitFor();
 
+  // Versus CPU: o 1º Pronto confirma a lutadora; o 2º, a da máquina (Pipoca vermelha).
+  async function confirmar() {
+    await page.locator('#pronto').click();
+    if (await page.locator('.carta[data-id="pipoca"]').isVisible() && !(await page.evaluate(() => !!window.KOTeste?.luta()))) {
+      await page.locator('.carta[data-id="pipoca"]').click();
+      await page.locator('#pronto').click();
+    }
+  }
   async function escolherPipoca() {
     await page.goto(env.APP_URL + '/'); // Trocar só o hash não recarrega o jogo.
     await page.goto(env.APP_URL + '/jogar/cpu#teste');
@@ -104,7 +112,7 @@ let browser;
   // Falha HTTP de verdade: a luta espera e permite uma nova tentativa.
   bloquearModelo = true;
   await escolherPipoca();
-  await page.locator('#pronto').click();
+  await confirmar();
   await page.waitForFunction(() => !!window.KOTeste?.luta());
   await page.evaluate(() => {
     window.__partidaOriginal = window.KOTeste.luta();
@@ -169,14 +177,14 @@ let browser;
   await page.route('**/js/ko-jogo-3d.js*', rota => rota.fulfill({ status: 200, contentType: 'text/javascript', body: '/* Pacote 3D ausente no teste. */' }));
   await escolherPipoca();
   assert.equal(await page.evaluate(() => typeof window.KO3D), 'undefined');
-  await page.locator('#pronto').click();
+  await confirmar();
   await conferirBloqueio('pacote-3d-ausente');
   await page.unroute('**/js/ko-jogo-3d.js*');
 
   // Suporte recusado também bloqueia, em vez de iniciar a versão antiga.
   await escolherPipoca();
   await page.evaluate(() => { window.KO3D.disponivel = () => false; });
-  await page.locator('#pronto').click();
+  await confirmar();
   await conferirBloqueio('3d-sem-suporte');
   assert.deepEqual(erros, [], 'Nenhum erro inesperado no navegador');
   console.log('OK: somente 3D; falhas visíveis, simulação bloqueada e nova tentativa funcional.');

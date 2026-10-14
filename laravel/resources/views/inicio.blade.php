@@ -34,11 +34,12 @@
         </form>
         @error('codigo') <p class="erro" role="alert">{{ $message }}</p> @enderror
 
+        <a class="botao" href="{{ route('jogar.local', 'arcade') }}">Arcade (1 jogador)</a>
         <div class="menu-linha">
-            <a class="botao botao-sec" href="{{ route('jogar.local', 'cpu') }}">Contra o computador</a>
-            <a class="botao botao-sec" href="{{ route('jogar.local', 'treino') }}">Treino</a>
+            <a class="botao botao-sec" href="{{ route('jogar.local', 'cpu') }}">Versus CPU</a>
+            <a class="botao botao-sec" href="{{ route('jogar.local', 'versus') }}">Versus 2 jogadores</a>
         </div>
-        <a class="botao botao-sec" href="{{ route('jogar.local', 'versus') }}">2 jogadores / TV</a>
+        <a class="botao botao-sec" href="{{ route('jogar.local', 'treino') }}">Treino</a>
         <a class="botao botao-sec" href="{{ route('ranking') }}">Ranking</a>
         @if ($eu->pin_hash !== null)
         <form method="post" action="{{ route('sair') }}">@csrf<button class="botao botao-sec">Sair da conta</button></form>

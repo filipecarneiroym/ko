@@ -84,7 +84,7 @@ class SalaTest extends TestCase
         $sala = Sala::criarPara($this->host);
         $this->actingAs($this->host);
 
-        foreach (['/jogar/cpu', '/jogar/treino', '/jogar/versus', '/sala/'.$sala->codigo] as $url) {
+        foreach (['/jogar/arcade', '/jogar/cpu', '/jogar/treino', '/jogar/versus', '/sala/'.$sala->codigo] as $url) {
             $pagina = $this->get($url)->assertOk();
             preg_match('/<script[^>]+id="ko-config"[^>]*>(.*?)<\/script>/s', $pagina->getContent(), $json);
             $elenco = json_decode($json[1], true, flags: JSON_THROW_ON_ERROR)['lutadores'];

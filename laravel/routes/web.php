@@ -24,6 +24,6 @@ Route::middleware(AcessoAmigos::class)->group(function () {
         Route::post('/salas/entrar', [SalaController::class, 'entrar'])->middleware('throttle:20,1')->name('sala.entrar');
         Route::get('/sala/{sala}', [SalaController::class, 'show'])->name('sala.show');
         Route::post('/sala/{sala}/resultado', [SalaController::class, 'resultado'])->middleware('throttle:30,1')->name('sala.resultado');
-        Route::get('/jogar/{modo}', [SalaController::class, 'local'])->whereIn('modo', ['cpu', 'treino', 'versus'])->name('jogar.local');
+        Route::get('/jogar/{modo}', [SalaController::class, 'local'])->whereIn('modo', ['arcade', 'cpu', 'treino', 'versus'])->name('jogar.local');
     });
 });

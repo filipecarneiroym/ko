@@ -199,7 +199,7 @@ let browser;
   assert.equal(await host.locator('.painel-controle button:focus').count(), 1);
   await host.locator('[data-fechar]').tap();
   await host.locator('.carta[data-id="pipoca"]').tap(); await host.locator('#pronto').tap();
-  assert.match(await host.locator('#pronto').textContent(), /Jogador 2/);
+  assert.match(await host.locator('#pronto').textContent(), /2P/);
   await host.locator('.carta[data-id="uivo"]').tap(); await host.locator('#pronto').tap();
   await host.waitForFunction(() => KOTeste.luta()?.s.fase === 'luta');
   console.log('PASS: menu aceita ambos os controles, foco na grade e configuração navegável');
@@ -208,6 +208,7 @@ let browser;
     await host.locator('[data-nivel="' + nivel + '"]').tap();
     assert.equal(await host.locator('[data-nivel="' + nivel + '"]').getAttribute('aria-pressed'), 'true');
     await host.locator('.carta[data-id="pipoca"]').tap(); await host.locator('#pronto').tap();
+    await host.locator('.carta[data-id="pipoca"]').tap(); await host.locator('#pronto').tap(); // lutadora da máquina
     await host.waitForFunction(() => KOTeste.luta()?.s.fase === 'luta');
     assert.equal(await host.evaluate(() => KOTeste.luta().dificuldade), nivel);
     assert.equal(await host.evaluate(() => typeof KOTeste.luta().cpu), 'function');
