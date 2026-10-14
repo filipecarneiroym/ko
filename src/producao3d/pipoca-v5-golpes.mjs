@@ -228,19 +228,21 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 11, giro: .45, inclinacao: .16, pelve: v(.1, .02, 0), pernas: { D: { tornozelo: v(.3, .98, ZD - .1), joelho: v(1, 1.3, 0), pe: 'plano' } } },
     { q: 12, giro: .8, inclinacao: .32, pelve: v(.15, .03, 0), pernas: { D: { tornozelo: v(1.08, 1.02, -.02), joelho: v(0, 1, 0), pe: 'esticado' } } },
     { q: 14, giro: .8, inclinacao: .32, pelve: v(.16, .03, 0), pernas: { D: { tornozelo: v(1.1, 1.02, -.02), joelho: v(0, 1, 0), pe: 'esticado' } } },
-    { q: 17, giro: .25, inclinacao: .08, pelve: v(.08, .01, 0), pernas: { D: { tornozelo: v(.22, .72, ZD - .08), joelho: v(1, 1, 0), pe: 'plano' } } },
-    { q: 20, giro: .05, inclinacao: .02, pelve: v(.01, 0, 0) },
+    { q: 15, giro: .25, inclinacao: .08, pelve: v(.08, .01, 0), pernas: { D: { tornozelo: v(.22, .72, ZD - .08), joelho: v(1, 1, 0), pe: 'plano' } } },
+    { q: 18, giro: .05, inclinacao: .02, pelve: v(.01, 0, 0) },
     { q: 24 },
   ]);
 
   // k2: chute alto de perna E (28 quadros), janela 7-10.
+  // k2: chute alto (28 quadros), janela 7-10. A subida é a mesma (pé de apoio firme),
+  // e a volta é mais rápida: recolhe em 6 quadros em vez de 9.
   clips.k2 = animar('k2', 28, [
     { q: 0 },
     { q: 4, giro: -.4, inclinacao: .22, pelve: v(-.06, .03, 0), pernas: { E: { tornozelo: v(.38, 1.22, ZE + .14), joelho: v(1, .9, 0), pe: 'plano' } } },
     { q: 7, giro: -.55, inclinacao: .46, pelve: v(-.04, .04, 0), pernas: { E: { tornozelo: v(1.0, 1.82, ZE + .2), joelho: v(0, 1, .2), pe: 'esticado' } } },
     { q: 10, giro: -.55, inclinacao: .46, pelve: v(-.03, .04, 0), pernas: { E: { tornozelo: v(1.02, 1.8, ZE + .2), joelho: v(0, 1, .2), pe: 'esticado' } } },
-    { q: 14, giro: -.3, inclinacao: .18, pelve: v(-.05, .02, 0), pernas: { E: { tornozelo: v(.38, 1.05, ZE + .12), joelho: v(1, .9, 0), pe: 'plano' } } },
-    { q: 19, giro: -.05, inclinacao: .03, pelve: v(-.01, 0, 0) },
+    { q: 13, giro: -.3, inclinacao: .18, pelve: v(-.05, .02, 0), pernas: { E: { tornozelo: v(.38, 1.05, ZE + .12), joelho: v(1, .9, 0), pe: 'plano' } } },
+    { q: 17, giro: -.05, inclinacao: .03, pelve: v(-.01, 0, 0) },
     { q: 28 },
   ]);
 
@@ -250,8 +252,8 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 4, giro: -.15, inclinacao: -.18, pelve: v(-.08, -.36, 0), pernas: { E: { tornozelo: v(.62, .16, ZE + .02), joelho: v(1, .5, -.2), pe: 'plano' }, D: { joelho: v(1, .1, .06) } } },
     { q: 6, giro: -.3, inclinacao: -.24, pelve: v(-.06, -.42, 0), pernas: { E: { tornozelo: v(1.0, .14, ZE + .08), joelho: v(0, 1, -.3), pe: 'plano' }, D: { joelho: v(1, .1, .06) } } },
     { q: 9, giro: -.3, inclinacao: -.24, pelve: v(-.05, -.42, 0), pernas: { E: { tornozelo: v(1.02, .14, ZE + .08), joelho: v(0, 1, -.3), pe: 'plano' }, D: { joelho: v(1, .1, .06) } } },
-    { q: 14, giro: -.15, inclinacao: -.14, pelve: v(-.06, -.34, 0), pernas: { E: { tornozelo: v(.6, .2, ZE + .02), joelho: v(1, .5, -.2), pe: 'plano' }, D: { joelho: v(1, .1, .06) } } },
-    { q: 19, giro: 0, inclinacao: -.04, pelve: v(-.02, -.1, 0) },
+    { q: 12, giro: -.15, inclinacao: -.14, pelve: v(-.06, -.34, 0), pernas: { E: { tornozelo: v(.6, .2, ZE + .02), joelho: v(1, .5, -.2), pe: 'plano' }, D: { joelho: v(1, .1, .06) } } },
+    { q: 16, giro: 0, inclinacao: -.04, pelve: v(-.02, -.1, 0) },
     { q: 26 },
   ]);
 
