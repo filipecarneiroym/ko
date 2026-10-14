@@ -94,9 +94,14 @@ export async function carregarModelo(buffer, id, simulador, scene) {
           // Suavizar a emenda dos socos e o relaxamento da defesa pelo relógio
           // do novo estado. Entrar em defesa aplica a proteção imediatamente.
           const emendaChute = atual?.name === 'p2' && grupo.name === 'k2';
+          // Chutes (troca de perna, chute cortado, volta à guarda) também fundem
+          // as poses em 4 quadros, antes da janela ativa. Defesa e dano entram na hora.
+          // (Rasteira e chute aéreo ficam de fora: a fusão perto do piso o atravessaria.)
+          const trocaChute = !!atual && !emendaChute && (/^(k1|k2)$/.test(grupo.name)
+            || /^(k1|k2)$/.test(atual.name) && ['parado', 'andando', 'recuo'].includes(grupo.name));
           const fimTransicao = emendaChute ? 6 : 4;
           const suavizar = atual?.name === 'p1' && grupo.name === 'p2'
-            || emendaChute
+            || emendaChute || trocaChute
             || atual?.name === 'defesa' && grupo.name === 'parado';
           transicao = id === 'pipoca' && suavizar && pose.quadro < fimTransicao ? {
             inicio: Math.max(0, pose.quadro),
