@@ -107,11 +107,11 @@ export async function carregarModelo(buffer, id, simulador, scene) {
             || atual.name === 'ck' && ['parado', 'agachado'].includes(grupo.name));
           const PASSADAS = ['parado', 'andando', 'recuo', 'pousando']; // corrida entra direto na passada certa
           const trocaPassada = !!atual && PASSADAS.includes(atual.name) && PASSADAS.includes(grupo.name);
-          // Fim da queda emenda no levantar sem estalo.
-          const levanta = atual?.name === 'caido' && grupo.name === 'levantando';
-          const fimTransicao = emendaChute || trocaPassada || levanta ? 6 : 4;
+          // Queda e levantada já compartilham a pose de emenda no GLB.
+          // Misturar seis quadros aqui atrasava o apoio e apagava o impulso rápido.
+          const fimTransicao = emendaChute || trocaPassada ? 6 : 4;
           const suavizar = atual?.name === 'p1' && grupo.name === 'p2'
-            || emendaChute || trocaChute || trocaPassada || levanta
+            || emendaChute || trocaChute || trocaPassada
             || atual?.name === 'defesa' && grupo.name === 'parado';
           transicao = id === 'pipoca' && suavizar && pose.quadro < fimTransicao ? {
             inicio: Math.max(0, pose.quadro),

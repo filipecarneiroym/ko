@@ -12,16 +12,19 @@ export function descreverPose(lutador, simulador, estado = null) {
   const usaRelogioDaFase = ['defesa', 'defesaBaixa'].includes(lutador.estado)
     || estado?.fase === 'final' && ['final', 'vitimaFinal'].includes(lutador.estado);
   const foco = golpe && lutador.golpe === 'foc';
+  const derrotadoNoFim = estado?.fase === 'fim' && estado.vencedor >= 0 && lutador.lado !== estado.vencedor;
+  const vitimaDoFinal = estado?.fase === 'final' && lutador.estado === 'vitimaFinal';
   // Final da Lola: gesto do arremesso chamando a chuva (34 quadros) e comemoração.
   const chama = false; // sem chuva de cenouras: no Final a vencedora só comemora
   const fT = Math.max(0, estado?.fT ?? lutador.t);
   return {
-    clip: foco ? 'foc' : lutador.estado === 'impulso' ? 'andando' : lutador.estado === 'colapso' ? 'dano'
+    clip: derrotadoNoFim || vitimaDoFinal ? 'derrotado' : foco ? 'foc' : lutador.estado === 'impulso' ? 'andando' : lutador.estado === 'colapso' ? 'dano'
       : chama ? (fT < 34 ? 'esp' : 'vitoria') : golpe ? lutador.golpe : lutador.estado,
-    quadro: foco ? (lutador.focoSolto ? lutador.t : Math.min(12, (lutador.focoCarga || 0) / 2))
+    quadro: derrotadoNoFim ? fT + (estado.finalFeito ? 60 : 0)
+      : vitimaDoFinal ? fT : foco ? (lutador.focoSolto ? lutador.t : Math.min(12, (lutador.focoCarga || 0) / 2))
       : chama ? (fT < 34 ? fT : fT - 34)
       : Math.max(0, usaRelogioDaFase ? estado?.fT ?? lutador.t : lutador.t),
-    ciclico: !golpe && CICLICOS.has(lutador.estado),
+    ciclico: !derrotadoNoFim && !vitimaDoFinal && !golpe && CICLICOS.has(lutador.estado),
     duracao: golpe ? golpe.dur : null,
     x: (lutador.x / simulador.U - simulador.LARGURA / 2) / 24,
     y: lutador.y / simulador.U / 24,

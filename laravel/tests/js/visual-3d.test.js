@@ -40,6 +40,25 @@ test('encenação final usa relógio da fase mesmo quando o lutador não avança
   s.p[1].estado = 'vitimaFinal';
   assert.equal(descreverPose(s.p[1], K, s).quadro, 55);
 });
+
+test('fim da partida deixa o perdedor deitado com ou sem Final, sem repetir a queda', async () => {
+  const [{ descreverPose }] = await modulos;
+  const s = K.novo({ lutadores: ['pipoca', 'pipoca'] });
+  s.fase = 'fim'; s.vencedor = 1; s.fT = 80;
+  s.p[0].estado = 'tonto'; s.p[0].t = 0;
+  const antes = JSON.stringify(s), pose = descreverPose(s.p[0], K, s);
+  assert.equal(pose.clip, 'derrotado'); assert.equal(pose.quadro, 80); assert.equal(pose.ciclico, false);
+  assert.equal(JSON.stringify(s), antes);
+  s.finalFeito = 1; s.fT = 0; s.p[0].estado = 'derrotado';
+  assert.ok(descreverPose(s.p[0], K, s).quadro >= 60, 'depois do Final continua deitada');
+  s.fase = 'final'; s.fT = 10000; s.p[0].estado = 'vitimaFinal'; s.p[1].estado = 'final';
+  K.passo(s, [0, 0]);
+  assert.equal(s.fase, 'fim');
+  for (let i = 0; i < 100; i++) K.passo(s, [0, 0]);
+  assert.equal(s.p[0].estado, 'derrotado');
+  assert.equal(descreverPose(s.p[0], K, s).clip, 'derrotado');
+  assert.ok(descreverPose(s.p[0], K, s).quadro >= 60, 'relógio do encerramento mantém a pose deitada');
+});
 test('importação exige GLB com rig, todos os estados e recursos incorporados', async () => {
   const [{ ESTADOS_VISUAIS }, { validarGlb }] = await modulos;
   const doc = { asset: { version: '2.0' }, skins: [{}], meshes: [{}], animations: [...ESTADOS_VISUAIS, ...Object.keys(K.LUTADORES.pipoca.golpes)].map(name => ({ name })) };

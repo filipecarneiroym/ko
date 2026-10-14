@@ -79,3 +79,39 @@ Para a Lola, usar a clareza das poses, os apoios e a recuperação desses
 chutes como referência. Kikoken, Spinning Bird Kick e a sequência de pernas
 da Chun-Li são golpes próprios dela; não foram acrescentados ao repertório
 da Lola nesta etapa.
+
+## Queda, levantada rápida e derrota — terceiro vídeo
+
+Vídeo enviado em 14/10/2026, baixado para
+`tmp/analise-video-completo/levantada-video.mp4` (903,117 segundos,
+640 × 360). Referência detalhada do Ryu em aproximadamente **2:15,2–2:16,4**,
+com quadros em `levantada-ryu-detalhe.jpg`: pernas recolhidas sobre o tronco,
+mãos no chão junto da cabeça, impulso dos braços e recuperação em arco.
+
+Conforme a correção de Filipe, as luvas apoiam por baixo das orelhas e o
+movimento é rápido: recolhe nos quadros 3–5, empurra até o 7, passa pelo arco
+no 10 e volta aos pés no 14. O clipe termina na guarda, mantendo os 40 passos
+da regra de recuperação. A queda mantém seus 46 passos.
+
+- Removida a definição duplicada de `caido` que substituía a queda de costas
+  por uma pose agachada. Recuperação fica no clipe `levantando`.
+- A emenda para a guarda só ajusta os últimos quadros. Antes ela substituía
+  toda a ação a partir do quadro 4. Retirada também a mistura de seis quadros
+  entre queda e levantada, pois os clipes já compartilham a pose de emenda.
+- Apoios das mãos usam alvos fixos no piso. A malha é conferida contra o
+  chão também entre os passos, durante a exportação.
+- O contato da queda no quadro 8 gera uma onda clara rente ao chão e poeira
+  baixa que se expande e some. O pouso da levantada no 14 tem um efeito menor.
+  Esses efeitos seguem o relógio da pose e congelam junto com ela.
+- Pose própria de derrota: corpo deitado, braços relaxados e pernas mais
+  estendidas, ligeiramente assimétricas, sem ficar preso na postura de
+  pernas recolhidas usada no impulso.
+- No encerramento sem o Final, o estado do perdedor pode continuar como
+  `tonto`. O 3D apresenta a derrota e usa o relógio da fase para concluir a
+  queda. Depois do Final mantém a pose deitada sem reiniciar a animação.
+  Essa apresentação não modifica o estado ou o resultado do motor.
+
+Verificações: mãos junto da cabeça e próximas do piso, pernas recolhidas
+antes do impulso, fase aérea do arco, emendas, relaxamento da derrota e pele
+acima do piso nos dois modelos e orientações; capturas no navegador para
+queda, apoio, arco, pouso e encerramento com e sem Final.

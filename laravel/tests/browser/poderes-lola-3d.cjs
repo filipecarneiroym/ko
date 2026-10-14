@@ -36,6 +36,12 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
       .filter(m => m.name.startsWith('golpe-bola-')).map(m => m.material.emissiveTexture)).size), 1,
       'projéteis compartilham uma textura pronta, sem clones dinâmicos vazios');
     const casos = [
+      ['queda-contato', 'caido', 8], ['queda-deitada', 'caido', 30],
+      ['queda-impacto', 'caido', 11],
+      ['levantar-recolhe', 'levantando', 3], ['levantar-maos', 'levantando', 5],
+      ['levantar-arco', 'levantando', 10], ['levantar-pouso', 'levantando', 14],
+      ['derrota-final', 'derrotado', 60], ['derrota-invertida', 'derrotado', 60, -1],
+      ['fim-partida', 'derrotado', 80], ['fim-apos-final', 'derrotado', 0],
       ['chute-duplo-primeiro', 'k1', 6], ['chute-duplo-segundo', 'k1', 12],
       ['chute-alto-preparo', 'k2', 4], ['chute-alto-contato', 'k2', 7],
       ['rasteira-preparo', 'ck', 4], ['rasteira-contato', 'ck', 6],
@@ -56,7 +62,7 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
       if (process.env.KO_HADOUKEN && !['esp', 'espEx', 'ultra'].includes(golpe)) continue;
       if (process.env.KO_CHUTES && !['k1', 'k2', 'ck', 'ak', 'tatsu', 'tatsuEx'].includes(golpe)) continue;
       if (process.env.KO_CHUTE_AEREO && golpe !== 'ak') continue;
-      const resultado = await page.evaluate(async ({ golpe, quadro, face }) => {
+      const resultado = await page.evaluate(async ({ nome, golpe, quadro, face }) => {
         const lab = globalThis.__laboratorio3d; lab.pausado = true;
         const novo = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: true }); novo.fase = 'luta'; novo.fT = 0;
         novo.p[0].x = (face > 0 ? 80 : 300) * KOSim.U; novo.p[1].x = (face > 0 ? 300 : 80) * KOSim.U;
@@ -66,20 +72,39 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
         const B = KOSim.B;
         const comandos = { k1: B.K, ck: B.D | B.K, esp: B.S, dp: B.R | B.S, tatsu: B.L | B.S, espEx: B.S | B.P, dpEx: B.R | B.S | B.P,
           tatsuEx: B.L | B.S | B.P, sup: B.S | B.K, ultra: B.S | B.F, foc: B.F };
-        if (['k2', 'ak'].includes(golpe)) {
+        if (['caido', 'levantando', 'derrotado'].includes(golpe)) {
+          Object.assign(lab.estado.p[0], { estado: golpe, golpe: null, t: quadro });
+        } else if (['k2', 'ak'].includes(golpe)) {
           // Inspeção do clipe inteiro, sem a queda interromper o chute aéreo.
           Object.assign(lab.estado.p[0], { estado: 'golpe', golpe, t: quadro, y: golpe === 'ak' ? 48 * KOSim.U : 0 });
         } else KOSim.passo(lab.estado, [comandos[golpe], 0]);
         let guarda = 0;
         while ((golpe === 'foc' ? lab.estado.p[0].focoCarga < quadro : lab.estado.p[0].t < quadro) && guarda++ < 180)
           KOSim.passo(lab.estado, [golpe === 'foc' ? B.F : 0, 0]);
+        if (nome.startsWith('fim-')) {
+          Object.assign(lab.estado, { fase: 'fim', vencedor: 1, fT: quadro, finalFeito: nome === 'fim-apos-final' ? 1 : 0 });
+          Object.assign(lab.estado.p[0], { estado: nome === 'fim-partida' ? 'tonto' : 'derrotado', t: 0 });
+        }
         await new Promise(resolve => lab.scene.onAfterRenderObservable.addOnce(() => resolve()));
-        return { golpe: lab.estado.p[0].golpe, altura: lab.estado.p[0].y, proj: lab.estado.proj.length };
-      }, { golpe, quadro, face });
-      assert.equal(resultado.golpe, golpe);
+        return { golpe: lab.estado.p[0].golpe, estado: lab.estado.p[0].estado, altura: lab.estado.p[0].y, proj: lab.estado.proj.length };
+      }, { nome, golpe, quadro, face });
+      if (nome === 'fim-partida') assert.equal(resultado.estado, 'tonto', 'fim visual não muda o estado do motor');
+      else if (['caido', 'levantando', 'derrotado'].includes(golpe)) assert.equal(resultado.estado, golpe);
+      else assert.equal(resultado.golpe, golpe);
       if (golpe.startsWith('dp')) assert.ok(resultado.altura > 0);
       if (golpe === 'espEx') assert.equal(resultado.proj, 2);
       await page.waitForTimeout(500);
+      if (['queda-impacto', 'queda-deitada', 'levantar-pouso', 'fim-partida', 'fim-apos-final'].includes(nome)) {
+        const piso = await page.evaluate(() => {
+          const scene = globalThis.__laboratorio3d.scene, onda = scene.getMeshByName('sf4-onda-chao-0');
+          return { ativo: onda.isEnabled(), y: onda.position.y,
+            poeira: scene.meshes.filter(m => m.name.startsWith('sf4-poeira-chao-0-') && m.isEnabled()).length };
+        });
+        const vivo = ['queda-impacto', 'levantar-pouso'].includes(nome);
+        assert.equal(piso.ativo, vivo, 'onda sincronizada com contato e pouso; depois some');
+        assert.equal(piso.poeira, vivo ? 5 : 0);
+        if (vivo) assert.ok(piso.y > 0 && piso.y < .05, 'onda rente ao piso');
+      }
       if (['k1', 'k2', 'ck', 'ak', 'tatsu'].includes(golpe)) {
         const efeitos = await page.evaluate(() => {
           const scene = globalThis.__laboratorio3d.scene;

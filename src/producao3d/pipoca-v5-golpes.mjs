@@ -175,9 +175,9 @@ export function criarGolpesV5(ossos, parado, simulador) {
           // Alvo comum no corpo: as duas luvas precisam chegar ao mesmo gesto,
           // não a dois pontos iguais relativos a ombros separados. A IK continua
           // recebendo vetores ombro→punho, depois de converter o alvo anatômico.
-          const alvo = chave => chave?.alvoCorpo
-            ? chave.alvoCorpo.add(pose.pelve).subtract(fk[bb.braco])
-            : chave?.alvo ?? guardaAlvo;
+          const alvo = chave => chave?.alvoPiso ? chave.alvoPiso.subtract(fk[bb.braco])
+            : chave?.alvoCorpo ? chave.alvoCorpo.add(pose.pelve).subtract(fk[bb.braco])
+              : chave?.alvo ?? guardaAlvo;
           pose.bracos[lado] = {
             alvo: lerpV(alvo(ba), alvo(bz), t),
             cotovelo: lerpV(ba?.cotovelo ?? guardaCot, bz?.cotovelo ?? guardaCot, t),
@@ -431,64 +431,56 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 24, rol: -2 * Math.PI },
   ]);
 
-  // caido (46 quadros, o motor fixa): queda como a do SF4 depois da rasteira.
-  // A reação começa no quadro 0 (pernas varridas para a frente, tronco para
-  // trás), gira de costas no ar, bate no chão no 9, quica e recupera a guarda
-  // com impulso pelos ombros. Pernas presas ao corpo (loc) acompanham o giro;
-  // acimaDoPiso() mantém a pele inteira acima do chão.
-  // estica: 0 = pernas varridas à frente (no ar); 1 = estendidas no chão.
-  const deCostas = (rol, pelve, inclinacao, estica = 0) => ({ rol, pelve, inclinacao,
-    pernas: { E: { local: v(.5 - .2 * estica, -.62 - .16 * estica, ZE * .5), loc: 1, joelho: v(1, .6 - .4 * estica, -.1), pe: 'corpo' },
-      D: { local: v(.36 - .02 * estica, -.6 - .14 * estica, ZD * .5), loc: 1, joelho: v(1, .6 - .2 * estica, .1), pe: 'corpo' } } });
-  // Mãos no chão ao lado da cabeça (empurram o corpo de volta, como no SF4).
-  const maos = (alvoY, alvoX) => ({ bracos: { E: { alvo: v(alvoX, alvoY, -.12), cotovelo: v(0, .4, -1) }, D: { alvo: v(alvoX, alvoY, .12), cotovelo: v(0, .4, 1) } } });
-  clips.caido = animar('caido', 46, [
-    { q: 0, ...deCostas(.45, v(-.08, -.3, 0), .45) },
-    { q: 5, ...deCostas(1.25, v(-.3, -.75, 0), .2) },
-    { q: 9, ...deCostas(1.57, v(-.42, -.98, 0), .3, .6) },
-    { q: 11, ...deCostas(1.5, v(-.44, -.88, 0), .2, .5) },
-    { q: 14, ...deCostas(1.38, v(-.45, -1, 0), .62, 1) },
-    { q: 30, ...deCostas(1.38, v(-.45, -1, 0), .6, .85) },
-    // Recuperação rápida: recolhe as pernas sobre os ombros e dá impulso
-    // para plantar os pés. Não completa uma cambalhota suspensa no ar.
-    { q: 34, ...encolhida(1.95, .7, .95, .35, v(-.4, -.75, 0)), pescoco: .4, orelhas: -1.2, ...maos(-.3, -.25) },
-    { q: 37, ...encolhida(1.55, .85, .95, .3, v(-.32, -.55, 0)), pescoco: .4, orelhas: -1.2, ...maos(-.45, -.15) },
-    { q: 40, ...encolhida(.85, .65, .8, -.18, v(-.15, -.35, 0)), pescoco: .15, orelhas: -.7, ...maos(-.6, .05) },
-    { q: 43, ...baixa(-.1), rol: .1, orelhas: -.2 },
-    // A regra troca no 46; o último quadro visível (45) já encaixa no levantar.
-    { q: 44, ...baixa(0) },
-    { q: 45, ...baixa(0) },
-    { q: 46, ...baixa(0) },
-  ]);
-  // levantando (40 quadros): das costas com a base agachada, sobe em etapas (a pelve
-  // sobe a cada 12 quadros) até a guarda. Antes eram 16 quadros e quase não se via.
-  // Mãos no chão empurrando: os braços começam apoiados no chão e vão se esticando
-  // conforme o quadril sobe (mesmo ritmo das etapas), até a guarda no fim.
-  const apoio = (y, x) => ({ bracos: { E: { alvo: v(x, y, -.12), cotovelo: v(-.1, -.4, -1) }, D: { alvo: v(x, y, .12), cotovelo: v(-.1, -.4, 1) } } });
-  // Mola em arco: com os pés plantados e as mãos no chão, o quadril sobe e o tronco
-  // inclina para trás (como um C deitado) enquanto os braços empurram; depois a Lola
-  // desce o quadril e se firma na guarda.
+  // Referência: terceiro vídeo, Ryu em ~2:15. Queda e recuperação são
+  // clipes separados: deitado, mãos junto à cabeça, impulso em arco e pouso.
+  const maosNoPiso = (x = -1.05) => ({ bracos: {
+    E: { alvoPiso: v(x, .16, -.27), cotovelo: v(-.2, .6, -1) },
+    D: { alvoPiso: v(x, .16, .27), cotovelo: v(-.2, .6, 1) },
+  } });
+  const relaxada = () => ({ bracos: {
+    E: { alvoPiso: v(-.65, .05, -.48), cotovelo: v(-.2, .2, -1) },
+    D: { alvoPiso: v(-.48, .07, .5), cotovelo: v(-.2, .2, 1) },
+  } });
+  const deitada = (rol = 1.48, dy = -1.18) => ({ rol, pelve: v(-.3, dy, 0), inclinacao: .04,
+    pernas: {
+      E: { local: v(.18, -1.32, ZE * .65), loc: 1, joelho: v(1, .15, -.1), pe: 'corpo' },
+      D: { local: v(.13, -1.26, ZD * .8), loc: 1, joelho: v(1, .25, .1), pe: 'corpo' },
+    }, ...relaxada() });
+  const queda = [
+    { q: 0, rol: .25, pelve: v(-.05, -.12, 0), inclinacao: .12 },
+    { q: 4, ...deitada(1.0, -.6) },
+    { q: 8, ...deitada(1.48, -1.18) },
+    { q: 11, ...deitada(1.38, -1.08) },
+    { q: 16, ...deitada() },
+  ];
+  clips.caido = animar('caido', 46, [...queda, { q: 46, ...deitada() }]);
+  // No K.O. fica deitada, com pernas relaxadas e ligeiramente assimétricas.
+  // Não termina agachada nem reaproveita a pose que prepara o levantar.
+  clips.derrotado = animar('derrotado', 60, [...queda, { q: 60, ...deitada() }]);
+  const recolhida = (rol, dy) => ({ rol, pelve: v(-.35, dy, 0), inclinacao: -.1,
+    pernas: {
+      E: { local: v(.45, -.3, ZE * .6), loc: 1, joelho: v(1, .8, -.1), pe: 'corpo' },
+      D: { local: v(.4, -.35, ZD * .6), loc: 1, joelho: v(1, .8, .1), pe: 'corpo' },
+    }, ...maosNoPiso() });
   clips.levantando = animar('levantando', 40, [
-    { q: 0, ...baixa(0) },
-    { q: 6, ...baixa(.1), inclinacao: -.2, ...apoio(-.9, .2) },
-    { q: 14, ...baixa(.42), inclinacao: -.4, ...apoio(-.55, .18) },
-    { q: 21, ...baixa(.4), inclinacao: -.34, ...apoio(-.5, .2) },
-    { q: 30, ...baixa(.1), inclinacao: -.08 },
-    { q: 40 },
-  ]);
-
-  // caido (46 quadros): a Lola cai para trás quase deitada, com as pernas semi-flexionadas
-  // (baixa), toca o chão no quadro 16, quica de leve (30) e assenta; no fim volta à base
-  // agachada que o levantar usa, para a emenda não estalar.
-  clips.caido = animar('caido', 46, [
-    { q: 0 },
-    { q: 8, ...baixa(.12), inclinacao: -.35 },
-    { q: 16, ...baixa(.3), inclinacao: -.7 },
-    { q: 24, ...baixa(.36), inclinacao: -.75 },
-    { q: 30, ...baixa(.32), inclinacao: -.7 },
-    { q: 36, ...baixa(.36), inclinacao: -.72 },
-    { q: 42, ...baixa(0) },
-    { q: 46, ...baixa(0) },
+    { q: 0, ...deitada() },
+    { q: 3, ...recolhida(1.95, -.7) },
+    { q: 5, ...recolhida(2.05, -.62) },
+    { q: 7, ...recolhida(1.8, -.5) },
+    // Solta as mãos depois do impulso; pernas desenham o arco até o pouso.
+    { q: 10, rol: .85, pelve: v(-.12, .02, 0), inclinacao: -.28,
+      pernas: {
+        E: { local: v(.1, -1.25, ZE * .8), loc: 1, joelho: v(1, .4, -.1), pe: 'corpo' },
+        D: { local: v(.02, -1.22, ZD * .8), loc: 1, joelho: v(1, .4, .1), pe: 'corpo' },
+      } },
+    { q: 12, rol: .25, pelve: v(-.04, -.16, 0), inclinacao: -.15,
+      pernas: {
+        E: { tornozelo: v(.44, .32, ZE), joelho: v(1, .4, -.1), pe: 'plano' },
+        D: { tornozelo: v(-.3, .35, ZD), joelho: v(1, .4, .1), pe: 'plano' },
+      } },
+    { q: 14, ...baixa(-.08), rol: .08 },
+    { q: 18, ...baixa(.1) },
+    { q: 24 }, { q: 32 }, { q: 40 },
   ]);
 
   // Rolamento sem atravessar o chão: em cada quadro, mede o ponto mais baixo
@@ -546,9 +538,9 @@ export function emendarLevantada(clip, guarda) {
   for (const canal of clip.canais) {
     const fonte = guarda.canais.find(c => c.osso === canal.osso && c.tipo === canal.tipo);
     const tamanho = canal.tipo === 'rotation' ? 4 : 3;
-    const de = canal.valores.slice(3 * tamanho, 4 * tamanho), para = fonte.valores.slice(0, tamanho);
-    for (let q = 4; q <= clip.duracaoQuadros; q++) {
-      const peso = suave(Math.min(1, (q - 3) / 7));
+    const de = canal.valores.slice(32 * tamanho, 33 * tamanho), para = fonte.valores.slice(0, tamanho);
+    for (let q = 33; q <= clip.duracaoQuadros; q++) {
+      const peso = suave(Math.min(1, (q - 32) / 8));
       const valor = tamanho === 4
         ? Quaternion.Slerp(Quaternion.FromArray(de), Quaternion.FromArray(para), peso).normalize().asArray()
         : Vector3.Lerp(Vector3.FromArray(de), Vector3.FromArray(para), peso).asArray();

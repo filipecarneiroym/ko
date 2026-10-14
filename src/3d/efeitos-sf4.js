@@ -6,7 +6,7 @@ import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem.js';
 import { Color3, Color4 } from '@babylonjs/core/Maths/math.color.js';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector.js';
 import { Constants } from '@babylonjs/core/Engines/constants.js';
-import { quedasDoFinal } from './estado-visual.mjs';
+import { quedasDoFinal, descreverPose } from './estado-visual.mjs';
 
 // Efeitos de luta no estilo Street Fighter IV, em 3D: respingos de tinta de
 // pincel com miolo de luz, faíscas, escudo de defesa, rastro de tinta, Super
@@ -93,6 +93,17 @@ function texturaFumaca(scene) {
     g.fillStyle = gr; g.fillRect(0, 0, n, n);
   }
   t.update();
+  return t;
+}
+
+function texturaOndaChao(scene) {
+  const t = new DynamicTexture('sf4-onda-chao-textura', { width: 256, height: 256 }, scene, false);
+  t.hasAlpha = true;
+  const g = t.getContext(), gr = g.createRadialGradient(128, 128, 0, 128, 128, 126);
+  gr.addColorStop(0, 'rgba(255,248,220,0)'); gr.addColorStop(.65, 'rgba(255,248,220,0)');
+  gr.addColorStop(.75, 'rgba(255,252,230,.8)'); gr.addColorStop(.82, 'rgba(255,255,245,.65)');
+  gr.addColorStop(1, 'rgba(255,248,220,0)');
+  g.clearRect(0, 0, 256, 256); g.fillStyle = gr; g.fillRect(0, 0, 256, 256); t.update();
   return t;
 }
 
@@ -208,6 +219,15 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
   // Fumaça branca (impacto) e névoa azul (defesa): mesma textura, sem clone
   // (o clone de textura dinâmica nunca ficava pronto e travava o carregamento).
   const texFumaca = texturaFumaca(scene);
+  const matSolo = materialPlano('sf4-mat-onda-chao', texturaOndaChao(scene));
+  const matPoeiraClara = materialPlano('sf4-mat-poeira-clara', texFumaca);
+  const solo = [0, 1].map(lado => {
+    const onda = plano(`sf4-onda-chao-${lado}`, matSolo);
+    onda.billboardMode = Mesh.BILLBOARDMODE_NONE; onda.rotation.x = Math.PI / 2;
+    onda.renderingGroupId = 0;
+    const nuvens = Array.from({ length: 5 }, (_, i) => plano(`sf4-poeira-chao-${lado}-${i}`, matPoeiraClara));
+    return { onda, nuvens };
+  });
   const nuvem = (nome, c1, c2, c3, blend) => {
     const ps = new ParticleSystem(nome, 120, scene);
     ps.particleTexture = texFumaca; ps.blendMode = blend;
@@ -333,7 +353,10 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
         if (p) respingo(matEspecial, xMundo(p.x), yMundo(p.y) + 1.3, .6, 2.6, 26, 'super', .65);
       } else if (e.t === 'pulo' || e.t === 'chao') {
         const p = estado?.p?.[e.lado];
-        if (p) respingo(matPoeira, xMundo(p.x), .18, -.3, e.t === 'chao' ? 1.3 : .9, 14, 'poeira');
+        // A queda da Lola tem contato próprio no q8 do clipe. Evitar duas
+        // explosões: a onda clara acompanha o corpo encostando no piso.
+        if (p && !(e.t === 'chao' && p.id === 'pipoca' && ['caido', 'derrotado'].includes(p.estado)))
+          respingo(matPoeira, xMundo(p.x), .18, -.3, e.t === 'chao' ? 1.3 : .9, 14, 'poeira');
       } else if (e.t === 'perfeito') {
         // Depois do K.O. e mais baixo: as duas faixas não se sobrepõem.
         mostrarLetreiro('perfeito', 'PERFEITO!', 90, { tinta: '#d4a20c' }); if (letreiros) letreiros_.get('perfeito').nasc = relogio + 60;
@@ -354,6 +377,27 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
   // dt em quadros de motor (fração quando a tela está em câmera lenta).
   function atualizar(estado, dt, camera) {
     relogio += dt;
+    solo.forEach((s, lado) => {
+      const p = estado?.p?.[lado], pose = p && descreverPose(p, simulador, estado);
+      const queda = pose && ['caido', 'derrotado'].includes(pose.clip);
+      const pouso = pose?.clip === 'levantando';
+      const idade = p ? pose.quadro - (queda ? 8 : 14) : -1;
+      const dur = queda ? 20 : 10;
+      const vivo = p?.id === 'pipoca' && (queda || pouso) && idade >= 0 && idade < dur && p.y === 0;
+      s.onda.setEnabled(vivo); s.nuvens.forEach(n => n.setEnabled(vivo && !reduzido()));
+      if (!vivo) return;
+      const f = idade / dur, tamanho = queda ? 3 : 1.15;
+      const x = xMundo(p.x) - (queda ? .1 * p.face : 0);
+      s.onda.position.set(x, .035, 0);
+      s.onda.scaling.setAll(tamanho * (.6 + .7 * Math.sqrt(f)));
+      s.onda.visibility = .95 * (1 - f) ** 2;
+      s.nuvens.forEach((n, i) => {
+        const direcao = i / 2 - 1;
+        n.position.set(x + direcao * tamanho * (.15 + f * .45), .12 + f * (.25 + i % 2 * .12), -.12 + i * .05);
+        n.scaling.setAll((.45 + f * .85) * (queda ? 1 : .6));
+        n.visibility = .8 * (1 - f) ** 2;
+      });
+    });
     const quedas = quedasDoFinal(estado, U), fT = estado?.fT ?? 0;
     for (const q of quedas) {
       if (ultimoFinal === null || ultimoFinal >= q.contato || fT < q.contato) continue;
@@ -464,6 +508,7 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
     relogio = 0; tremor = 0; superNasc = koNasc = flashNasc = tremorNasc = -1e9; faseAnterior = null;
     for (const r of [...respingos, ...escudos, ...rastro]) { r.nasc = -1e9; r.malha.setEnabled(false); }
     for (const l of letreiros_.values()) { l.nasc = -1e9; l.malha.setEnabled(false); }
+    for (const s of solo) { s.onda.setEnabled(false); s.nuvens.forEach(n => n.setEnabled(false)); }
   }
 
   // Malhas que acendem na camada de brilho (estrelas, tinta, escudos, flash).
