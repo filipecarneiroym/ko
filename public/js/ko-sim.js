@@ -49,8 +49,8 @@
         ck: { dur: 26, janelas: [P({ de: 6, ate: 9, dano: 45, tipo: 'baixo', derruba: 1, caixa: [4, -10, 34, 10] })] },
         ap: { dur: 20, janelas: [P({ de: 4, ate: 14, dano: 45, tipo: 'aereo', caixa: [4, -40, 22, 14] })] },
         ak: { dur: 22, janelas: [P({ de: 5, ate: 16, dano: 55, hs: 18, tipo: 'aereo', caixa: [2, -26, 28, 12] })] },
-        // Cenoura bumerangue: vai, volta e acerta nas duas passadas.
-        esp: { dur: 30, proj: { quadro: 10, tipo: 'cenoura', vx: 100, y: 48, w: 16, h: 8, vida: 110, volta: 30, dano: 55, hs: 20, bs: 14 } },
+        // Hadouken: a chama sai reta e some; não volta.
+        esp: { dur: 30, proj: { quadro: 10, tipo: 'cenoura', vx: 100, y: 48, w: 16, h: 8, vida: 110, dano: 55, hs: 20, bs: 14 } },
         // Subida com soco (frente, baixo, baixo-frente + soco): alta, pega quem está de pé.
         dp: { dur: 30, janelas: [P({ de: 6, ate: 12, dano: 60, hs: 22, bs: 14, caixa: [2, -96, 30, 70], derruba: 1 })] },
         // Toca: some no chão, anda por baixo e salta debaixo do adversário.
@@ -366,7 +366,7 @@
       id, lado, x: lado === 0 ? 112 * U : 272 * U, y: 0, vx: 0, vy: 0, face: lado === 0 ? 1 : -1,
       vida: d.vida, poder: 0, estado: 'parado', t: 0, golpe: null, encostou: 0, acertos: 0,
       stun: 0, combo: 0, juggle: 0, inv: 0, pulosAr: 0, empurrao: 0, sumido: 0, armadura: 0, forca: 0, enrolado: 0, prende: '', estrelas: 0,
-      bAnt: 0, buf: { P: 0, K: 0, S: 0, B: 0, U: 0 }, quandoP: -99, quandoK: -99, hist: [],
+      bAnt: 0, buf: { P: 0, K: 0, S: 0, B: 0, U: 0 }, quandoP: -99, quandoK: -99, hist: [], pressF: -99, pressT: -99, passoT: 0, passoDir: 0,
       toqueFrente: -99, toqueTras: -99, soltouFrente: 1, soltouTras: 1,
     };
   }
@@ -444,6 +444,11 @@
     if (sobe & tr) { if (s.f - l.toqueTras <= 12 && l.soltouTras) l.toqueDuploTras = 1; l.toqueTras = s.f; l.soltouTras = 0; }
     if (sobe & B.RC) l.toqueDuploTras = 1;
     if (!(bits & tr) && l.toqueTras !== s.f) l.soltouTras = 1;
+    // Toque curto para frente ou para trás (até 6 quadros) dá um passo, como no boxe.
+    if (sobe & fr) l.pressF = s.f;
+    if (sobe & tr) l.pressT = s.f;
+    if (!(bits & fr) && (l.bAnt & fr) && s.f - l.pressF <= 6) { l.passoT = 1; l.passoDir = 1; }
+    if (!(bits & tr) && (l.bAnt & tr) && s.f - l.pressT <= 6) { l.passoT = 1; l.passoDir = -1; }
     // Histórico de direção (frente/baixo) para sequências como o quarto de círculo.
     l.hist.push((bits & B.D ? 'D' : '') + (bits & fr ? 'F' : '') || 'N');
     if (l.hist.length > JANELA_MOVIMENTO) l.hist.shift();
@@ -558,6 +563,11 @@
     }
     if (agachado) { if (l.estado !== 'agachado') mudar(l, 'agachado'); vel(s, l, 0); return; }
     if (l.toqueDuploTras) { mudar(l, 'recuo'); l.inv = 8; l.vx = -l.face * 90; return; }
+    if (l.passoT > 0 && l.passoT <= 10 && !l.toqueDuploFrente && l.estado !== 'corrida') {
+      if (l.estado !== 'andando') mudar(l, 'andando');
+      vel(s, l, l.face * l.passoDir * d.andar); l.passoT++; return;
+    }
+    l.passoT = 0;
     if (segura(fr)) {
       if (l.toqueDuploFrente || l.estado === 'corrida') { if (l.estado !== 'corrida') mudar(l, 'corrida'); vel(s, l, l.face * d.correr); return; }
       if (l.estado !== 'andando') mudar(l, 'andando');

@@ -51,7 +51,7 @@ test('impacto real da Pipoca congela durante hitstop e render repetido não cria
   } finally { cena.fechar(); }
 });
 
-test('cenoura segue s.proj depois do fim do esp, inverte no retorno e desaparece junto ao projétil', async () => {
+test('hadouken segue s.proj depois do fim do esp, vai reto e desaparece junto ao projétil', async () => {
   const cena = await preparar();
   try {
     const s = estado(); s.p[0].x = 70 * K.U; s.p[1].x = 320 * K.U;
@@ -67,13 +67,13 @@ test('cenoura segue s.proj depois do fim do esp, inverte no retorno e desaparece
       existiu = true;
       assert.equal(cenoura.position.x, (p.x / K.U - K.LARGURA / 2) / 24);
       assert.equal(cenoura.position.y, p.y / K.U / 24);
-      // Ponta voltada para onde vai: frente na ida, vira na volta do bumerangue.
+      // Ponta voltada para onde vai: a chama sempre segue para a frente.
       assert.equal(cenoura.rotation.z, p.vx >= 0 ? 0 : Math.PI);
       if (s.p[0].golpe !== 'esp') aposClip = true;
-      if (p.voltando) voltou = true;
+      if (p.voltando) voltou = true; // o hadouken não volta: a flag nunca liga
     }
-    assert.ok(existiu && aposClip && voltou);
-    assert.equal(cenoura.isEnabled(), false, 'Voltar para a mão encerra também o visual');
+    assert.ok(existiu && aposClip && !voltou);
+    assert.equal(cenoura.isEnabled(), false, 'Sumir encerra também o visual');
   } finally { cena.fechar(); }
 });
 

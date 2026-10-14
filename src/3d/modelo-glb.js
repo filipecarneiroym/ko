@@ -98,8 +98,10 @@ export async function carregarModelo(buffer, id, simulador, scene) {
           // Chutes (troca de perna, chute cortado, volta à guarda) também fundem
           // as poses em 4 quadros, antes da janela ativa. Defesa e dano entram na hora.
           // (Rasteira e chute aéreo ficam de fora: a fusão perto do piso o atravessaria.)
+          // Chute agachado (ck) também funde ao voltar para a guarda ou para o agachar.
           const trocaChute = !!atual && !emendaChute && (/^(k1|k2)$/.test(grupo.name)
-            || /^(k1|k2)$/.test(atual.name) && ['parado', 'andando', 'recuo'].includes(grupo.name));
+            || /^(k1|k2)$/.test(atual.name) && ['parado', 'andando', 'recuo'].includes(grupo.name)
+            || atual.name === 'ck' && ['parado', 'agachado'].includes(grupo.name));
           const PASSADAS = ['parado', 'andando', 'recuo', 'pousando']; // corrida entra direto na passada certa
           const trocaPassada = !!atual && PASSADAS.includes(atual.name) && PASSADAS.includes(grupo.name);
           // Fim da queda emenda no levantar sem estalo.

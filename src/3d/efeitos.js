@@ -67,6 +67,8 @@ export function criarEfeitos(scene, simulador, movimentoReduzido = { matches: fa
       folha.parent = raiz; folha.material = verde; folha.isPickable = false;
       folha.position.set(-.29, (i - 1) * .045, 0); folha.rotation.z = Math.PI / 2 + (i - 1) * .55;
     }
+    // Hadouken: só a chama (brilho-golpes.js) aparece; o modelo de cenoura fica oculto.
+    raiz.getChildMeshes().forEach(m => { m.isVisible = false; });
     raiz.setEnabled(false);
     return raiz;
   }

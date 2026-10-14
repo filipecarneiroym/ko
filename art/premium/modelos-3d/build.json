@@ -15,15 +15,15 @@
     "src/3d/camera-luta.js": "db2e510b35a409e53692fa3dcff8481b2e95d7102934bf7edf9327dd6be9777a",
     "src/3d/contrato-glb.mjs": "6b292f3da1c4a1fe1ea3963c0c8c0600994a57bdf9b29090c65e2a81108cbae5",
     "src/3d/efeitos-sf4.js": "47ee8072d334c04a5d30eaae609b263a950df51bba7e69c56ff2f4471e3c18fc",
-    "src/3d/efeitos.js": "5f75a2514401d87adb527b353ae5991b1f0617b2870b197d8026661929e28ea6",
+    "src/3d/efeitos.js": "422cdfa76ae591d0fd78989a94d5b38110a8cc83f365d6cb6d326fd9a5bdcf2b",
     "src/3d/estado-visual.mjs": "9611a49ab2972576a51e55d33e9b4cfbd18dfecedd27a1c3197a87d0b2472169",
     "src/3d/jogo-3d.js": "b8101e1ca6c87d21175aab7f7f7a860a42d196e32e0f7679a53d64f88e4d9037",
     "src/3d/laboratorio.js": "da2ce170dae82c152185450c9dbfff756d0a0cb07076167c9194203a4aee7e72",
-    "src/3d/modelo-glb.js": "68ad6b51e029c59d775aecc3d9a0993cbd5eb170c6d74912f3da3000c3c59b89",
+    "src/3d/modelo-glb.js": "a5791b81a341d1b5a4b23a04a23d09b7fafc497479bbbcac2671e29f6f2bcab1",
     "src/3d/perfil-pipoca.mjs": "effca8a992370c7fe15a90f05e570b5ac9b677f69ad879b44de49c6b58e9884a"
   },
   "saida": {
     "caminho": "public/js/ko-laboratorio-3d.js",
-    "sha256": "c051c2baa7159fa74179b53bc9e1295a6251ff4ddb4c47ba4fc032103a825d66"
+    "sha256": "c3f13434ed835d74e3b1fb2cb7d6cdd6c9e9121d3364aa7ee3666dcc534c2556"
   }
 }

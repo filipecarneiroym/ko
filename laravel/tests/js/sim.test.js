@@ -293,7 +293,7 @@ test('esquiva rolando atravessa o adversário sem apanhar', () => {
   assert.ok(s.p[0].x > x1, 'a esquiva deveria passar para o outro lado');
 });
 
-test('cenoura vai, volta e some', () => {
+test('hadouken vai reto e some, sem voltar', () => {
   const s = prontaParaLutar();
   s.p[0].x = 60 * K.U; s.p[1].x = 330 * K.U;
   K.passo(s, [B.S, 0]);
@@ -301,6 +301,7 @@ test('cenoura vai, volta e some', () => {
   assert.strictEqual(s.proj.length, 1);
   roteiro(s, [[0, 0, 120]]);
   assert.strictEqual(s.proj.length, 0);
+  assert.ok(s.proj.every(p => !p.voltando), 'a chama não pode voltar');
 });
 
 test('agarrão interrompido solta quem estava preso', () => {
