@@ -67,6 +67,8 @@ export async function carregarModelo(buffer, id, simulador, scene) {
     let transicao = null;
     return {
       get malhas() { return malhas; },
+      // Osso pelo nome (os dois lutadores têm os mesmos nomes; a cena não serve).
+      osso(nome) { return nosDosOssos.find(no => no.name === nome) || null; },
       atualizar(pose) {
         // Mortal gira em volta da cintura (não dos pés): compensa a posição.
         const giro = pose.mortal || 0, centro = 1.15;

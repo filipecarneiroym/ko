@@ -4,6 +4,7 @@ import { descreverPose } from './estado-visual.mjs';
 import { carregarModelo } from './modelo-glb.js';
 import { criarEfeitos } from './efeitos.js';
 import { criarEfeitosSF4 } from './efeitos-sf4.js';
+import { criarBrilhoGolpes } from './brilho-golpes.js';
 import { criarApresentacao } from './apresentacao.js';
 import { criarArena } from './arenas.js';
 import { criarCameraLuta, enquadrarCameraLuta } from './camera-luta.js';
@@ -75,7 +76,7 @@ async function baixar(url, sinal) {
 }
 
 function criar(canvas, { cenario, lutadores, aoFalhar } = {}) {
-  let engine, scene, camera, apresentacao, efeitos, sf4;
+  let engine, scene, camera, apresentacao, efeitos, sf4, brilhoGolpes;
   const modelos = [null, null], controle = new AbortController();
   let arena = null, encerrado = false, ultimoF = null, preparado = false, falha = null;
   perdeuContexto = false;
@@ -141,6 +142,8 @@ function criar(canvas, { cenario, lutadores, aoFalhar } = {}) {
     const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)');
     efeitos = criarEfeitos(scene, KOSim, reduzido);
     sf4 = criarEfeitosSF4(scene, KOSim, reduzido, { letreiros: false });
+    brilhoGolpes = criarBrilhoGolpes(scene, KOSim, reduzido);
+    for (const m of sf4.malhasBrilho) brilhoGolpes.brilho.addIncludedOnlyMesh(m);
     addEventListener('resize', redimensionar);
   } catch (erro) {
     liberar();
@@ -191,6 +194,7 @@ function criar(canvas, { cenario, lutadores, aoFalhar } = {}) {
         const passos = ultimoF === null ? 0 : Math.max(0, s.f - ultimoF);
         ultimoF = s.f;
         s.p.forEach((p, i) => modelos[i].atualizar(descreverPose(p, KOSim, s)));
+        brilhoGolpes.atualizar(s, modelos);
         arena?.atualizar(s.f);
         sf4.atualizar(s, passos, camera);
         enquadrarCameraLuta(camera, engine, s, KOSim, sf4.camera(s));
@@ -200,7 +204,7 @@ function criar(canvas, { cenario, lutadores, aoFalhar } = {}) {
     },
     limpar() {
       if (encerrado) return;
-      try { efeitos.limpar(); sf4.limpar(); ultimoF = null; }
+      try { efeitos.limpar(); sf4.limpar(); brilhoGolpes.limpar(); ultimoF = null; }
       catch (erro) { falhar(erro, 'efeitos'); }
     },
     descartar() {

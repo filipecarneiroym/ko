@@ -13,11 +13,12 @@ import { criarCaixas } from './caixas.js';
 import { criarApresentacao } from './apresentacao.js';
 import { criarArena, ARENAS } from './arenas.js';
 import { criarEfeitosSF4 } from './efeitos-sf4.js';
+import { criarBrilhoGolpes } from './brilho-golpes.js';
 import { criarCameraLuta, enquadrarCameraLuta } from './camera-luta.js';
 
 const canvas = document.querySelector('#arena-3d');
 const aviso = document.querySelector('#estado-3d');
-let engine, scene, camera, efeitos, sf4, apresentacao, anterior = 0, acumulado = 0, indicador = 0;
+let engine, scene, camera, efeitos, sf4, brilhoGolpes, apresentacao, anterior = 0, acumulado = 0, indicador = 0;
 let suspenso = false, preservado = false, encerrado = false, carregando = false, operacaoModelo = null;
 let estado = KOSim.novo({ lutadores: ['pipoca', 'uivo'], treino: true });
 // Luta Pipoca azul × Pipoca vermelha: contra a máquina (KOCPU) ou 2 jogadores.
@@ -37,7 +38,7 @@ const teclas2 = new Set();
 const limparEntrada = () => { teclas.clear(); teclas2.clear(); pulsos.clear(); toques.clear(); };
 const reiniciar = () => {
   if (carregando || encerrado) return;
-  limparEntrada(); efeitos?.limpar(); sf4?.limpar();
+  limparEntrada(); efeitos?.limpar(); sf4?.limpar(); brilhoGolpes?.limpar();
   estado = KOSim.novo(luta ? { lutadores: ['pipoca', 'pipoca'], treino: false } : { lutadores: ['pipoca', 'uivo'], treino: true });
   cpu = luta?.modo === 'cpu' ? globalThis.KOCPU.criar(KOSim, luta.nivel) : null;
 };
@@ -201,7 +202,7 @@ async function iniciarLuta() {
       antigos.forEach(m => m?.descartar());
       luta = { modo, nivel };
       // Nova luta já com as duas Pipocas (reiniciar ignora pedidos durante o carregamento).
-      limparEntrada(); efeitos?.limpar(); sf4?.limpar();
+      limparEntrada(); efeitos?.limpar(); sf4?.limpar(); brilhoGolpes?.limpar();
       estado = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: false });
       cpu = modo === 'cpu' ? globalThis.KOCPU.criar(KOSim, nivel) : null;
       const avisoModelo = document.querySelector('#estado-modelos');
@@ -264,6 +265,8 @@ try {
   const bonecos = [manequim(0, '#ffb12b'), manequim(1, '#6aa8ff')];
   efeitos = criarEfeitos(scene, KOSim, window.matchMedia('(prefers-reduced-motion: reduce)'));
   sf4 = criarEfeitosSF4(scene, KOSim, window.matchMedia('(prefers-reduced-motion: reduce)'));
+  brilhoGolpes = criarBrilhoGolpes(scene, KOSim, window.matchMedia('(prefers-reduced-motion: reduce)'));
+  for (const m of sf4.malhasBrilho) brilhoGolpes.brilho.addIncludedOnlyMesh(m);
   const caixas = criarCaixas(scene, KOSim);
   const exibirCaixas = document.querySelector('#exibir-caixas');
   anterior = performance.now();
@@ -310,6 +313,7 @@ try {
       b.braco.position.x = janela ? 1.05 : .65;
       b.perna.rotation.z = janela && p.golpe?.includes('k') ? -.9 : 0;
     });
+    if (modelos[0] && modelos[1]) brilhoGolpes.atualizar(estado, modelos);
     tempoArena += dt / (1000 / 60); arena.atualizar(tempoArena);
     enquadrarCamera();
     efeitos.atualizar(estado.f, estado); caixas.atualizar(estado, !!exibirCaixas?.checked);

@@ -412,5 +412,7 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
     for (const l of letreiros_.values()) { l.nasc = -1e9; l.malha.setEnabled(false); }
   }
 
-  return { eventos, atualizar, camera, limpar };
+  // Malhas que acendem na camada de brilho (estrelas, tinta, escudos, flash).
+  const malhasBrilho = [...estrelas.map(e => e.malha), ...respingos.map(r => r.malha), ...escudos.map(e => e.malha), ...bolasFlash];
+  return { eventos, atualizar, camera, limpar, malhasBrilho };
 }
