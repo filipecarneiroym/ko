@@ -109,6 +109,13 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
     aura.minSize = .18; aura.maxSize = .42; aura.minLifeTime = .18; aura.maxLifeTime = .45;
     aura.color1 = new Color4(1, .78, .3, .9); aura.color2 = new Color4(1, .35, .08, .8); aura.colorDead = new Color4(.3, 0, 0, 0);
     aura.emitRate = 0; aura.start();
+    const nevoa = new ParticleSystem(`golpe-nevoa-${lado}`, 160, scene);
+    nevoa.particleTexture = chama; nevoa.blendMode = ParticleSystem.BLENDMODE_ADD;
+    nevoa.emitter = new Vector3(0, -100, 0); nevoa.createSphereEmitter(.08);
+    nevoa.minEmitPower = .1; nevoa.maxEmitPower = .5; nevoa.gravity = new Vector3(0, .7, 0);
+    nevoa.minSize = .14; nevoa.maxSize = .32; nevoa.minLifeTime = .12; nevoa.maxLifeTime = .3;
+    nevoa.addSizeGradient(0, .6); nevoa.addSizeGradient(1, 1.5);
+    nevoa.emitRate = 0; nevoa.start();
     // Focus Attack: redemoinho de tinta escura em volta do corpo enquanto carrega.
     const foco = new ParticleSystem(`golpe-foco-${lado}`, 160, scene);
     foco.particleTexture = tintaFoco; foco.blendMode = ParticleSystem.BLENDMODE_STANDARD;
@@ -120,7 +127,7 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
     foco.minSize = .35; foco.maxSize = .75; foco.minLifeTime = .25; foco.maxLifeTime = .5;
     foco.color1 = new Color4(1, 1, 1, .85); foco.color2 = new Color4(.8, .85, 1, .7); foco.colorDead = new Color4(.5, .5, .7, 0);
     foco.emitRate = 0; foco.start();
-    return { ponta, rastro, mat, aura, foco, ativo: false };
+    return { ponta, rastro, mat, aura, foco, nevoa, ativo: false };
   });
 
   // O membro que bate é o mais esticado para a frente (mão ou pé).
@@ -192,8 +199,14 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
             d.mat.emissiveColor = Color3.FromHexString(COR[tipo]);
             d.rastro.diameter = tipo === 'fraco' ? .12 : .2;
             d.rastro.reset(); d.rastro.setEnabled(true); d.rastro.start();
+            const fogo = tipo !== 'fraco';
+            d.nevoa.color1 = fogo ? new Color4(1, .78, .35, .8) : new Color4(.8, .92, 1, .6);
+            d.nevoa.color2 = fogo ? new Color4(1, .38, .1, .6) : new Color4(.5, .7, 1, .45);
+            d.nevoa.colorDead = new Color4(0, 0, 0, 0);
           }
         } else if (d.ativo) { d.rastro.stop(); d.rastro.setEnabled(false); }
+        d.nevoa.emitRate = ativo && !movimentoReduzido.matches ? 140 : 0;
+        if (ativo) d.nevoa.emitter = d.ponta.position.clone();
         d.ativo = ativo; d.janela = janela;
 
         // Focus: tinta enquanto carrega (até soltar o golpe).
@@ -206,10 +219,10 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
         if (queima) d.aura.emitter.set((l.x / simulador.U - simulador.LARGURA / 2) / 24, l.y / simulador.U / 24 + 1.15, 0);
       });
     },
-    limpar() { for (const b of bolas) { b.malha.setEnabled(false); b.fogo.emitRate = 0; b.fogo.reset(); } for (const d of lados) { d.rastro.stop(); d.rastro.setEnabled(false); d.ativo = false; d.aura.emitRate = 0; d.aura.reset(); d.foco.emitRate = 0; d.foco.reset(); } },
+    limpar() { for (const b of bolas) { b.malha.setEnabled(false); b.fogo.emitRate = 0; b.fogo.reset(); } for (const d of lados) { d.rastro.stop(); d.rastro.setEnabled(false); d.ativo = false; d.aura.emitRate = 0; d.aura.reset(); d.foco.emitRate = 0; d.foco.reset(); d.nevoa.emitRate = 0; d.nevoa.reset(); } },
     descartar() {
       tintaFoco.dispose();
-      for (const d of lados) { d.foco.dispose(); d.aura.dispose(); d.rastro.dispose(); d.mat.dispose(); d.ponta.dispose(); }
+      for (const d of lados) { d.nevoa.dispose(); d.foco.dispose(); d.aura.dispose(); d.rastro.dispose(); d.mat.dispose(); d.ponta.dispose(); }
       for (const b of bolas) { b.fogo.dispose(); b.malha.dispose(); }
       matBola.dispose(); texBola.dispose(); chama.dispose(); brilho.dispose();
     },

@@ -81,6 +81,21 @@ function texturaEstrela(scene, nome, cor) {
   return t;
 }
 
+function texturaFumaca(scene) {
+  const n = 128, c = n / 2, t = new DynamicTexture('sf4-fumaca', { width: n, height: n }, scene, true);
+  t.hasAlpha = true;
+  const g = t.getContext();
+  g.clearRect(0, 0, n, n);
+  // Várias bolas macias formam uma nuvem irregular.
+  for (const [x, y, r, a] of [[0, 0, .5, .5], [-.22, -.1, .32, .4], [.24, -.08, .3, .4], [-.1, .2, .3, .35], [.16, .18, .28, .35]]) {
+    const gr = g.createRadialGradient(c + x * n, c + y * n, 0, c + x * n, c + y * n, r * n);
+    gr.addColorStop(0, `rgba(235,232,228,${a})`); gr.addColorStop(1, 'rgba(235,232,228,0)');
+    g.fillStyle = gr; g.fillRect(0, 0, n, n);
+  }
+  t.update();
+  return t;
+}
+
 function texturaBrilho(scene, nome, cor) {
   const t = new DynamicTexture(nome, { width: 128, height: 128 }, scene, true);
   t.hasAlpha = true;
@@ -190,6 +205,15 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
   const faiscas = sistema('sf4-faiscas', texFaisca, '#ffe6a0ff', '#ff7a1cff');
   const faiscasFrias = sistema('sf4-faiscas-frias', texFaiscaFria, '#e8fbffff', '#4fb8ffff');
   function explodir(ps, x, y, z, n) { ps.emitter = new Vector3(x, y, z); ps.manualEmitCount = n; }
+  const fumaca = new ParticleSystem('sf4-fumaca', 120, scene);
+  fumaca.particleTexture = texturaFumaca(scene); fumaca.blendMode = ParticleSystem.BLENDMODE_STANDARD;
+  fumaca.color1 = new Color4(1, 1, 1, .55); fumaca.color2 = new Color4(.85, .82, .8, .45); fumaca.colorDead = new Color4(.8, .78, .76, 0);
+  fumaca.minSize = .35; fumaca.maxSize = .8; fumaca.minLifeTime = .35; fumaca.maxLifeTime = .75;
+  fumaca.minEmitPower = .4; fumaca.maxEmitPower = 1.3; fumaca.gravity = new Vector3(0, .9, 0);
+  fumaca.minAngularSpeed = -1.5; fumaca.maxAngularSpeed = 1.5;
+  fumaca.addSizeGradient(0, .5); fumaca.addSizeGradient(1, 1.6);
+  fumaca.createSphereEmitter(.15); fumaca.emitRate = 0; fumaca.manualEmitCount = 0; fumaca.renderingGroupId = 1;
+  fumaca.start();
 
   // Escudo de defesa (anel com hexágonos, voltado para a câmera).
   const escudos = Array.from({ length: 4 }, (_, i) => ({ malha: plano(`sf4-escudo-${i}`, matEscudo, 1), nasc: -1e9 }));
@@ -264,6 +288,7 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
         if (pesado) respingo(matForte, x, y, -.5, 1.6, 20, 'acerto', .9);
         bolasFlash[cursor % 3].position.set(x, y, -.6); bolasFlash[cursor % 3].metadata = { nasc: relogio, tam: pesado ? 2.6 : 1.5 };
         estrela(matEstrela, x, y, -.7, pesado ? 2.4 : 1.5, pesado ? 11 : 8);
+        if (!reduzido()) explodir(fumaca, x, y, -.45, pesado ? 16 : 7);
         if (!reduzido()) explodir(faiscas, x, y, -.5, pesado ? 70 : 30);
         tremor = pesado ? .16 : .06; tremorNasc = relogio;
         if (pesado) { flashNasc = relogio; flashForca = .18; }
