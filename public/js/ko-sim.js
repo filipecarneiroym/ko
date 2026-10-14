@@ -609,9 +609,11 @@
       if (l.stun > 0) l.stun--;
     } else if (l.estado === 'caido') {
       l.inv = 2;
+      l.vx = 0; // nada de escorregar deitado: a queda para onde encostou
       if (l.t >= 46) { mudar(l, 'levantando'); }
     } else if (l.estado === 'levantando') {
       l.inv = 2;
+      l.vx = 0;
       if (l.t >= 16) { mudar(l, 'parado'); l.combo = 0; l.juggle = 0; l.inv = 4; }
     } else if (l.estado === 'pousando') {
       if (l.t >= 4) mudar(l, 'parado');
@@ -710,7 +712,7 @@
       v.derrubado = 1;
     }
     if (golpe.derruba) v.derrubado = 1;
-    if (golpe.derruba && !golpe.lanca && noChao(v)) { mudar(v, 'caido'); }
+    if (golpe.derruba && !golpe.lanca && noChao(v)) { mudar(v, 'caido'); v.vx = 0; }
     if (golpe.tonto) v.estrelas = 50;
     if (golpe.enrola || golpe.prende) { v.enrolado = golpe.hs; v.prende = golpe.prende || 'la'; } // lã da Vó Nena, cartola do Truque
     // Bengala do Vô Tião: puxa quem foi fisgado para colado nele.

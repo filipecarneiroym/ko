@@ -148,6 +148,7 @@ button, a.botao { touch-action: manipulation; min-height: 48px; }
 .painel-graficos p { margin: 0; font: 600 15px/1.5 system-ui, sans-serif; }
 .painel-graficos details { max-width: 100%; color: var(--apagado); font: 13px/1.5 system-ui, sans-serif; overflow-wrap: anywhere; }
 .painel-graficos summary { cursor: pointer; padding: 8px; }
+.diag-3d { margin: 6px 0 0; padding: 8px 10px; background: #00000040; border-radius: 8px; white-space: pre-wrap; overflow-wrap: anywhere; font: 12px/1.5 ui-monospace, monospace; color: #cfe8ff; text-align: left; }
 .carregando-3d { width: 32px; height: 32px; border: 3px solid #ffffff30; border-top-color: var(--amarelo); border-radius: 50%; animation: carregar-3d 1s linear infinite; }
 @keyframes carregar-3d { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .carregando-3d { animation: none; } }

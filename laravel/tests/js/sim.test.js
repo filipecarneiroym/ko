@@ -454,6 +454,27 @@ test('onda gigante do Maré não dá para pular por cima', () => {
   assert.ok(pegou, 'a onda deveria pegar mesmo pulando');
 });
 
+test('rasteira derruba o boneco no lugar (não escorrega deitado)', () => {
+  const s = prontaParaLutar(['pipoca', 'pipoca']);
+  colar(s);
+  let caiu = false, medindo = false, xMax = -Infinity, xMin = Infinity, vxSuspeito = 0;
+  for (let i = 0; i < 220; i++) {
+    // p1 agachado dá rasteira (ck); p0 anda para a direita, em direção ao p1.
+    K.passo(s, [B.R, B.D | (i % 10 === 0 ? B.K : 0)]);
+    const v = s.p[0];
+    const noChao_ = v.estado === 'caido' || v.estado === 'levantando';
+    if (noChao_ && !medindo) { medindo = true; caiu = true; xMax = xMin = v.x; }
+    if (medindo && noChao_) {
+      xMax = Math.max(xMax, v.x); xMin = Math.min(xMin, v.x);
+      if (v.vx !== 0) vxSuspeito++;
+    }
+    if (medindo && !noChao_) break; // fim da primeira queda basta
+  }
+  assert.ok(caiu, 'a rasteira deveria derrubar o boneco');
+  assert.ok(xMax - xMin < 20 * K.U, 'escorregou deitado ' + (xMax - xMin) + ' unidades');
+  assert.strictEqual(vxSuspeito, 0, 'o caído ficou com velocidade horizontal');
+});
+
 test('arrancada de moto do Volt e escada da Brasa acertam várias vezes', () => {
   for (const id of ['volt', 'brasa']) {
     const s = prontaParaLutar([id, 'uivo']);

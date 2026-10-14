@@ -12,6 +12,24 @@ import { criarCameraLuta, enquadrarCameraLuta } from './camera-luta.js';
 // máquina e o online continuam iguais. A tela 2D fica por cima, transparente,
 // com o placar. Personagens com modelo 3D: por enquanto a Pipoca (roupa azul
 // no lado 1 e vermelha no lado 2).
+
+// Etiqueta da versão do 3D. Aparece no aviso de erro para conferir se o aparelho
+// carregou o arquivo novo (o Safari do iOS guarda JavaScript em cache com facilidade).
+const VERSAO_3D = 'ko3d-2026-10-13d';
+// iPhone/iPad: o WebGL do Safari é mais frágil e a memória é curta.
+const IOS = /iP(hone|ad|od)/.test(navigator.userAgent)
+  || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+// Diagnóstico do aparelho, colhido ao criar o motor (não abre contexto extra).
+let ultimoDispositivo = null, perdeuContexto = false;
+function lerDispositivo(engine) {
+  const info = { versao: VERSAO_3D, iphone: IOS, uboDesligado: engine.disableUniformBuffers === true };
+  try {
+    const caps = engine.getCaps();
+    return { ...info, webGL: engine.webGLVersion, renderer: caps.renderer, texturaMax: caps.maxTextureSize, memoria: navigator.deviceMemory ?? null };
+  } catch { return info; }
+}
+
 function lerModelos() {
   let config;
   try { config = JSON.parse(document.getElementById('ko-config')?.textContent || 'null'); }
@@ -60,6 +78,7 @@ function criar(canvas, { cenario, lutadores, aoFalhar } = {}) {
   let engine, scene, camera, apresentacao, efeitos, sf4;
   const modelos = [null, null], controle = new AbortController();
   let arena = null, encerrado = false, ultimoF = null, preparado = false, falha = null;
+  perdeuContexto = false;
   let etapa = 'configuração', rejeitarCarga;
   const redimensionar = () => {
     if (encerrado) return;
@@ -94,6 +113,7 @@ function criar(canvas, { cenario, lutadores, aoFalhar } = {}) {
 
   function contextoPerdido(evento) {
     evento.preventDefault();
+    perdeuContexto = true;
     falhar(new Error('O navegador interrompeu o contexto 3D. Tente carregar a luta novamente.'), 'contexto WebGL');
   }
 
@@ -109,6 +129,7 @@ function criar(canvas, { cenario, lutadores, aoFalhar } = {}) {
     // iOS 16.7+/17: "Unable to create uniform buffer"). Desligar os UBOs usa o caminho de
     // uniforms simples e deixa o 3D rodar nesses aparelhos.
     engine.disableUniformBuffers = true;
+    ultimoDispositivo = lerDispositivo(engine);
     // Celular: limita a resolução interna (cada pixel a mais custa bateria).
     engine.setHardwareScalingLevel(Math.max(1, (window.devicePixelRatio || 1) / 1.5));
     canvas.addEventListener('webglcontextlost', contextoPerdido);
@@ -189,6 +210,8 @@ function criar(canvas, { cenario, lutadores, aoFalhar } = {}) {
 }
 
 window.KO3D = {
+  // Etiqueta de versão: aparece no aviso de erro para conferir o que o aparelho baixou.
+  versao: VERSAO_3D,
   // O 3D só entra quando o aparelho aguenta e os dois lutadores têm modelo.
   disponivel: (lutadores) => {
     try {
@@ -197,4 +220,6 @@ window.KO3D = {
     } catch { return false; }
   },
   criar,
+  // Dados do aparelho para o aviso de erro (WebGL, UBO, contexto perdido).
+  diagnostico: () => ({ ...(ultimoDispositivo || { versao: VERSAO_3D, iphone: IOS }), contextoPerdido: perdeuContexto }),
 };

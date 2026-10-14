@@ -359,10 +359,25 @@
     painelGraficos = document.createElement('div');
     painelGraficos.className = 'painel painel-graficos';
     painelGraficos.setAttribute('aria-live', 'polite');
+    let diagnostico = '';
+    if (erro) {
+      let d = {};
+      try { d = window.KO3D?.diagnostico?.() || {}; } catch { d = {}; }
+      diagnostico = [
+        `Etapa: ${erro.etapa3d || 'inicialização'}`,
+        `Versão do 3D: ${d.versao || window.KO3D?.versao || '?'}`,
+        `WebGL: ${d.webGL ?? '?'}`,
+        `Placa: ${d.renderer || '?'}`,
+        `Textura máxima: ${d.texturaMax ?? '?'}`,
+        `iPhone/iPad: ${d.iphone ? 'sim' : 'não'}`,
+        `Uniform buffers desligados: ${d.uboDesligado ? 'sim' : 'não'}`,
+        `Contexto perdido: ${d.contextoPerdido ? 'sim' : 'não'}`,
+      ].join('\n');
+    }
     painelGraficos.innerHTML = `<div class="cartao-fim">
       <h2>${erro ? 'O 3D não carregou' : 'Preparando a arena'}</h2>
       <p role="status">${erro ? 'Confira sua conexão e tente novamente para entrar na luta.' : 'Carregando o cenário e as lutadoras…'}</p>
-      ${erro ? `<details><summary>Detalhes do erro</summary><p>${esc(erro.message || String(erro))}</p></details>
+      ${erro ? `<details><summary>Detalhes do erro</summary><p>${esc(erro.message || String(erro))}</p><pre class="diag-3d">${esc(diagnostico)}</pre></details>
         <button class="botao" data-acao="tentar-3d">Tentar novamente</button>` : '<span class="carregando-3d" aria-hidden="true"></span>'}
       <a class="botao botao-sec" href="${cfg.inicio}">Voltar ao menu</a>
     </div>`;
@@ -395,7 +410,7 @@
       descartarGraficos(partida);
       partida.carregando3d = false; partida.erro3d = erro; partida.sobra = 0;
       controles.hidden = true;
-      window.KODiagnostico3D = { etapa: erro.etapa3d || 'inicialização', mensagem: erro.message || String(erro), data: new Date().toISOString() };
+      window.KODiagnostico3D = { etapa: erro.etapa3d || 'inicialização', mensagem: erro.message || String(erro), data: new Date().toISOString(), dispositivo: (() => { try { return window.KO3D?.diagnostico?.() || null; } catch { return null; } })() };
       mostrarEstadoGraficos(partida, erro);
     };
     // Canvas visível antes de criar o motor, para calcular a resolução correta.
