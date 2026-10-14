@@ -257,6 +257,30 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 26 },
   ]);
 
+  // ak: chute no ar (22 quadros). Sobe a perna da frente esticada no ápice (quadro 8-12)
+  // e recolhe a de trás; o pé de apoio fica no ar, então a sola não é checada.
+  clips.ak = animar('ak', 22, [
+    { q: 0 },
+    { q: 3, giro: -.25, inclinacao: .1, pelve: v(0, .1, 0), pernas: { E: { tornozelo: v(.4, 1.0, ZE + .14), joelho: v(1, .8, 0), pe: 'plano' }, D: { tornozelo: v(.2, .6, ZD - .1), joelho: v(1, .9, 0), pe: 'plano' } } },
+    { q: 8, giro: -.5, inclinacao: .3, pelve: v(.02, .16, 0), pernas: { E: { tornozelo: v(1.05, 1.3, ZE + .2), joelho: v(0, 1, .2), pe: 'esticado' }, D: { tornozelo: v(.1, .55, ZD - .1), joelho: v(1, 1, 0), pe: 'plano' } } },
+    { q: 12, giro: -.5, inclinacao: .3, pelve: v(.02, .16, 0), pernas: { E: { tornozelo: v(1.05, 1.3, ZE + .2), joelho: v(0, 1, .2), pe: 'esticado' }, D: { tornozelo: v(.1, .55, ZD - .1), joelho: v(1, 1, 0), pe: 'plano' } } },
+    { q: 16, giro: -.2, inclinacao: .12, pelve: v(.01, .1, 0), pernas: { E: { tornozelo: v(.45, 1.0, ZE + .14), joelho: v(1, .9, 0), pe: 'plano' }, D: { tornozelo: v(.2, .6, ZD - .1), joelho: v(1, .9, 0), pe: 'plano' } } },
+    { q: 19, giro: 0, inclinacao: .02, pelve: v(0, .04, 0) },
+    { q: 22 },
+  ]);
+
+  // esp (hadouken): as duas mãos se juntam na frente do corpo (carregando), e no
+  // quadro 10 empurram para frente; a bola sai da união das mãos, na altura do peito.
+  const juntas = (x, y) => ({ bracos: { E: { alvo: v(x, y, -.06), cotovelo: v(-.2, -.6, -1) }, D: { alvo: v(x, y, .06), cotovelo: v(-.2, -.6, 1) } } });
+  clips.esp = animar('esp', 30, [
+    { q: 0 },
+    { q: 5, inclinacao: .05, pelve: v(-.02, -.12, 0), ...juntas(.28, -.4) },
+    { q: 10, inclinacao: .12, ...juntas(.8, -.4) },
+    { q: 16, inclinacao: .08, ...juntas(.6, -.38) },
+    { q: 24, ...juntas(.25, -.45) },
+    { q: 30 },
+  ]);
+
   // dp: subida com soco (Shoryuken próprio da Pipoca, 30 quadros). Agacha e carrega
   // (4), sobe com o braço da frente em linha reta (10), no ápice o corpo está mais
   // alto e o braço de trás puxa para o quadril; desce e pousa (22-30).
@@ -367,6 +391,20 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 21, ...baixa(.4), inclinacao: -.34, ...apoio(-.5, .2) },
     { q: 30, ...baixa(.1), inclinacao: -.08 },
     { q: 40 },
+  ]);
+
+  // caido (46 quadros): a Lola cai para trás quase deitada, com as pernas semi-flexionadas
+  // (baixa), toca o chão no quadro 16, quica de leve (30) e assenta; no fim volta à base
+  // agachada que o levantar usa, para a emenda não estalar.
+  clips.caido = animar('caido', 46, [
+    { q: 0 },
+    { q: 8, ...baixa(.12), inclinacao: -.35 },
+    { q: 16, ...baixa(.3), inclinacao: -.7 },
+    { q: 24, ...baixa(.36), inclinacao: -.75 },
+    { q: 30, ...baixa(.32), inclinacao: -.7 },
+    { q: 36, ...baixa(.36), inclinacao: -.72 },
+    { q: 42, ...baixa(0) },
+    { q: 46, ...baixa(0) },
   ]);
 
   // Rolamento sem atravessar o chão: em cada quadro, mede o ponto mais baixo
