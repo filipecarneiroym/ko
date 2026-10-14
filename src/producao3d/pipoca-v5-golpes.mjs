@@ -270,6 +270,24 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 10, ...baixa(0) },
   ]);
 
+  // caido (46 quadros, o motor fixa): queda como a do SF4 depois da rasteira.
+  // A reação começa no quadro 0 (pernas varridas para a frente, tronco para
+  // trás), gira de costas no ar, bate no chão no 9, quica e fica deitada até
+  // o motor mandar levantar. Pernas presas ao corpo (loc) acompanham o giro;
+  // acimaDoPiso() mantém a pele inteira acima do chão.
+  // estica: 0 = pernas varridas à frente (no ar); 1 = estendidas no chão.
+  const deCostas = (rol, pelve, inclinacao, estica = 0) => ({ rol, pelve, inclinacao,
+    pernas: { E: { local: v(.5 - .2 * estica, -.62 - .16 * estica, ZE * .5), loc: 1, joelho: v(1, .6 - .4 * estica, -.1), pe: 'corpo' },
+      D: { local: v(.36 - .02 * estica, -.6 - .14 * estica, ZD * .5), loc: 1, joelho: v(1, .6 - .2 * estica, .1), pe: 'corpo' } } });
+  clips.caido = animar('caido', 46, [
+    { q: 0, ...deCostas(.45, v(-.08, -.3, 0), .45) },
+    { q: 5, ...deCostas(1.25, v(-.3, -.75, 0), .2) },
+    { q: 9, ...deCostas(1.57, v(-.42, -.98, 0), .3, .6) },
+    { q: 11, ...deCostas(1.5, v(-.44, -.88, 0), .2, .5) },
+    { q: 14, ...deCostas(1.38, v(-.45, -1, 0), .62, 1) },
+    { q: 46, ...deCostas(1.38, v(-.45, -1, 0), .6, .85) },
+  ]);
+
   // pulo: impulso, extensão, pernas recolhidas à frente (joelhos para a frente,
   // não para fora) e preparação do pouso. A altura vem do motor.
   const ar = (dy, eE, eD, inc) => ({ pelve: v(0, dy, 0), inclinacao: inc,

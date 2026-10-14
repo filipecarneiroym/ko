@@ -101,9 +101,11 @@ export async function carregarModelo(buffer, id, simulador, scene) {
             || /^(k1|k2)$/.test(atual.name) && ['parado', 'andando', 'recuo'].includes(grupo.name));
           const PASSADAS = ['parado', 'andando', 'recuo', 'pousando']; // corrida entra direto na passada certa
           const trocaPassada = !!atual && PASSADAS.includes(atual.name) && PASSADAS.includes(grupo.name);
-          const fimTransicao = emendaChute || trocaPassada ? 6 : 4;
+          // Fim da queda emenda no levantar sem estalo.
+          const levanta = atual?.name === 'caido' && grupo.name === 'levantando';
+          const fimTransicao = emendaChute || trocaPassada || levanta ? 6 : 4;
           const suavizar = atual?.name === 'p1' && grupo.name === 'p2'
-            || emendaChute || trocaChute || trocaPassada
+            || emendaChute || trocaChute || trocaPassada || levanta
             || atual?.name === 'defesa' && grupo.name === 'parado';
           transicao = id === 'pipoca' && suavizar && pose.quadro < fimTransicao ? {
             inicio: Math.max(0, pose.quadro),
