@@ -1,0 +1,315 @@
+{
+  "aprovadoFinal": false,
+  "descricao": "Cenoura, Super, ataques baixos, ataque aéreo e Final calculados pelo KOSim real. Pipoca vermelha (jogador) contra Pipoca azul.",
+  "caminhoModelo": "public/modelos/estudos/pipoca-v5-vermelha.glb",
+  "sha256Glb": "98ad3d49d2bfe00bd19dc56fd7c60bb7c0bea482b53bc378a021046c0d30ca07",
+  "sha256Simulacao": "be602fcb24aa1445a678f1b7c89c1888df4a7ef28144c0ec9ef633762fb65947",
+  "quadros": [
+    {
+      "cenario": "shoryu",
+      "arquivo": "000.png",
+      "quadro": 0,
+      "fase": "luta",
+      "tempoFase": 0,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 0,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 0,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": [
+        {
+          "t": "round",
+          "n": 1
+        }
+      ]
+    },
+    {
+      "cenario": "shoryu",
+      "arquivo": "001.png",
+      "quadro": 3,
+      "fase": "luta",
+      "tempoFase": 3,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "cp",
+          "quadro": 2,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 3,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "shoryu",
+      "arquivo": "002.png",
+      "quadro": 6,
+      "fase": "luta",
+      "tempoFase": 4,
+      "hitstop": 4,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "cp",
+          "quadro": 3,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "pipoca",
+          "estado": "dano",
+          "golpe": null,
+          "quadro": 0,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "shoryu",
+      "arquivo": "003.png",
+      "quadro": 9,
+      "fase": "luta",
+      "tempoFase": 4,
+      "hitstop": 1,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "cp",
+          "quadro": 3,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "pipoca",
+          "estado": "dano",
+          "golpe": null,
+          "quadro": 0,
+          "x": 2880,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "shoryu",
+      "arquivo": "004.png",
+      "quadro": 12,
+      "fase": "luta",
+      "tempoFase": 6,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "cp",
+          "quadro": 5,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "pipoca",
+          "estado": "dano",
+          "golpe": null,
+          "quadro": 2,
+          "x": 2952,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "shoryu",
+      "arquivo": "005.png",
+      "quadro": 16,
+      "fase": "luta",
+      "tempoFase": 10,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "golpe",
+          "golpe": "cp",
+          "quadro": 9,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "pipoca",
+          "estado": "dano",
+          "golpe": null,
+          "quadro": 6,
+          "x": 3000,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "shoryu",
+      "arquivo": "006.png",
+      "quadro": 20,
+      "fase": "luta",
+      "tempoFase": 14,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 3,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "pipoca",
+          "estado": "dano",
+          "golpe": null,
+          "quadro": 10,
+          "x": 3000,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "shoryu",
+      "arquivo": "007.png",
+      "quadro": 26,
+      "fase": "luta",
+      "tempoFase": 20,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 9,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 4,
+          "x": 3000,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "shoryu",
+      "arquivo": "008.png",
+      "quadro": 32,
+      "fase": "luta",
+      "tempoFase": 26,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 15,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 10,
+          "x": 3000,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    },
+    {
+      "cenario": "shoryu",
+      "arquivo": "009.png",
+      "quadro": 40,
+      "fase": "luta",
+      "tempoFase": 34,
+      "hitstop": 0,
+      "lutadores": [
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 23,
+          "x": 2336,
+          "y": 0,
+          "sumido": 0
+        },
+        {
+          "id": "pipoca",
+          "estado": "parado",
+          "golpe": null,
+          "quadro": 18,
+          "x": 3000,
+          "y": 0,
+          "sumido": 0
+        }
+      ],
+      "projeteis": [],
+      "eventos": []
+    }
+  ],
+  "pedidosExternos": []
+}
