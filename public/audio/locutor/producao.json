@@ -88,13 +88,13 @@
       "sha256": "096bbbf1d0cfde271eecc2684e81fd83ec6a2e03216f94db6dbfb3035293ff44"
     },
     "vitoria-pipoca": {
-      "texto": "Pipoca... venceu!",
+      "texto": "Lola... venceu!",
       "arquivo": "vitoria-pipoca.mp3",
       "tempo": 1,
-      "duracao": 1.974,
-      "pico": 0.75391,
-      "bytes": 32684,
-      "sha256": "92309185a988170912ca6ec4b85cde98ee9e0b69895123312e442c7667e803f6"
+      "duracao": 1.877,
+      "pico": 0.75406,
+      "bytes": 31148,
+      "sha256": "665f2abb56cc7eac3af4e46aeae2c3365f26d72b4d907fffe394dcff44b48b4d"
     },
     "vitoria-uivo": {
       "texto": "Uivo... venceu!",

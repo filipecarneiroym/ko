@@ -64,7 +64,7 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
       for (let tentativa = 0; ; tentativa++) {
         await page.keyboard.down(tecla); await page.waitForTimeout(segurar); await page.keyboard.up(tecla);
         try { await page.waitForFunction(t => window.__eventos.some(e => e.t === t), tipo, { timeout: 8000 }); break; }
-        catch (erro) { if (tentativa >= 2) throw erro; if (antes) await antes(); }
+        catch (erro) { if (tentativa >= 2) { console.log("eventos", tipo, await page.evaluate(() => [window.__eventos.map(e => e.t).join(","), JSON.stringify(globalThis.__laboratorio3d.estado.p.map(p => [p.estado, p.golpe, Math.round(p.x / 16)])), globalThis.__laboratorio3d.pausado])); throw erro; } if (antes) await antes(); }
       }
       await page.waitForFunction(() => globalThis.__laboratorio3d.pausado, null, { timeout: 8000 });
       await page.waitForTimeout(400);
@@ -76,6 +76,8 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
     await golpe('1-soco', 'KeyJ', 'acerto', { antes: aproximar });
     await aproximar();
     await golpe('2-chute', 'KeyK', 'acerto', { antes: aproximar });
+    // A adversária precisa ter saído do atordoamento do chute duplo para defender.
+    await page.waitForFunction(() => !['dano', 'caido', 'levantando'].includes(globalThis.__laboratorio3d.estado.p[1].estado), null, { timeout: 30000 });
     await aproximar();
     await page.keyboard.down('Comma');
     await golpe('3-defesa', 'KeyJ', 'defendeu', { antes: aproximar });

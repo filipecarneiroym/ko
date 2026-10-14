@@ -67,7 +67,8 @@ test('cenoura segue s.proj depois do fim do esp, inverte no retorno e desaparece
       existiu = true;
       assert.equal(cenoura.position.x, (p.x / K.U - K.LARGURA / 2) / 24);
       assert.equal(cenoura.position.y, p.y / K.U / 24);
-      assert.equal(cenoura.rotation.z, p.t / 3 * (p.vx >= 0 ? 1 : -1));
+      // Ponta voltada para onde vai: frente na ida, vira na volta do bumerangue.
+      assert.equal(cenoura.rotation.z, p.vx >= 0 ? 0 : Math.PI);
       if (s.p[0].golpe !== 'esp') aposClip = true;
       if (p.voltando) voltou = true;
     }

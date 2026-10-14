@@ -32,7 +32,7 @@
 
   const LUTADORES = {
     pipoca: {
-      nome: 'Pipoca', vida: 950, andar: 42, tras: 32, correr: 86, pulo: 150, puloX: 50, gravidade: 9, pulosAr: 1,
+      nome: 'Lola', vida: 950, andar: 42, tras: 32, correr: 86, pulo: 150, puloX: 50, gravidade: 9, pulosAr: 1,
       altura: 60, golpes: {
         p1: { dur: 12, cancel: { P: 'p2', S: 1 }, janelas: [P({ de: 3, ate: 5, dano: 35, hs: 14, bs: 9, caixa: [6, -50, 24, 10] })] },
         p2: { dur: 18, cancel: { K: 'k2', S: 1 }, janelas: [P({ de: 5, ate: 7, dano: 50, hs: 17, bs: 11, caixa: [6, -48, 28, 12] })] },

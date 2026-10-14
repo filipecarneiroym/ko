@@ -204,8 +204,8 @@ export function criarEfeitos(scene, simulador, movimentoReduzido = { matches: fa
       raiz.setEnabled(!!p);
       if (!p) continue;
       raiz.position.set(xMundo(p.x), yMundo(p.y), -.12);
-      // O projétil pode sobreviver ao clip esp; t/vx já refletem ida, volta e hitstop.
-      raiz.rotation.z = reduzido ? p.vx >= 0 ? 0 : Math.PI : p.t / 3 * (p.vx >= 0 ? 1 : -1);
+      // Ponta sempre para onde a cenoura vai (na volta do bumerangue, vira junto).
+      raiz.rotation.z = p.vx >= 0 ? 0 : Math.PI;
     }
   }
 

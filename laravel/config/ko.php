@@ -14,7 +14,7 @@ return [
     // Artes e regras dos demais ficam preservadas para a produção de cada modelo.
     'lutadores' => [
         'pipoca' => [
-            'nome' => 'Pipoca', 'pronto' => true, 'arte' => 'pipoca-v1.webp',
+            'nome' => 'Lola', 'pronto' => true, 'arte' => 'pipoca-v1.webp',
             'modelos3d' => ['/modelos/estudos/pipoca-v5-azul.glb', '/modelos/estudos/pipoca-v5-vermelha.glb'],
         ],
         'uivo' => ['nome' => 'Uivo', 'pronto' => false, 'arte' => 'uivo-v1.webp'],

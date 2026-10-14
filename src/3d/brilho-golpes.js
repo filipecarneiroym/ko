@@ -1,5 +1,7 @@
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode.js';
 import { TrailMesh } from '@babylonjs/core/Meshes/trailMesh.js';
+import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder.js';
+import { Mesh } from '@babylonjs/core/Meshes/mesh.js';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture.js';
 import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem.js';
@@ -27,11 +29,54 @@ function texturaChama(scene) {
   return t;
 }
 
+// Bola de fogo do especial (como o hadouken): miolo branco, corpo laranja e
+// línguas de chama em volta.
+function texturaBolaDeFogo(scene) {
+  const n = 256, c = n / 2, t = new DynamicTexture('golpe-bola-fogo', { width: n, height: n }, scene, true);
+  t.hasAlpha = true;
+  const g = t.getContext();
+  g.clearRect(0, 0, n, n);
+  g.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < 14; i++) {
+    const a = i / 14 * Math.PI * 2, comp = c * (.62 + (i % 3) * .1);
+    g.save(); g.translate(c, c); g.rotate(a);
+    const gr = g.createLinearGradient(0, 0, comp, 0);
+    gr.addColorStop(0, 'rgba(255,200,90,.9)'); gr.addColorStop(.6, 'rgba(255,90,20,.5)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = gr; g.beginPath(); g.moveTo(0, -c * .14); g.quadraticCurveTo(comp * .7, -c * .1, comp, 0); g.quadraticCurveTo(comp * .7, c * .1, 0, c * .14); g.fill();
+    g.restore();
+  }
+  const miolo = g.createRadialGradient(c, c, 0, c, c, c * .55);
+  miolo.addColorStop(0, '#ffffff'); miolo.addColorStop(.25, '#fff0a0'); miolo.addColorStop(.6, 'rgba(255,120,30,.75)'); miolo.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = miolo; g.fillRect(0, 0, n, n);
+  t.update();
+  return t;
+}
+
 export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matches: false }) {
   // Meia resolução: o brilho é borrado de propósito e pesa pouco no celular.
   const brilho = new GlowLayer('golpes-brilho', scene, { mainTextureRatio: .5, blurKernelSize: 40 });
   brilho.intensity = 1.1;
   const chama = texturaChama(scene);
+  const U = simulador.U, xMundo = x => (x / U - simulador.LARGURA / 2) / 24, yMundo = y => y / U / 24;
+
+  // Uma bola de fogo por dono (mesmo pool das cenouras de efeitos.js).
+  const texBola = texturaBolaDeFogo(scene);
+  const matBola = new StandardMaterial('golpe-bola-mat', scene);
+  matBola.disableLighting = true; matBola.emissiveTexture = texBola; matBola.opacityTexture = texBola;
+  matBola.diffuseColor = new Color3(0, 0, 0); matBola.backFaceCulling = false; matBola.alphaMode = Constants.ALPHA_ADD;
+  const bolas = [0, 1].map(dono => {
+    const malha = MeshBuilder.CreatePlane(`golpe-bola-${dono}`, { size: 1.15 }, scene);
+    malha.material = matBola; malha.billboardMode = Mesh.BILLBOARDMODE_ALL; malha.isPickable = false; malha.setEnabled(false);
+    brilho.addIncludedOnlyMesh(malha);
+    const fogo = new ParticleSystem(`golpe-bola-rastro-${dono}`, 200, scene);
+    fogo.particleTexture = chama; fogo.blendMode = ParticleSystem.BLENDMODE_ADD;
+    fogo.emitter = new Vector3(0, -100, 0); fogo.createSphereEmitter(.18);
+    fogo.minEmitPower = .2; fogo.maxEmitPower = .6; fogo.gravity = new Vector3(0, .8, 0);
+    fogo.minSize = .16; fogo.maxSize = .38; fogo.minLifeTime = .12; fogo.maxLifeTime = .3;
+    fogo.color1 = new Color4(1, .85, .4, .9); fogo.color2 = new Color4(1, .4, .1, .8); fogo.colorDead = new Color4(.3, 0, 0, 0);
+    fogo.emitRate = 0; fogo.start();
+    return { malha, fogo };
+  });
 
   const lados = [0, 1].map(lado => {
     const ponta = new TransformNode(`golpe-ponta-${lado}`, scene);
@@ -70,6 +115,19 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
     brilho,
     // Depois de os modelos receberem a pose do quadro.
     atualizar(estado, modelos) {
+      bolas.forEach((b, dono) => {
+        const p = estado.proj?.find(p => p.dono === dono && p.tipo === 'cenoura' && p.vida > 0);
+        b.malha.setEnabled(!!p);
+        b.fogo.emitRate = p && !movimentoReduzido.matches ? 160 : 0;
+        if (!p) return;
+        const x = xMundo(p.x), y = yMundo(p.y);
+        // Atrás da cenoura (z maior = mais longe da câmera), pulsando e girando.
+        b.malha.position.set(x, y, -.04);
+        b.malha.scaling.setAll(1 + .12 * Math.sin(p.t * .9));
+        b.malha.rotation.z = p.t * .35;
+        b.fogo.emitter.set(x - Math.sign(p.vx || 1) * .15, y, -.1);
+        b.fogo.direction1 = new Vector3(-Math.sign(p.vx || 1) * 2.2, -.3, 0); b.fogo.direction2 = new Vector3(-Math.sign(p.vx || 1) * 3, .4, 0);
+      });
       estado.p.forEach((l, i) => {
         const d = lados[i], modelo = modelos[i];
         const golpe = l.estado === 'golpe' && simulador.LUTADORES[l.id]?.golpes[l.golpe];
@@ -95,10 +153,11 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
         if (queima) d.aura.emitter.set((l.x / simulador.U - simulador.LARGURA / 2) / 24, l.y / simulador.U / 24 + 1.15, 0);
       });
     },
-    limpar() { for (const d of lados) { d.rastro.stop(); d.rastro.setEnabled(false); d.ativo = false; d.aura.emitRate = 0; d.aura.reset(); } },
+    limpar() { for (const b of bolas) { b.malha.setEnabled(false); b.fogo.emitRate = 0; b.fogo.reset(); } for (const d of lados) { d.rastro.stop(); d.rastro.setEnabled(false); d.ativo = false; d.aura.emitRate = 0; d.aura.reset(); } },
     descartar() {
       for (const d of lados) { d.aura.dispose(); d.rastro.dispose(); d.mat.dispose(); d.ponta.dispose(); }
-      chama.dispose(); brilho.dispose();
+      for (const b of bolas) { b.fogo.dispose(); b.malha.dispose(); }
+      matBola.dispose(); texBola.dispose(); chama.dispose(); brilho.dispose();
     },
   };
 }

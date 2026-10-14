@@ -10,12 +10,12 @@
     "src/3d/arena-academia.js": "3af338b17730d72f77cfca7c0015bb2f7e45bd57240d4f5654f91ed620377fbf",
     "src/3d/arena-realista.js": "d848d95e74c24b9c2d037a330ce0523c332e89a1a77817d01fbb9672946f0165",
     "src/3d/arenas.js": "56e5edf049966daa6e797a2cacfae1ec2a47d847ae13134780ccb349c70ae94d",
-    "src/3d/brilho-golpes.js": "31425165c8aee27c1817f2d6324bcff42a435832f7ddb1f4cc8bffa0f3da3348",
+    "src/3d/brilho-golpes.js": "a06474b0a1b8c147f9f2cbc6b8b052cc12fecfd2368dbac3708e42ec230be292",
     "src/3d/caixas.js": "14ab50a1c505237c3aa4005385e121a131affe8ea212a7539f9499cd3fe82f24",
     "src/3d/camera-luta.js": "07f76a6b4c00252fc8613e58686c0b0cae67ad781cad0f390b1a09d886818ceb",
     "src/3d/contrato-glb.mjs": "0fafc4fa6b706c2b0f88155714a14aa42b0450b3eee768c28e46f4694b8cff53",
     "src/3d/efeitos-sf4.js": "6050ff7f311fe1537bdd58d316074dfad08143ae4cf490c309cab9901896bcf0",
-    "src/3d/efeitos.js": "28f2254b416dfc4e630ad1e0c171a90c52b7b151de5b1c956ed13118cbf5a4e4",
+    "src/3d/efeitos.js": "cb5d985a4ad1956bd9e1dd2d49492e94daec6b563243d26becae7752cd60c483",
     "src/3d/estado-visual.mjs": "30f190d4d9937470b2862a227b8ef2219c6c435a5981d71775094238e952ae84",
     "src/3d/jogo-3d.js": "1021dbca5d15940e38f7a0afb48e6987b527bb805af4c91f23400c68a0990aa7",
     "src/3d/laboratorio.js": "05500a78e95e3564c8c06c1aecd7705fd26955082ca7bd39dea1510b5917eecc",
@@ -24,6 +24,6 @@
   },
   "saida": {
     "caminho": "public/js/ko-laboratorio-3d.js",
-    "sha256": "ab4aec922c66d7c8a271010aa8ee3ce576ef067a9110097d7b1370c9743dcdb4"
+    "sha256": "9eac0a2d4c2ab7c1f649b5edd480d01054f961ad57d0fe44d076d468ab3c8759"
   }
 }

@@ -34,7 +34,7 @@ CHAMADAS = {
 }
 # Anúncio do vencedor pelo nome do lutador (arquivo vitoria-<id>.mp3).
 LUTADORES = {
-    'pipoca': 'Pipoca', 'uivo': 'Uivo', 'maromba': 'Maromba', 'ginga': 'Ginga',
+    'pipoca': 'Lola', 'uivo': 'Uivo', 'maromba': 'Maromba', 'ginga': 'Ginga',
     'vo-nena': 'Vó Nena', 'vo-tiao': 'Vô Tião', 'kira': 'Kira', 'toco': 'Toco',
     'nix': 'Nix', 'eco': 'Eco', 'volt': 'Volt', 'kilo': 'Kilo', 'brasa': 'Brasa',
     'mare': 'Maré', 'truque': 'Truque', 'fossil': 'Fóssil',
