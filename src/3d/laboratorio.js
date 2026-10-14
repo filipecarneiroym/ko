@@ -241,7 +241,9 @@ try {
   // iPhone/iPad (Safari) falham ao criar "uniform buffers" no iOS 16.7+/17; desligar
   // os UBOs contorna o "Unable to create uniform buffer".
   engine.disableUniformBuffers = true;
-  engine.setHardwareScalingLevel(Math.max(1, window.devicePixelRatio / 1.5));
+  // Nitidez no celular: desenha na densidade real da tela (até 2×). Antes o
+  // motor ignorava o devicePixelRatio e ainda reduzia: imagem esticada e borrada.
+  engine.setHardwareScalingLevel(1 / Math.min(window.devicePixelRatio || 1, 2));
   scene = new Scene(engine); scene.clearColor.set(.025, .015, .06, 1);
   camera = criarCameraLuta(scene);
   redimensionar();

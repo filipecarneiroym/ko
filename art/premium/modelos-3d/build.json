@@ -8,7 +8,7 @@
     "scripts/fontes-3d.mjs": "0c12e57821efbb0059928698eb2da7f09dba5fabb29f4dd88e18855237d9bac7",
     "src/3d/apresentacao.js": "06676228144fc9446c226925ae49a38c36ebdf30e514e527049a3d144847060a",
     "src/3d/arena-academia.js": "3af338b17730d72f77cfca7c0015bb2f7e45bd57240d4f5654f91ed620377fbf",
-    "src/3d/arena-realista.js": "45267d2d279851ea7bcfe64e9e45107f8411ba3d231e81b2c70cddf9aea259e7",
+    "src/3d/arena-realista.js": "d848d95e74c24b9c2d037a330ce0523c332e89a1a77817d01fbb9672946f0165",
     "src/3d/arenas.js": "56e5edf049966daa6e797a2cacfae1ec2a47d847ae13134780ccb349c70ae94d",
     "src/3d/caixas.js": "14ab50a1c505237c3aa4005385e121a131affe8ea212a7539f9499cd3fe82f24",
     "src/3d/camera-luta.js": "07f76a6b4c00252fc8613e58686c0b0cae67ad781cad0f390b1a09d886818ceb",
@@ -16,13 +16,13 @@
     "src/3d/efeitos-sf4.js": "a34190d29b986b8c46a8feb78599c060c11a60ee5730f0701cf53492386fe815",
     "src/3d/efeitos.js": "28f2254b416dfc4e630ad1e0c171a90c52b7b151de5b1c956ed13118cbf5a4e4",
     "src/3d/estado-visual.mjs": "30f190d4d9937470b2862a227b8ef2219c6c435a5981d71775094238e952ae84",
-    "src/3d/jogo-3d.js": "a72bae15aa2342c0acf24953d9e3dfb4e8d0f1ebb550a062a3d826afdf7f1b1b",
-    "src/3d/laboratorio.js": "b0ab886937ff702c690bbb3ea0044d6de458482259369f7d8bb6030a7aa00b8d",
+    "src/3d/jogo-3d.js": "fb116dba81a456e4f48a7bf73c3567fbd773e2f944be3d909c7f4586fb8a1961",
+    "src/3d/laboratorio.js": "a14c05859eaea4df5137b4be35aff7eadc6e1979a29060891917eb6fb97c0da5",
     "src/3d/modelo-glb.js": "4173297a07b6021cc9472cc08bbf21f8b4ecbcb2d3b398ca02d10d2eaa34b6dc",
     "src/3d/perfil-pipoca.mjs": "effca8a992370c7fe15a90f05e570b5ac9b677f69ad879b44de49c6b58e9884a"
   },
   "saida": {
     "caminho": "public/js/ko-laboratorio-3d.js",
-    "sha256": "2bfa22df50894aed8608bf316d95d883358d91dee17a17d0ca9d95bacac0c8ef"
+    "sha256": "0da1fa16826eb4a8eeaa28b8141fb81e117eceb6febeea0315509c9a82b060a0"
   }
 }

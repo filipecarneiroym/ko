@@ -146,7 +146,9 @@ def main():
     fundo.filepath_raw = str(saida/'fundo.jpg')
     fundo.file_format = 'JPEG'
     fundo.save()
-    hdr = saida/'ambiente.hdr'
+    # Fonte da luz (fica fora do site); o jogo usa ambiente.env (gerar-env-arenas.cjs).
+    hdr = ROOT/'art/premium/arenas'/arena/'fontes'/'ambiente.hdr'
+    hdr.parent.mkdir(parents=True, exist_ok=True)
     urllib.request.urlretrieve(f"https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/{cfg['hdri']}_1k.hdr", hdr)
     relatorio['arquivos'] = {p.name: p.stat().st_size for p in saida.iterdir()}
     (ROOT/'art/premium/arenas'/arena/'relatorio.json').write_text(json.dumps(relatorio, indent=2) + '\n')

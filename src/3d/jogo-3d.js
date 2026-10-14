@@ -130,8 +130,9 @@ function criar(canvas, { cenario, lutadores, aoFalhar } = {}) {
     // uniforms simples e deixa o 3D rodar nesses aparelhos.
     engine.disableUniformBuffers = true;
     ultimoDispositivo = lerDispositivo(engine);
-    // Celular: limita a resolução interna (cada pixel a mais custa bateria).
-    engine.setHardwareScalingLevel(Math.max(1, (window.devicePixelRatio || 1) / 1.5));
+    // Nitidez no celular: desenha na densidade real da tela (até 2×). Antes o
+    // motor ignorava o devicePixelRatio e ainda reduzia: imagem esticada e borrada.
+    engine.setHardwareScalingLevel(1 / Math.min(window.devicePixelRatio || 1, 2));
     canvas.addEventListener('webglcontextlost', contextoPerdido);
     etapa = 'apresentação';
     scene = new Scene(engine);

@@ -5,7 +5,7 @@ import { TransformNode } from '@babylonjs/core/Meshes/transformNode.js';
 import { PBRMaterial } from '@babylonjs/core/Materials/PBR/pbrMaterial.js';
 import { Texture } from '@babylonjs/core/Materials/Textures/texture.js';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture.js';
-import { HDRCubeTexture } from '@babylonjs/core/Materials/Textures/hdrCubeTexture.js';
+import { CubeTexture } from '@babylonjs/core/Materials/Textures/cubeTexture.js';
 import { PhotoDome } from '@babylonjs/core/Helpers/photoDome.js';
 import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem.js';
 import { Scene } from '@babylonjs/core/scene.js';
@@ -178,7 +178,9 @@ export async function criarArenaRealista(nome, scene, apresentacao) {
   // laboratório ficam mais fracas, senão as lutadoras estouram de claro.
   const anterior = { ambiente: scene.environmentTexture, intensidade: scene.environmentIntensity,
     nevoa: [scene.fogMode, scene.fogStart, scene.fogEnd, scene.fogColor.clone()] };
-  const ambiente = new HDRCubeTexture(base + 'ambiente.hdr', scene, 256, false, true, false, true);
+  // .env (cubo pré-filtrado em PNG RGBD, de gerar-env-arenas.cjs): funciona em
+  // qualquer celular. O HDR em float chegava preto no iPhone (lutadora escura).
+  const ambiente = CubeTexture.CreateFromPrefilteredData(base + 'ambiente.env', scene);
   scene.environmentTexture = ambiente; scene.environmentIntensity = cfg.luz[0];
   descartaveis.push(ambiente);
   const luzes = scene.lights.map(l => ({ l, i: l.intensity }));
