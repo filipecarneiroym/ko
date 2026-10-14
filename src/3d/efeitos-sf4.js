@@ -6,6 +6,7 @@ import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem.js';
 import { Color3, Color4 } from '@babylonjs/core/Maths/math.color.js';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector.js';
 import { Constants } from '@babylonjs/core/Engines/constants.js';
+import { quedasDoFinal } from './estado-visual.mjs';
 
 // Efeitos de luta no estilo Street Fighter IV, em 3D: respingos de tinta de
 // pincel com miolo de luz, faíscas, escudo de defesa, rastro de tinta, Super
@@ -280,6 +281,9 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
         if (p) { respingo(matEspecial, xMundo(p.x), yMundo(p.y) + 1.2, .6, 2.2, 18, 'quebra', .7); flashNasc = relogio; flashForca = .25; }
       // Especial: nada no arremesso (só a cenoura em chamas voa, em
       // brilho-golpes.js); o impacto vem no evento de acerto.
+      } else if (e.t === 'golpeFinal') {
+        // Como o Ultra do SF4: tela escura e clarão.
+        superLado = e.lado; superNasc = relogio; flashNasc = relogio; flashForca = .5;
       } else if (e.t === 'super') {
         const p = estado?.p?.[e.lado];
         superLado = e.lado; superNasc = relogio;
@@ -306,9 +310,20 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
     faseAnterior = estado?.fase ?? null;
   }
 
+  let ultimoFinal = null;
   // dt em quadros de motor (fração quando a tela está em câmera lenta).
   function atualizar(estado, dt, camera) {
     relogio += dt;
+    const quedas = quedasDoFinal(estado, U), fT = estado?.fT ?? 0;
+    for (const q of quedas) {
+      if (ultimoFinal === null || ultimoFinal >= q.contato || fT < q.contato) continue;
+      const x = xMundo(q.x), y = .75;
+      estrela(matEstrela, x, y, -.7, 1.7, 9);
+      respingo(matForte, x, y, -.5, 1.3, 16, 'acerto', .8);
+      if (!reduzido()) explodir(faiscas, x, y, -.5, 40);
+      tremor = .1; tremorNasc = relogio;
+    }
+    ultimoFinal = quedas.length ? fT : null;
     for (const r of respingos) {
       const idade = relogio - r.nasc, f = idade / r.dur;
       const vivo = idade >= 0 && f < 1;

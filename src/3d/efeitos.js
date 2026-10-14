@@ -9,7 +9,7 @@ import { PERFIL_PIPOCA } from './perfil-pipoca.mjs';
 const TAMANHO_POOL = 12;
 const LIMITES = Object.freeze({ impacto: 16, defesa: 12, poeira: 14, toca: 18, especial: 12 });
 
-export function criarEfeitos(scene, simulador, movimentoReduzido = { matches: false }) {
+export function criarEfeitos(scene, simulador, movimentoReduzido = { matches: false }, { impactosFinal = true } = {}) {
   let cursor = 0, relogio = 0, ultimoQuadro = null, ultimoQuadroEventos = null, ultimaFase = null, ultimoFT = null, ultimoFinal = null, encerrado = false;
   const personagens = [], memoria = new Map();
   function material(nome, cor) {
@@ -170,7 +170,7 @@ export function criarEfeitos(scene, simulador, movimentoReduzido = { matches: fa
         }
         const contato = i * 6 + 36;
         if (ultimoFinal !== null && ultimoFinal < contato && tempo >= contato) {
-          emitir('impacto', x, 18 * simulador.U, { pipoca: true });
+          if (impactosFinal) emitir('impacto', x, 18 * simulador.U, { pipoca: true });
         }
       }
       ultimoFinal = tempo;

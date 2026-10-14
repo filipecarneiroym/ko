@@ -263,7 +263,7 @@ try {
   trocarArena('academia');
   ouvir(seletorArena, 'change', () => trocarArena(ARENAS.includes(seletorArena.value) ? seletorArena.value : 'academia'));
   const bonecos = [manequim(0, '#ffb12b'), manequim(1, '#6aa8ff')];
-  efeitos = criarEfeitos(scene, KOSim, window.matchMedia('(prefers-reduced-motion: reduce)'));
+  efeitos = criarEfeitos(scene, KOSim, window.matchMedia('(prefers-reduced-motion: reduce)'), { impactosFinal: false });
   sf4 = criarEfeitosSF4(scene, KOSim, window.matchMedia('(prefers-reduced-motion: reduce)'));
   brilhoGolpes = criarBrilhoGolpes(scene, KOSim, window.matchMedia('(prefers-reduced-motion: reduce)'));
   for (const m of sf4.malhasBrilho) brilhoGolpes.brilho.addIncludedOnlyMesh(m);

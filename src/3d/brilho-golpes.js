@@ -9,6 +9,7 @@ import { GlowLayer } from '@babylonjs/core/Layers/glowLayer.js';
 import { Color3, Color4 } from '@babylonjs/core/Maths/math.color.js';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector.js';
 import { Constants } from '@babylonjs/core/Engines/constants.js';
+import { quedasDoFinal } from './estado-visual.mjs';
 
 // Luminosidade dos golpes no estilo do SF4 de celular: rastro de luz na mão
 // ou no pé que bate (branco-azulado no fraco, fogo no forte, energia no
@@ -111,10 +112,27 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
     return melhor;
   }
 
+  // Chuva de Cenouras do Final: as que estão caindo ganham a mesma bola de fogo.
+  const chamasChuva = Array.from({ length: 8 }, (_, i) => {
+    const m = MeshBuilder.CreatePlane(`golpe-chuva-fogo-${i}`, { size: .9 }, scene);
+    m.material = matBola; m.billboardMode = Mesh.BILLBOARDMODE_ALL; m.isPickable = false; m.setEnabled(false);
+    brilho.addIncludedOnlyMesh(m);
+    return m;
+  });
+
   return {
     brilho,
     // Depois de os modelos receberem a pose do quadro.
     atualizar(estado, modelos) {
+      for (const m of chamasChuva) m.setEnabled(false);
+      let livre = 0;
+      for (const q of quedasDoFinal(estado, U)) {
+        if (q.idade < 0 || q.idade >= 36 || livre >= chamasChuva.length || movimentoReduzido.matches) continue;
+        const m = chamasChuva[livre++];
+        m.setEnabled(true);
+        m.position.set(xMundo(q.x), (140 - q.idade * 3.6) / 24 + .25, -.18);
+        m.scaling.setAll(1 + .15 * Math.sin(q.idade * .8)); m.rotation.z = q.idade * .3;
+      }
       bolas.forEach((b, dono) => {
         const p = estado.proj?.find(p => p.dono === dono && p.tipo === 'cenoura' && p.vida > 0);
         b.malha.setEnabled(!!p);

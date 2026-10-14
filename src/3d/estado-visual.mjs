@@ -12,9 +12,13 @@ export function descreverPose(lutador, simulador, estado = null) {
   const usaRelogioDaFase = ['defesa', 'defesaBaixa'].includes(lutador.estado)
     || estado?.fase === 'final' && ['final', 'vitimaFinal'].includes(lutador.estado);
   const foco = golpe && lutador.golpe === 'foc';
+  // Final da Lola: gesto do arremesso chamando a chuva (34 quadros) e comemoração.
+  const chama = lutador.estado === 'final' && lutador.id === 'pipoca' && estado?.fase === 'final';
+  const fT = Math.max(0, estado?.fT ?? lutador.t);
   return {
-    clip: foco ? 'p2' : golpe ? lutador.golpe : lutador.estado,
+    clip: foco ? 'p2' : chama ? (fT < 34 ? 'esp' : 'vitoria') : golpe ? lutador.golpe : lutador.estado,
     quadro: foco ? (lutador.t < 18 ? 2 : Math.min(18, 2 + (lutador.t - 18) * 1.6))
+      : chama ? (fT < 34 ? fT : fT - 34)
       : Math.max(0, usaRelogioDaFase ? estado?.fT ?? lutador.t : lutador.t),
     ciclico: !golpe && CICLICOS.has(lutador.estado),
     duracao: golpe ? golpe.dur : null,
@@ -42,6 +46,14 @@ function giros(l, simulador, golpe) {
   if (janela) volta = Math.PI * 2 * suave(Math.min(1, l.t / janela.de));
   return { mortal, volta };
 }
+// Chuva de Cenouras (Final da Pipoca): 18 quedas a cada 6 quadros; cada uma
+// cai por 36 quadros e bate no chão perto da vítima. Mesma conta de efeitos.js.
+export function quedasDoFinal(estado, U) {
+  const vencedor = estado?.p?.[estado.vencedor], vitima = estado?.p?.find(p => p.lado !== estado.vencedor);
+  if (estado?.fase !== 'final' || vencedor?.id !== 'pipoca' || !vitima) return [];
+  return Array.from({ length: 18 }, (_, i) => ({ i, x: vitima.x + ((i * 13) % 40 - 20) * U, idade: Math.max(0, estado.fT) - i * 6, contato: i * 6 + 36 }));
+}
+
 export function quadroDoClip(pose, grupo) {
   const fps = grupo.targetedAnimations[0]?.animation.framePerSecond || 60;
   const decorrido = pose.quadro * fps / 60;
