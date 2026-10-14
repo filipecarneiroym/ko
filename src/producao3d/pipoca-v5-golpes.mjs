@@ -257,16 +257,16 @@ export function criarGolpesV5(ossos, parado, simulador) {
   ], { laco: true });
 
   // cp: soco agachado no estilo do SF4 (10 quadros, janela 3-5): da guarda
-  // agachada, o ombro gira para dentro, o tronco vai à frente e o braço da
-  // frente estica reto até o peito da adversária; a outra luva protege o rosto.
+  // agachada, o ombro gira para dentro e o braço da frente estica reto até a
+  // cintura da adversária, cabeça de frente para ela; a outra luva protege o rosto.
   const socoBaixo = (dy, giro, inclinacao, alvo, cotovelo) => ({ ...baixa(dy), giro, inclinacao,
     bracos: { E: { alvo, cotovelo } } });
   clips.cp = animar('cp', 10, [
     { q: 0, ...baixa(0) },
-    { q: 2, ...socoBaixo(-.01, -.2, -.2, v(.28, -.3, .06), v(-.2, -1, -.4)) },
-    { q: 3, ...socoBaixo(-.03, -.5, -.34, v(.74, -.36, .16), v(0, -.4, -1)) },
-    { q: 5, ...socoBaixo(-.03, -.5, -.34, v(.75, -.36, .16), v(0, -.4, -1)) },
-    { q: 8, ...socoBaixo(-.01, -.15, -.18, v(.3, -.24, .06), v(-.2, -1, -.4)) },
+    { q: 2, ...socoBaixo(-.01, -.2, -.12, v(.26, -.36, .06), v(-.2, -1, -.4)) },
+    { q: 3, ...socoBaixo(-.03, -.5, -.2, v(.72, -.52, .16), v(0, -.5, -1)) },
+    { q: 5, ...socoBaixo(-.03, -.5, -.2, v(.73, -.52, .16), v(0, -.5, -1)) },
+    { q: 8, ...socoBaixo(-.01, -.15, -.1, v(.3, -.3, .06), v(-.2, -1, -.4)) },
     { q: 10, ...baixa(0) },
   ]);
 
@@ -350,7 +350,9 @@ export function criarGolpesV5(ossos, parado, simulador) {
 // Olhar no oponente: nos movimentos baixos e de defesa a cabeça mantém a
 // direção da guarda (só acompanha o giro da pelve). Com o tronco inclinado
 // para agachar, a cabeça ia junto e o olhar caía para o chão.
-export function olharParaFrente(ossos, clip, guarda) {
+// seguirGiro=false: a cabeça fica de frente para a adversária mesmo com o
+// quadril girado (soco agachado); elevar > 0 levanta o queixo (olhar no rosto dela).
+export function olharParaFrente(ossos, clip, guarda, { seguirGiro = true, elevar = 0 } = {}) {
   const n = ossos.length, cab = ossos.findIndex(o => o.nome === 'cabeca');
   const canal = (c, i, t) => c.canais.find(k => k.osso === i && k.tipo === t);
   const globais = (c, q) => {
@@ -367,9 +369,9 @@ export function olharParaFrente(ossos, clip, guarda) {
     const G = globais(clip, q);
     // giro da pelve só em torno do eixo vertical
     const frente = v(1, 0, 0).applyRotationQuaternion(G[0]);
-    const giro = Quaternion.RotationAxis(v(0, 1, 0), Math.atan2(-frente.z, frente.x));
+    const giro = seguirGiro ? Quaternion.RotationAxis(v(0, 1, 0), Math.atan2(-frente.z, frente.x)) : Quaternion.Identity();
     const g0frente = v(1, 0, 0).applyRotationQuaternion(G0[0]);
-    const desejada = giro.multiply(Quaternion.RotationAxis(v(0, 1, 0), -Math.atan2(-g0frente.z, g0frente.x))).multiply(G0[cab]).normalize();
+    const desejada = Quaternion.RotationAxis(v(0, 0, 1), elevar).multiply(giro.multiply(Quaternion.RotationAxis(v(0, 1, 0), -Math.atan2(-g0frente.z, g0frente.x)))).multiply(G0[cab]).normalize();
     const pai = ossos[cab].pai;
     Quaternion.Inverse(G[pai]).multiply(desejada).normalize().toArray(valores, q * 4);
   }

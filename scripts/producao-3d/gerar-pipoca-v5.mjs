@@ -35,7 +35,7 @@ export function gerarPipocaV5() {
     const guardaV5 = clips.find(c => c.nome === 'parado');
     for (const nome of ['agachado', 'cp', 'defesaBaixa', 'ck', 'defesa', 'pousando', 'recuo', 'quebra']) {
       const i = clips.findIndex(c => c.nome === nome);
-      clips[i] = olharParaFrente(v5.ossos, clips[i], guardaV5);
+      clips[i] = olharParaFrente(v5.ossos, clips[i], guardaV5, nome === 'cp' ? { seguirGiro: false, elevar: .18 } : {});
     }
     const primitiva = v5.primitivas[0];
     for (const c of clips) if (['rolando', 'caido', 'levantando', 'derrotado', 'vitimaFinal', 'sup', 'quebra'].includes(c.nome))
