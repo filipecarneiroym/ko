@@ -15,15 +15,15 @@
     "src/3d/camera-luta.js": "db2e510b35a409e53692fa3dcff8481b2e95d7102934bf7edf9327dd6be9777a",
     "src/3d/contrato-glb.mjs": "0fafc4fa6b706c2b0f88155714a14aa42b0450b3eee768c28e46f4694b8cff53",
     "src/3d/efeitos-sf4.js": "dda6c1470e0c4b8cdf7420d5b0ba464cc6f13efa9315ad05784941492ba40d06",
-    "src/3d/efeitos.js": "c0a06902204defa26f8607da2d0260497217c6cf72ed466e8a3658b3dfcdd07d",
-    "src/3d/estado-visual.mjs": "bd52c457d0408521fc0a80f142af402659aea65e0d192173e0a4719ef06909c6",
-    "src/3d/jogo-3d.js": "07d7ea7970dd46682779f2e236fb813dd56cc13ee0c2f79033907e49bceb885b",
-    "src/3d/laboratorio.js": "39a466185945c5bceb458869a05166d53ea9a3296db661fd4e7003e50eacef4f",
+    "src/3d/efeitos.js": "5f75a2514401d87adb527b353ae5991b1f0617b2870b197d8026661929e28ea6",
+    "src/3d/estado-visual.mjs": "9611a49ab2972576a51e55d33e9b4cfbd18dfecedd27a1c3197a87d0b2472169",
+    "src/3d/jogo-3d.js": "b8101e1ca6c87d21175aab7f7f7a860a42d196e32e0f7679a53d64f88e4d9037",
+    "src/3d/laboratorio.js": "e5d9807abb42af0f6910341b3d6e146dbf94147cee18b0d751e2d6e29ebe11d1",
     "src/3d/modelo-glb.js": "814ae92d8c98098483655104d76803028c83cf67b369d18c1f32fa8f8271057a",
     "src/3d/perfil-pipoca.mjs": "effca8a992370c7fe15a90f05e570b5ac9b677f69ad879b44de49c6b58e9884a"
   },
   "saida": {
     "caminho": "public/js/ko-laboratorio-3d.js",
-    "sha256": "7155658390657f9b57ad29d1012d2615ce5feded144bd4fcb08fae1fd9023830"
+    "sha256": "8c22ad3923dcd1c6ca743a2e5ba4d54da0803d9a6924fc22041e789586d0896f"
   }
 }

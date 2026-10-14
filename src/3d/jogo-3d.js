@@ -140,7 +140,7 @@ function criar(canvas, { cenario, lutadores, aoFalhar } = {}) {
     camera = criarCameraLuta(scene);
     apresentacao = criarApresentacao(scene);
     const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)');
-    efeitos = criarEfeitos(scene, KOSim, reduzido, { impactosFinal: false });
+    efeitos = criarEfeitos(scene, KOSim, reduzido, { impactosFinal: false, chuvaFinal: false });
     sf4 = criarEfeitosSF4(scene, KOSim, reduzido, { letreiros: false });
     brilhoGolpes = criarBrilhoGolpes(scene, KOSim, reduzido);
     for (const m of sf4.malhasBrilho) brilhoGolpes.brilho.addIncludedOnlyMesh(m);

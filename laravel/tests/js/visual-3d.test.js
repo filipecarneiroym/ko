@@ -36,10 +36,7 @@ test('encenação final usa relógio da fase mesmo quando o lutador não avança
   const [{ descreverPose }] = await modulos;
   const s = K.novo({ lutadores: ['pipoca', 'uivo'] });
   s.fase = 'final'; s.fT = 55; s.p[0].estado = 'final'; s.p[0].t = 0;
-  // Lola: gesto do arremesso nos 34 primeiros quadros, depois comemora (relógio da fase).
-  assert.deepEqual([descreverPose(s.p[0], K, s).clip, descreverPose(s.p[0], K, s).quadro], ['vitoria', 21]);
-  s.fT = 10; assert.deepEqual([descreverPose(s.p[0], K, s).clip, descreverPose(s.p[0], K, s).quadro], ['esp', 10]);
-  s.fT = 55;
+  assert.equal(descreverPose(s.p[0], K, s).quadro, 55);
   s.p[1].estado = 'vitimaFinal';
   assert.equal(descreverPose(s.p[1], K, s).quadro, 55);
 });

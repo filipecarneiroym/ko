@@ -9,7 +9,7 @@ import { PERFIL_PIPOCA } from './perfil-pipoca.mjs';
 const TAMANHO_POOL = 12;
 const LIMITES = Object.freeze({ impacto: 16, defesa: 12, poeira: 14, toca: 18, especial: 12 });
 
-export function criarEfeitos(scene, simulador, movimentoReduzido = { matches: false }, { impactosFinal = true } = {}) {
+export function criarEfeitos(scene, simulador, movimentoReduzido = { matches: false }, { impactosFinal = true, chuvaFinal = true } = {}) {
   let cursor = 0, relogio = 0, ultimoQuadro = null, ultimoQuadroEventos = null, ultimaFase = null, ultimoFT = null, ultimoFinal = null, encerrado = false;
   const personagens = [], memoria = new Map();
   function material(nome, cor) {
@@ -154,7 +154,7 @@ export function criarEfeitos(scene, simulador, movimentoReduzido = { matches: fa
     const reduzido = !!movimentoReduzido.matches;
     const vencedor = estado?.p?.[estado.vencedor];
     const vitima = estado?.p?.find(p => p.lado !== estado.vencedor);
-    const finalPipoca = estado?.fase === 'final' && vencedor?.id === 'pipoca' && vitima;
+    const finalPipoca = chuvaFinal && estado?.fase === 'final' && vencedor?.id === 'pipoca' && vitima;
     for (const raiz of chuva) raiz.setEnabled(false);
     if (finalPipoca) {
       const tempo = Math.max(0, estado.fT);
