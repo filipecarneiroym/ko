@@ -18,7 +18,7 @@ const env = {
   APP_URL: 'http://127.0.0.1:8019', DB_URL: '',
   DB_CONNECTION: 'sqlite', DB_DATABASE: banco,
   SESSION_DRIVER: 'file', SESSION_SECURE_COOKIE: 'false', CACHE_STORE: 'file',
-  KO_SENHA_AMIGOS: 'O.K',
+  KO_SENHA_AMIGOS: 'ko',
   KO_RELAY_HOST: '127.0.0.1', KO_RELAY_PORTA: '6019', KO_RELAY_URL: 'ws://127.0.0.1:6019',
 };
 const migracao = spawnSync('php', ['artisan', 'migrate', '--force'], {

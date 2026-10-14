@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'senha_amigos' => env('KO_SENHA_AMIGOS', 'O.K'),
+    'senha_amigos' => env('KO_SENHA_AMIGOS', 'ko'),
     // Endereço que o navegador usa para falar com o relay da luta (ws:// no PC, wss://…/ws no ar).
     'relay_url' => env('KO_RELAY_URL'),
     // Porta local onde o `php artisan ko:relay` escuta (o Nginx encaminha /ws para ela).

@@ -38,7 +38,7 @@ let browser;
       await paginas[i].getByText('Senha incorreta.', { exact: false }).waitFor();
       await paginas[i].screenshot({ path: path.join(temp, 'acesso-amigos-mobile.png') });
     }
-    await paginas[i].locator('#senha-amigos').fill('O.K');
+    await paginas[i].locator('#senha-amigos').fill('ko');
     await paginas[i].getByRole('button', { name: 'Desbloquear arena' }).tap();
     await paginas[i].locator('#apelido').fill(apelidos[i]);
     await paginas[i].locator('#pin').fill('0123');

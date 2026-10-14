@@ -11,8 +11,11 @@ class AcessoAmigosController extends Controller
     public function desbloquear(Request $request): RedirectResponse
     {
         $senha = $request->input('senha_amigos');
-        if (! is_string($senha) || ! hash_equals((string) config('ko.senha_amigos'), $senha)) {
-            return back()->withErrors(['senha_amigos' => 'Senha incorreta. Confira as maiúsculas e o ponto.']);
+        // Sem diferença de maiúsculas nem espaços nas pontas: o teclado do celular
+        // costuma pôr a primeira letra em maiúscula ("Ko").
+        $normalizar = fn (string $texto) => mb_strtolower(trim($texto));
+        if (! is_string($senha) || ! hash_equals($normalizar((string) config('ko.senha_amigos')), $normalizar($senha))) {
+            return back()->withErrors(['senha_amigos' => 'Senha incorreta.']);
         }
         $request->session()->regenerate();
         $request->session()->put('acesso_amigos', AcessoAmigos::chave());
