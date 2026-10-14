@@ -19,6 +19,7 @@
   const ROUND_FRAMES = 99 * 60;
   const PODER_MAX = 1000;
   const BUFFER = 6;                   // quadros que um botão apertado fica "guardado"
+  const JANELA_MOVIMENTO = 16;        // quadros de direção guardados para sequências (quarto de círculo)
   const INTRO = 100, FIM_ROUND = 150, JANELA_FINAL = 300, DURACAO_FINAL = 200;
 
   // Botões (um bit cada): esquerda, direita, cima, baixo, soco, chute, defesa, especial;
@@ -363,7 +364,7 @@
       id, lado, x: lado === 0 ? 112 * U : 272 * U, y: 0, vx: 0, vy: 0, face: lado === 0 ? 1 : -1,
       vida: d.vida, poder: 0, estado: 'parado', t: 0, golpe: null, encostou: 0, acertos: 0,
       stun: 0, combo: 0, juggle: 0, inv: 0, pulosAr: 0, empurrao: 0, sumido: 0, armadura: 0, forca: 0, enrolado: 0, prende: '', estrelas: 0,
-      bAnt: 0, buf: { P: 0, K: 0, S: 0, B: 0, U: 0 }, quandoP: -99, quandoK: -99,
+      bAnt: 0, buf: { P: 0, K: 0, S: 0, B: 0, U: 0 }, quandoP: -99, quandoK: -99, hist: [],
       toqueFrente: -99, toqueTras: -99, soltouFrente: 1, soltouTras: 1,
     };
   }
@@ -441,7 +442,22 @@
     if (sobe & tr) { if (s.f - l.toqueTras <= 12 && l.soltouTras) l.toqueDuploTras = 1; l.toqueTras = s.f; l.soltouTras = 0; }
     if (sobe & B.RC) l.toqueDuploTras = 1;
     if (!(bits & tr) && l.toqueTras !== s.f) l.soltouTras = 1;
+    // Histórico de direção (frente/baixo) para sequências como o quarto de círculo.
+    l.hist.push((bits & B.D ? 'D' : '') + (bits & fr ? 'F' : '') || 'N');
+    if (l.hist.length > JANELA_MOVIMENTO) l.hist.shift();
     l.bAnt = bits;
+  }
+
+  // Quarto de círculo para frente (baixo, baixo-frente, frente) nos últimos quadros.
+  // Não conta duas vezes: ao usar, o histórico é zerado.
+  function quartoDeCirculo(l) {
+    let passo = 0;
+    for (const h of l.hist) {
+      if (passo === 0 && h === 'D') passo = 1;
+      else if (passo === 1 && h === 'DF') passo = 2;
+      else if (passo === 2 && h === 'F') return true;
+    }
+    return false;
   }
 
   function usar(l, k) { if (l.buf[k] > 0) { l.buf[k] = 0; return true; } return false; }
@@ -507,6 +523,10 @@
       l.buf.P = 0; agarrar(s, l, o); return;
     }
     if (usar(l, 'F')) { iniciarGolpe(s, l, 'foc'); return; } // F: Focus Attack
+    // Quarto de círculo + soco = projétil (Hadouken): a cenoura, quando o lutador tem uma.
+    if (l.buf.P && !agachado && d.golpes.esp?.proj && quartoDeCirculo(l) && !s.proj.some((p) => p.dono === l.lado)) {
+      l.buf.P = 0; l.hist = []; iniciarGolpe(s, l, 'esp'); return;
+    }
     if (usar(l, 'P')) { iniciarGolpe(s, l, agachado ? 'cp' : 'p1'); return; }
     if (usar(l, 'K')) { iniciarGolpe(s, l, agachado ? 'ck' : (l.estado === 'corrida' ? 'k2' : 'k1')); return; }
 
