@@ -2,8 +2,8 @@
   "aprovadoFinal": false,
   "descricao": "Cenoura, Super, ataques baixos, ataque aéreo e Final calculados pelo KOSim real. Pipoca vermelha (jogador) contra Pipoca azul.",
   "caminhoModelo": "public/modelos/estudos/pipoca-v5-vermelha.glb",
-  "sha256Glb": "98ad3d49d2bfe00bd19dc56fd7c60bb7c0bea482b53bc378a021046c0d30ca07",
-  "sha256Simulacao": "be602fcb24aa1445a678f1b7c89c1888df4a7ef28144c0ec9ef633762fb65947",
+  "sha256Glb": "ea8a30fbaa17d4faaf4955076bf0bbec259c6f7fb456efaf2674ea41c5c3e708",
+  "sha256Simulacao": "a31f2f9c3b393bd4e30a5c34688cb3baf7be534ffeb0697d8877903b5568e4d8",
   "quadros": [
     {
       "cenario": "shoryu",

@@ -69,7 +69,7 @@ function texturaBolaDeFogo(scene) {
 export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matches: false }) {
   // Meia resolução: o brilho é borrado de propósito e pesa pouco no celular.
   const brilho = new GlowLayer('golpes-brilho', scene, { mainTextureRatio: .5, blurKernelSize: 40 });
-  brilho.intensity = .85; // suave em repouso; o pico vem do impacto e da velocidade do golpe
+  brilho.intensity = 1.25; // visível no celular (tela pequena e brilho do aparelho); o pico vem do impacto e da velocidade
   const chama = texturaChama(scene), tintaFoco = texturaTintaFoco(scene);
   const U = simulador.U, xMundo = x => (x / U - simulador.LARGURA / 2) / 24, yMundo = y => y / U / 24;
 
@@ -191,7 +191,7 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
           if (m) {
             // Rastro acompanha a velocidade do membro: forte no estalo, some quando desacelera.
             const veloc = d.membro === m.nome ? Vector3.Distance(d.ponta.position, m.p) : 0;
-            d.mat.alpha = Math.min(.95, .12 + veloc * 4.5);
+            d.mat.alpha = Math.min(1, .35 + veloc * 4.5);
             d.ponta.position.copyFrom(m.p); d.membro = m.nome;
           }
           if (!d.ativo || d.janela !== janela) {

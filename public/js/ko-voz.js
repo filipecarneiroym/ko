@@ -5,7 +5,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
   const PERFIS = {
-    pipoca: { hz: 310, vogal: [800, 1600, 2800], pitch: 1.65, esp: 'Cenoura vai!', sup: 'Salto da toca!', final: 'Hora do lanche!' },
+    pipoca: { hz: 370, vogal: [920, 1950, 3150], pitch: 1.85, esp: 'Hadouken!', sup: 'Salto da toca!', final: 'Hora do lanche!' },
     uivo: { hz: 105, vogal: [350, 650, 2400], pitch: 0.45, esp: 'Auu!', sup: 'Fúria da alcateia!', final: 'Lua cheia!' },
     maromba: { hz: 95, vogal: [650, 1100, 2500], pitch: 0.55, esp: 'Segura o músculo!', sup: 'Brilho de campeão!', final: 'Supino!' },
     ginga: { hz: 180, vogal: [500, 1900, 2600], pitch: 1.05, esp: 'Rasteira!', sup: 'Gira a roda!', final: 'Joga bonito!' },

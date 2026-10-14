@@ -147,7 +147,7 @@ async function baixarModelo(caminho, operacao) {
   return buffer;
 }
 async function testarBlockouts() {
-  await executarCarregamento('Preparando estudos 3D de Pipoca e Uivo…', async operacao => {
+  await executarCarregamento('Preparando estudos 3D de Lola e Uivo…', async operacao => {
     const novos = [];
     let instalados = false;
     try {
@@ -162,14 +162,14 @@ async function testarBlockouts() {
       modelos.splice(0, 2, ...novos); instalados = true;
       antigos.forEach(m => m?.descartar());
       const avisoModelo = document.querySelector('#estado-modelos');
-      if (avisoModelo) avisoModelo.textContent = 'Pipoca e Uivo carregados para teste técnico. Modelos provisórios reprovados visualmente; não são a arte final.';
+      if (avisoModelo) avisoModelo.textContent = 'Lola e Uivo carregados para teste técnico. Modelos provisórios reprovados visualmente; não são a arte final.';
     } finally {
       if (!instalados) novos.forEach(m => m.descartar());
     }
   });
 }
 async function testarGuardaPipoca() {
-  await executarCarregamento('Preparando os movimentos da Pipoca…', async operacao => {
+  await executarCarregamento('Preparando os movimentos da Lola…', async operacao => {
     let novo, instalado = false;
     try {
       const buffer = await aguardarCarregamento(baixarModelo('/modelos/estudos/pipoca-direcao-visual-v13.glb', operacao), operacao);
@@ -179,7 +179,7 @@ async function testarGuardaPipoca() {
       const antigo = modelos[0]; modelos[0] = novo; instalado = true;
       antigo?.descartar();
       const avisoModelo = document.querySelector('#estado-modelos');
-      if (avisoModelo) avisoModelo.textContent = 'Pipoca carregada. Teste socos, chutes, ataques baixos e aéreos, salto, defesa, cenoura e Super. Aparência e movimentos em refinamento.';
+      if (avisoModelo) avisoModelo.textContent = 'Lola carregada. Teste socos, chutes, ataques baixos e aéreos, salto, defesa, cenoura e Super. Aparência e movimentos em refinamento.';
     } finally { if (!instalado) novo?.descartar(); }
   });
 }
@@ -187,7 +187,7 @@ async function iniciarLuta() {
   const modo = document.querySelector('#modo-luta')?.value === 'versus' ? 'versus' : 'cpu';
   const nivel = document.querySelector('#nivel-maquina')?.value || 'medio';
   if (modo === 'cpu' && !globalThis.KOCPU?.PERFIS[nivel]) return;
-  await executarCarregamento('Preparando Pipoca azul e Pipoca vermelha…', async operacao => {
+  await executarCarregamento('Preparando Lola azul e Lola vermelha…', async operacao => {
     const novos = [];
     let instalados = false;
     try {
@@ -207,7 +207,7 @@ async function iniciarLuta() {
       cpu = modo === 'cpu' ? globalThis.KOCPU.criar(KOSim, nivel) : null;
       const avisoModelo = document.querySelector('#estado-modelos');
       if (avisoModelo) avisoModelo.textContent = modo === 'cpu'
-        ? `Luta contra a máquina (${globalThis.KOCPU.PERFIS[nivel].nome}). Você é a Pipoca azul.`
+        ? `Luta contra a máquina (${globalThis.KOCPU.PERFIS[nivel].nome}). Você é a Lola azul.`
         : 'Luta 2 jogadores: jogador 1 azul (A/D/W/S, J/K/L/I), jogador 2 vermelha (setas, N/M/vírgula/ponto). Controles também funcionam.';
     } finally {
       if (!instalados) novos.forEach(m => m.descartar());
@@ -320,7 +320,7 @@ try {
     scene.render();
     if (agora - indicador > 500) {
       const fps = engine.getFps();
-      const rotulo = luta ? `Pipoca azul × Pipoca vermelha (${luta.modo === 'cpu' ? 'máquina ' + globalThis.KOCPU.PERFIS[luta.nivel].nome : '2 jogadores'}) · round ${estado.round} · ${estado.rounds[0]}–${estado.rounds[1]}` : 'Protótipo';
+      const rotulo = luta ? `Lola azul × Lola vermelha (${luta.modo === 'cpu' ? 'máquina ' + globalThis.KOCPU.PERFIS[luta.nivel].nome : '2 jogadores'}) · round ${estado.round} · ${estado.rounds[0]}–${estado.rounds[1]}` : 'Protótipo';
       aviso.textContent = `${rotulo} · ${Number.isFinite(fps) ? Math.round(fps) : '…'} FPS · ${estado.fase} · vida ${estado.p[0].vida} / ${estado.p[1].vida}`;
       indicador = agora;
     }
