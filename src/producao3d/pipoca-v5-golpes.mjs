@@ -355,10 +355,15 @@ export function criarGolpesV5(ossos, parado, simulador) {
   // Mãos no chão empurrando: os braços começam apoiados no chão e vão se esticando
   // conforme o quadril sobe (mesmo ritmo das etapas), até a guarda no fim.
   const apoio = (y, x) => ({ bracos: { E: { alvo: v(x, y, -.12), cotovelo: v(-.1, -.4, -1) }, D: { alvo: v(x, y, .12), cotovelo: v(-.1, -.4, 1) } } });
+  // Mola em arco: com os pés plantados e as mãos no chão, o quadril sobe e o tronco
+  // inclina para trás (como um C deitado) enquanto os braços empurram; depois a Lola
+  // desce o quadril e se firma na guarda.
   clips.levantando = animar('levantando', 40, [
     { q: 0, ...baixa(0) },
-    { q: 12, ...baixa(.12), ...apoio(-.7, .28) },
-    { q: 26, ...baixa(.24), ...apoio(-.45, .22) },
+    { q: 6, ...baixa(.1), inclinacao: -.2, ...apoio(-.9, .2) },
+    { q: 14, ...baixa(.42), inclinacao: -.4, ...apoio(-.55, .18) },
+    { q: 21, ...baixa(.4), inclinacao: -.34, ...apoio(-.5, .2) },
+    { q: 30, ...baixa(.1), inclinacao: -.08 },
     { q: 40 },
   ]);
 
