@@ -214,6 +214,37 @@ export function criarGolpesV5(ossos, parado, simulador) {
   const ZE = guarda.z, ZD = tras.z;
   const clips = {};
 
+  // Caminhada de luta: guarda firme, elevação baixa e sola de apoio parada
+  // no mundo. A velocidade vem da distância do motor, inclusive ao recuar.
+  // Duas transferências de apoio em 24 quadros, em vez do ciclo antigo de 12.
+  const duracaoMarcha = 24;
+  const distanciaMarcha = simulador.LUTADORES.pipoca.andar / (simulador.U * PX) * duracaoMarcha;
+  const temposMarcha = [], rotMarcha = Array.from({ length: n }, () => []), raizMarcha = [];
+  for (let q = 0; q <= duracaoMarcha; q += .25) {
+    const pernas = {};
+    for (const [lado, atraso] of [['E', 6], ['D', 18]]) {
+      const fase = (q + atraso) % duracaoMarcha, apoio = fase <= duracaoMarcha / 2;
+      const u = (fase - duracaoMarcha / 2) / (duracaoMarcha / 2);
+      const dx = apoio ? distanciaMarcha / 4 - distanciaMarcha * fase / duracaoMarcha
+        : -distanciaMarcha / 4 + distanciaMarcha / 2 * suave(u);
+      const altura = apoio ? 0 : .065 * Math.sin(Math.PI * u) ** 2;
+      const base = P0[PERNAS[lado].pe];
+      const tornozelo = v(base.x * .35 + dx, base.y + altura, base.z);
+      pernas[lado] = { tornozelo, joelho: v(1, 0, lado === 'E' ? -.12 : .12),
+        local: Vector3.Zero(), loc: 0, pe: G0[PERNAS[lado].pe] };
+    }
+    const { G, P } = resolver({ pelve: v(0, -.08, 0), giro: 0, inclinacao: -.025, pernas });
+    temposMarcha.push(q / 60); raizMarcha.push(...P[0].asArray());
+    for (let i = 0; i < n; i++) rotMarcha[i].push(...(ossos[i].pai === null ? G[i]
+      : Quaternion.Inverse(G[ossos[i].pai]).multiply(G[i]).normalize()).asArray());
+  }
+  clips.andando = { clip: { nome: 'andando', duracaoQuadros: duracaoMarcha,
+    canais: ossos.flatMap((o, i) => [
+      { osso: i, tipo: 'rotation', tempos: temposMarcha, valores: rotMarcha[i] },
+      { osso: i, tipo: 'translation', tempos: temposMarcha,
+        valores: i === 0 ? raizMarcha : temposMarcha.flatMap(() => o.posicao) },
+    ]) } };
+
   // k1: dois chutes médios (24 quadros), perna E nas janelas 6-8, D em 12-14.
   clips.k1 = animar('k1', 24, [
     { q: 0 },
@@ -451,7 +482,9 @@ export function criarGolpesV5(ossos, parado, simulador) {
     }
     relatorio.cp = [{ lado: 'E', caixa, quadros, ok: quadros.every(f => f.dentro) }];
   }
-  return { clips: Object.fromEntries(Object.entries(clips).map(([k, c]) => [k, c.clip])), relatorio };
+  return { clips: Object.fromEntries(Object.entries(clips).map(([k, c]) => [k, c.clip])), relatorio,
+    marcha: { clip: 'andando', distanciaCiclo: distanciaMarcha, duracaoQuadros: duracaoMarcha,
+      apoioQuadros: duracaoMarcha / 2, alturaBalanco: .065, fase: 'distancia-horizontal-assinada' } };
 }
 
 // A guarda recebida aqui já passou pelo acabamento final dos joelhos no

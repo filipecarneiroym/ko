@@ -38,8 +38,10 @@ export function criarEstudoMarcha(guarda, jab, forte, defesa, reacao, marcha, si
     assert.ok(inicio.every((v, i) => Math.abs(v - sinal * fim[i]) < 1e-6), 'Ciclo da marcha fecha sem mudança de pose');
   }
   for (let i = 0; i < 20; i++) for (const tipo of ['rotation', 'translation']) assert.ok(alvos.has(`${i}:${tipo}`));
-  const velocidadeReferencia = simulador.LUTADORES.pipoca.andar / (simulador.U * 24);
-  assert.equal(velocidadeReferencia * marcha.duracaoQuadros, DISTANCIA_CICLO, 'Passada acompanha a velocidade atual da Pipoca');
+  // O estudo v9 foi assado com 42 unidades/quadro. A calibração histórica
+  // descreve o ativo; o importador adapta o ciclo à distância real do motor.
+  const velocidadeReferencia = 42 / (simulador.U * 24);
+  assert.equal(velocidadeReferencia * marcha.duracaoQuadros, DISTANCIA_CICLO, 'Distância assada da marcha v9');
   dados.clips = dados.clips.map(c => c.nome === 'andando' ? structuredClone(marcha) : c);
   dados.extras.status = 'estudo-guarda-socos-defesa-reacao-marcha';
   dados.extras.animacoes = 'Guarda, dois socos, defesa alta, reação e marcha revisados; outros 25 clips preservados.';

@@ -11,7 +11,8 @@ const modulos = Promise.all([
   import('../../../src/3d/estado-visual.mjs'),
 ]);
 const DISTANCIA = 1.3125;
-const VELOCIDADE = K.LUTADORES.pipoca.andar / (K.U * 24);
+// Calibração do ativo histórico v9, independente do balanceamento atual.
+const VELOCIDADE = 42 / (K.U * 24);
 
 async function preparar() {
   const [{ NullEngine }, { Scene }, , { carregarModelo }] = await modulos;
@@ -79,7 +80,7 @@ test('marcha substitui somente andando na versão v8 e publica sua distância re
   assert.deepEqual(dados.clips.filter(c => c.nome !== 'andando'), base.clips.filter(c => c.nome !== 'andando'));
   assert.equal(dados.extras.marcha.clip, 'andando');
   assert.equal(dados.extras.marcha.distanciaCiclo, DISTANCIA);
-  assert.equal(dados.extras.marcha.distanciaCiclo / VELOCIDADE, 12);
+  assert.equal(dados.extras.marcha.distanciaCiclo / dados.extras.marcha.velocidadeReferencia, 12);
   assert.equal(JSON.stringify([...fontes, marcha]), antes, 'Gerar a marcha preserva fontes anteriores');
   const corrompida = structuredClone(marcha);
   corrompida.canais.find(c => c.osso === 0 && c.tipo === 'translation').valores[0] = .1;

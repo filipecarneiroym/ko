@@ -4,6 +4,25 @@ const assert = require('node:assert');
 const K = require('../../../public/js/ko-sim.js');
 
 const { B } = K;
+test('toque curto para imediatamente ao soltar e inverter direção responde no próximo passo', () => {
+  for (const lado of [0, 1]) for (const frente of [true, false]) {
+    const s = prontaParaLutar(['pipoca', 'pipoca']);
+    const l = s.p[lado], direcao = (l.face === 1) === frente ? B.R : B.L;
+    const entrada = [0, 0]; entrada[lado] = direcao;
+    for (let i = 0; i < 3; i++) K.passo(s, entrada);
+    assert.equal(l.vx, l.face * (frente ? K.LUTADORES.pipoca.andar : -K.LUTADORES.pipoca.tras));
+    entrada[lado] = 0;
+    const x = l.x;
+    for (let i = 0; i < 12; i++) K.passo(s, entrada);
+    assert.equal(l.x, x, 'nenhum passo extra depois de soltar');
+    assert.equal(l.vx, 0); assert.equal(l.estado, 'parado');
+    entrada[lado] = direcao;
+    K.passo(s, entrada);
+    entrada[lado] = direcao === B.R ? B.L : B.R;
+    K.passo(s, entrada);
+    assert.equal(Math.sign(l.vx), frente ? -l.face : l.face, 'troca de direção imediata');
+  }
+});
 test('hash detecta diferenças que alteram quadros futuros', () => {
   const a = K.novo({ lutadores: ['pipoca', 'uivo'] });
   const b = structuredClone(a);

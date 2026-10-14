@@ -47,6 +47,7 @@ export function gerarPipocaV5() {
     assert.deepEqual(pesAoContrario, [], `Pé ao contrário: ${JSON.stringify(pesAoContrario.slice(0, 20))}`);
     const dados = { nome: 'pipoca', ...v5, clips,
       extras: { status: 'pipoca-v5-jogo', variante, aprovadoFinal: false,
+        marcha: golpes.marcha,
         animacoes: v13.extras.animacoes, retarget: 'v13 -> v5 (rotações; comprimentos da v5; pelve escalada pela perna)' } };
     const bytes = exportarGlb(dados);
     const doc = validarGlb(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.length), 'pipoca', K);

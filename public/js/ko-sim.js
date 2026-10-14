@@ -39,7 +39,7 @@
   const FOCO = { dur: 34, armadura: [2, 18], janelas: [P({ de: 19, ate: 21, dano: 50, hs: 28, bs: 12, caixa: [6, -56, 30, 16] })] };
   const LUTADORES = {
     pipoca: {
-      nome: 'Lola', vida: 950, andar: 42, tras: 32, correr: 86, pulo: 150, puloX: 50, gravidade: 9, pulosAr: 1,
+      nome: 'Lola', vida: 950, andar: 30, tras: 24, correr: 86, pulo: 150, puloX: 50, gravidade: 9, pulosAr: 1,
       altura: 60, golpes: {
         p1: { dur: 12, cancel: { P: 'p2', S: 1 }, janelas: [P({ de: 3, ate: 5, dano: 35, hs: 14, bs: 9, caixa: [6, -50, 24, 10] })] },
         p2: { dur: 18, cancel: { K: 'k2', S: 1 }, janelas: [P({ de: 5, ate: 7, dano: 50, hs: 17, bs: 11, caixa: [6, -48, 28, 12] })] },
@@ -366,7 +366,7 @@
       id, lado, x: lado === 0 ? 112 * U : 272 * U, y: 0, vx: 0, vy: 0, face: lado === 0 ? 1 : -1,
       vida: d.vida, poder: 0, estado: 'parado', t: 0, golpe: null, encostou: 0, acertos: 0,
       stun: 0, combo: 0, juggle: 0, inv: 0, pulosAr: 0, empurrao: 0, sumido: 0, armadura: 0, forca: 0, enrolado: 0, prende: '', estrelas: 0,
-      bAnt: 0, buf: { P: 0, K: 0, S: 0, B: 0, U: 0 }, quandoP: -99, quandoK: -99, hist: [], pressF: -99, pressT: -99, passoT: 0, passoDir: 0,
+      bAnt: 0, buf: { P: 0, K: 0, S: 0, B: 0, U: 0 }, quandoP: -99, quandoK: -99, hist: [],
       toqueFrente: -99, toqueTras: -99, soltouFrente: 1, soltouTras: 1,
     };
   }
@@ -444,11 +444,6 @@
     if (sobe & tr) { if (s.f - l.toqueTras <= 12 && l.soltouTras) l.toqueDuploTras = 1; l.toqueTras = s.f; l.soltouTras = 0; }
     if (sobe & B.RC) l.toqueDuploTras = 1;
     if (!(bits & tr) && l.toqueTras !== s.f) l.soltouTras = 1;
-    // Toque curto para frente ou para trás (até 6 quadros) dá um passo, como no boxe.
-    if (sobe & fr) l.pressF = s.f;
-    if (sobe & tr) l.pressT = s.f;
-    if (!(bits & fr) && (l.bAnt & fr) && s.f - l.pressF <= 6) { l.passoT = 1; l.passoDir = 1; }
-    if (!(bits & tr) && (l.bAnt & tr) && s.f - l.pressT <= 6) { l.passoT = 1; l.passoDir = -1; }
     // Histórico de direção (frente/baixo) para sequências como o quarto de círculo.
     l.hist.push((bits & B.D ? 'D' : '') + (bits & fr ? 'F' : '') || 'N');
     if (l.hist.length > JANELA_MOVIMENTO) l.hist.shift();
@@ -563,11 +558,6 @@
     }
     if (agachado) { if (l.estado !== 'agachado') mudar(l, 'agachado'); vel(s, l, 0); return; }
     if (l.toqueDuploTras) { mudar(l, 'recuo'); l.inv = 8; l.vx = -l.face * 90; return; }
-    if (l.passoT > 0 && l.passoT <= 10 && !l.toqueDuploFrente && l.estado !== 'corrida') {
-      if (l.estado !== 'andando') mudar(l, 'andando');
-      vel(s, l, l.face * l.passoDir * d.andar); l.passoT++; return;
-    }
-    l.passoT = 0;
     if (segura(fr)) {
       if (l.toqueDuploFrente || l.estado === 'corrida') { if (l.estado !== 'corrida') mudar(l, 'corrida'); vel(s, l, l.face * d.correr); return; }
       if (l.estado !== 'andando') mudar(l, 'andando');
