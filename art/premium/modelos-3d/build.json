@@ -12,7 +12,7 @@
     "src/3d/arenas.js": "56e5edf049966daa6e797a2cacfae1ec2a47d847ae13134780ccb349c70ae94d",
     "src/3d/brilho-golpes.js": "1e3e2ae8a5654bfdb6ffcf38a289727a3253165e3a2895509f8b4c903525e1f3",
     "src/3d/caixas.js": "14ab50a1c505237c3aa4005385e121a131affe8ea212a7539f9499cd3fe82f24",
-    "src/3d/camera-luta.js": "07f76a6b4c00252fc8613e58686c0b0cae67ad781cad0f390b1a09d886818ceb",
+    "src/3d/camera-luta.js": "db2e510b35a409e53692fa3dcff8481b2e95d7102934bf7edf9327dd6be9777a",
     "src/3d/contrato-glb.mjs": "0fafc4fa6b706c2b0f88155714a14aa42b0450b3eee768c28e46f4694b8cff53",
     "src/3d/efeitos-sf4.js": "57bfdd1386cca9b066a590155bb33b4023bf190f813a14cf5ecc33f0c8545fc4",
     "src/3d/efeitos.js": "c0a06902204defa26f8607da2d0260497217c6cf72ed466e8a3658b3dfcdd07d",
@@ -24,6 +24,6 @@
   },
   "saida": {
     "caminho": "public/js/ko-laboratorio-3d.js",
-    "sha256": "ec437d366ccb348b078b12dc1288488222e20e3fd55ec262169a3ee2187dee27"
+    "sha256": "868d52059a609fdb33c26049da5d10313061dda28ddb61806ce921fd87999071"
   }
 }

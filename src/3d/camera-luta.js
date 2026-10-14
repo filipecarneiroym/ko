@@ -26,6 +26,10 @@ export function enquadrarCameraLuta(camera, engine, estado, simulador, pedido = 
     const k = 1 - pedido.zoom;
     cx += (pedido.foco.x - cx) * Math.min(1, k * 2.5); cy += (pedido.foco.y - cy) * Math.min(1, k * 2.5); zoom = pedido.zoom;
   }
+  // Como no SF4: a câmera para no fim da arena; quem encosta na parede fica na
+  // borda da tela (antes a câmera seguia e parecia que ela travava no meio do chão).
+  const parede = (simulador.LARGURA / 2 - 18) / 24 + .6, metadeLargura = metadeAltura * zoom * aspecto;
+  if (!pedido?.foco) cx = metadeLargura >= parede ? 0 : Math.max(-parede + metadeLargura, Math.min(parede - metadeLargura, cx));
   const d = pedido?.desloc || Vector3.Zero();
   const distancia = metadeAltura * zoom / Math.tan(camera.fov / 2);
   // Quase na horizontal: o fundo ocupa a metade de cima.
