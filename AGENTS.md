@@ -77,6 +77,10 @@ um arquivo .cjs; `page.goto` para a mesma URL só mudando hash não recarrega;
    **Manter as fotos/artes de todos os outros personagens** (entram depois,
    um por vez, seguindo o padrão de refinamento).
 6. Depois da aprovação da Pipoca: próximo personagem em 3D.
+7. **Pelagem marrom da Lola (ex-Pipoca; id interno continua pipoca)**, ainda não aplicada: prévias em
+   art/premium/modelos-3d/estudos-mixamo/pipoca-v5-jogo/previa-lola-marrom*.png. Recomendado: tom médio
+   (178,156,137) com focinho/bochechas creme e pontas das orelhas escuras (pintura à mão na textura
+   cor_azul/cor_vermelha, conferida de vários ângulos), depois gerar-pipoca-v5.mjs e os retratos.
 
 ## Publicação (Render: ko-rat6.onrender.com)
 O Render publica a partir do GitHub (`filipecarneiroym/ko`, branch `main`).
