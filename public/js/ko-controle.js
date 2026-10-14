@@ -12,7 +12,8 @@
   const PADRAO = {
     L: [botao(14), eixo(0, -1)], R: [botao(15), eixo(0, 1)],
     U: [botao(12), eixo(1, -1)], D: [botao(13), eixo(1, 1)],
-    P: [botao(2)], K: [botao(0)], D_: [botao(3)], S: [botao(1)], menu: [botao(9)],
+    // Mesmo desenho do celular: especial em cima (Y), soco à esquerda (X), Focus à direita (B), chute embaixo (A).
+    P: [botao(2)], K: [botao(0)], D_: [botao(1)], S: [botao(3)], menu: [botao(9)],
   };
 
   function pressionado(pad, comando) {

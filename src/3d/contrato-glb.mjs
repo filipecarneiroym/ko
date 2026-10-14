@@ -1,6 +1,7 @@
 import { ESTADOS_VISUAIS } from './estado-visual.mjs';
 
 export const LIMITE_GLB = 24 * 1024 * 1024;
+export const GOLPES_OPCIONAIS = ['dp'];
 export function validarGlb(buffer, id, simulador) {
   if (!(buffer instanceof ArrayBuffer) || buffer.byteLength < 20 || buffer.byteLength > LIMITE_GLB) throw new Error('Use um GLB de até 24 MB.');
   const view = new DataView(buffer);
@@ -16,7 +17,8 @@ export function validarGlb(buffer, id, simulador) {
   if (doc.extensionsRequired?.length || doc.extensionsUsed?.length) throw new Error('Exporte o GLB sem extensões nesta primeira etapa.');
   const golpes = simulador.LUTADORES[id]?.golpes;
   if (!golpes) throw new Error('Lutador desconhecido.');
-  const obrigatorios = [...ESTADOS_VISUAIS, ...Object.keys(golpes)];
+  // Golpes novos podem faltar em arquivos de estudo antigos; os modelos de jogo da v5 trazem todos.
+  const obrigatorios = [...ESTADOS_VISUAIS, ...Object.keys(golpes).filter(n => !GOLPES_OPCIONAIS.includes(n))];
   const nomes = (doc.animations || []).map(a => a.name);
   if (new Set(nomes).size !== nomes.length) throw new Error('As animações precisam de nomes únicos.');
   const faltantes = obrigatorios.filter(n => !nomes.includes(n));

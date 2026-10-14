@@ -255,6 +255,21 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 26 },
   ]);
 
+  // dp: subida com soco (Shoryuken próprio da Pipoca, 30 quadros). Agacha e carrega
+  // (4), sobe com o braço da frente em linha reta (10), no ápice o corpo está mais
+  // alto e o braço de trás puxa para o quadril; desce e pousa (22-30).
+  // Subida com os pés plantados: o motor não tira o lutador do chão, então a
+  // força vem da perna de trás empurrando e do tronco inclinado; a pelve sobe pouco.
+  clips.dp = animar('dp', 30, [
+    { q: 0 },
+    { q: 4, giro: 0, inclinacao: -.12, pelve: v(-.02, -.22, 0), pernas: { E: { tornozelo: v(.5, .2, ZE + .06), joelho: v(1, .5, -.2), pe: 'plano' }, D: { joelho: v(1, .1, .06) } }, bracos: { E: { alvo: v(.12, .02, -.14), cotovelo: v(-.2, -.6, -1) }, D: { alvo: v(-.02, .05, .16), cotovelo: v(-.3, -.8, 1) } } },
+    { q: 7, giro: .1, inclinacao: .16, pelve: v(.03, .04, 0), pernas: { E: { tornozelo: v(.55, .1, ZE + .08), joelho: v(1, .6, 0), pe: 'plano' }, D: { tornozelo: v(.95, .1, ZD - .04), joelho: v(0, 1, 0), pe: 'esticado' } }, bracos: { E: { alvo: v(.1, .5, -.12), cotovelo: v(-.1, .1, -1) }, D: { alvo: v(-.14, .18, .14), cotovelo: v(-.3, -.2, 1) } } },
+    { q: 10, giro: .1, inclinacao: .2, pelve: v(.05, .08, 0), pernas: { E: { tornozelo: v(.4, .1, ZE + .1), joelho: v(1, .6, 0), pe: 'plano' }, D: { tornozelo: v(1.0, .1, ZD - .04), joelho: v(0, 1, 0), pe: 'esticado' } }, bracos: { E: { alvo: v(.04, .7, -.12), cotovelo: v(-.1, .3, -1) }, D: { alvo: v(-.2, .12, .14), cotovelo: v(-.4, -.4, 1) } } },
+    { q: 16, giro: 0, inclinacao: .08, pelve: v(.02, .04, 0), pernas: { E: { tornozelo: v(.5, .1, ZE + .08), joelho: v(1, .6, 0), pe: 'plano' }, D: { tornozelo: v(.7, .1, ZD - .06), joelho: v(0, .9, 0), pe: 'plano' } }, bracos: { E: { alvo: v(.06, .5, -.12), cotovelo: v(-.1, .2, -1) }, D: { alvo: v(-.14, .14, .14), cotovelo: v(-.3, -.2, 1) } } },
+    { q: 22, giro: 0, inclinacao: -.04, pelve: v(0, .02, 0) },
+    { q: 30 },
+  ]);
+
   // agachado: guarda baixa de luta (laço de 60 quadros com respiração).
   const baixa = dy => ({ inclinacao: -.12, pelve: v(-.02, -.30 + dy, 0),
     pernas: { E: { joelho: v(1, 0, -.25) }, D: { joelho: v(1, 0, .3) } } });

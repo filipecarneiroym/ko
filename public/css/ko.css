@@ -191,17 +191,18 @@ button, a.botao { touch-action: manipulation; min-height: 48px; }
 .com-controle .icone-controle { display: block; }
 .com-controle .direcional, .com-controle .botoes { display: none; }
 
-/* Quatro botões em losango: em cima defesa, esquerda soco, direita especial, embaixo chute.
-   Vizinhos de propósito: soco+chute (esquiva) e defesa+especial (quebra-combo) com um dedo só. */
+/* Quatro botões em losango, como no SF4 de celular: em cima especial, esquerda soco, direita Focus, embaixo chute.
+   Vizinhos de propósito: soco+chute (esquiva) com um dedo só. */
 .botoes {
   --b: clamp(58px, 12.5vmin, 80px);
   position: absolute; right: calc(4% + env(safe-area-inset-right)); bottom: 6%;
   display: grid; grid-template-columns: repeat(3, var(--b)); grid-template-rows: repeat(3, var(--b)); gap: 2px;
   pointer-events: none;
 }
-.b-defesa { grid-area: 1 / 2; }
+/* Como no SF4 de celular: especial em cima, soco à esquerda, Focus à direita e chute embaixo. */
+.b-especial { grid-area: 1 / 2; }
 .b-soco { grid-area: 2 / 1; }
-.b-especial { grid-area: 2 / 3; }
+.b-foco { grid-area: 2 / 3; }
 .b-chute { grid-area: 3 / 2; }
 .b {
   border-radius: 50%; font-size: clamp(22px, 5.6vmin, 32px); padding: 0;
@@ -210,7 +211,7 @@ button, a.botao { touch-action: manipulation; min-height: 48px; }
   box-shadow: 0 5px 0 rgba(26, 15, 36, 0.85), inset 0 -6px 0 rgba(0, 0, 0, 0.22), inset 0 4px 0 rgba(255, 255, 255, 0.25);
   display: grid; place-items: center;
 }
-.b-defesa { background: radial-gradient(circle at 35% 30%, #7da2ff, #3a6cf0 60%); }
+.b-foco { background: radial-gradient(circle at 35% 30%, #7da2ff, #3a6cf0 60%); }
 .b-especial { background: radial-gradient(circle at 35% 30%, #ff9ae9, #e03fc0 60%); }
 .b-soco { background: radial-gradient(circle at 35% 30%, #ff7f83, #d82a30 60%); }
 .b-chute { background: radial-gradient(circle at 35% 30%, #ffc27a, #f08a1c 60%); }

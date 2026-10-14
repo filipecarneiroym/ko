@@ -3,7 +3,7 @@ import '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode.js';
 import { Bone } from '@babylonjs/core/Bones/bone.pure.js';
 import { Quaternion, Vector3 } from '@babylonjs/core/Maths/math.vector.js';
-import { validarGlb } from './contrato-glb.mjs';
+import { validarGlb, GOLPES_OPCIONAIS } from './contrato-glb.mjs';
 import { quadroDoClip } from './estado-visual.mjs';
 
 export async function carregarModelo(buffer, id, simulador, scene) {
@@ -21,6 +21,7 @@ export async function carregarModelo(buffer, id, simulador, scene) {
     const grupos = new Map(container.animationGroups.map(g => [g.name, g]));
     for (const nome of [...new Set([...Object.keys(simulador.LUTADORES[id].golpes), 'parado'])]) {
       const g = grupos.get(nome);
+      if (!g && GOLPES_OPCIONAIS.includes(nome)) continue; // arquivo de estudo sem este golpe
       const duracao = simulador.LUTADORES[id].golpes[nome]?.dur;
       const fps = g?.targetedAnimations[0]?.animation.framePerSecond;
       if (!g || !fps || g.to <= g.from || g.from !== 0) throw new Error(`Revise os quadros da animação ${nome}.`);

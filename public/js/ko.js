@@ -763,7 +763,7 @@
   function abrirControles() {
     const sobre = document.createElement('div');
     sobre.className = 'painel painel-controle';
-    sobre.innerHTML = '<div class="cartao-fim"><h2>Controles</h2><p role="status"></p><p class="dica">Ligue os controles ao aparelho que está rodando o jogo e aperte um botão em cada um. Padrão: botão inferior confirma/chuta; esquerdo soca; superior defende; direito usa especial.</p><div class="acoes"><button class="botao" data-pad="0">Configurar jogador 1</button><button class="botao" data-pad="1">Configurar jogador 2</button><button class="botao botao-sec" data-fechar>Voltar</button></div></div>';
+    sobre.innerHTML = '<div class="cartao-fim"><h2>Controles</h2><p role="status"></p><p class="dica">Ligue os controles ao aparelho que está rodando o jogo e aperte um botão em cada um. Padrão: botão inferior chuta; esquerdo soca; superior usa especial; direito usa Focus.</p><div class="acoes"><button class="botao" data-pad="0">Configurar jogador 1</button><button class="botao" data-pad="1">Configurar jogador 2</button><button class="botao botao-sec" data-fechar>Voltar</button></div></div>';
     document.getElementById('jogo').appendChild(sobre);
     sobre.querySelectorAll('[data-pad]').forEach((b) => b.onclick = () => pads.configurar(Number(b.dataset.pad)));
     sobre.querySelector('[data-fechar]').onclick = () => { pads.cancelar(); sobre.remove(); limparControles(); pulsosPads = [0, 0]; $('#ajustar-controles')?.focus(); };

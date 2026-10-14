@@ -51,6 +51,8 @@
         ak: { dur: 22, janelas: [P({ de: 5, ate: 16, dano: 55, hs: 18, tipo: 'aereo', caixa: [2, -26, 28, 12] })] },
         // Cenoura bumerangue: vai, volta e acerta nas duas passadas.
         esp: { dur: 30, proj: { quadro: 10, tipo: 'cenoura', vx: 100, y: 48, w: 16, h: 8, vida: 110, volta: 30, dano: 55, hs: 20, bs: 14 } },
+        // Subida com soco (frente, baixo, baixo-frente + soco): alta, pega quem está de pé.
+        dp: { dur: 30, janelas: [P({ de: 6, ate: 12, dano: 60, hs: 22, bs: 14, caixa: [2, -96, 30, 70], derruba: 1 })] },
         // Toca: some no chão, anda por baixo e salta debaixo do adversário.
         sup: { dur: 62, inv: [0, 46], toca: [8, 42], janelas: [P({ de: 44, ate: 50, dano: 230, hs: 34, bs: 20, caixa: [-16, -86, 32, 86], lanca: [16, 190], derruba: 1 })] },
       },
@@ -448,17 +450,15 @@
     l.bAnt = bits;
   }
 
-  // Quarto de círculo para frente (baixo, baixo-frente, frente) nos últimos quadros.
-  // Não conta duas vezes: ao usar, o histórico é zerado.
-  function quartoDeCirculo(l) {
+  // Sequência de direções (em ordem) nos últimos quadros. Não conta duas vezes:
+  // ao usar, o histórico é zerado.
+  function sequencia(l, seq) {
     let passo = 0;
-    for (const h of l.hist) {
-      if (passo === 0 && h === 'D') passo = 1;
-      else if (passo === 1 && h === 'DF') passo = 2;
-      else if (passo === 2 && h === 'F') return true;
-    }
+    for (const h of l.hist) if (h === seq[passo] && ++passo === seq.length) return true;
     return false;
   }
+  const quartoDeCirculo = (l) => sequencia(l, ['D', 'DF', 'F']);   // baixo, baixo-frente, frente
+  const dragao = (l) => sequencia(l, ['F', 'D', 'DF']);             // frente, baixo, baixo-frente
 
   function usar(l, k) { if (l.buf[k] > 0) { l.buf[k] = 0; return true; } return false; }
 
@@ -518,14 +518,19 @@
     if (tentarEspecial(s, l)) return;
 
     const agachado = segura(B.D);
-    // Agarrão: frente + soco colado num adversário de pé.
-    if (l.buf.P && segura(fr) && !agachado && Math.abs(o.x - l.x) <= AGARRAO.alcance && noChao(o) && livreParaAgarrar(o)) {
-      l.buf.P = 0; agarrar(s, l, o); return;
-    }
     if (usar(l, 'F')) { iniciarGolpe(s, l, 'foc'); return; } // F: Focus Attack
+    // Frente, baixo, baixo-frente + soco = subida (dp), que sobe do chão.
+    if (l.buf.P && !agachado && d.golpes.dp && dragao(l)) {
+      l.buf.P = 0; l.hist = []; iniciarGolpe(s, l, 'dp'); return;
+    }
     // Quarto de círculo + soco = projétil (Hadouken): a cenoura, quando o lutador tem uma.
     if (l.buf.P && !agachado && d.golpes.esp?.proj && quartoDeCirculo(l) && !s.proj.some((p) => p.dono === l.lado)) {
       l.buf.P = 0; l.hist = []; iniciarGolpe(s, l, 'esp'); return;
+    }
+    // Agarrão: frente + soco colado num adversário de pé. Vem depois da subida e da cenoura,
+    // que usam a mesma entrada (frente + soco) e precisam ganhar no corpo a corpo.
+    if (l.buf.P && segura(fr) && !agachado && Math.abs(o.x - l.x) <= AGARRAO.alcance && noChao(o) && livreParaAgarrar(o)) {
+      l.buf.P = 0; agarrar(s, l, o); return;
     }
     if (usar(l, 'P')) { iniciarGolpe(s, l, agachado ? 'cp' : 'p1'); return; }
     if (usar(l, 'K')) { iniciarGolpe(s, l, agachado ? 'ck' : (l.estado === 'corrida' ? 'k2' : 'k1')); return; }

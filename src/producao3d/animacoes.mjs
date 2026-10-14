@@ -127,7 +127,9 @@ export function criarAnimacoes(id, ossos, simulador) {
     if (['ap','ak'].includes(nome)) Object.assign(p.r,{coxa_D:[0,0,.6],canela_D:[0,0,-1.0]});
     return p;
   }
-  for (const [nome,golpe] of Object.entries(simulador.LUTADORES[id].golpes)) {
+  // dp (Shoryuken da Pipoca) não tem clipe na base v13: o clipe dele é feito à mão na v5.
+  const golposBase = Object.entries(simulador.LUTADORES[id].golpes).filter(([nome]) => nome !== 'dp');
+  for (const [nome,golpe] of golposBase) {
     const d = golpe.dur, chaves = new Map([[0,guarda],[d,guarda]]);
     const inserir = (q,p) => chaves.set(Math.max(0,Math.min(d,q)),p);
     if (nome === 'esp') {
@@ -158,7 +160,7 @@ export function criarAnimacoes(id, ossos, simulador) {
     }
     clip(nome,d,[...chaves]);
   }
-  const esperados = [...ESTADOS_VISUAIS,...Object.keys(simulador.LUTADORES[id].golpes)];
+  const esperados = [...ESTADOS_VISUAIS,...golposBase.map(([nome]) => nome)];
   if (clips.length !== esperados.length || esperados.some(n => !clips.some(c => c.nome === n))) throw new Error('Clips incompletos.');
   return clips;
 }

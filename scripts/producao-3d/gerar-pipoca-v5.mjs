@@ -1,5 +1,5 @@
 // Pipoca v5 jogável: malha da arte final (preparar-jogo-pipoca-v5.py) com os
-// 31 movimentos do estudo v13 retargetados para o esqueleto da v5.
+// 31 movimentos do estudo v13 retargetados para o esqueleto da v5, mais o Shoryuken próprio (dp).
 // Gera as duas roupas: azul (jogador) e vermelha (máquina / jogador 2).
 //   node scripts/producao-3d/gerar-pipoca-v5.mjs
 import assert from 'node:assert/strict';
@@ -31,6 +31,7 @@ export function gerarPipocaV5() {
     const baixos = { cp: [golpes.clips.agachado, null], defesaBaixa: [golpes.clips.agachado, null], ap: [golpes.clips.pulo, 14] };
     const clips = herdados.map(c => golpes.clips[c.nome]
       ?? (baixos[c.nome] ? pernasDe(v5.ossos, c, ...baixos[c.nome]) : joelhosParaFrente(v5.ossos, c)));
+    clips.push(golpes.clips.dp);
     // Olhar no oponente ao agachar e defender.
     const guardaV5 = clips.find(c => c.nome === 'parado');
     for (const nome of ['agachado', 'cp', 'defesaBaixa', 'ck', 'defesa', 'pousando', 'recuo', 'quebra']) {
@@ -49,12 +50,12 @@ export function gerarPipocaV5() {
         animacoes: v13.extras.animacoes, retarget: 'v13 -> v5 (rotações; comprimentos da v5; pelve escalada pela perna)' } };
     const bytes = exportarGlb(dados);
     const doc = validarGlb(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.length), 'pipoca', K);
-    assert.equal(doc.animations.length, 31);
+    assert.equal(doc.animations.length, 32);
     const caminho = `public/modelos/estudos/pipoca-v5-${variante}.glb`;
     writeFileSync(resolve(raiz, caminho), bytes);
     const triangulos = doc.meshes.flatMap(m => m.primitives).reduce((n, p) => n + doc.accessors[p.indices].count / 3, 0);
     relatorio.arquivos[variante] = { caminho, bytes: bytes.length, sha256: sha(bytes), triangulos,
-      materiais: doc.materials.length, ossos: 20, clips: 31,
+      materiais: doc.materials.length, ossos: 20, clips: 32,
       dentroDoTeto: triangulos <= 40000, glbDentroDoAlvo: bytes.length <= 8 * 1024 * 1024 };
   }
   writeFileSync(resolve(pastaV5, 'integracao.json'), JSON.stringify(relatorio, null, 2) + '\n');

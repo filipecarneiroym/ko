@@ -112,9 +112,9 @@ function compararEmenda(modelo, antes, depois) {
 }
 
 for (const variante of ['azul', 'vermelha']) {
-  test(`recuperação v5 ${variante} preserva os 31 clipes, 20 ossos e durações da regra`, async () => {
+  test(`recuperação v5 ${variante} preserva os 31 clipes de base e o dp, 20 ossos e durações da regra`, async () => {
     const modelo = await modelos[variante];
-    assert.equal(modelo.doc.animations.length, 31);
+    assert.equal(modelo.doc.animations.length, 32);
     assert.equal(modelo.doc.skins[0].joints.length, 20);
     for (const [nome, duracao] of [['caido', 46], ['levantando', 16]]) {
       const clip = modelo.clips.get(nome);
