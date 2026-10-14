@@ -36,6 +36,11 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
       .filter(m => m.name.startsWith('golpe-bola-')).map(m => m.material.emissiveTexture)).size), 1,
       'projéteis compartilham uma textura pronta, sem clones dinâmicos vazios');
     const casos = [
+      ['chute-duplo-primeiro', 'k1', 6], ['chute-duplo-segundo', 'k1', 12],
+      ['chute-alto-preparo', 'k2', 4], ['chute-alto-contato', 'k2', 7],
+      ['rasteira-preparo', 'ck', 4], ['rasteira-contato', 'ck', 6],
+      ['chute-aereo-inicio', 'ak', 5], ['chute-aereo-fim', 'ak', 16],
+      ['chute-alto-invertido', 'k2', 7, -1], ['rasteira-invertida', 'ck', 6, -1],
       ['hadouken-preparo', 'esp', 5], ['hadouken-quadril', 'esp', 7],
       ['hadouken-disparo', 'esp', 10], ['hadouken-viagem', 'esp', 16],
       ['hadouken-vapor', 'esp', 24],
@@ -47,7 +52,10 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
       ['super-toca', 'sup', 46], ['ultra-carga', 'ultra', 18], ['ultra-projetil', 'ultra', 25], ['focus-carga', 'foc', 30],
     ];
     for (const [nome, golpe, quadro, face = 1] of casos) {
+      if (process.env.KO_CAPTURAS && !process.env.KO_CAPTURAS.split(',').includes(nome)) continue;
       if (process.env.KO_HADOUKEN && !['esp', 'espEx', 'ultra'].includes(golpe)) continue;
+      if (process.env.KO_CHUTES && !['k1', 'k2', 'ck', 'ak', 'tatsu', 'tatsuEx'].includes(golpe)) continue;
+      if (process.env.KO_CHUTE_AEREO && golpe !== 'ak') continue;
       const resultado = await page.evaluate(async ({ golpe, quadro, face }) => {
         const lab = globalThis.__laboratorio3d; lab.pausado = true;
         const novo = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: true }); novo.fase = 'luta'; novo.fT = 0;
@@ -56,9 +64,12 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
         novo.p[0].poder = KOSim.PODER_MAX; novo.p[0].revanche = KOSim.ULTRA_MAX;
         Object.assign(lab.estado, novo);
         const B = KOSim.B;
-        const comandos = { esp: B.S, dp: B.R | B.S, tatsu: B.L | B.S, espEx: B.S | B.P, dpEx: B.R | B.S | B.P,
+        const comandos = { k1: B.K, ck: B.D | B.K, esp: B.S, dp: B.R | B.S, tatsu: B.L | B.S, espEx: B.S | B.P, dpEx: B.R | B.S | B.P,
           tatsuEx: B.L | B.S | B.P, sup: B.S | B.K, ultra: B.S | B.F, foc: B.F };
-        KOSim.passo(lab.estado, [comandos[golpe], 0]);
+        if (['k2', 'ak'].includes(golpe)) {
+          // Inspeção do clipe inteiro, sem a queda interromper o chute aéreo.
+          Object.assign(lab.estado.p[0], { estado: 'golpe', golpe, t: quadro, y: golpe === 'ak' ? 48 * KOSim.U : 0 });
+        } else KOSim.passo(lab.estado, [comandos[golpe], 0]);
         let guarda = 0;
         while ((golpe === 'foc' ? lab.estado.p[0].focoCarga < quadro : lab.estado.p[0].t < quadro) && guarda++ < 180)
           KOSim.passo(lab.estado, [golpe === 'foc' ? B.F : 0, 0]);
@@ -69,6 +80,15 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
       if (golpe.startsWith('dp')) assert.ok(resultado.altura > 0);
       if (golpe === 'espEx') assert.equal(resultado.proj, 2);
       await page.waitForTimeout(500);
+      if (['k1', 'k2', 'ck', 'ak', 'tatsu'].includes(golpe)) {
+        const efeitos = await page.evaluate(() => {
+          const scene = globalThis.__laboratorio3d.scene;
+          return { particulas: scene.getParticleSystemById('golpe-nevoa-0').emitRate,
+            largura: scene.getMeshByName('golpe-rastro-0').diameter };
+        });
+        assert.equal(efeitos.particulas, 0, 'chutes comuns sem névoa de fogo cobrindo a perna');
+        assert.ok(efeitos.largura <= .08, 'rastro discreto de movimento');
+      }
       if (['esp', 'espEx', 'ultra'].includes(golpe)) {
         const visual = await page.evaluate(() => {
           const scene = globalThis.__laboratorio3d.scene;

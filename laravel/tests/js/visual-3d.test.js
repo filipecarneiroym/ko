@@ -52,7 +52,7 @@ test('importação exige GLB com rig, todos os estados e recursos incorporados',
   assert.throws(() => validarGlb(glb({ ...doc, animations: [...doc.animations, doc.animations[0]] }), 'pipoca', K), /únicos/);
 });
 
-test('mortal no pulo para frente/trás e volta inteira no chute forte (só visual)', async () => {
+test('mortal no pulo e chutes sem uma volta artificial antes do contato', async () => {
   const [{ descreverPose }] = await modulos;
   const pulo = K.LUTADORES.pipoca.pulo;
   const base = { id: 'pipoca', x: 0, y: 40, face: 1, t: 3, sumido: 0 };
@@ -61,7 +61,8 @@ test('mortal no pulo para frente/trás e volta inteira no chute forte (só visua
   assert.ok(frente.mortal < -1 && tras.mortal > 1, 'gira para lados opostos no meio do pulo');
   assert.equal(descreverPose({ ...base, estado: 'pulo', vx: 0, vy: 0 }, K).mortal, 0, 'pulo parado não gira');
   assert.ok(Math.abs(descreverPose({ ...base, estado: 'pulo', vx: 50, vy: -pulo }, K).mortal + Math.PI * 2) < 1e-9, 'pousa de pé (volta completa)');
-  const chute = (t) => descreverPose({ ...base, y: 0, estado: 'golpe', golpe: 'k2', t, vx: 0, vy: 0 }, K).volta;
-  assert.equal(chute(0), 0);
-  assert.ok(Math.abs(chute(20) - Math.PI * 2) < 1e-9, 'a perna sai depois da volta inteira');
+  for (const golpe of ['k1', 'k2', 'ck', 'ak', 'tatsu', 'tatsuEx'])
+    for (let t = 0; t <= K.LUTADORES.pipoca.golpes[golpe].dur; t++)
+      assert.equal(descreverPose({ ...base, y: 0, estado: 'golpe', golpe, t, vx: 0, vy: 0 }, K).volta, 0,
+        'giro autoral do clipe sem volta extra da raiz');
 });

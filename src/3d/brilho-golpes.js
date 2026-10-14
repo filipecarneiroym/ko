@@ -16,7 +16,7 @@ import { quedasDoFinal } from './estado-visual.mjs';
 // especial/Super), aura de fogo no especial e no Super e uma camada de brilho
 // que faz faíscas e rastros "vazarem" luz. Só visual: lê o estado do motor.
 const COR = {
-  fraco: '#bfe9ff', forte: '#ff7a1c', especial: '#75eaff', super: '#ffd84a',
+  fraco: '#bfe9ff', chute: '#d9e5e9', forte: '#ff7a1c', especial: '#75eaff', super: '#ffd84a',
 };
 const FORTES = new Set(['p2', 'k2']);
 const CHUTES = new Set(['k1', 'k2', 'ck', 'ak', 'tatsu', 'tatsuEx']);
@@ -229,6 +229,7 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
       estado.p.forEach((l, i) => {
         const d = lados[i], modelo = modelos[i];
         const hadouken = ['esp', 'espEx', 'ultra'].includes(l.golpe);
+        const chuteComum = ['k1', 'k2', 'ck', 'ak', 'tatsu'].includes(l.golpe);
         const solta = l.golpe === 'ultra' ? 25 : 10;
         d.carga.setEnabled(!!modelo && hadouken && l.estado === 'golpe' && l.t >= 4 && l.t < solta && !l.sumido);
         if (d.carga.isEnabled()) {
@@ -256,21 +257,21 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
           if (m) {
             // Rastro acompanha a velocidade do membro: forte no estalo, some quando desacelera.
             const veloc = d.membro === m.nome ? Vector3.Distance(d.ponta.position, m.p) : 0;
-            d.mat.alpha = Math.min(1, .35 + veloc * 4.5);
+            d.mat.alpha = chuteComum ? Math.min(.38, .1 + veloc * .8) : Math.min(1, .35 + veloc * 4.5);
             d.ponta.position.copyFrom(m.p); d.membro = m.nome;
           }
           if (!d.ativo || d.janela !== janela) {
-            const tipo = l.golpe === 'sup' ? 'super' : hadouken ? 'especial' : FORTES.has(l.golpe) ? 'forte' : 'fraco';
+            const tipo = l.golpe === 'sup' ? 'super' : hadouken ? 'especial' : chuteComum ? 'chute' : FORTES.has(l.golpe) ? 'forte' : 'fraco';
             d.mat.emissiveColor = Color3.FromHexString(COR[tipo]);
-            d.rastro.diameter = tipo === 'fraco' ? .12 : .2;
+            d.rastro.diameter = chuteComum ? .07 : tipo === 'fraco' ? .12 : .2;
             d.rastro.reset(); d.rastro.setEnabled(true); d.rastro.start();
-            const fogo = tipo !== 'fraco' && !hadouken;
+            const fogo = tipo !== 'fraco' && !hadouken && !chuteComum;
             d.nevoa.color1 = fogo ? new Color4(1, .78, .35, .8) : new Color4(.8, .92, 1, .6);
             d.nevoa.color2 = fogo ? new Color4(1, .38, .1, .6) : new Color4(.5, .7, 1, .45);
             d.nevoa.colorDead = new Color4(0, 0, 0, 0);
           }
         } else if (d.ativo) { d.rastro.stop(); d.rastro.setEnabled(false); }
-        d.nevoa.emitRate = ativo && !movimentoReduzido.matches ? 140 : 0;
+        d.nevoa.emitRate = ativo && !chuteComum && !movimentoReduzido.matches ? 140 : 0;
         if (ativo) d.nevoa.emitter = d.ponta.position.clone();
         d.ativo = ativo; d.janela = janela;
 

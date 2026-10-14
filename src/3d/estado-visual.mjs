@@ -31,8 +31,8 @@ export function descreverPose(lutador, simulador, estado = null) {
   };
 }
 
-// Só visual (como no SF4): mortal no pulo para frente/trás e volta inteira
-// antes do chute forte. A regra (posição, caixas, tempo) não muda.
+// Só visual: mortal no pulo para frente/trás. Os giros dos golpes pertencem
+// aos seus clipes, sem uma volta extra aplicada ao corpo inteiro.
 const suave = t => t * t * (3 - 2 * t);
 function giros(l, simulador, golpe) {
   const dados = simulador.LUTADORES[l.id];
@@ -42,9 +42,6 @@ function giros(l, simulador, golpe) {
     const p = Math.max(0, Math.min(1, (dados.pulo - l.vy) / (2 * dados.pulo) / .85));
     mortal = -Math.sign(l.vx * l.face) * Math.PI * 2 * suave(p);
   }
-  // Chute forte e rasteira (como a do SF4) dão a volta inteira antes de soltar a perna.
-  const janela = golpe && (l.golpe === 'k2' || l.golpe === 'ck') && golpe.janelas?.[0];
-  if (janela) volta = Math.PI * 2 * suave(Math.min(1, l.t / janela.de));
   return { mortal, volta };
 }
 // Chuva de Cenouras (Final da Pipoca): 18 quedas a cada 6 quadros; cada uma

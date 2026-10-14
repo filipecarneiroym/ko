@@ -262,10 +262,10 @@ export function criarGolpesV5(ossos, parado, simulador) {
     // então a D dobra e estica. Sempre um pé no chão.
     { q: 9, giro: -.2, inclinacao: .1, pelve: v(.03, .02, 0), pernas: { E: { tornozelo: v(.78, .72, ZE + .13), joelho: v(1, 1, 0), pe: 'plano' } } },
     { q: 10, giro: .05, inclinacao: .06, pelve: v(.06, .01, 0) },
-    { q: 11, giro: .45, inclinacao: .16, pelve: v(.1, .02, 0), pernas: { D: { tornozelo: v(.3, .98, ZD - .1), joelho: v(1, 1.3, 0), pe: 'plano' } } },
-    { q: 12, giro: .8, inclinacao: .32, pelve: v(.15, .03, 0), pernas: { D: { tornozelo: v(1.08, 1.02, -.02), joelho: v(0, 1, 0), pe: 'esticado' } } },
-    { q: 14, giro: .8, inclinacao: .32, pelve: v(.16, .03, 0), pernas: { D: { tornozelo: v(1.1, 1.02, -.02), joelho: v(0, 1, 0), pe: 'esticado' } } },
-    { q: 15, giro: .25, inclinacao: .08, pelve: v(.08, .01, 0), pernas: { D: { tornozelo: v(.22, .72, ZD - .08), joelho: v(1, 1, 0), pe: 'plano' } } },
+    { q: 11, giro: .25, inclinacao: .16, pelve: v(.03, .02, 0), pernas: { D: { tornozelo: v(.3, .98, ZD - .1), joelho: v(1, 1.3, 0), pe: 'plano' } } },
+    { q: 12, giro: .45, inclinacao: .26, pelve: v(.03, .03, 0), pernas: { D: { tornozelo: v(1.36, 1.02, -.02), joelho: v(0, 1, 0), pe: 'esticado' } } },
+    { q: 14, giro: .45, inclinacao: .26, pelve: v(.04, .03, 0), pernas: { D: { tornozelo: v(1.38, 1.02, -.02), joelho: v(0, 1, 0), pe: 'esticado' } } },
+    { q: 15, giro: .25, inclinacao: .08, pelve: v(.03, .01, 0), pernas: { D: { tornozelo: v(.22, .72, ZD - .08), joelho: v(1, 1, 0), pe: 'plano' } } },
     { q: 18, giro: .05, inclinacao: .02, pelve: v(.01, 0, 0) },
     { q: 24 },
   ]);
@@ -294,15 +294,14 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 26 },
   ]);
 
-  // ak: chute no ar (22 quadros). Sobe a perna da frente esticada no ápice (quadro 8-12)
+  // ak: chute no ar (22 quadros). A extensão acompanha a janela ativa 5-16,
   // e recolhe a de trás; o pé de apoio fica no ar, então a sola não é checada.
   clips.ak = animar('ak', 22, [
     { q: 0 },
     { q: 3, giro: -.25, inclinacao: .1, pelve: v(0, .1, 0), pernas: { E: { tornozelo: v(.4, 1.0, ZE + .14), joelho: v(1, .8, 0), pe: 'plano' }, D: { tornozelo: v(.2, .6, ZD - .1), joelho: v(1, .9, 0), pe: 'plano' } } },
-    { q: 8, giro: -.5, inclinacao: .3, pelve: v(.02, .16, 0), pernas: { E: { tornozelo: v(1.05, 1.3, ZE + .2), joelho: v(0, 1, .2), pe: 'esticado' }, D: { tornozelo: v(.1, .55, ZD - .1), joelho: v(1, 1, 0), pe: 'plano' } } },
-    { q: 12, giro: -.5, inclinacao: .3, pelve: v(.02, .16, 0), pernas: { E: { tornozelo: v(1.05, 1.3, ZE + .2), joelho: v(0, 1, .2), pe: 'esticado' }, D: { tornozelo: v(.1, .55, ZD - .1), joelho: v(1, 1, 0), pe: 'plano' } } },
-    { q: 16, giro: -.2, inclinacao: .12, pelve: v(.01, .1, 0), pernas: { E: { tornozelo: v(.45, 1.0, ZE + .14), joelho: v(1, .9, 0), pe: 'plano' }, D: { tornozelo: v(.2, .6, ZD - .1), joelho: v(1, .9, 0), pe: 'plano' } } },
-    { q: 19, giro: 0, inclinacao: .02, pelve: v(0, .04, 0) },
+    { q: 5, giro: -.5, inclinacao: .3, pelve: v(-.08, .16, 0), pernas: { E: { tornozelo: v(1.24, .98, ZE + .2), joelho: v(0, 1, .2), pe: 'esticado' }, D: { tornozelo: v(.1, .55, ZD - .1), joelho: v(1, 1, 0), pe: 'plano' } } },
+    { q: 16, giro: -.5, inclinacao: .3, pelve: v(-.08, .16, 0), pernas: { E: { tornozelo: v(1.24, .98, ZE + .2), joelho: v(0, 1, .2), pe: 'esticado' }, D: { tornozelo: v(.1, .55, ZD - .1), joelho: v(1, 1, 0), pe: 'plano' } } },
+    { q: 19, giro: -.2, inclinacao: .12, pelve: v(.01, .1, 0), pernas: { E: { tornozelo: v(.45, 1.0, ZE + .14), joelho: v(1, .9, 0), pe: 'plano' }, D: { tornozelo: v(.2, .6, ZD - .1), joelho: v(1, .9, 0), pe: 'plano' } } },
     { q: 22 },
   ]);
 
