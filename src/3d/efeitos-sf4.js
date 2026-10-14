@@ -260,7 +260,8 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
       if (e.t === 'acerto') {
         const forte = Math.max(0, Math.min(2, e.forte || 0)), { x, y } = contato(e, estado);
         const pesado = forte >= 1 || (e.dano || 0) >= 50;
-        respingo(pesado ? matForte : matFraco, x, y, -.5, pesado ? 1.6 : 1, pesado ? 20 : 15, 'acerto', pesado ? .9 : .8);
+        // Como no SF4: golpe fraco é só faísca; a tinta de pincel fica para os fortes.
+        if (pesado) respingo(matForte, x, y, -.5, 1.6, 20, 'acerto', .9);
         bolasFlash[cursor % 3].position.set(x, y, -.6); bolasFlash[cursor % 3].metadata = { nasc: relogio, tam: pesado ? 2.6 : 1.5 };
         estrela(matEstrela, x, y, -.7, pesado ? 2.4 : 1.5, pesado ? 11 : 8);
         if (!reduzido()) explodir(faiscas, x, y, -.5, pesado ? 70 : 30);

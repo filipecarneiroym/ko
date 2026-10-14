@@ -25,9 +25,12 @@ const CHUTES = new Set(['k1', 'k2', 'ck', 'ak']);
 function texturaTintaFoco(scene) {
   const n = 64, t = new DynamicTexture('golpe-tinta-foco', { width: n, height: n }, scene, false);
   t.hasAlpha = true;
-  const g = t.getContext(), gr = g.createRadialGradient(n / 2, n / 2, 0, n / 2, n / 2, n / 2);
-  gr.addColorStop(0, 'rgba(10,8,22,.95)'); gr.addColorStop(.6, 'rgba(20,16,40,.7)'); gr.addColorStop(.85, 'rgba(160,170,220,.35)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
-  g.fillStyle = gr; g.fillRect(0, 0, n, n); t.update();
+  const g = t.getContext();
+  g.clearRect(0, 0, n, n);
+  g.save(); g.translate(n / 2, n / 2); g.scale(1, .32); // pincelada: comprida e fina
+  const gr = g.createRadialGradient(0, 0, 0, 0, 0, n / 2);
+  gr.addColorStop(0, 'rgba(10,8,22,.95)'); gr.addColorStop(.6, 'rgba(20,16,40,.75)'); gr.addColorStop(.85, 'rgba(160,170,220,.35)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = gr; g.beginPath(); g.arc(0, 0, n / 2, 0, Math.PI * 2); g.fill(); g.restore(); t.update();
   return t;
 }
 
@@ -66,7 +69,7 @@ function texturaBolaDeFogo(scene) {
 export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matches: false }) {
   // Meia resolução: o brilho é borrado de propósito e pesa pouco no celular.
   const brilho = new GlowLayer('golpes-brilho', scene, { mainTextureRatio: .5, blurKernelSize: 40 });
-  brilho.intensity = 1.1;
+  brilho.intensity = .85; // suave em repouso; o pico vem do impacto e da velocidade do golpe
   const chama = texturaChama(scene), tintaFoco = texturaTintaFoco(scene);
   const U = simulador.U, xMundo = x => (x / U - simulador.LARGURA / 2) / 24, yMundo = y => y / U / 24;
 
@@ -178,7 +181,12 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
           const m = membro(modelo, l);
           // Trocou de pé ou mão no meio do golpe: recomeça o rastro (sem linha ligando os dois).
           if (m && d.ativo && d.membro !== m.nome) d.rastro.reset();
-          if (m) { d.ponta.position.copyFrom(m.p); d.membro = m.nome; }
+          if (m) {
+            // Rastro acompanha a velocidade do membro: forte no estalo, some quando desacelera.
+            const veloc = d.membro === m.nome ? Vector3.Distance(d.ponta.position, m.p) : 0;
+            d.mat.alpha = Math.min(.95, .12 + veloc * 4.5);
+            d.ponta.position.copyFrom(m.p); d.membro = m.nome;
+          }
           if (!d.ativo || d.janela !== janela) {
             const tipo = l.golpe === 'sup' ? 'super' : l.golpe === 'esp' ? 'especial' : FORTES.has(l.golpe) ? 'forte' : 'fraco';
             d.mat.emissiveColor = Color3.FromHexString(COR[tipo]);
