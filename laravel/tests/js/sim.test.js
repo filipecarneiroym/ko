@@ -485,3 +485,18 @@ test('arrancada de moto do Volt e escada da Brasa acertam várias vezes', () => 
     assert.ok(maior >= 4, id + ' só fez ' + maior + ' hits');
   }
 });
+
+test('analógico: leve anda na metade da velocidade e o peteleco para trás vira recuo', () => {
+  const andar = (bits) => {
+    const s = K.novo({ lutadores: ['pipoca', 'pipoca'], treino: true });
+    s.fase = 'luta'; const x0 = s.p[0].x;
+    for (let i = 0; i < 30; i++) K.passo(s, [bits, 0]);
+    return s.p[0].x - x0;
+  };
+  const normal = andar(K.B.R), leve = andar(K.B.R | K.B.LV);
+  assert.ok(normal > 0 && leve > 0 && Math.abs(leve * 2 - normal) <= 60, `leve ${leve} ≈ metade de ${normal}`);
+  const s = K.novo({ lutadores: ['pipoca', 'pipoca'], treino: true });
+  s.fase = 'luta';
+  K.passo(s, [K.B.L | K.B.RC, 0]);
+  assert.equal(s.p[0].estado, 'recuo');
+});

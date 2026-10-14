@@ -19,11 +19,11 @@
     "src/3d/estado-visual.mjs": "09451a3fa28366480d8b6ef0ec79ba3fc404582894878a1c791044702493dbf2",
     "src/3d/jogo-3d.js": "c782a4a63774413a8c6947c1f221c6fde96fbf7133d3e85595528fc76e7e41cc",
     "src/3d/laboratorio.js": "b784bf8081ad08f3a9efc95f279fbe73f24e528dc4552bc69a2047e2177f1f5e",
-    "src/3d/modelo-glb.js": "de54e3bf63019c2888ac1bc9f08b02c50988e5bd876ea69d729058b5ae38f7d6",
+    "src/3d/modelo-glb.js": "9cde84b0448c333109af16f686c95006e92e5b31563bd2f9bf8191a8c1e65607",
     "src/3d/perfil-pipoca.mjs": "effca8a992370c7fe15a90f05e570b5ac9b677f69ad879b44de49c6b58e9884a"
   },
   "saida": {
     "caminho": "public/js/ko-laboratorio-3d.js",
-    "sha256": "bae363c17004a128305988fb85a50707ab8a65e5b555711bb6fa9e362fe15ae4"
+    "sha256": "7c196d3f9903d091e5898986f11b6255f83df4b153c28ecc55cd0b661f2edf15"
   }
 }

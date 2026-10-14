@@ -21,8 +21,9 @@
   const BUFFER = 6;                   // quadros que um botão apertado fica "guardado"
   const INTRO = 100, FIM_ROUND = 150, JANELA_FINAL = 300, DURACAO_FINAL = 200;
 
-  // Botões (um bit cada): esquerda, direita, cima, baixo, soco, chute, defesa, especial
-  const B = { L: 1, R: 2, U: 4, D: 8, P: 16, K: 32, D_: 64, S: 128 };
+  // Botões (um bit cada): esquerda, direita, cima, baixo, soco, chute, defesa, especial;
+  // LV: analógico pouco inclinado (anda devagar); RC: peteleco para trás (recuo).
+  const B = { L: 1, R: 2, U: 4, D: 8, P: 16, K: 32, D_: 64, S: 128, LV: 256, RC: 512 };
   const DEF = B.D_;
 
   // ---------- Elenco ----------
@@ -430,6 +431,7 @@
     if (sobe & fr) { if (s.f - l.toqueFrente <= 12 && l.soltouFrente) l.toqueDuploFrente = 1; l.toqueFrente = s.f; l.soltouFrente = 0; }
     if (!(bits & fr) && l.toqueFrente !== s.f) l.soltouFrente = 1;
     if (sobe & tr) { if (s.f - l.toqueTras <= 12 && l.soltouTras) l.toqueDuploTras = 1; l.toqueTras = s.f; l.soltouTras = 0; }
+    if (sobe & B.RC) l.toqueDuploTras = 1;
     if (!(bits & tr) && l.toqueTras !== s.f) l.soltouTras = 1;
     l.bAnt = bits;
   }
@@ -530,9 +532,9 @@
     if (segura(fr)) {
       if (l.toqueDuploFrente || l.estado === 'corrida') { if (l.estado !== 'corrida') mudar(l, 'corrida'); vel(s, l, l.face * d.correr); return; }
       if (l.estado !== 'andando') mudar(l, 'andando');
-      vel(s, l, l.face * d.andar); return;
+      vel(s, l, l.face * (segura(B.LV) ? d.andar >> 1 : d.andar)); return;
     }
-    if (segura(tr)) { if (l.estado !== 'andando') mudar(l, 'andando'); vel(s, l, -l.face * d.tras); return; }
+    if (segura(tr)) { if (l.estado !== 'andando') mudar(l, 'andando'); vel(s, l, -l.face * (segura(B.LV) ? d.tras >> 1 : d.tras)); return; }
     if (l.estado !== 'parado') mudar(l, 'parado');
     vel(s, l, 0);
   }

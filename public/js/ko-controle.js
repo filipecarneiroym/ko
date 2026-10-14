@@ -31,11 +31,17 @@
   }
 
   function ler(pad, mapa) {
-    const saida = { bits: 0, menu: false, confirmar: false, voltar: false };
+    const saida = { bits: 0, menu: false, confirmar: false, voltar: false, eixoX: 0 };
     if (!pad || pad.connected === false || !mapaValido(mapa)) return saida;
     for (const acao of ACOES) {
       const ativo = mapa[acao].some((c) => pressionado(pad, c));
       if (ativo && BITS[acao]) saida.bits |= BITS[acao];
+      // Esquerda/direita pelo analógico: guarda quanto está inclinado (botão = 1).
+      if (ativo && (acao === 'L' || acao === 'R')) {
+        const forca = Math.max(...mapa[acao].map((c) => c.tipo === 'eixo' ? Math.abs(pad.axes?.[c.indice] || 0) : (pressionado(pad, c) ? 1 : 0)));
+        saida.eixoX = (acao === 'R' ? 1 : -1) * forca;
+        if (forca < 0.75) saida.bits |= 256; // leve: anda devagar
+      }
       if (acao === 'menu') saida.menu = ativo;
     }
     saida.confirmar = !!(saida.bits & BITS.K);
