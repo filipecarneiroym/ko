@@ -158,23 +158,23 @@ button, a.botao { touch-action: manipulation; min-height: 48px; }
 /* Direcional no estilo do Street Fighter IV de celular: bola vermelha
    brilhante cercada por 8 setas amarelas; a seta da direção acende. */
 .direcional {
-  --t: clamp(130px, 28vmin, 180px);
+  --t: clamp(150px, 33vmin, 210px);
   position: absolute; left: calc(4% + env(safe-area-inset-left)); bottom: 6%;
   width: var(--t); height: var(--t); pointer-events: none; opacity: 0.7;
 }
 .direcional .seta {
-  position: absolute; left: 50%; top: 50%; width: 19%; height: 15%; margin: -7.5% 0 0 -9.5%;
-  background: linear-gradient(180deg, #fff6b0, #f2c418 55%, #b88a00);
+  position: absolute; left: 50%; top: 50%; width: 17%; height: 12%; margin: -6% 0 0 -8.5%;
+  background: linear-gradient(180deg, #ffe98a, #e8b81a 55%, #9c7400);
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
-  transform: rotate(var(--a)) translateY(calc(var(--t) * -0.41));
-  filter: drop-shadow(0 2px 0 #0007); opacity: 0.8;
+  transform: rotate(var(--a)) translateY(calc(var(--t) * -0.44));
+  filter: drop-shadow(0 0 1px #5a4200) drop-shadow(0 2px 1px #0007); opacity: 0.85; z-index: 1;
 }
 .direcional .seta-c { --a: 0deg; } .direcional .seta-cd { --a: 45deg; } .direcional .seta-d { --a: 90deg; } .direcional .seta-bd { --a: 135deg; }
 .direcional .seta-b { --a: 180deg; } .direcional .seta-be { --a: 225deg; } .direcional .seta-e { --a: 270deg; } .direcional .seta-ce { --a: 315deg; }
 .direcional .analogico {
-  position: absolute; left: 25%; top: 25%; width: 50%; height: 50%; border-radius: 50%;
-  background: radial-gradient(circle at 34% 28%, #fff 0 6%, #ff9a9a 14%, #e23434 42%, #8e0e12 78%, #5a0608);
-  box-shadow: 0 6px 10px #0009, inset 0 -6px 10px #0006, 0 0 0 2px #0004;
+  position: absolute; left: 21%; top: 21%; width: 58%; height: 58%; border-radius: 50%;
+  background: radial-gradient(circle at 33% 27%, #ffffffd0 0 5%, #ff8a8acc 12%, #c42020c0 38%, #7a0a0ec8 72%, #4a0508d8);
+  box-shadow: 0 6px 12px #0008, inset 0 -8px 14px #0007, inset 0 4px 8px #ffffff30;
   transform: translate(var(--analogico-x, 0px), var(--analogico-y, 0px));
 }
 .direcional[data-dir]:not([data-dir=""]) { opacity: 0.92; }

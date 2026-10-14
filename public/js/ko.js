@@ -162,7 +162,7 @@
   function atualizarDirecional(x, y) {
     const r = direcional.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
     const dx = x - cx, dy = y - cy, dist = Math.hypot(dx, dy);
-    const escala = dist ? Math.min(dist, r.width * 0.3) / dist : 0;
+    const escala = dist ? Math.min(dist, r.width * 0.15) / dist : 0; // a bola anda pouco: as setas continuam visíveis
     direcional.style.setProperty('--analogico-x', dx * escala + 'px');
     direcional.style.setProperty('--analogico-y', dy * escala + 'px');
     bitsDir = 0;
