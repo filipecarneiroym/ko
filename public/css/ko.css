@@ -185,6 +185,11 @@ button, a.botao { touch-action: manipulation; min-height: 48px; }
   opacity: 1; background: linear-gradient(180deg, #ffffff, #fff07a 50%, #ffc400); filter: drop-shadow(0 0 6px #ffe066);
 }
 
+/* Controle externo em uso: só o ícone no canto (como no SF4 de celular). */
+.icone-controle { display: none; position: absolute; right: calc(3% + env(safe-area-inset-right)); bottom: 5%; width: clamp(40px, 7vmin, 56px); pointer-events: none; filter: drop-shadow(0 2px 2px #000a); }
+.com-controle .icone-controle { display: block; }
+.com-controle .direcional, .com-controle .botoes { display: none; }
+
 /* Quatro botões em losango: em cima defesa, esquerda soco, direita especial, embaixo chute.
    Vizinhos de propósito: soco+chute (esquiva) e defesa+especial (quebra-combo) com um dedo só. */
 .botoes {

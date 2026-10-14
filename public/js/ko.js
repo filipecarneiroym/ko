@@ -24,8 +24,15 @@
   let estadosPads = [{ bits: 0 }, { bits: 0 }], pulsosPads = [0, 0], primeiroLocal = null;
   if (versus) document.body.classList.add('versus-local');
 
+  let usandoControle = false;
+  // Tocar na tela traz de volta o direcional e os botões de toque.
+  addEventListener('pointerdown', (e) => { if (e.pointerType === 'touch') { usandoControle = false; document.body.classList.remove('com-controle'); } }, true);
   function atualizarPads() {
     estadosPads = pads.atualizar();
+    // Controle externo (USB/Bluetooth) em uso: some o toque e fica só o ícone, como no SF4.
+    if (!estadosPads.some((p) => p.conectado)) usandoControle = false;
+    else if (estadosPads.some((p) => p.conectado && (p.bits || p.pulso))) usandoControle = true;
+    document.body.classList.toggle('com-controle', usandoControle);
     const ajuste = document.querySelector('.painel-controle');
     if (ajuste) {
       const passo = pads.configuracao();

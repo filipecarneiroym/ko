@@ -35,6 +35,7 @@
             <button type="button" data-b="S" class="b b-especial" aria-label="Especial">⚡</button>
             <button type="button" data-b="K" class="b b-chute" aria-label="Chute">🦵</button>
         </div>
+        <svg class="icone-controle" viewBox="0 0 64 40" aria-hidden="true"><path d="M14 4h36c7 0 12 6 13 14l1 10c1 7-6 11-11 6l-6-6H17l-6 6c-5 5-12 1-11-6l1-10C2 10 7 4 14 4z" fill="#0008" stroke="#ff3b30" stroke-width="3"/><path d="M13 15h4v-4h4v4h4v4h-4v4h-4v-4h-4z" fill="#ff3b30"/><circle cx="44" cy="14" r="2.6" fill="#ff3b30"/><circle cx="50" cy="19" r="2.6" fill="#ff3b30"/><circle cx="38" cy="19" r="2.6" fill="#ff3b30"/><circle cx="44" cy="24" r="2.6" fill="#ff3b30"/></svg>
         <button type="button" class="pausa" id="pausa" aria-label="Menu">❚❚</button>
     </div>
     <div id="painel" class="painel"></div>
