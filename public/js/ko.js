@@ -448,7 +448,7 @@
       if (somLigado) {
         if (!somArena?.evento(e) && SONS[e.t]) SONS[e.t](e);
         // O primeiro round só é anunciado depois de a arena ficar pronta.
-        if (!(e.t === 'round' && (luta.carregando3d || luta.erro3d))) somArena?.locutor(e);
+        if (!(e.t === 'round' && (luta.carregando3d || luta.erro3d))) somArena?.locutor(e.t === 'vitoria' ? { ...e, lutador: luta.s.p[e.vencedor]?.id } : e);
       }
       vozLutador(e);
       if (e.t === 'acerto' && (e.lado === meuLado || luta.s.p[meuLado].estado === 'dano') && e.forte) vibrar(e.forte * 20);

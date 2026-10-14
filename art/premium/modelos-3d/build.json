@@ -13,16 +13,16 @@
     "src/3d/caixas.js": "14ab50a1c505237c3aa4005385e121a131affe8ea212a7539f9499cd3fe82f24",
     "src/3d/camera-luta.js": "07f76a6b4c00252fc8613e58686c0b0cae67ad781cad0f390b1a09d886818ceb",
     "src/3d/contrato-glb.mjs": "0fafc4fa6b706c2b0f88155714a14aa42b0450b3eee768c28e46f4694b8cff53",
-    "src/3d/efeitos-sf4.js": "e7e27c0e256cc496d397996834a84ed608fa491c3615a976adb3355d790e973e",
+    "src/3d/efeitos-sf4.js": "a34190d29b986b8c46a8feb78599c060c11a60ee5730f0701cf53492386fe815",
     "src/3d/efeitos.js": "28f2254b416dfc4e630ad1e0c171a90c52b7b151de5b1c956ed13118cbf5a4e4",
-    "src/3d/estado-visual.mjs": "6a5388a61074de405228b3bfe7d02d68255cf8feb0b9c2e419f37ac9396f1541",
+    "src/3d/estado-visual.mjs": "30f190d4d9937470b2862a227b8ef2219c6c435a5981d71775094238e952ae84",
     "src/3d/jogo-3d.js": "a72bae15aa2342c0acf24953d9e3dfb4e8d0f1ebb550a062a3d826afdf7f1b1b",
     "src/3d/laboratorio.js": "b0ab886937ff702c690bbb3ea0044d6de458482259369f7d8bb6030a7aa00b8d",
-    "src/3d/modelo-glb.js": "bd90c28c725c1fdb59d351f7d355f2f200b60d2723a8e9e77096a427e078f5d3",
+    "src/3d/modelo-glb.js": "4173297a07b6021cc9472cc08bbf21f8b4ecbcb2d3b398ca02d10d2eaa34b6dc",
     "src/3d/perfil-pipoca.mjs": "effca8a992370c7fe15a90f05e570b5ac9b677f69ad879b44de49c6b58e9884a"
   },
   "saida": {
     "caminho": "public/js/ko-laboratorio-3d.js",
-    "sha256": "064b4f7250fe45c51f8b9eff8005aedc269701732ebdbbcbb2a2be202d5cbde2"
+    "sha256": "2bfa22df50894aed8608bf316d95d883358d91dee17a17d0ca9d95bacac0c8ef"
   }
 }

@@ -12,12 +12,18 @@
     'round-final': '/audio/locutor/round-final.mp3',
     lutem: '/audio/locutor/lutem.mp3',
     ko: '/audio/locutor/ko.mp3',
+    perfeito: '/audio/locutor/perfeito.mp3',
+    tempo: '/audio/locutor/tempo.mp3',
+    empate: '/audio/locutor/empate.mp3',
   });
+  // "<Lutador> venceu!": baixado só quando a luta acaba (um arquivo por lutador).
+  const urlDaFala = id => FALAS[id] || (/^vitoria-[a-z-]+$/.test(id) ? '/audio/locutor/' + id + '.mp3' : null);
 
   function falaDoEvento(e) {
     if (!e || typeof e !== 'object') return null;
     if (e.t === 'round') return e.final ? 'round-final' : 'round-' + e.n;
-    return e.t === 'lutem' || e.t === 'ko' ? e.t : null;
+    if (e.t === 'vitoria') return e.vencedor < 0 ? 'empate' : typeof e.lutador === 'string' ? 'vitoria-' + e.lutador : null;
+    return ['lutem', 'ko', 'perfeito', 'tempo'].includes(e.t) ? e.t : null;
   }
 
   // Camadas: grave que desce, corpo filtrado e estalo curto. Os quatro
@@ -66,28 +72,34 @@
 
     function preparar() {
       if (preparacao) return preparacao;
-      preparacao = Promise.all(Object.entries(FALAS).map(async ([id, url]) => {
-        if (vozes.has(id)) return;
-        const resposta = await fetch(url, { credentials: 'same-origin', cache: 'no-cache' });
-        if (!resposta.ok) throw new Error('Não foi possível carregar a voz do locutor (HTTP ' + resposta.status + ').');
-        const buffer = await ctx.decodeAudioData(await resposta.arrayBuffer());
-        vozes.set(id, buffer);
-      })).catch(erro => { preparacao = null; throw erro; });
+      preparacao = Promise.all(Object.keys(FALAS).map(carregar)).catch(erro => { preparacao = null; throw erro; });
       return preparacao;
     }
 
+    // A fala anterior some em 80 ms (sem corte seco no eco de arena).
     function pararVoz() {
       pedidoVoz++;
       if (!voz) return;
-      try { voz.stop(); } catch { /* A chamada já pode ter terminado. */ }
-      voz.disconnect(); voz = null;
+      const { fonte, volume } = voz, agora = ctx.currentTime;
+      volume.gain.setValueAtTime(volume.gain.value, agora);
+      volume.gain.linearRampToValueAtTime(0, agora + .08);
+      try { fonte.stop(agora + .09); } catch { /* A chamada já pode ter terminado. */ }
+      voz = null;
+    }
+
+    async function carregar(id) {
+      if (vozes.has(id)) return;
+      const resposta = await fetch(urlDaFala(id), { credentials: 'same-origin', cache: 'no-cache' });
+      if (!resposta.ok) throw new Error('Não foi possível carregar a voz do locutor (HTTP ' + resposta.status + ').');
+      vozes.set(id, await ctx.decodeAudioData(await resposta.arrayBuffer()));
     }
 
     function reproduzirVoz(id, pedido) {
       if (pedido !== pedidoVoz || ctx.state !== 'running' || !vozes.has(id)) return;
-      const fonte = ctx.createBufferSource();
-      fonte.buffer = vozes.get(id); fonte.connect(saida); voz = fonte;
-      fonte.onended = () => { fonte.disconnect(); if (voz === fonte) voz = null; };
+      const fonte = ctx.createBufferSource(), volume = ctx.createGain();
+      fonte.buffer = vozes.get(id); fonte.connect(volume); volume.connect(saida);
+      const atual = { fonte, volume }; voz = atual;
+      fonte.onended = () => { fonte.disconnect(); volume.disconnect(); if (voz === atual) voz = null; };
       fonte.start();
     }
 
@@ -96,11 +108,11 @@
       pararVoz,
       locutor(e) {
         const id = falaDoEvento(e);
-        if (!FALAS[id]) return false;
+        if (!id || !urlDaFala(id)) return false;
         pararVoz();
         const pedido = pedidoVoz;
         if (vozes.has(id)) reproduzirVoz(id, pedido);
-        else preparar().then(() => reproduzirVoz(id, pedido)).catch(erro => console.warn('K.O: locutor indisponível.', erro));
+        else (FALAS[id] ? preparar() : carregar(id)).then(() => reproduzirVoz(id, pedido)).catch(erro => console.warn('K.O: locutor indisponível.', erro));
         return true;
       },
       evento(e) {

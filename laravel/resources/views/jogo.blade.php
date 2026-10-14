@@ -26,7 +26,7 @@
     <div id="controles" class="controles" hidden>
         {{-- Direcional em cruz e quatro botões em losango, como nos controles clássicos. --}}
         <div class="direcional" id="direcional" data-dir="">
-            <span class="seta seta-c"></span><span class="seta seta-b"></span><span class="seta seta-e"></span><span class="seta seta-d"></span><span class="miolo"></span>
+            <span class="seta seta-c"></span><span class="seta seta-cd"></span><span class="seta seta-d"></span><span class="seta seta-bd"></span><span class="seta seta-b"></span><span class="seta seta-be"></span><span class="seta seta-e"></span><span class="seta seta-ce"></span>
             <span class="analogico" aria-hidden="true"></span>
         </div>
         <div class="botoes">

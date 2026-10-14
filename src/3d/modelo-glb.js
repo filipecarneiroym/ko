@@ -45,14 +45,34 @@ export async function carregarModelo(buffer, id, simulador, scene) {
         && fonte.distanciaCiclo > .1 && fonte.distanciaCiclo < 10) ciclosPorDistancia.set(nome, fonte.distanciaCiclo);
     }
     let faseMarcha = 0, ultimoX = null, ultimaFace = null;
+    // Chute rodado: a volta é em torno do pé de apoio (o mais baixo), que
+    // continua plantado; o corpo gira sobre ele.
+    const pes = nosDosOssos.filter(no => /^pe_[ED]$/.test(no.name));
+    function posicaoMundo(no) {
+      const cadeia = []; for (let n = no; n; n = n.parent) cadeia.unshift(n);
+      for (const n of cadeia) n.computeWorldMatrix(true);
+      return no.getAbsolutePosition().clone();
+    }
+    function girarSobreApoio(volta) {
+      if (!pes.length) { raiz.rotation.y += volta; return; }
+      const apoio = pes.map(posicaoMundo).reduce((a, b) => (b.y < a.y ? b : a));
+      const dx = apoio.x - raiz.position.x, dz = apoio.z - raiz.position.z, c = Math.cos(volta), sn = Math.sin(volta);
+      raiz.rotation.y += volta;
+      // Ry(volta) aplicado ao deslocamento até o pé (convenção do Babylon).
+      raiz.position.x += dx - (dx * c + dz * sn);
+      raiz.position.z += dz - (-dx * sn + dz * c);
+    }
     const malhas = Object.freeze(container.meshes.filter(m => m.getTotalVertices() > 0));
     let atual = null;
     let transicao = null;
     return {
       get malhas() { return malhas; },
       atualizar(pose) {
-        raiz.position.set(pose.x, pose.y, 0);
+        // Mortal gira em volta da cintura (não dos pés): compensa a posição.
+        const giro = pose.mortal || 0, centro = 1.15;
+        raiz.position.set(pose.x + pose.face * centro * Math.sin(giro), pose.y + centro * (1 - Math.cos(giro)), 0);
         raiz.rotation.y = pose.face > 0 ? 0 : Math.PI;
+        raiz.rotation.z = giro;
         raiz.setEnabled(pose.visivel);
         const grupo = grupos.get(pose.clip);
         if (!grupo) return;
@@ -100,6 +120,7 @@ export async function carregarModelo(buffer, id, simulador, scene) {
             Quaternion.SlerpToRef(rotacao, no.rotationQuaternion, peso, no.rotationQuaternion);
           }
         }
+        if (pose.volta) girarSobreApoio(pose.volta);
       },
       descartar() { container.dispose(); raiz.dispose(); },
     };

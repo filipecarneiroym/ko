@@ -1342,14 +1342,30 @@
         if (s.rounds[lado] > i) { const ouro = g.createRadialGradient(mx - 1, 24, 0.5, mx, 25, 3.4); ouro.addColorStop(0, '#fff6c0'); ouro.addColorStop(1, '#e0a400'); g.fillStyle = ouro; } else g.fillStyle = '#3a2a4a';
         g.beginPath(); g.arc(mx, 25, 3.3, 0, Math.PI * 2); g.fill();
       }
-      const px = lado === 0 ? 10 : W - 10 - 100, py = H - 13, pw = (100 * l.poder) / K.PODER_MAX, cheia = l.poder >= K.PODER_MAX;
-      g.fillStyle = CONTORNO; barra(g, px - 2, py - 2, 104, 8, 3); g.fill();
-      g.fillStyle = '#1d1638'; barra(g, px, py, 100, 4, 2); g.fill();
-      const pg = g.createLinearGradient(px, 0, px + 100, 0); pg.addColorStop(0, '#2f6bff'); pg.addColorStop(1, cheia ? '#ffffff' : '#4fd8ff');
-      g.fillStyle = cheia && Math.floor(s.f / 5) % 2 ? '#ffffff' : pg;
-      if (pw > 0) { barra(g, lado === 0 ? px : px + 100 - pw, py, pw, 4, 2); g.fill(); }
-      g.fillStyle = '#ff4fd8'; g.fillRect(px + 49.5, py, 1, 4);
-      if (cheia) texto(g, 'SUPER!', lado === 0 ? px + 106 : px - 6, py - 3, 8, Math.floor(s.f / 6) % 2 ? '#ffe066' : '#ff4fd8', { direita: lado === 1 });
+      // Barra de Super no estilo do SF4: quatro gomos azul-ciano inclinados;
+      // gomo cheio acende, o que está enchendo fica escuro; cheia pisca "SUPER!".
+      const px = lado === 0 ? 10 : W - 10 - 104, py = H - 14, gomo = 24, folga = 2.7, alt = 6, inc = 3;
+      const cheia = l.poder >= K.PODER_MAX, pisca = cheia && Math.floor(s.f / 5) % 2;
+      const gomoPath = (x, w) => { g.beginPath(); g.moveTo(x + inc, py); g.lineTo(x + w + inc, py); g.lineTo(x + w, py + alt); g.lineTo(x, py + alt); g.closePath(); };
+      for (let i = 0; i < 4; i++) {
+        const ordem = lado === 0 ? i : 3 - i, x = px + i * (gomo + folga);
+        const frac = Math.max(0, Math.min(1, l.poder / K.PODER_MAX * 4 - ordem));
+        g.lineWidth = 2.4; g.strokeStyle = CONTORNO; gomoPath(x, gomo); g.stroke();
+        g.fillStyle = '#0d1b3a'; gomoPath(x, gomo); g.fill();
+        if (frac > 0) {
+          const w = gomo * frac, x0 = lado === 0 ? x : x + gomo - w;
+          const gr = g.createLinearGradient(0, py, 0, py + alt);
+          if (frac >= 1) { gr.addColorStop(0, pisca ? '#ffffff' : '#c8fbff'); gr.addColorStop(0.45, pisca ? '#bff6ff' : '#3fe0ff'); gr.addColorStop(1, '#0a8fd0'); }
+          else { gr.addColorStop(0, '#2a7fb0'); gr.addColorStop(1, '#14507a'); }
+          g.save(); gomoPath(x, gomo); g.clip(); g.fillStyle = gr; g.fillRect(x0, py, w + inc, alt); g.restore();
+          if (frac >= 1) { g.save(); g.shadowColor = '#4fe6ff'; g.shadowBlur = 6; g.strokeStyle = 'rgba(200,250,255,0.7)'; g.lineWidth = 0.6; gomoPath(x, gomo); g.stroke(); g.restore(); }
+        }
+      }
+      if (cheia) {
+        g.save(); g.shadowColor = '#3fd8ff'; g.shadowBlur = 8;
+        texto(g, 'SUPER!', lado === 0 ? px + 4 * (gomo + folga) + 3 : px - 5, py - 3, 9, pisca ? '#ffffff' : '#7fefff', { direita: lado === 1 });
+        g.restore();
+      }
     }
     g.fillStyle = CONTORNO; barra(g, 175, 3, 34, 20, 5); g.fill();
     const rg = g.createLinearGradient(0, 5, 0, 21); rg.addColorStop(0, '#3a2a66'); rg.addColorStop(1, '#1d1338'); g.fillStyle = rg; barra(g, 177, 5, 30, 16, 4); g.fill();

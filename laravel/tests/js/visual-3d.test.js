@@ -51,3 +51,17 @@ test('importação exige GLB com rig, todos os estados e recursos incorporados',
   assert.throws(() => validarGlb(glb({ ...doc, extensionsRequired: ['KHR_draco_mesh_compression'] }), 'pipoca', K), /extensões/);
   assert.throws(() => validarGlb(glb({ ...doc, animations: [...doc.animations, doc.animations[0]] }), 'pipoca', K), /únicos/);
 });
+
+test('mortal no pulo para frente/trás e volta inteira no chute forte (só visual)', async () => {
+  const [{ descreverPose }] = await modulos;
+  const pulo = K.LUTADORES.pipoca.pulo;
+  const base = { id: 'pipoca', x: 0, y: 40, face: 1, t: 3, sumido: 0 };
+  const frente = descreverPose({ ...base, estado: 'pulo', vx: 50, vy: 0 }, K);
+  const tras = descreverPose({ ...base, estado: 'pulo', vx: -50, vy: 0 }, K);
+  assert.ok(frente.mortal < -1 && tras.mortal > 1, 'gira para lados opostos no meio do pulo');
+  assert.equal(descreverPose({ ...base, estado: 'pulo', vx: 0, vy: 0 }, K).mortal, 0, 'pulo parado não gira');
+  assert.ok(Math.abs(descreverPose({ ...base, estado: 'pulo', vx: 50, vy: -pulo }, K).mortal + Math.PI * 2) < 1e-9, 'pousa de pé (volta completa)');
+  const chute = (t) => descreverPose({ ...base, y: 0, estado: 'golpe', golpe: 'k2', t, vx: 0, vy: 0 }, K).volta;
+  assert.equal(chute(0), 0);
+  assert.ok(Math.abs(chute(20) - Math.PI * 2) < 1e-9, 'a perna sai depois da volta inteira');
+});

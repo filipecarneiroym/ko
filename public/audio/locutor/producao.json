@@ -1,64 +1,235 @@
 {
   "voz": "pt-BR-AntonioNeural",
-  "rate": "+4%",
-  "pitch": "-22Hz",
-  "filtros_ffmpeg": "silenceremove=start_periods=1:start_duration=0.015:start_threshold=-42dB,areverse,silenceremove=start_periods=1:start_duration=0.015:start_threshold=-48dB,areverse,highpass=f=65,lowpass=f=10000,equalizer=f=130:t=q:w=0.9:g=3,equalizer=f=2400:t=q:w=1:g=2,acompressor=threshold=0.18:ratio=3:attack=4:release=65:makeup=1.6,apad=pad_dur=0.14,aecho=0.75:0.35:53|91:0.12|0.07,loudnorm=I=-14:TP=-2:LRA=7,alimiter=limit=0.84:level=false",
+  "rate": "-6%",
+  "pitch": "-34Hz",
+  "filtros_ffmpeg": "silenceremove=start_periods=1:start_duration=0.015:start_threshold=-42dB,areverse,silenceremove=start_periods=1:start_duration=0.015:start_threshold=-48dB,areverse,highpass=f=65,lowpass=f=10000,equalizer=f=110:t=q:w=0.9:g=4.5,equalizer=f=2400:t=q:w=1:g=2,acompressor=threshold=0.18:ratio=3:attack=4:release=65:makeup=1.6,apad=pad_dur=0.35,aecho=0.8:0.6:48|97|173:0.3|0.2|0.11,loudnorm=I=-14:TP=-2:LRA=7,alimiter=limit=0.84:level=false",
   "edge_tts": "7.3.1",
   "imageio_ffmpeg": "0.6.0",
   "chamadas": {
     "round-1": {
       "texto": "Round um!",
       "arquivo": "round-1.mp3",
-      "tempo": 1.18,
-      "duracao": 0.681,
-      "pico": 0.73842,
-      "bytes": 11948,
-      "sha256": "c79722c6385d52d724c4baa24d9a96b4876e6633b665c6875f384117501b3307"
+      "tempo": 1.22,
+      "duracao": 0.59,
+      "pico": 0.71463,
+      "bytes": 10412,
+      "sha256": "a4e686850a7bda127888f08bb0d336576c4fcb33fa3f9a59aa9ad3544e3ca3f1"
     },
     "round-2": {
       "texto": "Round dois!",
       "arquivo": "round-2.mp3",
-      "tempo": 1.18,
-      "duracao": 0.832,
-      "pico": 0.74778,
-      "bytes": 14252,
-      "sha256": "09e53263f48301298d8417922a5fd034221f8c25477b1a202060f6d164d885b7"
+      "tempo": 1.22,
+      "duracao": 0.73,
+      "pico": 0.75251,
+      "bytes": 12716,
+      "sha256": "552488ec7570eab367f659af71091c800bd69bed9797e95d01d355bec0de9ce5"
     },
     "round-3": {
       "texto": "Round três!",
       "arquivo": "round-3.mp3",
-      "tempo": 1.18,
-      "duracao": 0.829,
-      "pico": 0.75006,
-      "bytes": 14252,
-      "sha256": "be7ef0e88d75c7c0172f11c56f014c8eb9ca250b7544957540e0cb31cba39453"
+      "tempo": 1.22,
+      "duracao": 0.712,
+      "pico": 0.72964,
+      "bytes": 12332,
+      "sha256": "6be3e0b1095d3f7195d08e56ae2916b3c26e26601fb769fed3a14ebecdbf2629"
     },
     "round-final": {
       "texto": "Round final!",
       "arquivo": "round-final.mp3",
-      "tempo": 1.18,
-      "duracao": 0.836,
-      "pico": 0.75284,
-      "bytes": 14252,
-      "sha256": "6a8b6aa1c58d73482efebb14fb469b8eb3ff82744076329b53ef84f5303c4fe0"
+      "tempo": 1.22,
+      "duracao": 0.719,
+      "pico": 0.69625,
+      "bytes": 12332,
+      "sha256": "6f5179594a782c801bcdbe7cb5dd493bedfa3e585269c1c7fbb7925b5a0ab79a"
     },
     "lutem": {
       "texto": "Lutem!",
       "arquivo": "lutem.mp3",
       "tempo": 1,
-      "duracao": 0.652,
-      "pico": 0.75574,
-      "bytes": 11564,
-      "sha256": "9969dd993f0d7d531d389c721819260e3f23461353ec600ca05a8cd77d1f6e42"
+      "duracao": 0.996,
+      "pico": 0.75312,
+      "bytes": 16940,
+      "sha256": "c4d1b8eca6871fb296dc67e50963f923b006cb1ea82bf42707ac702b36b2db0d"
     },
     "ko": {
       "texto": "Ká! Ô!",
       "arquivo": "ko.mp3",
       "tempo": 1,
-      "duracao": 1.515,
+      "duracao": 1.949,
+      "pico": 0.75433,
+      "bytes": 32300,
+      "sha256": "7a322ebbbb31c815d946e0e5589e91f05f053ade61732623bd84f104d763fab1"
+    },
+    "perfeito": {
+      "texto": "Perfeito!",
+      "arquivo": "perfeito.mp3",
+      "tempo": 1,
+      "duracao": 1.146,
       "pico": 0.75369,
-      "bytes": 25388,
-      "sha256": "a7a0c3ae2bba339fe6cdf8b81aa12db02c65a967c680d2b2d0db36bc1a41fa05"
+      "bytes": 19244,
+      "sha256": "85cabc4fce197cbfbbbd09cd598b12b0d8729f6dfa2b6a0410bc466e821d43eb"
+    },
+    "tempo": {
+      "texto": "Tempo!",
+      "arquivo": "tempo.mp3",
+      "tempo": 1,
+      "duracao": 0.935,
+      "pico": 0.75433,
+      "bytes": 15788,
+      "sha256": "b69825fd18bdba93576605e5501cccb85ebaf8d44287e534f12ae1dcb042fc28"
+    },
+    "empate": {
+      "texto": "Empate!",
+      "arquivo": "empate.mp3",
+      "tempo": 1,
+      "duracao": 1.156,
+      "pico": 0.75385,
+      "bytes": 19628,
+      "sha256": "096bbbf1d0cfde271eecc2684e81fd83ec6a2e03216f94db6dbfb3035293ff44"
+    },
+    "vitoria-pipoca": {
+      "texto": "Pipoca... venceu!",
+      "arquivo": "vitoria-pipoca.mp3",
+      "tempo": 1,
+      "duracao": 1.974,
+      "pico": 0.75391,
+      "bytes": 32684,
+      "sha256": "92309185a988170912ca6ec4b85cde98ee9e0b69895123312e442c7667e803f6"
+    },
+    "vitoria-uivo": {
+      "texto": "Uivo... venceu!",
+      "arquivo": "vitoria-uivo.mp3",
+      "tempo": 1,
+      "duracao": 1.836,
+      "pico": 0.75329,
+      "bytes": 30380,
+      "sha256": "946afca6bb259f8acd4aa84b8b8f8f47aace73f73c34279ae0602589753d6267"
+    },
+    "vitoria-maromba": {
+      "texto": "Maromba... venceu!",
+      "arquivo": "vitoria-maromba.mp3",
+      "tempo": 1,
+      "duracao": 2.032,
+      "pico": 0.7556,
+      "bytes": 33452,
+      "sha256": "5fdd51cadde19cdbfce784e1d25f2dd99dd513567d95929adaacf1d5eebb3997"
+    },
+    "vitoria-ginga": {
+      "texto": "Ginga... venceu!",
+      "arquivo": "vitoria-ginga.mp3",
+      "tempo": 1,
+      "duracao": 1.932,
+      "pico": 0.75526,
+      "bytes": 31916,
+      "sha256": "2aa9cc6d34e4fe2cb49474e648d1a7e94dfac51e63badb8e59c09f16294138c6"
+    },
+    "vitoria-vo-nena": {
+      "texto": "Vó Nena... venceu!",
+      "arquivo": "vitoria-vo-nena.mp3",
+      "tempo": 1,
+      "duracao": 2.01,
+      "pico": 0.7546,
+      "bytes": 33068,
+      "sha256": "d8ec9acb82f7da6d367be28e60397ce3aa39e6df7748458bb132a2a387e069db"
+    },
+    "vitoria-vo-tiao": {
+      "texto": "Vô Tião... venceu!",
+      "arquivo": "vitoria-vo-tiao.mp3",
+      "tempo": 1,
+      "duracao": 2.034,
+      "pico": 0.75468,
+      "bytes": 33452,
+      "sha256": "6942773c6bc53ba721998be3da6a322a5b1ad00d8fb0ebc20b63512a0c949896"
+    },
+    "vitoria-kira": {
+      "texto": "Kira... venceu!",
+      "arquivo": "vitoria-kira.mp3",
+      "tempo": 1,
+      "duracao": 1.736,
+      "pico": 0.75487,
+      "bytes": 28844,
+      "sha256": "4c7aa70f3afafd3c4447bf87e171112a91fc72ff5309c4e9d89e0b78515a73f2"
+    },
+    "vitoria-toco": {
+      "texto": "Toco... venceu!",
+      "arquivo": "vitoria-toco.mp3",
+      "tempo": 1,
+      "duracao": 1.867,
+      "pico": 0.75295,
+      "bytes": 30764,
+      "sha256": "38fab7ea0097873a5c2ec1525b2b666620ff0d34cbd8f7afe63fe58e704388c0"
+    },
+    "vitoria-nix": {
+      "texto": "Nix... venceu!",
+      "arquivo": "vitoria-nix.mp3",
+      "tempo": 1,
+      "duracao": 1.834,
+      "pico": 0.75307,
+      "bytes": 30380,
+      "sha256": "8e9884ee32ecf48a7aa4c7bc401e3da152dff34076c2b40eb852827b29330c15"
+    },
+    "vitoria-eco": {
+      "texto": "Eco... venceu!",
+      "arquivo": "vitoria-eco.mp3",
+      "tempo": 1,
+      "duracao": 1.925,
+      "pico": 0.75465,
+      "bytes": 31916,
+      "sha256": "02b9511433557ae08b88c74d6eec831c8476dfbd2bff5a3380ea4f3c2a70015d"
+    },
+    "vitoria-volt": {
+      "texto": "Volt... venceu!",
+      "arquivo": "vitoria-volt.mp3",
+      "tempo": 1,
+      "duracao": 1.845,
+      "pico": 0.75439,
+      "bytes": 30380,
+      "sha256": "d03a0e0acc62acfa2dd479c983e16ff1109f9045fd25188994b9aa5ad1187927"
+    },
+    "vitoria-kilo": {
+      "texto": "Kilo... venceu!",
+      "arquivo": "vitoria-kilo.mp3",
+      "tempo": 1,
+      "duracao": 1.736,
+      "pico": 0.75329,
+      "bytes": 28844,
+      "sha256": "14a9336abd58f8ae0a48b91563b86bd2efb822349019ad67a8e3bf7f4bc4858f"
+    },
+    "vitoria-brasa": {
+      "texto": "Brasa... venceu!",
+      "arquivo": "vitoria-brasa.mp3",
+      "tempo": 1,
+      "duracao": 1.885,
+      "pico": 0.75474,
+      "bytes": 31148,
+      "sha256": "54607ceb384cab82cea5bf844626d1906ceeb97976074cecce1f3d21712067dd"
+    },
+    "vitoria-mare": {
+      "texto": "Maré... venceu!",
+      "arquivo": "vitoria-mare.mp3",
+      "tempo": 1,
+      "duracao": 1.924,
+      "pico": 0.75518,
+      "bytes": 31916,
+      "sha256": "f4e1d652c8562b9bb952e65ce514517f1b158cf19db722aaebee096783fe9e4e"
+    },
+    "vitoria-truque": {
+      "texto": "Truque... venceu!",
+      "arquivo": "vitoria-truque.mp3",
+      "tempo": 1,
+      "duracao": 1.775,
+      "pico": 0.75588,
+      "bytes": 29228,
+      "sha256": "b87b1d166390d2240199444e7409676f7496d968cd0b9bf90172f1d48b4c2a28"
+    },
+    "vitoria-fossil": {
+      "texto": "Fóssil... venceu!",
+      "arquivo": "vitoria-fossil.mp3",
+      "tempo": 1,
+      "duracao": 1.921,
+      "pico": 0.75377,
+      "bytes": 31916,
+      "sha256": "b221f9560d2f198571550fd50b5ac66c30730d217627f4e0dc253d3f4d465925"
     }
   }
 }

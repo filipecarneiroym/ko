@@ -58,6 +58,28 @@ function texturaTinta(scene, nome, { tinta, borda, miolo, raios = 0, seed = 3, t
   return t;
 }
 
+function texturaEstrela(scene, nome, cor) {
+  const n = 256, c = n / 2, t = new DynamicTexture(nome, { width: n, height: n }, scene, true);
+  t.hasAlpha = true;
+  const g = t.getContext();
+  g.clearRect(0, 0, n, n);
+  g.globalCompositeOperation = 'lighter';
+  // Raios: 4 longos e 4 curtos, afinando para a ponta.
+  for (let i = 0; i < 8; i++) {
+    const comp = c * (i % 2 ? .55 : .98), larg = c * (i % 2 ? .05 : .075);
+    g.save(); g.translate(c, c); g.rotate(i * Math.PI / 4);
+    const gr = g.createLinearGradient(0, 0, comp, 0);
+    gr.addColorStop(0, '#ffffff'); gr.addColorStop(.35, cor); gr.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = gr; g.beginPath(); g.moveTo(0, -larg); g.lineTo(comp, 0); g.lineTo(0, larg); g.closePath(); g.fill();
+    g.restore();
+  }
+  const miolo = g.createRadialGradient(c, c, 0, c, c, c * .32);
+  miolo.addColorStop(0, '#ffffff'); miolo.addColorStop(.4, cor); miolo.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = miolo; g.fillRect(0, 0, n, n);
+  t.update();
+  return t;
+}
+
 function texturaBrilho(scene, nome, cor) {
   const t = new DynamicTexture(nome, { width: 128, height: 128 }, scene, true);
   t.hasAlpha = true;
@@ -157,8 +179,9 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
     const ps = new ParticleSystem(nome, 260, scene);
     ps.particleTexture = textura; ps.blendMode = ParticleSystem.BLENDMODE_ADD;
     ps.color1 = Color4.FromHexString(cor1); ps.color2 = Color4.FromHexString(cor2); ps.colorDead = new Color4(0, 0, 0, 0);
-    ps.minSize = .05; ps.maxSize = .16; ps.minLifeTime = .12; ps.maxLifeTime = .38;
+    ps.minSize = .1; ps.maxSize = .3; ps.minLifeTime = .12; ps.maxLifeTime = .34;
     ps.minEmitPower = 3; ps.maxEmitPower = 9; ps.gravity = new Vector3(0, -9, 0);
+    ps.billboardMode = ParticleSystem.BILLBOARDMODE_STRETCHED; ps.minScaleX = .18; ps.maxScaleX = .3;
     ps.createSphereEmitter(.08); ps.emitRate = 0; ps.manualEmitCount = 0; ps.renderingGroupId = 1;
     ps.start();
     return ps;
@@ -185,6 +208,15 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
   matFlashTela.disableLighting = true; matFlashTela.emissiveColor = new Color3(1, 1, 1); matFlashTela.alphaMode = Constants.ALPHA_ADD;
   flash.material = matFlashTela; flash.position.set(0, 3, -6); flash.isPickable = false; flash.visibility = 0; flash.renderingGroupId = 2;
   const bolasFlash = Array.from({ length: 3 }, (_, i) => plano(`sf4-flash-${i}`, matFlash, 1));
+  const matEstrela = materialPlano('sf4-mat-estrela', texturaEstrela(scene, 'sf4-estrela', '#ffd36a'), { aditivo: true });
+  const matEstrelaFria = materialPlano('sf4-mat-estrela-fria', texturaEstrela(scene, 'sf4-estrela-fria', '#8fdcff'), { aditivo: true });
+  const estrelas = Array.from({ length: 4 }, (_, i) => ({ malha: plano(`sf4-estrela-${i}`, matEstrela, 1), nasc: -1e9, tam: 1, dur: 9 }));
+  let cursorEstrela = 0;
+  function estrela(material, x, y, z, tam, dur = 9) {
+    const e = estrelas[cursorEstrela++ % estrelas.length];
+    e.malha.material = material; e.malha.position.set(x, y, z); e.malha.rotation.z = Math.random() * Math.PI;
+    Object.assign(e, { nasc: relogio, tam, dur });
+  }
 
   // Letreiros (Super, K.O., Perfeito).
   const letreiros_ = new Map();
@@ -229,12 +261,14 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
         const pesado = forte >= 1 || (e.dano || 0) >= 50;
         respingo(pesado ? matForte : matFraco, x, y, -.5, pesado ? 1.6 : 1, pesado ? 20 : 15, 'acerto', pesado ? .9 : .8);
         bolasFlash[cursor % 3].position.set(x, y, -.6); bolasFlash[cursor % 3].metadata = { nasc: relogio, tam: pesado ? 2.6 : 1.5 };
+        estrela(matEstrela, x, y, -.7, pesado ? 2.4 : 1.5, pesado ? 11 : 8);
         if (!reduzido()) explodir(faiscas, x, y, -.5, pesado ? 70 : 30);
         tremor = pesado ? .16 : .06; tremorNasc = relogio;
         if (pesado) { flashNasc = relogio; flashForca = .18; }
       } else if (e.t === 'defendeu') {
         const { x, y } = contato(e, estado), s = escudos[cursorEscudo++ % escudos.length];
         s.malha.position.set(x, y, -.55); s.nasc = relogio;
+        estrela(matEstrelaFria, x, y, -.7, 1.2, 7);
         if (!reduzido()) explodir(faiscasFrias, x, y, -.55, 24);
         tremor = .03; tremorNasc = relogio;
       } else if (e.t === 'choque') {
@@ -287,6 +321,14 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
       // Entra rápido e some em curva (sem ficar parado cheio na tela).
       const sai = Math.max(0, (f - .3) / .7);
       r.malha.visibility = r.forca * Math.min(1, .6 + f * 6) * (1 - sai * sai * (3 - 2 * sai));
+    }
+    for (const e of estrelas) {
+      const f = (relogio - e.nasc) / e.dur;
+      e.malha.setEnabled(f >= 0 && f < 1);
+      if (f < 0 || f >= 1) continue;
+      e.malha.scaling.setAll(e.tam * (.55 + .6 * Math.min(1, f * 4)));
+      e.malha.rotation.z += .02 * dt;
+      e.malha.visibility = 1 - f * f;
     }
     for (const b of bolasFlash) {
       const d = b.metadata; if (!d) { b.setEnabled(false); continue; }

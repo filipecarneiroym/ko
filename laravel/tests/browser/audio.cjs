@@ -52,17 +52,20 @@ for (const [nome, chamada] of Object.entries(producao.chamadas)) {
       for (const taxa of [44100, 48000]) saida.push(await renderizar(taxa, 30, { t: 'ko' }));
       saida.push(await renderizar(48000, 0, { t: 'round', n: 1 }));
       saida.push(await renderizar(48000, 0, { t: 'perfeito' }));
+      saida.push(await renderizar(48000, 0, { t: 'vitoria', vencedor: 0, lutador: 'pipoca' }));
+      saida.push(await renderizar(48000, 0, { t: 'acerto' }));
       return saida;
     });
-    for (const resultado of resultados.slice(0, 3)) {
+    for (const resultado of resultados.slice(0, 5)) {
       assert(resultado.pico > .01 && resultado.pico <= .94, 'Mixer audível, com margem abaixo de clipping');
       assert(resultado.energia > 1, 'Áudio realmente renderizado');
       assert.equal(resultado.aceitou, true);
     }
-    assert.equal(resultados[3].aceitou, false, 'Perfeito não recebe fala');
-    assert.equal(resultados[3].energia, 0, 'Evento extra permanece sem voz');
+    assert.equal(resultados[5].aceitou, false, 'Golpe não recebe fala do locutor');
+    assert.equal(resultados[5].energia, 0, 'Evento sem fala permanece sem voz');
     assert.deepEqual(erros, [], 'Sem erros no navegador');
-    assert.equal(pedidos.filter(url => url.endsWith('.mp3')).length, 24, 'Cada instância prepara seis arquivos; golpes não baixam áudio');
+    // 6 instâncias × 9 chamadas fixas + 1 anúncio de vencedor baixado sob demanda.
+    assert.equal(pedidos.filter(url => url.endsWith('.mp3')).length, 6 * 9 + 1, 'Chamadas fixas preparadas; vencedor sob demanda; golpes não baixam áudio');
     console.log(JSON.stringify({ ok: true, resultados }, null, 2));
   } finally { await browser.close(); }
 })().catch(erro => { console.error(erro); process.exitCode = 1; });
