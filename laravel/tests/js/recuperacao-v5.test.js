@@ -116,7 +116,7 @@ for (const variante of ['azul', 'vermelha']) {
     const modelo = await modelos[variante];
     assert.equal(modelo.doc.animations.length, 32);
     assert.equal(modelo.doc.skins[0].joints.length, 20);
-    for (const [nome, duracao] of [['caido', 46], ['levantando', 16]]) {
+    for (const [nome, duracao] of [['caido', 46], ['levantando', 40]]) {
       const clip = modelo.clips.get(nome);
       assert.equal(clip.duracaoQuadros, duracao, `${nome} preserva duração da regra`);
       for (const canal of clip.canais) {

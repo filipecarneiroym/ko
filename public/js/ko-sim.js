@@ -645,7 +645,7 @@
     } else if (l.estado === 'levantando') {
       l.inv = 2;
       l.vx = 0;
-      if (l.t >= 16) { mudar(l, 'parado'); l.combo = 0; l.juggle = 0; l.inv = 4; }
+      if (l.t >= 40) { mudar(l, 'parado'); l.combo = 0; l.juggle = 0; l.inv = 4; }
     } else if (l.estado === 'pousando') {
       if (l.t >= 4) mudar(l, 'parado');
     }

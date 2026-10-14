@@ -350,11 +350,13 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 45, ...baixa(0) },
     { q: 46, ...baixa(0) },
   ]);
-  // levantando (16 quadros): da base agachada direto para a guarda.
-  clips.levantando = animar('levantando', 16, [
+  // levantando (40 quadros): das costas com a base agachada, sobe em etapas (a pelve
+  // sobe a cada 12 quadros) até a guarda. Antes eram 16 quadros e quase não se via.
+  clips.levantando = animar('levantando', 40, [
     { q: 0, ...baixa(0) },
-    { q: 6, ...baixa(.08) },
-    { q: 16 },
+    { q: 12, ...baixa(.12) },
+    { q: 26, ...baixa(.24) },
+    { q: 40 },
   ]);
 
   // Rolamento sem atravessar o chão: em cada quadro, mede o ponto mais baixo
