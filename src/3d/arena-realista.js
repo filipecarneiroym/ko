@@ -187,7 +187,10 @@ export async function criarArenaRealista(nome, scene, apresentacao) {
   for (const { l } of luzes) l.intensity *= cfg.luz[1];
 
   // Fundo 360°, centro na altura da câmera (horizonte da foto no lugar).
-  const domo = new PhotoDome(`${nome}-fundo`, base + 'fundo.jpg', { resolution: 48, size: 140, useDirectMapping: true }, scene);
+  // Celular (tela de toque): foto de 2048 px; no computador, a de 4096 px. Cabe na tela e
+  // pesa de 1/3 a 1/5 do download.
+  const fundo = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches ? 'fundo-celular.jpg' : 'fundo.jpg';
+  const domo = new PhotoDome(`${nome}-fundo`, base + fundo, { resolution: 48, size: 140, useDirectMapping: true }, scene);
   domo.mesh.parent = raiz; domo.mesh.rotation.y = cfg.giro; domo.mesh.position.y = 1.6;
   domo.imageMode = PhotoDome.MODE_MONOSCOPIC;
   domo.material.fogEnabled = false;   // a foto já tem a atmosfera dela
