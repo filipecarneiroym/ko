@@ -34,6 +34,12 @@ export function criarGolpesV5(ossos, parado, simulador) {
   }
   const perna = l => ({ coxa: idx(`coxa_${l}`), canela: idx(`canela_${l}`), pe: idx(`pe_${l}`) });
   const PERNAS = { E: perna('E'), D: perna('D') };
+  // Braços por IK de dois ossos (ombro→cotovelo→punho), como as pernas: a
+  // pose-chave diz onde fica a luva (relativo ao ombro) e para onde aponta o
+  // cotovelo. Sem 'bracos' na chave, o braço segue a guarda (cinemática direta).
+  const braco = l => ({ braco: idx(`braco_${l}`), antebraco: idx(`antebraco_${l}`), mao: idx(`mao_${l}`) });
+  const BRACOS = { E: braco('E'), D: braco('D') };
+  const B1 = off(BRACOS.E.antebraco).length(), B2 = off(BRACOS.E.mao).length();
   const L1 = off(PERNAS.E.canela).length(), L2 = off(PERNAS.E.pe).length();
   const deDirecao = (de, para) => { const q = Quaternion.Identity(); Quaternion.FromUnitVectorsToRef(de.normalizeToNew(), para.normalizeToNew(), q); return q; };
 
@@ -54,6 +60,22 @@ export function criarGolpesV5(ossos, parado, simulador) {
       P[i] = P[pai].add(off(i).applyRotationQuaternion(G[pai]));
       G[i] = G[pai].multiply(L0[i]).normalize();
       if (i === tronco) G[i] = Quaternion.RotationAxis(v(0, 0, 1), p.inclinacao).multiply(G[i]).normalize();
+      for (const [lado, b] of Object.entries(BRACOS)) {
+        const pb = p.bracos?.[lado];
+        if (!pb) continue;
+        if (i === b.braco) {
+          const H = P[i], eixo = pb.alvo, d = Math.min(Math.max(eixo.length(), Math.abs(B1 - B2) + 1e-4), B1 + B2 - 1e-4);
+          const e = eixo.normalizeToNew();
+          const polo = pb.cotovelo.subtract(e.scale(Vector3.Dot(pb.cotovelo, e))).normalize();
+          const u = (B1 * B1 - B2 * B2 + d * d) / (2 * d), h = Math.sqrt(Math.max(0, B1 * B1 - u * u));
+          const K = H.add(e.scale(u)).add(polo.scale(h));
+          joelhos['braco' + lado] = { K, T: H.add(e.scale(d)) };
+          G[i] = deDirecao(off(b.antebraco).applyRotationQuaternion(G[i]), K.subtract(H)).multiply(G[i]).normalize();
+        } else if (i === b.antebraco) {
+          const { K, T } = joelhos['braco' + lado];
+          G[i] = deDirecao(off(b.mao).applyRotationQuaternion(G[i]), T.subtract(K)).multiply(G[i]).normalize();
+        }
+      }
       for (const [lado, b] of Object.entries(PERNAS)) {
         const pp = p.pernas[lado];
         if (i === b.coxa) {
@@ -136,6 +158,19 @@ export function criarGolpesV5(ossos, parado, simulador) {
         const fa = formaPe(lado, a.pernas?.[lado]?.pe ?? 'plano', K, T, pose.giro, pose.rol);
         const fb = formaPe(lado, b.pernas?.[lado]?.pe ?? 'plano', K, T, pose.giro, pose.rol);
         pose.pernas[lado].pe = Quaternion.Slerp(fa, fb, t).normalize();
+      }
+      if (chaves.some(k => k.bracos)) {
+        const fk = resolver(pose).P;
+        pose.bracos = {};
+        for (const lado of ['E', 'D']) {
+          const bb = BRACOS[lado], guardaAlvo = fk[bb.mao].subtract(fk[bb.braco]), guardaCot = fk[bb.antebraco].subtract(fk[bb.braco]);
+          const ba = a.bracos?.[lado], bz = b.bracos?.[lado];
+          if (!ba && !bz) continue;
+          pose.bracos[lado] = {
+            alvo: lerpV(ba?.alvo ?? guardaAlvo, bz?.alvo ?? guardaAlvo, t),
+            cotovelo: lerpV(ba?.cotovelo ?? guardaCot, bz?.cotovelo ?? guardaCot, t),
+          };
+        }
       }
       ({ G, P } = resolver(pose));
       // Sola inteira acima do piso: sobe o tornozelo da perna que afunda
@@ -221,6 +256,20 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 0, ...baixa(0) }, { q: 30, ...baixa(-.012) }, { q: 60, ...baixa(0) },
   ], { laco: true });
 
+  // cp: soco agachado no estilo do SF4 (10 quadros, janela 3-5): da guarda
+  // agachada, o ombro gira para dentro, o tronco vai à frente e o braço da
+  // frente estica reto até o peito da adversária; a outra luva protege o rosto.
+  const socoBaixo = (dy, giro, inclinacao, alvo, cotovelo) => ({ ...baixa(dy), giro, inclinacao,
+    bracos: { E: { alvo, cotovelo } } });
+  clips.cp = animar('cp', 10, [
+    { q: 0, ...baixa(0) },
+    { q: 2, ...socoBaixo(-.01, -.2, -.2, v(.28, -.3, .06), v(-.2, -1, -.4)) },
+    { q: 3, ...socoBaixo(-.03, -.5, -.34, v(.74, -.36, .16), v(0, -.4, -1)) },
+    { q: 5, ...socoBaixo(-.03, -.5, -.34, v(.75, -.36, .16), v(0, -.4, -1)) },
+    { q: 8, ...socoBaixo(-.01, -.15, -.18, v(.3, -.24, .06), v(-.2, -1, -.4)) },
+    { q: 10, ...baixa(0) },
+  ]);
+
   // pulo: impulso, extensão, pernas recolhidas à frente (joelhos para a frente,
   // não para fora) e preparação do pouso. A altura vem do motor.
   const ar = (dy, eE, eD, inc) => ({ pelve: v(0, dy, 0), inclinacao: inc,
@@ -283,6 +332,17 @@ export function criarGolpesV5(ossos, parado, simulador) {
       }
       return { lado, caixa, quadros, ok: quadros.every(f => f.dentro) };
     });
+  }
+  // Soco agachado: a luva (mão até a ponta do punho) dentro da caixa do motor.
+  {
+    const [bx, by, bw, bh] = simulador.LUTADORES.pipoca.golpes.cp.janelas[0].caixa, janela = simulador.LUTADORES.pipoca.golpes.cp.janelas[0];
+    const caixa = { x0: bx / PX, x1: (bx + bw) / PX, y0: -(by + bh) / PX, y1: -by / PX }, quadros = [];
+    for (let q = janela.de; q <= janela.ate; q++) {
+      const P = clips.cp.poses[q], M = P[BRACOS.E.mao], C = P[BRACOS.E.antebraco], dir = M.subtract(C).normalize();
+      const pontos = [0, .06, .12].map(d => M.add(dir.scale(d)));
+      quadros.push({ q, dentro: pontos.some(p => p.x >= caixa.x0 && p.x <= caixa.x1 && p.y >= caixa.y0 && p.y <= caixa.y1), luva: M.asArray().map(x => +x.toFixed(3)) });
+    }
+    relatorio.cp = [{ lado: 'E', caixa, quadros, ok: quadros.every(f => f.dentro) }];
   }
   return { clips: Object.fromEntries(Object.entries(clips).map(([k, c]) => [k, c.clip])), relatorio };
 }

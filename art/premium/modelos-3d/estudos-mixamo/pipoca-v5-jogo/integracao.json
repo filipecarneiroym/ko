@@ -32,7 +32,7 @@
     "azul": {
       "caminho": "public/modelos/estudos/pipoca-v5-azul.glb",
       "bytes": 5965500,
-      "sha256": "46bf799ea93b9e431982b14d8d7f71048edad44779cdcb6b2f12496fa74d9363",
+      "sha256": "1a5e5b0cdfcc953ccd68df725abf18d135b418df4db24c185cd5fbcddf5eaded",
       "triangulos": 28346,
       "materiais": 1,
       "ossos": 20,
@@ -43,7 +43,7 @@
     "vermelha": {
       "caminho": "public/modelos/estudos/pipoca-v5-vermelha.glb",
       "bytes": 5980236,
-      "sha256": "f84a7fa7d5635ffd966aab9d4f19642d0237a64b15d65065786ec1ea9aec9d0c",
+      "sha256": "7a374d30d2de78c1087e968905b1b50b2d19f260e5bd4591f68670a5ab2f92e1",
       "triangulos": 28346,
       "materiais": 1,
       "ossos": 20,
@@ -227,6 +227,47 @@
               1.02,
               0.241,
               -0.284
+            ]
+          }
+        ],
+        "ok": true
+      }
+    ],
+    "cp": [
+      {
+        "lado": "E",
+        "caixa": {
+          "x0": 0.25,
+          "x1": 1.1666666666666667,
+          "y0": 0.7916666666666666,
+          "y1": 1.1666666666666667
+        },
+        "quadros": [
+          {
+            "q": 3,
+            "dentro": true,
+            "luva": [
+              0.825,
+              1.101,
+              -0.043
+            ]
+          },
+          {
+            "q": 4,
+            "dentro": true,
+            "luva": [
+              0.826,
+              1.102,
+              -0.044
+            ]
+          },
+          {
+            "q": 5,
+            "dentro": true,
+            "luva": [
+              0.827,
+              1.104,
+              -0.045
             ]
           }
         ],
