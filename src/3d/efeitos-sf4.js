@@ -281,6 +281,12 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
         if (p) { respingo(matEspecial, xMundo(p.x), yMundo(p.y) + 1.2, .6, 2.2, 18, 'quebra', .7); flashNasc = relogio; flashForca = .25; }
       // Especial: nada no arremesso (só a cenoura em chamas voa, em
       // brilho-golpes.js); o impacto vem no evento de acerto.
+      } else if (e.t === 'armadura') {
+        const x = xMundo(e.x), y = yMundo(e.y);
+        estrela(matEstrelaFria, x, y, -.7, 2, 10);
+        bolasFlash[cursor % 3].position.set(x, y, -.6); bolasFlash[cursor % 3].metadata = { nasc: relogio, tam: 2.4 };
+        if (!reduzido()) explodir(faiscasFrias, x, y, -.55, 40);
+        flashNasc = relogio; flashForca = .25;
       } else if (e.t === 'golpeFinal') {
         // Como o Ultra do SF4: tela escura e clarão.
         superLado = e.lado; superNasc = relogio; flashNasc = relogio; flashForca = .5;
