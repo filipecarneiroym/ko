@@ -352,10 +352,13 @@ export function criarGolpesV5(ossos, parado, simulador) {
   ]);
   // levantando (40 quadros): das costas com a base agachada, sobe em etapas (a pelve
   // sobe a cada 12 quadros) até a guarda. Antes eram 16 quadros e quase não se via.
+  // Mãos no chão empurrando: os braços começam apoiados no chão e vão se esticando
+  // conforme o quadril sobe (mesmo ritmo das etapas), até a guarda no fim.
+  const apoio = (y, x) => ({ bracos: { E: { alvo: v(x, y, -.12), cotovelo: v(-.1, -.4, -1) }, D: { alvo: v(x, y, .12), cotovelo: v(-.1, -.4, 1) } } });
   clips.levantando = animar('levantando', 40, [
     { q: 0, ...baixa(0) },
-    { q: 12, ...baixa(.12) },
-    { q: 26, ...baixa(.24) },
+    { q: 12, ...baixa(.12), ...apoio(-.7, .28) },
+    { q: 26, ...baixa(.24), ...apoio(-.45, .22) },
     { q: 40 },
   ]);
 

@@ -79,14 +79,14 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
   matBola.disableLighting = true; matBola.emissiveTexture = texBola; matBola.opacityTexture = texBola;
   matBola.diffuseColor = new Color3(0, 0, 0); matBola.backFaceCulling = false; matBola.alphaMode = Constants.ALPHA_ADD;
   const bolas = [0, 1].map(dono => {
-    const malha = MeshBuilder.CreatePlane(`golpe-bola-${dono}`, { size: 1.15 }, scene);
+    const malha = MeshBuilder.CreatePlane(`golpe-bola-${dono}`, { size: 1.9 }, scene);
     malha.material = matBola; malha.billboardMode = Mesh.BILLBOARDMODE_ALL; malha.isPickable = false; malha.setEnabled(false);
     brilho.addIncludedOnlyMesh(malha);
     const fogo = new ParticleSystem(`golpe-bola-rastro-${dono}`, 200, scene);
     fogo.particleTexture = chama; fogo.blendMode = ParticleSystem.BLENDMODE_ADD;
     fogo.emitter = new Vector3(0, -100, 0); fogo.createSphereEmitter(.18);
-    fogo.minEmitPower = .2; fogo.maxEmitPower = .6; fogo.gravity = new Vector3(0, .8, 0);
-    fogo.minSize = .16; fogo.maxSize = .38; fogo.minLifeTime = .12; fogo.maxLifeTime = .3;
+    fogo.minEmitPower = .3; fogo.maxEmitPower = .9; fogo.gravity = new Vector3(0, .8, 0);
+    fogo.minSize = .32; fogo.maxSize = .75; fogo.minLifeTime = .15; fogo.maxLifeTime = .4;
     fogo.color1 = new Color4(1, .85, .4, .9); fogo.color2 = new Color4(1, .4, .1, .8); fogo.colorDead = new Color4(.3, 0, 0, 0);
     fogo.emitRate = 0; fogo.start();
     return { malha, fogo };

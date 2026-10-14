@@ -131,8 +131,8 @@ for (const variante of ['azul', 'vermelha']) {
   test(`recuperação v5 ${variante} emenda os últimos quadros visíveis sem estalo`, async t => {
     const modelo = await modelos[variante];
     // O motor muda de estado ao atingir 46/16: os últimos quadros desenhados
-    // são 45 e 15. Comparar somente os finais 46/16 esconderia o defeito.
-    for (const [antes, q, depois] of [['caido', 45, 'levantando'], ['levantando', 15, 'parado']]) {
+    // são 45 e 39 (o levantar tem 40 quadros). Comparar somente os finais 46/40 esconderia o defeito.
+    for (const [antes, q, depois] of [['caido', 45, 'levantando'], ['levantando', 39, 'parado']]) {
       const erro = compararEmenda(modelo, pose(modelo, antes, q), pose(modelo, depois, 0));
       t.diagnostic(JSON.stringify({ variante, antes, quadro: q, depois, ...erro }));
       assert.ok(erro.maiorOsso < .001, `${antes}${q} → ${depois}0: nó salta ${(erro.maiorOsso * 100).toFixed(2)} cm`);
