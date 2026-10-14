@@ -1,12 +1,14 @@
 // Retrato da seleção gerado do mesmo GLB usado na luta.
-// node scripts/producao-3d/renderizar-retrato-pipoca.cjs
+// node scripts/producao-3d/renderizar-retrato-pipoca.cjs [azul|vermelha]
+// azul: jogador 1 (pipoca-3d-retrato.png); vermelha: lado 2 (pipoca-3d-retrato-vermelha.png).
 const { build } = require('esbuild');
 const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '../..');
 const { chromium } = require(path.join(root, '.browser-check/node_modules/playwright'));
 const origem = 'http://127.0.0.1:8049';
-const destino = path.join(root, 'public/personagens/pipoca-3d-retrato.png');
+const cor = process.argv[2] === 'vermelha' ? 'vermelha' : 'azul';
+const destino = path.join(root, 'public/personagens', cor === 'azul' ? 'pipoca-3d-retrato.png' : 'pipoca-3d-retrato-vermelha.png');
 
 (async () => {
   const bundle = await build({
@@ -27,7 +29,7 @@ const destino = path.join(root, 'public/personagens/pipoca-3d-retrato.png');
       scene.getMeshByName('piso').setEnabled(false);
       scene.getMeshByName('limite-arena').setEnabled(false);
       (async () => {
-        const modelo = await carregarModelo(await (await fetch('/modelos/estudos/pipoca-v5-azul.glb')).arrayBuffer(), 'pipoca', KOSim, scene);
+        const modelo = await carregarModelo(await (await fetch('/modelos/estudos/pipoca-v5-${cor}.glb')).arrayBuffer(), 'pipoca', KOSim, scene);
         apresentacao.prepararModelo(modelo);
         modelo.atualizar({ x: 0, y: 0, face: 1, visivel: true, clip: 'parado', quadro: 0, ciclico: true });
         await scene.whenReadyAsync();

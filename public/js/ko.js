@@ -51,7 +51,7 @@
     if (!ativo) return;
     if (versus && painel.dataset.tela === 'escolha') {
       const status = $('#ladoDele');
-      if (status) status.textContent = estadosPads.map((p, i) => 'Controle ' + (i + 1) + ': ' + (!p.conectado ? 'aperte um botão para conectar' : p.mapeado ? 'pronto' : 'abra Configurar controles')).join(' · ');
+      if (status) status.textContent = estadosPads.map((p, i) => (i + 1) + 'P: ' + (!p.conectado ? 'aperte um botão no controle' : p.mapeado ? 'controle ok' : 'configure o controle')).join(' · ');
     }
     KOControle.navegar(alvo, sobre ? estadosPads.find((p) => p.pulso || p.confirmarClicado) : ativo);
     if (sobre && estadosPads.some((p) => p.menuClicado)) sobre.querySelector('[data-acao="voltar"]').click();
@@ -651,12 +651,16 @@
     const cartas = prontos.map((id) => {
       const l = cfg.lutadores[id];
       return `<button class="carta" data-id="${id}" aria-label="${esc(l.nome)}">
-        <canvas width="480" height="600"></canvas>
+        <canvas width="160" height="160"></canvas>
         <span class="nome">${esc(l.nome)}</span>
       </button>`;
     }).join('');
+    // Como no SF4: os dois escolhidos em 3D, grandes, por trás da grade de ícones.
+    const figura = (lado) => `<figure class="destaque lado-${lado} vazio"><img alt="" decoding="async">
+        <figcaption><span class="tag"></span><b class="nome-grande"></b><span class="ok">Confirmado ✓</span></figcaption></figure>`;
     painel.innerHTML = `
-      <div class="escolha">
+      <div class="escolha escolha-sf4">
+        <div class="palco" aria-hidden="true">${figura(1)}${figura(2)}</div>
         <header><h2>Escolha seu lutador</h2>${recado ? `<p class="recado">${esc(recado)}</p>` : ''}</header>
         ${cfg.modo === 'cpu' ? `<div class="dificuldade" role="group" aria-label="Dificuldade do computador">${Object.entries(KOCPU.PERFIS).map(([id, perfil]) => `<button type="button" class="botao botao-sec" data-nivel="${id}" aria-pressed="${cfg.dificuldade === id}">${perfil.nome}</button>`).join('')}</div>` : ''}
         <div class="grade">${cartas}</div>
@@ -676,7 +680,8 @@
       foto.onload = () => {
         if (!cv.isConnected) return;
         g.clearRect(0, 0, cv.width, cv.height); // o fundo do retrato 3D é transparente
-        g.drawImage(foto, 0, 0, cv.width, cv.height);
+        // Ícone redondo: só a cabeça (orelhas ao queixo) do retrato 640×800.
+        g.drawImage(foto, foto.width * .16, foto.height * .14, foto.width * .69, foto.width * .69, 0, 0, cv.width, cv.height);
       };
       foto.src = `/personagens/${id}-3d-retrato.png`;
     });
@@ -722,11 +727,35 @@
     sobre.querySelector('[data-fechar]').onclick = () => { pads.cancelar(); sobre.remove(); limparControles(); pulsosPads = [0, 0]; $('#ajustar-controles')?.focus(); };
   }
 
+  // Retratos grandes da escolha: 1P à esquerda (roupa azul), lado 2 à direita
+  // (roupa vermelha, olhando para o 1P). Só segue para a luta com os dois
+  // confirmados: no versus, 1P e depois 2P apertam Pronto; no online, os dois.
+  function mostrarDestaque(lado, id, rotulo, confirmado) {
+    const fig = painel.querySelector('.destaque.lado-' + lado);
+    if (!fig) return;
+    const img = fig.querySelector('img');
+    fig.classList.toggle('vazio', !id);
+    fig.classList.toggle('confirmado', !!(id && confirmado));
+    fig.querySelector('.tag').textContent = rotulo;
+    fig.querySelector('.nome-grande').textContent = id ? cfg.lutadores[id]?.nome || '' : '';
+    if (!id) { img.removeAttribute('src'); delete img.dataset.id; return; }
+    if (img.dataset.id === id) return;
+    img.dataset.id = id;
+    const base = '/personagens/' + id + '-3d-retrato';
+    img.onerror = () => { if (lado === 2 && img.src.endsWith('-vermelha.png')) img.src = base + '.png'; else fig.classList.add('vazio'); };
+    img.src = lado === 2 ? base + '-vermelha.png' : base + '.png';
+  }
+
   function marcarEscolhas() {
     painel.querySelectorAll('.carta').forEach((b) => {
       b.classList.toggle('minha', b.dataset.id === estadoSala.minhaEscolha);
       b.classList.toggle('dele', b.dataset.id === estadoSala.escolhaDele);
     });
+    const um = versus ? primeiroLocal || estadoSala.minhaEscolha : estadoSala.minhaEscolha;
+    const dois = cfg.modo === 'online' ? estadoSala.escolhaDele : versus ? (primeiroLocal ? estadoSala.minhaEscolha : null) : um;
+    const rotulo2 = cfg.modo === 'online' ? (nomes[1 - meuLado] || 'Amigo') : versus ? '2P' : cfg.modo === 'cpu' ? 'CPU' : 'Treino';
+    mostrarDestaque(1, um, versus ? '1P' : (cfg.eu || '1P'), cfg.modo === 'online' ? estadoSala.euPronto : versus && !!primeiroLocal);
+    mostrarDestaque(2, dois, rotulo2, cfg.modo === 'online' && estadoSala.elePronto);
     const det = $('#detalhe'), st = STATUS[estadoSala.minhaEscolha];
     if (det) det.innerHTML = st ? `<strong>${esc(cfg.lutadores[estadoSala.minhaEscolha].nome)}</strong><span>${esc(st.estilo)}</span>
       <div class="barras">${['forca', 'velocidade', 'alcance'].map((k) => `<label>${{ forca: 'Força', velocidade: 'Velocidade', alcance: 'Alcance' }[k]}<i data-v="${st[k]}"></i></label>`).join('')}</div>` : '<span>Toque num lutador.</span>';
@@ -739,7 +768,7 @@
     if (pronto) {
       pronto.disabled = !estadoSala.minhaEscolha || estadoSala.euPronto || (cfg.modo === 'online' && !rede.outroAqui);
       pronto.textContent = estadoSala.euPronto ? 'Esperando o amigo…' : 'Pronto!';
-      if (versus) pronto.textContent = primeiroLocal ? 'Jogador 2: pronto! (dois controles necessários)' : 'Jogador 1: confirmar lutador';
+      if (versus) pronto.textContent = primeiroLocal ? '2P: confirmar' : '1P: confirmar';
     }
   }
 

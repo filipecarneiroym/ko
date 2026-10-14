@@ -279,6 +279,50 @@ button, a.botao { touch-action: manipulation; min-height: 48px; }
 .barras i[data-v="5"]::after { transform: scaleX(1); }
 .lado-dele { font-family: system-ui, sans-serif; font-weight: 800; color: var(--rosa); font-size: 14px; }
 
+/* Escolha no estilo do SF4: cenário ao fundo, os dois escolhidos em 3D
+   grandes nas laterais (nome em pincelada) e ícones redondos embaixo. */
+.painel-escolha { background: linear-gradient(180deg, #0a061899 0%, #0a0618cc 60%, #0a0618f2 100%), url(/arenas/academia/fundo.jpg) center 50% / 260% auto, #1a1030; /* faixa do horizonte da foto 360° (sem o teto curvo) */ }
+.escolha-sf4 { position: relative; width: 100%; max-width: none; height: 100%; display: flex; flex-direction: column; gap: 8px; }
+.escolha-sf4 > :not(.palco) { position: relative; z-index: 1; }
+.palco { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.destaque { position: absolute; bottom: 20%; height: 74%; aspect-ratio: 4 / 5; margin: 0; }
+.destaque.lado-1 { left: -1%; }
+.destaque.lado-2 { right: -1%; }
+.destaque img { width: 100%; height: 100%; object-fit: contain; object-position: bottom; filter: drop-shadow(0 0 22px #000c); }
+.destaque.lado-2 img { transform: scaleX(-1); }
+.destaque.vazio img { visibility: hidden; }
+.destaque figcaption { position: absolute; left: 4%; right: 4%; bottom: 8%; display: grid; justify-items: start; gap: 4px; }
+.destaque.lado-2 figcaption { justify-items: end; }
+.nome-grande {
+  font-family: var(--fonte); font-style: italic; font-size: clamp(30px, 8vmin, 64px); line-height: 1; color: #fff;
+  -webkit-text-stroke: 2px #2a0606; paint-order: stroke fill; text-shadow: 3px 3px 0 #b3121a, 6px 6px 0 #000a; transform: rotate(-5deg); text-transform: uppercase;
+}
+.destaque .tag { font-family: var(--fonte); font-size: clamp(12px, 2.6vmin, 18px); padding: 2px 10px; border-radius: 999px; background: var(--amarelo); color: var(--contorno); border: 2px solid var(--contorno); }
+.destaque.lado-2 .tag { background: #e8343a; color: #fff; }
+.destaque .ok { display: none; font-family: system-ui, sans-serif; font-weight: 800; font-size: 13px; padding: 3px 10px; border-radius: 999px; background: #1fbf6a; color: #fff; border: 2px solid #0a3a20; }
+.destaque.confirmado .ok { display: inline-block; }
+.destaque.vazio .nome-grande, .destaque.vazio .ok { display: none; }
+.escolha-sf4 .grade { margin-top: auto; }
+.escolha-sf4 .carta, .escolha-sf4 .grade:has(.carta:only-child) .carta {
+  width: clamp(62px, 11vmin, 92px); aspect-ratio: 1; border-radius: 50%;
+  border: 3px solid #d9b45a; background: radial-gradient(circle at 50% 35%, #5a4a7a, #1a1030 70%); box-shadow: 0 3px 0 #000a, inset 0 0 0 2px #0006;
+}
+.escolha-sf4 .carta .nome { display: none; }
+.escolha-sf4 .carta.minha { border-color: #fff3a0; box-shadow: 0 0 0 3px var(--amarelo), 0 0 20px #ffd23fcc; }
+.escolha-sf4 footer { grid-template-columns: 1fr auto auto auto; padding: 8px 12px; border-radius: 14px; background: #0a0618b3; }
+.escolha-sf4 footer .lado-dele:empty { display: none; }
+.escolha-sf4 footer .lado-dele { font-size: 12px; max-width: 34ch; }
+.escolha-sf4 #pronto { white-space: nowrap; }
+.escolha-sf4 #ajustar-controles { font-size: 13px; padding: 8px 12px; min-height: 0; }
+@media (max-height: 500px) {
+  .destaque { bottom: 30%; height: 66%; }
+  .escolha-sf4 .dificuldade { margin-block: 4px; }
+  .escolha-sf4 .detalhe > span { display: none; }
+}
+@media (orientation: portrait) {
+  .destaque { height: 40%; bottom: auto; top: 10%; }
+}
+
 /* Celular em pé: pede para girar (o jogo é deitado). */
 .gire { display: none; }
 @media (orientation: portrait) and (max-width: 900px) {
