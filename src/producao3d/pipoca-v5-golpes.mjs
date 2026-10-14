@@ -60,6 +60,10 @@ export function criarGolpesV5(ossos, parado, simulador) {
       P[i] = P[pai].add(off(i).applyRotationQuaternion(G[pai]));
       G[i] = G[pai].multiply(L0[i]).normalize();
       if (i === tronco) G[i] = Quaternion.RotationAxis(v(0, 0, 1), p.inclinacao).multiply(G[i]).normalize();
+      // Recolher a cabeça e as orelhas na recuperação: o apoio fica nos
+      // ombros, em vez de elevar o corpo inteiro para proteger as pontas.
+      if (ossos[i].nome === 'cabeca' && p.pescoco) G[i] = G[i].multiply(Quaternion.RotationAxis(v(0, 0, 1), p.pescoco)).normalize();
+      if (/^orelha_[ED]$/.test(ossos[i].nome) && p.orelhas) G[i] = G[i].multiply(Quaternion.RotationAxis(v(0, 0, 1), p.orelhas)).normalize();
       for (const [lado, b] of Object.entries(BRACOS)) {
         const pb = p.bracos?.[lado];
         if (!pb) continue;
@@ -141,6 +145,8 @@ export function criarGolpesV5(ossos, parado, simulador) {
         inclinacao: (a.inclinacao ?? 0) + ((b.inclinacao ?? 0) - (a.inclinacao ?? 0)) * t,
         rol: (a.rol ?? 0) + ((b.rol ?? 0) - (a.rol ?? 0)) * t,
         bola: (a.bola ?? 0) + ((b.bola ?? 0) - (a.bola ?? 0)) * t,
+        pescoco: (a.pescoco ?? 0) + ((b.pescoco ?? 0) - (a.pescoco ?? 0)) * t,
+        orelhas: (a.orelhas ?? 0) + ((b.orelhas ?? 0) - (a.orelhas ?? 0)) * t,
         pernas: {},
       };
       for (const lado of ['E', 'D']) {
@@ -270,24 +276,6 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 10, ...baixa(0) },
   ]);
 
-  // caido (46 quadros, o motor fixa): queda como a do SF4 depois da rasteira.
-  // A reação começa no quadro 0 (pernas varridas para a frente, tronco para
-  // trás), gira de costas no ar, bate no chão no 9, quica e fica deitada até
-  // o motor mandar levantar. Pernas presas ao corpo (loc) acompanham o giro;
-  // acimaDoPiso() mantém a pele inteira acima do chão.
-  // estica: 0 = pernas varridas à frente (no ar); 1 = estendidas no chão.
-  const deCostas = (rol, pelve, inclinacao, estica = 0) => ({ rol, pelve, inclinacao,
-    pernas: { E: { local: v(.5 - .2 * estica, -.62 - .16 * estica, ZE * .5), loc: 1, joelho: v(1, .6 - .4 * estica, -.1), pe: 'corpo' },
-      D: { local: v(.36 - .02 * estica, -.6 - .14 * estica, ZD * .5), loc: 1, joelho: v(1, .6 - .2 * estica, .1), pe: 'corpo' } } });
-  clips.caido = animar('caido', 46, [
-    { q: 0, ...deCostas(.45, v(-.08, -.3, 0), .45) },
-    { q: 5, ...deCostas(1.25, v(-.3, -.75, 0), .2) },
-    { q: 9, ...deCostas(1.57, v(-.42, -.98, 0), .3, .6) },
-    { q: 11, ...deCostas(1.5, v(-.44, -.88, 0), .2, .5) },
-    { q: 14, ...deCostas(1.38, v(-.45, -1, 0), .62, 1) },
-    { q: 46, ...deCostas(1.38, v(-.45, -1, 0), .6, .85) },
-  ]);
-
   // pulo: impulso, extensão, pernas recolhidas à frente (joelhos para a frente,
   // não para fora) e preparação do pouso. A altura vem do motor.
   const ar = (dy, eE, eD, inc) => ({ pelve: v(0, dy, 0), inclinacao: inc,
@@ -316,6 +304,42 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 16, ...encolhida(-4.8, 1, 1, -.55) },
     { q: 20, ...encolhida(-6.1, .55, .4, -.3, v(0, -.32, 0)) },
     { q: 24, rol: -2 * Math.PI },
+  ]);
+
+  // caido (46 quadros, o motor fixa): queda como a do SF4 depois da rasteira.
+  // A reação começa no quadro 0 (pernas varridas para a frente, tronco para
+  // trás), gira de costas no ar, bate no chão no 9, quica e recupera a guarda
+  // com impulso pelos ombros. Pernas presas ao corpo (loc) acompanham o giro;
+  // acimaDoPiso() mantém a pele inteira acima do chão.
+  // estica: 0 = pernas varridas à frente (no ar); 1 = estendidas no chão.
+  const deCostas = (rol, pelve, inclinacao, estica = 0) => ({ rol, pelve, inclinacao,
+    pernas: { E: { local: v(.5 - .2 * estica, -.62 - .16 * estica, ZE * .5), loc: 1, joelho: v(1, .6 - .4 * estica, -.1), pe: 'corpo' },
+      D: { local: v(.36 - .02 * estica, -.6 - .14 * estica, ZD * .5), loc: 1, joelho: v(1, .6 - .2 * estica, .1), pe: 'corpo' } } });
+  // Mãos no chão ao lado da cabeça (empurram o corpo de volta, como no SF4).
+  const maos = (alvoY, alvoX) => ({ bracos: { E: { alvo: v(alvoX, alvoY, -.12), cotovelo: v(0, .4, -1) }, D: { alvo: v(alvoX, alvoY, .12), cotovelo: v(0, .4, 1) } } });
+  clips.caido = animar('caido', 46, [
+    { q: 0, ...deCostas(.45, v(-.08, -.3, 0), .45) },
+    { q: 5, ...deCostas(1.25, v(-.3, -.75, 0), .2) },
+    { q: 9, ...deCostas(1.57, v(-.42, -.98, 0), .3, .6) },
+    { q: 11, ...deCostas(1.5, v(-.44, -.88, 0), .2, .5) },
+    { q: 14, ...deCostas(1.38, v(-.45, -1, 0), .62, 1) },
+    { q: 30, ...deCostas(1.38, v(-.45, -1, 0), .6, .85) },
+    // Recuperação rápida: recolhe as pernas sobre os ombros e dá impulso
+    // para plantar os pés. Não completa uma cambalhota suspensa no ar.
+    { q: 34, ...encolhida(1.95, .7, .95, .35, v(-.4, -.75, 0)), pescoco: .4, orelhas: -1.2, ...maos(-.3, -.25) },
+    { q: 37, ...encolhida(1.55, .85, .95, .3, v(-.32, -.55, 0)), pescoco: .4, orelhas: -1.2, ...maos(-.45, -.15) },
+    { q: 40, ...encolhida(.85, .65, .8, -.18, v(-.15, -.35, 0)), pescoco: .15, orelhas: -.7, ...maos(-.6, .05) },
+    { q: 43, ...baixa(-.1), rol: .1, orelhas: -.2 },
+    // A regra troca no 46; o último quadro visível (45) já encaixa no levantar.
+    { q: 44, ...baixa(0) },
+    { q: 45, ...baixa(0) },
+    { q: 46, ...baixa(0) },
+  ]);
+  // levantando (16 quadros): da base agachada direto para a guarda.
+  clips.levantando = animar('levantando', 16, [
+    { q: 0, ...baixa(0) },
+    { q: 6, ...baixa(.08) },
+    { q: 16 },
   ]);
 
   // Rolamento sem atravessar o chão: em cada quadro, mede o ponto mais baixo
@@ -363,6 +387,24 @@ export function criarGolpesV5(ossos, parado, simulador) {
     relatorio.cp = [{ lado: 'E', caixa, quadros, ok: quadros.every(f => f.dentro) }];
   }
   return { clips: Object.fromEntries(Object.entries(clips).map(([k, c]) => [k, c.clip])), relatorio };
+}
+
+// A guarda recebida aqui já passou pelo acabamento final dos joelhos no
+// gerador. Fechar contra a guarda anterior ao acabamento causava outro estalo.
+export function emendarLevantada(clip, guarda) {
+  for (const canal of clip.canais) {
+    const fonte = guarda.canais.find(c => c.osso === canal.osso && c.tipo === canal.tipo);
+    const tamanho = canal.tipo === 'rotation' ? 4 : 3;
+    const de = canal.valores.slice(3 * tamanho, 4 * tamanho), para = fonte.valores.slice(0, tamanho);
+    for (let q = 4; q <= clip.duracaoQuadros; q++) {
+      const peso = suave(Math.min(1, (q - 3) / 7));
+      const valor = tamanho === 4
+        ? Quaternion.Slerp(Quaternion.FromArray(de), Quaternion.FromArray(para), peso).normalize().asArray()
+        : Vector3.Lerp(Vector3.FromArray(de), Vector3.FromArray(para), peso).asArray();
+      canal.valores.splice(q * tamanho, tamanho, ...valor);
+    }
+  }
+  return clip;
 }
 
 // Olhar no oponente: nos movimentos baixos e de defesa a cabeça mantém a

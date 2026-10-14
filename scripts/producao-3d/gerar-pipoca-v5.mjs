@@ -9,7 +9,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { montarEstudoVisual } from './gerar-estudo-visual.mjs';
 import { carregarPipocaV5, retargetarClips, acimaDoPiso, VARIANTES } from '../../src/producao3d/pipoca-v5.mjs';
-import { criarGolpesV5, conferirPes, joelhosParaFrente, pernasDe, olharParaFrente } from '../../src/producao3d/pipoca-v5-golpes.mjs';
+import { criarGolpesV5, conferirPes, joelhosParaFrente, pernasDe, olharParaFrente, emendarLevantada } from '../../src/producao3d/pipoca-v5-golpes.mjs';
 import { exportarGlb } from './glb.mjs';
 import { validarGlb } from '../../src/3d/contrato-glb.mjs';
 
@@ -37,9 +37,11 @@ export function gerarPipocaV5() {
       const i = clips.findIndex(c => c.nome === nome);
       clips[i] = olharParaFrente(v5.ossos, clips[i], guardaV5, nome === 'cp' ? { seguirGiro: false, elevar: .18 } : {});
     }
+    emendarLevantada(clips.find(c => c.nome === 'levantando'), guardaV5);
     const primitiva = v5.primitivas[0];
     for (const c of clips) if (['rolando', 'caido', 'levantando', 'derrotado', 'vitimaFinal', 'sup', 'quebra'].includes(c.nome))
-      acimaDoPiso(c, v5.ossos, { posicoes: primitiva.posicoes, juntas: primitiva.juntas, pesos: primitiva.pesos });
+      acimaDoPiso(c, v5.ossos, { posicoes: primitiva.posicoes, juntas: primitiva.juntas, pesos: primitiva.pesos },
+        ['caido', 'levantando'].includes(c.nome) ? { subdivisoes: 4, passoVertices: 1 } : {});
     const pesAoContrario = conferirPes(v5.ossos, clips);
     assert.deepEqual(pesAoContrario, [], `Pé ao contrário: ${JSON.stringify(pesAoContrario.slice(0, 20))}`);
     const dados = { nome: 'pipoca', ...v5, clips,

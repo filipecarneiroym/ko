@@ -57,7 +57,21 @@ export function alturaSolas(pes) {
 // Sobe a pelve, quadro a quadro, para que nenhum vértice da malha deformada
 // (skinning linear, como no jogo) fique abaixo do piso. A estimativa pelo
 // esqueleto não cobria as orelhas no rolamento (atravessavam 40 cm).
-export function acimaDoPiso(clip, ossos, malha) {
+export function acimaDoPiso(clip, ossos, malha, { subdivisoes = 1, passoVertices = 3 } = {}) {
+  // Os giros rápidos da recuperação precisam medir também o arco entre
+  // passos do motor. Mais chaves visuais não alteram a duração da regra.
+  if (subdivisoes > 1) for (const canal of clip.canais) {
+    const tempos = [], valores = [], componentes = canal.tipo === 'rotation' ? 4 : 3;
+    for (let i = 0; i < canal.tempos.length - 1; i++) for (let s = 0; s < subdivisoes; s++) {
+      const t = s / subdivisoes;
+      tempos.push(canal.tempos[i] + (canal.tempos[i + 1] - canal.tempos[i]) * t);
+      valores.push(...(componentes === 4
+        ? Quaternion.Slerp(Quaternion.FromArray(canal.valores, i * 4), Quaternion.FromArray(canal.valores, (i + 1) * 4), t).normalize().asArray()
+        : Vector3.Lerp(Vector3.FromArray(canal.valores, i * 3), Vector3.FromArray(canal.valores, (i + 1) * 3), t).asArray()));
+    }
+    tempos.push(canal.tempos.at(-1)); valores.push(...canal.valores.slice(-componentes));
+    canal.tempos = tempos; canal.valores = valores;
+  }
   const n = ossos.length, canal = (i, t) => clip.canais.find(c => c.osso === i && c.tipo === t);
   const raiz = canal(0, 'translation'), quadros = raiz.tempos.length, V = malha.posicoes.length / 3;
   for (let q = 0; q < quadros; q++) {
@@ -69,7 +83,7 @@ export function acimaDoPiso(clip, ossos, malha) {
       P.push(pai === null ? t : P[pai].add(t.applyRotationQuaternion(G[pai])));
     }
     let minY = Infinity;
-    for (let v = 0; v < V; v += 3) {           // 1 em cada 3 vértices basta (malha densa)
+    for (let v = 0; v < V; v += passoVertices) {
       let y = 0;
       for (let k = 0; k < 4; k++) {
         const w = malha.pesos[v * 4 + k];
