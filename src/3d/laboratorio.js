@@ -296,7 +296,7 @@ try {
       KOSim.passo(estado, [entrada | (pads?.[0]?.bits || 0), entrada2]);
       // Impactos e defesas agora são da camada SF4 (tinta); o módulo antigo
       // segue com cenoura, toca, poeira e Chuva de Cenouras.
-      efeitos.eventos(estado.ev.filter(e => e.t !== 'acerto' && e.t !== 'defendeu'), estado.f, estado);
+      efeitos.eventos(estado.ev.filter(e => e.t !== 'acerto' && e.t !== 'defendeu' && e.t !== 'especial'), estado.f, estado);
       sf4.eventos(estado.ev, estado);
       acumulado -= 1000 / 60; passos++;
     }

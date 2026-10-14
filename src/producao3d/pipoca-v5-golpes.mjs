@@ -177,16 +177,16 @@ export function criarGolpesV5(ossos, parado, simulador) {
   clips.k1 = animar('k1', 24, [
     { q: 0 },
     { q: 3, giro: -.25, inclinacao: .08, pelve: v(-.03, .02, 0), pernas: { E: { tornozelo: v(.42, .82, ZE + .12), joelho: v(1, .8, 0), pe: 'plano' } } },
-    { q: 6, giro: -.35, inclinacao: .16, pelve: v(.02, .03, 0), pernas: { E: { tornozelo: v(1.24, 1.02, ZE + .16), joelho: v(0, 1, 0), pe: 'esticado' } } },
-    { q: 8, giro: -.35, inclinacao: .16, pelve: v(.03, .03, 0), pernas: { E: { tornozelo: v(1.26, 1.02, ZE + .16), joelho: v(0, 1, 0), pe: 'esticado' } } },
+    { q: 6, giro: -.5, inclinacao: .26, pelve: v(.03, .03, 0), pernas: { E: { tornozelo: v(1.28, 1.02, ZE + .16), joelho: v(0, 1, 0), pe: 'esticado' } } },
+    { q: 8, giro: -.5, inclinacao: .26, pelve: v(.04, .03, 0), pernas: { E: { tornozelo: v(1.3, 1.02, ZE + .16), joelho: v(0, 1, 0), pe: 'esticado' } } },
     // Troca de pernas em 4 quadros (o motor fixa E em 6-8 e D em 12-14): a E
     // recolhe em arco por 2 quadros (antes descia 0,8 m em 1 só) e pousa; só
     // então a D dobra e estica. Sempre um pé no chão.
     { q: 9, giro: -.2, inclinacao: .1, pelve: v(.03, .02, 0), pernas: { E: { tornozelo: v(.78, .72, ZE + .13), joelho: v(1, 1, 0), pe: 'plano' } } },
     { q: 10, giro: .05, inclinacao: .06, pelve: v(.06, .01, 0) },
-    { q: 11, giro: .3, inclinacao: .1, pelve: v(.1, .02, 0), pernas: { D: { tornozelo: v(.38, .8, ZD - .1), joelho: v(1, 1, 0), pe: 'plano' } } },
-    { q: 12, giro: .45, inclinacao: .16, pelve: v(.14, .03, 0), pernas: { D: { tornozelo: v(1.0, 1.02, -.02), joelho: v(0, 1, 0), pe: 'esticado' } } },
-    { q: 14, giro: .45, inclinacao: .16, pelve: v(.15, .03, 0), pernas: { D: { tornozelo: v(1.02, 1.02, -.02), joelho: v(0, 1, 0), pe: 'esticado' } } },
+    { q: 11, giro: .45, inclinacao: .16, pelve: v(.1, .02, 0), pernas: { D: { tornozelo: v(.3, .98, ZD - .1), joelho: v(1, 1.3, 0), pe: 'plano' } } },
+    { q: 12, giro: .8, inclinacao: .32, pelve: v(.15, .03, 0), pernas: { D: { tornozelo: v(1.08, 1.02, -.02), joelho: v(0, 1, 0), pe: 'esticado' } } },
+    { q: 14, giro: .8, inclinacao: .32, pelve: v(.16, .03, 0), pernas: { D: { tornozelo: v(1.1, 1.02, -.02), joelho: v(0, 1, 0), pe: 'esticado' } } },
     { q: 17, giro: .25, inclinacao: .08, pelve: v(.08, .01, 0), pernas: { D: { tornozelo: v(.22, .72, ZD - .08), joelho: v(1, 1, 0), pe: 'plano' } } },
     { q: 20, giro: .05, inclinacao: .02, pelve: v(.01, 0, 0) },
     { q: 24 },

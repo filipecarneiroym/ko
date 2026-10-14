@@ -278,9 +278,8 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
       } else if (e.t === 'quebra') {
         const p = estado?.p?.[e.lado];
         if (p) { respingo(matEspecial, xMundo(p.x), yMundo(p.y) + 1.2, .6, 2.2, 18, 'quebra', .7); flashNasc = relogio; flashForca = .25; }
-      } else if (e.t === 'especial') {
-        const p = estado?.p?.[e.lado];
-        if (p) respingo(matEspecial, xMundo(p.x) + p.face * .7, yMundo(p.y) + 1.6, -.45, 1.3, 16, 'especial');
+      // Especial: nada no arremesso (só a cenoura em chamas voa, em
+      // brilho-golpes.js); o impacto vem no evento de acerto.
       } else if (e.t === 'super') {
         const p = estado?.p?.[e.lado];
         superLado = e.lado; superNasc = relogio;
@@ -341,9 +340,9 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
       s.malha.setEnabled(f >= 0 && f < 1);
       s.malha.scaling.setAll(1.1 + f * .5); s.malha.visibility = 1 - f * f;
     }
-    // Rastro: uma marca nova a cada 2 quadros atrás de cada cenoura em voo.
+    // Rastro de tinta atrás de projéteis (a cenoura usa só o fogo de brilho-golpes.js).
     for (const p of estado?.proj || []) {
-      if (p.tipo !== 'cenoura' || p.vida <= 0 || Math.floor(relogio) % 2) continue;
+      if (p.tipo === 'cenoura' || p.vida <= 0 || Math.floor(relogio) % 2) continue;
       const r = rastro[cursorRastro++ % rastro.length];
       if (r.ultimo === Math.floor(relogio)) continue;
       r.ultimo = Math.floor(relogio); r.nasc = relogio;

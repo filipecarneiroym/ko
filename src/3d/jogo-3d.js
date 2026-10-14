@@ -183,7 +183,7 @@ function criar(canvas, { cenario, lutadores, aoFalhar } = {}) {
     eventos(evs, s) {
       if (encerrado || !preparado) return;
       try {
-        efeitos.eventos(evs.filter(e => e.t !== 'acerto' && e.t !== 'defendeu'), s.f, s);
+        efeitos.eventos(evs.filter(e => e.t !== 'acerto' && e.t !== 'defendeu' && e.t !== 'especial'), s.f, s);
         sf4.eventos(evs, s);
       } catch (erro) { falhar(erro, 'efeitos'); }
     },

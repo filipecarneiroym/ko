@@ -35,7 +35,8 @@ function giros(l, simulador, golpe) {
     const p = Math.max(0, Math.min(1, (dados.pulo - l.vy) / (2 * dados.pulo) / .85));
     mortal = -Math.sign(l.vx * l.face) * Math.PI * 2 * suave(p);
   }
-  const janela = golpe && l.golpe === 'k2' && golpe.janelas?.[0];
+  // Chute forte e rasteira (como a do SF4) dão a volta inteira antes de soltar a perna.
+  const janela = golpe && (l.golpe === 'k2' || l.golpe === 'ck') && golpe.janelas?.[0];
   if (janela) volta = Math.PI * 2 * suave(Math.min(1, l.t / janela.de));
   return { mortal, volta };
 }

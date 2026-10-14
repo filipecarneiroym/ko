@@ -106,7 +106,7 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
       const no = modelo.osso?.(nome);
       if (!no) continue;
       const p = no.getAbsolutePosition(), f = p.x * l.face;
-      if (f > frente) { frente = f; melhor = p; }
+      if (f > frente) { frente = f; melhor = { p, nome }; }
     }
     return melhor;
   }
@@ -136,8 +136,10 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
         const janela = golpe?.janelas?.find(j => l.t >= j.de - 3 && l.t <= j.ate);
         const ativo = !!(modelo && janela && !l.sumido);
         if (ativo) {
-          const p = membro(modelo, l);
-          if (p) d.ponta.position.copyFrom(p);
+          const m = membro(modelo, l);
+          // Trocou de pé ou mão no meio do golpe: recomeça o rastro (sem linha ligando os dois).
+          if (m && d.ativo && d.membro !== m.nome) d.rastro.reset();
+          if (m) { d.ponta.position.copyFrom(m.p); d.membro = m.nome; }
           if (!d.ativo || d.janela !== janela) {
             const tipo = l.golpe === 'sup' ? 'super' : l.golpe === 'esp' ? 'especial' : FORTES.has(l.golpe) ? 'forte' : 'fraco';
             d.mat.emissiveColor = Color3.FromHexString(COR[tipo]);
@@ -147,9 +149,9 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
         } else if (d.ativo) { d.rastro.stop(); d.rastro.setEnabled(false); }
         d.ativo = ativo; d.janela = janela;
 
-        // Aura de fogo enquanto solta o especial/Super.
-        const queima = (l.golpe === 'esp' || l.golpe === 'sup') && l.estado === 'golpe' && !movimentoReduzido.matches;
-        d.aura.emitRate = queima ? (l.golpe === 'sup' ? 260 : 140) : 0;
+        // Aura de fogo só no Super (no especial, o fogo é o da cenoura).
+        const queima = l.golpe === 'sup' && l.estado === 'golpe' && !movimentoReduzido.matches;
+        d.aura.emitRate = queima ? 260 : 0;
         if (queima) d.aura.emitter.set((l.x / simulador.U - simulador.LARGURA / 2) / 24, l.y / simulador.U / 24 + 1.15, 0);
       });
     },
