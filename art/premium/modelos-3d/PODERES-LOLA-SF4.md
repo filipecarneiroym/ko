@@ -47,8 +47,12 @@ mãos, em vez de repetir deslocamentos relativos a ombros diferentes.
 Conforme a correção de Filipe, ambos os cotovelos guiam as mãos pela frente
 da barriga até o disparo, sem recolher um braço para trás do tronco.
 
-O projétil tem núcleo branco, envelope azul/ciano, filamentos curvos e rastro
-curto. A carga acompanha o centro das mãos antes do lançamento. Removidos
+O projétil usa oito fases de vapor azul/ciano, com bolsões claros, bordas
+irregulares e cinco volumes que se dispersam para trás. Substitui o contorno
+oval e os aros da primeira versão, conforme a referência enviada por Filipe.
+Uma textura compartilhada atende todos os volumes; os quadros do motor
+dirigem a animação, inclusive o congelamento no impacto. A carga acompanha
+o centro das mãos antes do lançamento. Removidos
 o fogo laranja desses três golpes e a rotação contínua da bola. O material
 não soma branco à textura, preservando suas cores. Dano, colisão, velocidade
 e quadros de lançamento permanecem definidos pelo motor.

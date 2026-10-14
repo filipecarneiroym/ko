@@ -38,6 +38,7 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
     const casos = [
       ['hadouken-preparo', 'esp', 5], ['hadouken-quadril', 'esp', 7],
       ['hadouken-disparo', 'esp', 10], ['hadouken-viagem', 'esp', 16],
+      ['hadouken-vapor', 'esp', 24],
       ['hadouken-invertido', 'esp', 16, -1],
       ['hadouken-preparo-invertido', 'esp', 7, -1],
       ['shoryuken-subida', 'dp', 8], ['shoryuken-apice', 'dp', 16],
@@ -81,6 +82,26 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
         for (const rotacao of visual.rotacoes) assert.equal(rotacao, face > 0 ? 0 : Math.PI, 'rastro aponta para trás');
       }
       await page.locator('canvas').screenshot({ path: path.join(saida, `${nome}.png`) });
+      if (nome === 'hadouken-viagem' || nome === 'hadouken-invertido') {
+        const vapor = await page.evaluate(async () => {
+          const lab = globalThis.__laboratorio3d, bola = lab.scene.getMeshByName('golpe-bola-0');
+          const nuvens = lab.scene.meshes.filter(m => m.name.startsWith('hadouken-fumaca-0-') && m.isEnabled());
+          const uvAntes = Array.from(bola.getVerticesData('uv'));
+          const atras = nuvens.every(m => (bola.position.x - m.position.x) * Math.sign(lab.estado.proj[0].vx) > 0);
+          KOSim.passo(lab.estado, [0, 0]); KOSim.passo(lab.estado, [0, 0]);
+          const estado = JSON.stringify(lab.estado);
+          await new Promise(resolve => lab.scene.onAfterRenderObservable.addOnce(() => resolve()));
+          const uvDepois = Array.from(bola.getVerticesData('uv'));
+          await new Promise(resolve => lab.scene.onAfterRenderObservable.addOnce(() => resolve()));
+          return { quantidade: nuvens.length, atras, uvAntes, uvDepois,
+            congelado: JSON.stringify(uvDepois) === JSON.stringify(Array.from(bola.getVerticesData('uv'))),
+            estadoPreservado: JSON.stringify(lab.estado) === estado };
+        });
+        assert.ok(vapor.quantidade >= 3 && vapor.quantidade <= 5, 'rastro formado por volumes de vapor conforme a idade do disparo');
+        assert.ok(vapor.atras, 'fumaça fica atrás do projétil nas duas direções');
+        assert.notDeepEqual(vapor.uvDepois, vapor.uvAntes, 'contorno do vapor muda durante o voo');
+        assert.ok(vapor.congelado && vapor.estadoPreservado, 'efeito congelado sem avançar o motor');
+      }
       if (golpe === 'espEx') assert.equal(await page.evaluate(() => globalThis.__laboratorio3d.scene.meshes.filter(m => m.name.startsWith('golpe-bola-') && m.isEnabled()).length), 2);
       console.log('OK', nome, JSON.stringify(resultado));
     }

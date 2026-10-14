@@ -43,28 +43,53 @@ function texturaChama(scene) {
   return t;
 }
 
-// Energia do Hadouken: núcleo branco, envelope ciano e filamentos para trás.
+// Oito fases de vapor azul: o contorno se desfaz, sem aro ou esfera rígida.
+// Atlas compartilhado; animar os UVs mantém todos os projéteis na mesma textura.
 function texturaBolaDeFogo(scene) {
-  const n = 256, c = n / 2, t = new DynamicTexture('golpe-bola-fogo', { width: n, height: n }, scene, true);
+  const n = 128, t = new DynamicTexture('hadouken-vapor', { width: n * 4, height: n * 2 }, scene, false);
   t.hasAlpha = true;
   const g = t.getContext();
-  g.clearRect(0, 0, n, n);
-  g.globalCompositeOperation = 'lighter';
-  g.save(); g.translate(c + 14, c); g.scale(1, .8);
-  const miolo = g.createRadialGradient(0, 0, 0, 0, 0, c * .8);
-  miolo.addColorStop(0, '#ffffff'); miolo.addColorStop(.3, '#eaffff');
-  miolo.addColorStop(.48, 'rgba(100,235,255,.95)'); miolo.addColorStop(.66, 'rgba(20,125,255,.65)'); miolo.addColorStop(1, 'rgba(0,60,255,0)');
-  g.fillStyle = miolo; g.fillRect(-c - 14, -c * 1.3, n, n * 1.3); g.restore();
-  for (let i = 0; i < 7; i++) {
-    const sinal = i % 2 ? -1 : 1, altura = 22 + i * 7;
-    const gr = g.createLinearGradient(12, 0, 208, 0);
-    gr.addColorStop(0, 'rgba(0,100,255,0)'); gr.addColorStop(.5, 'rgba(35,165,255,.5)'); gr.addColorStop(1, 'rgba(190,255,255,.9)');
-    g.strokeStyle = gr; g.lineWidth = 2 + i % 3; g.beginPath();
-    g.moveTo(12 + i * 4, c + sinal * altura * .65);
-    g.bezierCurveTo(80, c + sinal * altura * 1.5, 208, c + sinal * altura, 210, c + sinal * 8); g.stroke();
+  g.clearRect(0, 0, n * 4, n * 2);
+  function vapor(x, y, rx, ry, cor, alpha) {
+    g.save(); g.translate(x, y); g.scale(rx, ry);
+    const gr = g.createRadialGradient(0, 0, 0, 0, 0, 1);
+    gr.addColorStop(0, `rgba(${cor},${alpha})`);
+    gr.addColorStop(.48, `rgba(${cor},${alpha * .75})`);
+    gr.addColorStop(1, `rgba(${cor},0)`);
+    g.fillStyle = gr; g.fillRect(-1, -1, 2, 2); g.restore();
+  }
+  for (let fase = 0; fase < 8; fase++) {
+    g.save(); g.translate(fase % 4 * n, Math.floor(fase / 4) * n);
+    g.beginPath(); g.rect(2, 2, n - 4, n - 4); g.clip();
+    const t = fase * Math.PI / 4;
+    // Turbilhões azuis separados: a borda tem vazios, pontas e pequenas nuvens.
+    for (let i = 0; i < 15; i++) {
+      const a = i * 2.399, onda = Math.sin(t + i * 1.7);
+      vapor(77 + Math.cos(a) * (25 + onda * 6), 64 + Math.sin(a) * (30 + onda * 7),
+        15 + (i % 4) * 3, 13 + (i % 3) * 4, '15,120,255', .55);
+    }
+    for (let i = 0; i < 9; i++) {
+      const a = i * 2.399 + t * .6;
+      vapor(76 + Math.cos(a) * 17, 64 + Math.sin(a) * 22, 17, 15, '50,215,255', .7);
+    }
+    // Miolo quebrado em bolsões claros; não há disco branco uniforme.
+    for (let i = 0; i < 4; i++) {
+      const a = t + i * 1.8;
+      vapor(79 + Math.cos(a) * 8, 64 + Math.sin(a) * 12, 12, 11, '215,255,255', .85);
+    }
+    for (let i = 0; i < 6; i++) {
+      const x = 16 + i * 8, y = 64 + Math.sin(t + i * 1.5) * (23 - i * 2);
+      vapor(x, y, 12 + i, 7 + i, '25,155,255', .22 + i * .04);
+    }
+    g.restore();
   }
   t.update();
   return t;
+}
+
+function quadroVapor(malha, quadro) {
+  const fase = Math.floor(quadro / 2) % 8, u = fase % 4 / 4, v = Math.floor(fase / 4) / 2;
+  malha.updateVerticesData('uv', [u, v, u + .25, v, u + .25, v + .5, u, v + .5]);
 }
 
 export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matches: false }) {
@@ -86,21 +111,21 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
     return mat;
   }
   const bolas = [0, 1, 2, 3].map(dono => {
-    const malha = MeshBuilder.CreatePlane(`golpe-bola-${dono}`, { size: 1.9 }, scene);
+    const malha = MeshBuilder.CreatePlane(`golpe-bola-${dono}`, { size: 1.9, updatable: true }, scene);
     malha.material = materialBola(`golpe-bola-mat-${dono}`); malha.billboardMode = Mesh.BILLBOARDMODE_ALL; malha.isPickable = false; malha.setEnabled(false);
-    brilho.addIncludedOnlyMesh(malha); brilho.setEffectIntensity(malha, .55);
-    const fogo = new ParticleSystem(`golpe-bola-rastro-${dono}`, 200, scene);
-    fogo.particleTexture = texBola; fogo.blendMode = ParticleSystem.BLENDMODE_ADD;
-    fogo.emitter = new Vector3(0, -100, 0); fogo.createSphereEmitter(.09);
-    fogo.minEmitPower = .8; fogo.maxEmitPower = 1.4; fogo.gravity = Vector3.Zero();
-    fogo.minSize = .12; fogo.maxSize = .3; fogo.minLifeTime = .06; fogo.maxLifeTime = .14;
-    fogo.color1 = new Color4(.6, .95, 1, .7); fogo.color2 = new Color4(.15, .5, 1, .5); fogo.colorDead = new Color4(0, .15, .6, 0);
-    fogo.emitRate = 0; fogo.start();
-    return { malha, fogo };
+    brilho.addIncludedOnlyMesh(malha); brilho.setEffectIntensity(malha, .28);
+    const fumaca = Array.from({ length: 5 }, (_, i) => {
+      const m = MeshBuilder.CreatePlane(`hadouken-fumaca-${dono}-${i}`, { size: 1.9, updatable: true }, scene);
+      m.material = materialBola(`hadouken-fumaca-mat-${dono}-${i}`);
+      m.material.alpha = .28 * (1 - i / 6);
+      m.billboardMode = Mesh.BILLBOARDMODE_ALL; m.isPickable = false; m.setEnabled(false);
+      return m;
+    });
+    return { malha, fumaca };
   });
 
   const lados = [0, 1].map(lado => {
-    const carga = MeshBuilder.CreatePlane(`hadouken-carga-${lado}`, { size: 1 }, scene);
+    const carga = MeshBuilder.CreatePlane(`hadouken-carga-${lado}`, { size: 1, updatable: true }, scene);
     carga.material = materialBola(`hadouken-carga-mat-${lado}`);
     carga.billboardMode = Mesh.BILLBOARDMODE_ALL; carga.isPickable = false; carga.setEnabled(false);
     brilho.addIncludedOnlyMesh(carga); brilho.setEffectIntensity(carga, .45);
@@ -157,8 +182,9 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
   // Chuva de Cenouras do Final: as que estão caindo ganham a mesma bola de fogo.
   const matChuva = materialBola('golpe-chuva-mat');
   const chamasChuva = Array.from({ length: 8 }, (_, i) => {
-    const m = MeshBuilder.CreatePlane(`golpe-chuva-fogo-${i}`, { size: .9 }, scene);
+    const m = MeshBuilder.CreatePlane(`golpe-chuva-fogo-${i}`, { size: .9, updatable: true }, scene);
     m.material = matChuva; m.billboardMode = Mesh.BILLBOARDMODE_ALL; m.isPickable = false; m.setEnabled(false);
+    quadroVapor(m, 0);
     brilho.addIncludedOnlyMesh(m);
     return m;
   });
@@ -180,17 +206,25 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
       bolas.forEach((b, indice) => {
         const p = projeteis[indice];
         b.malha.setEnabled(!!p);
-        b.fogo.emitRate = p && !movimentoReduzido.matches ? 90 : 0;
+        b.fumaca.forEach(m => m.setEnabled(false));
         if (!p) return;
         const x = xMundo(p.x), y = yMundo(p.y);
         // Envelope orientado na direção do disparo; pulsação discreta.
         b.malha.position.set(x, y, -.04);
-        const tamanho = (p.ultra ? 1.65 : p.ex ? 1.15 : 1) * (1 + .035 * Math.sin(p.t * .9));
-        b.malha.scaling.set(.66 * tamanho, .54 * tamanho, 1);
+        const tamanho = p.ultra ? 1.65 : p.ex ? 1.15 : 1;
+        b.malha.scaling.set(.9 * tamanho, .74 * tamanho, 1);
+        quadroVapor(b.malha, movimentoReduzido.matches ? 0 : p.t);
         b.malha.material.emissiveColor = Color3.Black();
         b.malha.rotation.z = p.vx >= 0 ? 0 : Math.PI;
-        b.fogo.emitter.set(x - Math.sign(p.vx || 1) * .15, y, -.1);
-        b.fogo.direction1 = new Vector3(-Math.sign(p.vx || 1), -.12, 0); b.fogo.direction2 = new Vector3(-Math.sign(p.vx || 1) * 1.8, .12, 0);
+        b.fumaca.forEach((m, i) => {
+          const atraso = (i + 1) * 1.4;
+          if (movimentoReduzido.matches || p.t <= atraso) return;
+          m.setEnabled(true);
+          m.position.set(x - p.vx / U / 24 * atraso, y + Math.sin(p.t * .6 + i * 2) * .07 * (i + 1), .02 + i * .005);
+          m.scaling.set((.68 + i * .035) * tamanho, (.5 + i * .035) * tamanho, 1);
+          m.rotation.z = b.malha.rotation.z;
+          quadroVapor(m, p.t + i * 3);
+        });
       });
       estado.p.forEach((l, i) => {
         const d = lados[i], modelo = modelos[i];
@@ -207,6 +241,7 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
             d.carga.position.copyFrom(Vector3.Center(maos[0].getAbsolutePosition(), maos[1].getAbsolutePosition()));
             d.carga.position.z -= .22;
             d.carga.scaling.setAll(.34 + .18 * l.t / solta);
+            quadroVapor(d.carga, movimentoReduzido.matches ? 0 : l.t);
           } else d.carga.setEnabled(false);
         }
         const golpe = l.estado === 'golpe' && simulador.LUTADORES[l.id]?.golpes[l.golpe];
@@ -249,11 +284,11 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
         if (queima) d.aura.emitter.set((l.x / simulador.U - simulador.LARGURA / 2) / 24, l.y / simulador.U / 24 + 1.15, 0);
       });
     },
-    limpar() { for (const b of bolas) { b.malha.setEnabled(false); b.fogo.emitRate = 0; b.fogo.reset(); } for (const d of lados) { d.carga.setEnabled(false); d.rastro.stop(); d.rastro.setEnabled(false); d.ativo = false; d.aura.emitRate = 0; d.aura.reset(); d.foco.emitRate = 0; d.foco.reset(); d.nevoa.emitRate = 0; d.nevoa.reset(); } },
+    limpar() { for (const b of bolas) { b.malha.setEnabled(false); b.fumaca.forEach(m => m.setEnabled(false)); } for (const d of lados) { d.carga.setEnabled(false); d.rastro.stop(); d.rastro.setEnabled(false); d.ativo = false; d.aura.emitRate = 0; d.aura.reset(); d.foco.emitRate = 0; d.foco.reset(); d.nevoa.emitRate = 0; d.nevoa.reset(); } },
     descartar() {
       tintaFoco.dispose();
       for (const d of lados) { d.carga.material.dispose(); d.carga.dispose(); d.nevoa.dispose(); d.foco.dispose(); d.aura.dispose(); d.rastro.dispose(); d.mat.dispose(); d.ponta.dispose(); }
-      for (const b of bolas) { b.fogo.dispose(); b.malha.material.dispose(); b.malha.dispose(); }
+      for (const b of bolas) { for (const m of b.fumaca) { m.material.dispose(); m.dispose(); } b.malha.material.dispose(); b.malha.dispose(); }
       for (const m of chamasChuva) m.dispose();
       matChuva.dispose();
       texBola.dispose(); chama.dispose(); brilho.dispose();
