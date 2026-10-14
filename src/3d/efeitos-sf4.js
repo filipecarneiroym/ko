@@ -205,19 +205,23 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
   const faiscas = sistema('sf4-faiscas', texFaisca, '#ffe6a0ff', '#ff7a1cff');
   const faiscasFrias = sistema('sf4-faiscas-frias', texFaiscaFria, '#e8fbffff', '#4fb8ffff');
   function explodir(ps, x, y, z, n) { ps.emitter = new Vector3(x, y, z); ps.manualEmitCount = n; }
-  const fumaca = new ParticleSystem('sf4-fumaca', 120, scene);
-  fumaca.particleTexture = texturaFumaca(scene); fumaca.blendMode = ParticleSystem.BLENDMODE_STANDARD;
-  fumaca.color1 = new Color4(1, 1, 1, .55); fumaca.color2 = new Color4(.85, .82, .8, .45); fumaca.colorDead = new Color4(.8, .78, .76, 0);
-  fumaca.minSize = .35; fumaca.maxSize = .8; fumaca.minLifeTime = .35; fumaca.maxLifeTime = .75;
-  fumaca.minEmitPower = .4; fumaca.maxEmitPower = 1.3; fumaca.gravity = new Vector3(0, .9, 0);
-  fumaca.minAngularSpeed = -1.5; fumaca.maxAngularSpeed = 1.5;
-  fumaca.addSizeGradient(0, .5); fumaca.addSizeGradient(1, 1.6);
-  fumaca.createSphereEmitter(.15); fumaca.emitRate = 0; fumaca.manualEmitCount = 0; fumaca.renderingGroupId = 1;
-  fumaca.start();
-  // Névoa azul da defesa.
-  const fumacaFria = fumaca.clone('sf4-fumaca-fria');
-  fumacaFria.color1 = new Color4(.75, .88, 1, .55); fumacaFria.color2 = new Color4(.45, .65, 1, .45); fumacaFria.colorDead = new Color4(.4, .55, 1, 0);
-  fumacaFria.blendMode = ParticleSystem.BLENDMODE_ADD; fumacaFria.emitRate = 0; fumacaFria.manualEmitCount = 0; fumacaFria.start();
+  // Fumaça branca (impacto) e névoa azul (defesa): mesma textura, sem clone
+  // (o clone de textura dinâmica nunca ficava pronto e travava o carregamento).
+  const texFumaca = texturaFumaca(scene);
+  const nuvem = (nome, c1, c2, c3, blend) => {
+    const ps = new ParticleSystem(nome, 120, scene);
+    ps.particleTexture = texFumaca; ps.blendMode = blend;
+    ps.color1 = c1; ps.color2 = c2; ps.colorDead = c3;
+    ps.minSize = .35; ps.maxSize = .8; ps.minLifeTime = .35; ps.maxLifeTime = .75;
+    ps.minEmitPower = .4; ps.maxEmitPower = 1.3; ps.gravity = new Vector3(0, .9, 0);
+    ps.minAngularSpeed = -1.5; ps.maxAngularSpeed = 1.5;
+    ps.addSizeGradient(0, .5); ps.addSizeGradient(1, 1.6);
+    ps.createSphereEmitter(.15); ps.emitRate = 0; ps.manualEmitCount = 0; ps.renderingGroupId = 1;
+    ps.start();
+    return ps;
+  };
+  const fumaca = nuvem('sf4-fumaca', new Color4(1, 1, 1, .55), new Color4(.85, .82, .8, .45), new Color4(.8, .78, .76, 0), ParticleSystem.BLENDMODE_STANDARD);
+  const fumacaFria = nuvem('sf4-fumaca-fria', new Color4(.75, .88, 1, .55), new Color4(.45, .65, 1, .45), new Color4(.4, .55, 1, 0), ParticleSystem.BLENDMODE_ADD);
 
   // Escudo de defesa (anel com hexágonos, voltado para a câmera).
   const escudos = Array.from({ length: 4 }, (_, i) => ({ malha: plano(`sf4-escudo-${i}`, matEscudo, 1), nasc: -1e9 }));
