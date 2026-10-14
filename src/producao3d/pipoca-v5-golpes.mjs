@@ -172,8 +172,14 @@ export function criarGolpesV5(ossos, parado, simulador) {
           const bb = BRACOS[lado], guardaAlvo = fk[bb.mao].subtract(fk[bb.braco]), guardaCot = fk[bb.antebraco].subtract(fk[bb.braco]);
           const ba = a.bracos?.[lado], bz = b.bracos?.[lado];
           if (!ba && !bz) continue;
+          // Alvo comum no corpo: as duas luvas precisam chegar ao mesmo gesto,
+          // não a dois pontos iguais relativos a ombros separados. A IK continua
+          // recebendo vetores ombro→punho, depois de converter o alvo anatômico.
+          const alvo = chave => chave?.alvoCorpo
+            ? chave.alvoCorpo.add(pose.pelve).subtract(fk[bb.braco])
+            : chave?.alvo ?? guardaAlvo;
           pose.bracos[lado] = {
-            alvo: lerpV(ba?.alvo ?? guardaAlvo, bz?.alvo ?? guardaAlvo, t),
+            alvo: lerpV(alvo(ba), alvo(bz), t),
             cotovelo: lerpV(ba?.cotovelo ?? guardaCot, bz?.cotovelo ?? guardaCot, t),
           };
         }
@@ -300,15 +306,22 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 22 },
   ]);
 
-  // esp (hadouken): as duas mãos se juntam na frente do corpo (carregando), e no
-  // quadro 10 empurram para frente; a bola sai da união das mãos, na altura do peito.
-  const juntas = (x, y) => ({ bracos: { E: { alvo: v(x, y, -.06), cotovelo: v(-.2, -.6, -1) }, D: { alvo: v(x, y, .06), cotovelo: v(-.2, -.6, 1) } } });
+  // Referência: videoplayback.mp4, ~5:53. Duas mãos recolhem ao lado do
+  // quadril, o tronco enrola e ambas empurram para a frente. Nunca sobem por
+  // cima da cabeça. As luvas deixam espaço para o núcleo entre elas.
+  const juntas = (x, y, z = 0) => ({ bracos: {
+    E: { alvoCorpo: v(x, y + .025, z - .08), cotovelo: v(.2, -.5, 1) },
+    D: { alvoCorpo: v(x, y - .025, z + .08), cotovelo: v(.2, -.5, 1) },
+  } });
   clips.esp = animar('esp', 30, [
     { q: 0 },
-    { q: 5, inclinacao: .05, pelve: v(-.02, -.12, 0), ...juntas(.28, -.4) },
-    { q: 10, inclinacao: .12, ...juntas(.8, -.4) },
-    { q: 16, inclinacao: .08, ...juntas(.6, -.38) },
-    { q: 24, ...juntas(.25, -.45) },
+    { q: 3, giro: -.12, inclinacao: -.02, pelve: v(-.02, -.06, 0), ...juntas(.08, 1.45, .22) },
+    { q: 5, giro: -.28, inclinacao: .03, pelve: v(-.04, -.10, 0), ...juntas(.10, 1.40, .43) },
+    { q: 7, giro: -.24, inclinacao: .02, pelve: v(-.04, -.10, 0), ...juntas(.10, 1.40, .43) },
+    // As duas emissões do EX (q10/q16) partem da união das luvas.
+    { q: 10, giro: .16, inclinacao: -.12, pelve: v(.03, -.04, 0), ...juntas(.72, 1.54) },
+    { q: 16, giro: .16, inclinacao: -.10, pelve: v(.03, -.04, 0), ...juntas(.72, 1.54) },
+    { q: 21, giro: .04, inclinacao: -.04, pelve: v(0, -.02, 0), ...juntas(.30, 1.52, -.05) },
     { q: 30 },
   ]);
 
@@ -350,11 +363,11 @@ export function criarGolpesV5(ossos, parado, simulador) {
   clips.espEx = copiarTempo(clips.esp, 'espEx', 30);
   clips.dpEx = copiarTempo(clips.dp, 'dpEx', 44);
   clips.ultra = animar('ultra', 70, [
-    { q: 0 }, { q: 8, pelve: v(-.08, -.18, 0), inclinacao: .12, ...juntas(.18, -.45) },
-    { q: 20, pelve: v(-.10, -.22, 0), inclinacao: .16, ...juntas(.20, -.42) },
-    { q: 25, pelve: v(.08, -.10, 0), inclinacao: .18, ...juntas(.88, -.38) },
-    { q: 38, pelve: v(.04, -.08, 0), inclinacao: .12, ...juntas(.82, -.38) },
-    { q: 55, ...juntas(.30, -.42) }, { q: 70 },
+    { q: 0 }, { q: 8, giro: -.32, pelve: v(-.08, -.18, 0), inclinacao: .03, ...juntas(.12, 1.50, .43) },
+    { q: 20, giro: -.36, pelve: v(-.10, -.22, 0), inclinacao: .04, ...juntas(.14, 1.54, .43) },
+    { q: 25, giro: .20, pelve: v(.08, -.10, 0), inclinacao: -.14, ...juntas(.67, 1.60) },
+    { q: 38, giro: .18, pelve: v(.04, -.08, 0), inclinacao: -.12, ...juntas(.71, 1.58) },
+    { q: 55, giro: .04, ...juntas(.30, 1.52, -.05) }, { q: 70 },
   ]);
   clips.foc = animar('foc', 34, [
     { q: 0 }, { q: 6, giro: -.2, inclinacao: .06, pelve: v(-.04, -.08, 0) },

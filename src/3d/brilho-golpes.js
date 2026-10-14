@@ -16,7 +16,7 @@ import { quedasDoFinal } from './estado-visual.mjs';
 // especial/Super), aura de fogo no especial e no Super e uma camada de brilho
 // que faz faíscas e rastros "vazarem" luz. Só visual: lê o estado do motor.
 const COR = {
-  fraco: '#bfe9ff', forte: '#ff7a1c', especial: '#ff9a2a', super: '#ffd84a',
+  fraco: '#bfe9ff', forte: '#ff7a1c', especial: '#75eaff', super: '#ffd84a',
 };
 const FORTES = new Set(['p2', 'k2']);
 const CHUTES = new Set(['k1', 'k2', 'ck', 'ak', 'tatsu', 'tatsuEx']);
@@ -43,25 +43,26 @@ function texturaChama(scene) {
   return t;
 }
 
-// Bola de fogo do especial (como o hadouken): miolo branco, corpo laranja e
-// línguas de chama em volta.
+// Energia do Hadouken: núcleo branco, envelope ciano e filamentos para trás.
 function texturaBolaDeFogo(scene) {
   const n = 256, c = n / 2, t = new DynamicTexture('golpe-bola-fogo', { width: n, height: n }, scene, true);
   t.hasAlpha = true;
   const g = t.getContext();
   g.clearRect(0, 0, n, n);
   g.globalCompositeOperation = 'lighter';
-  for (let i = 0; i < 14; i++) {
-    const a = i / 14 * Math.PI * 2, comp = c * (.62 + (i % 3) * .1);
-    g.save(); g.translate(c, c); g.rotate(a);
-    const gr = g.createLinearGradient(0, 0, comp, 0);
-    gr.addColorStop(0, 'rgba(255,200,90,.9)'); gr.addColorStop(.6, 'rgba(255,90,20,.5)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
-    g.fillStyle = gr; g.beginPath(); g.moveTo(0, -c * .14); g.quadraticCurveTo(comp * .7, -c * .1, comp, 0); g.quadraticCurveTo(comp * .7, c * .1, 0, c * .14); g.fill();
-    g.restore();
+  g.save(); g.translate(c + 14, c); g.scale(1, .8);
+  const miolo = g.createRadialGradient(0, 0, 0, 0, 0, c * .8);
+  miolo.addColorStop(0, '#ffffff'); miolo.addColorStop(.3, '#eaffff');
+  miolo.addColorStop(.48, 'rgba(100,235,255,.95)'); miolo.addColorStop(.66, 'rgba(20,125,255,.65)'); miolo.addColorStop(1, 'rgba(0,60,255,0)');
+  g.fillStyle = miolo; g.fillRect(-c - 14, -c * 1.3, n, n * 1.3); g.restore();
+  for (let i = 0; i < 7; i++) {
+    const sinal = i % 2 ? -1 : 1, altura = 22 + i * 7;
+    const gr = g.createLinearGradient(12, 0, 208, 0);
+    gr.addColorStop(0, 'rgba(0,100,255,0)'); gr.addColorStop(.5, 'rgba(35,165,255,.5)'); gr.addColorStop(1, 'rgba(190,255,255,.9)');
+    g.strokeStyle = gr; g.lineWidth = 2 + i % 3; g.beginPath();
+    g.moveTo(12 + i * 4, c + sinal * altura * .65);
+    g.bezierCurveTo(80, c + sinal * altura * 1.5, 208, c + sinal * altura, 210, c + sinal * 8); g.stroke();
   }
-  const miolo = g.createRadialGradient(c, c, 0, c, c, c * .55);
-  miolo.addColorStop(0, '#ffffff'); miolo.addColorStop(.25, '#fff0a0'); miolo.addColorStop(.6, 'rgba(255,120,30,.75)'); miolo.addColorStop(1, 'rgba(0,0,0,0)');
-  g.fillStyle = miolo; g.fillRect(0, 0, n, n);
   t.update();
   return t;
 }
@@ -80,24 +81,29 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
     // deixava scene.whenReadyAsync esperando uma textura nunca atualizada.
     const mat = new StandardMaterial(nome, scene);
     mat.disableLighting = true; mat.emissiveTexture = texBola; mat.opacityTexture = texBola;
-    mat.diffuseColor = new Color3(0, 0, 0); mat.backFaceCulling = false; mat.alphaMode = Constants.ALPHA_ADD;
+    mat.diffuseColor = new Color3(0, 0, 0); mat.specularColor = Color3.Black();
+    mat.emissiveColor = Color3.Black(); mat.backFaceCulling = false; mat.alphaMode = Constants.ALPHA_ADD;
     return mat;
   }
   const bolas = [0, 1, 2, 3].map(dono => {
     const malha = MeshBuilder.CreatePlane(`golpe-bola-${dono}`, { size: 1.9 }, scene);
     malha.material = materialBola(`golpe-bola-mat-${dono}`); malha.billboardMode = Mesh.BILLBOARDMODE_ALL; malha.isPickable = false; malha.setEnabled(false);
-    brilho.addIncludedOnlyMesh(malha);
+    brilho.addIncludedOnlyMesh(malha); brilho.setEffectIntensity(malha, .55);
     const fogo = new ParticleSystem(`golpe-bola-rastro-${dono}`, 200, scene);
-    fogo.particleTexture = chama; fogo.blendMode = ParticleSystem.BLENDMODE_ADD;
-    fogo.emitter = new Vector3(0, -100, 0); fogo.createSphereEmitter(.18);
-    fogo.minEmitPower = .3; fogo.maxEmitPower = .9; fogo.gravity = new Vector3(0, .8, 0);
-    fogo.minSize = .32; fogo.maxSize = .75; fogo.minLifeTime = .15; fogo.maxLifeTime = .4;
-    fogo.color1 = new Color4(1, .85, .4, .9); fogo.color2 = new Color4(1, .4, .1, .8); fogo.colorDead = new Color4(.3, 0, 0, 0);
+    fogo.particleTexture = texBola; fogo.blendMode = ParticleSystem.BLENDMODE_ADD;
+    fogo.emitter = new Vector3(0, -100, 0); fogo.createSphereEmitter(.09);
+    fogo.minEmitPower = .8; fogo.maxEmitPower = 1.4; fogo.gravity = Vector3.Zero();
+    fogo.minSize = .12; fogo.maxSize = .3; fogo.minLifeTime = .06; fogo.maxLifeTime = .14;
+    fogo.color1 = new Color4(.6, .95, 1, .7); fogo.color2 = new Color4(.15, .5, 1, .5); fogo.colorDead = new Color4(0, .15, .6, 0);
     fogo.emitRate = 0; fogo.start();
     return { malha, fogo };
   });
 
   const lados = [0, 1].map(lado => {
+    const carga = MeshBuilder.CreatePlane(`hadouken-carga-${lado}`, { size: 1 }, scene);
+    carga.material = materialBola(`hadouken-carga-mat-${lado}`);
+    carga.billboardMode = Mesh.BILLBOARDMODE_ALL; carga.isPickable = false; carga.setEnabled(false);
+    brilho.addIncludedOnlyMesh(carga); brilho.setEffectIntensity(carga, .45);
     const ponta = new TransformNode(`golpe-ponta-${lado}`, scene);
     const rastro = new TrailMesh(`golpe-rastro-${lado}`, ponta, scene, { diameter: .16, length: 9, autoStart: false });
     const mat = new StandardMaterial(`golpe-rastro-mat-${lado}`, scene);
@@ -132,7 +138,7 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
     foco.minSize = .35; foco.maxSize = .75; foco.minLifeTime = .25; foco.maxLifeTime = .5;
     foco.color1 = new Color4(1, 1, 1, .85); foco.color2 = new Color4(.8, .85, 1, .7); foco.colorDead = new Color4(.5, .5, .7, 0);
     foco.emitRate = 0; foco.start();
-    return { ponta, rastro, mat, aura, foco, nevoa, ativo: false };
+    return { carga, ponta, rastro, mat, aura, foco, nevoa, ativo: false };
   });
 
   // O membro que bate é o mais esticado para a frente (mão ou pé).
@@ -174,19 +180,35 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
       bolas.forEach((b, indice) => {
         const p = projeteis[indice];
         b.malha.setEnabled(!!p);
-        b.fogo.emitRate = p && !movimentoReduzido.matches ? 160 : 0;
+        b.fogo.emitRate = p && !movimentoReduzido.matches ? 90 : 0;
         if (!p) return;
         const x = xMundo(p.x), y = yMundo(p.y);
-        // Atrás da cenoura (z maior = mais longe da câmera), pulsando e girando.
+        // Envelope orientado na direção do disparo; pulsação discreta.
         b.malha.position.set(x, y, -.04);
-        b.malha.scaling.setAll((p.ultra ? 2.2 : p.ex ? 1.15 : 1) * (1 + .12 * Math.sin(p.t * .9)));
-        b.malha.material.emissiveColor = p.ultra ? new Color3(.8, .4, 1) : p.ex ? new Color3(1, .95, .35) : new Color3(1, 1, 1);
-        b.malha.rotation.z = p.t * .35;
+        const tamanho = (p.ultra ? 1.65 : p.ex ? 1.15 : 1) * (1 + .035 * Math.sin(p.t * .9));
+        b.malha.scaling.set(.66 * tamanho, .54 * tamanho, 1);
+        b.malha.material.emissiveColor = Color3.Black();
+        b.malha.rotation.z = p.vx >= 0 ? 0 : Math.PI;
         b.fogo.emitter.set(x - Math.sign(p.vx || 1) * .15, y, -.1);
-        b.fogo.direction1 = new Vector3(-Math.sign(p.vx || 1) * 2.2, -.3, 0); b.fogo.direction2 = new Vector3(-Math.sign(p.vx || 1) * 3, .4, 0);
+        b.fogo.direction1 = new Vector3(-Math.sign(p.vx || 1), -.12, 0); b.fogo.direction2 = new Vector3(-Math.sign(p.vx || 1) * 1.8, .12, 0);
       });
       estado.p.forEach((l, i) => {
         const d = lados[i], modelo = modelos[i];
+        const hadouken = ['esp', 'espEx', 'ultra'].includes(l.golpe);
+        const solta = l.golpe === 'ultra' ? 25 : 10;
+        d.carga.setEnabled(!!modelo && hadouken && l.estado === 'golpe' && l.t >= 4 && l.t < solta && !l.sumido);
+        if (d.carga.isEnabled()) {
+          const maos = ['mao_E', 'mao_D'].map(nome => modelo.osso?.(nome));
+          if (maos.every(Boolean)) {
+            for (const no of maos) {
+              const cadeia = []; for (let p = no; p; p = p.parent) cadeia.push(p);
+              for (const p of cadeia.reverse()) p.computeWorldMatrix(true);
+            }
+            d.carga.position.copyFrom(Vector3.Center(maos[0].getAbsolutePosition(), maos[1].getAbsolutePosition()));
+            d.carga.position.z -= .22;
+            d.carga.scaling.setAll(.34 + .18 * l.t / solta);
+          } else d.carga.setEnabled(false);
+        }
         const golpe = l.estado === 'golpe' && simulador.LUTADORES[l.id]?.golpes[l.golpe];
         // Só durante o golpe de verdade (cada janela: chute duplo tem duas, uma
         // por perna) e um pouco antes; some quando a perna começa a voltar.
@@ -203,11 +225,11 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
             d.ponta.position.copyFrom(m.p); d.membro = m.nome;
           }
           if (!d.ativo || d.janela !== janela) {
-            const tipo = l.golpe === 'sup' ? 'super' : l.golpe === 'esp' ? 'especial' : FORTES.has(l.golpe) ? 'forte' : 'fraco';
+            const tipo = l.golpe === 'sup' ? 'super' : hadouken ? 'especial' : FORTES.has(l.golpe) ? 'forte' : 'fraco';
             d.mat.emissiveColor = Color3.FromHexString(COR[tipo]);
             d.rastro.diameter = tipo === 'fraco' ? .12 : .2;
             d.rastro.reset(); d.rastro.setEnabled(true); d.rastro.start();
-            const fogo = tipo !== 'fraco';
+            const fogo = tipo !== 'fraco' && !hadouken;
             d.nevoa.color1 = fogo ? new Color4(1, .78, .35, .8) : new Color4(.8, .92, 1, .6);
             d.nevoa.color2 = fogo ? new Color4(1, .38, .1, .6) : new Color4(.5, .7, 1, .45);
             d.nevoa.colorDead = new Color4(0, 0, 0, 0);
@@ -221,16 +243,16 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
         const carregando = l.estado === 'golpe' && l.golpe === 'foc' && l.t < 19 && !movimentoReduzido.matches;
         d.foco.emitRate = carregando ? 140 + (l.nivelFoco || 1) * 65 : 0;
         if (carregando) d.foco.emitter.set((l.x / simulador.U - simulador.LARGURA / 2) / 24, l.y / simulador.U / 24 + 1.15, 0);
-        // Aura de fogo só no Super (no especial, o fogo é o da cenoura).
-        const queima = (['sup', 'ultra'].includes(l.golpe) || /Ex$/.test(l.golpe || '')) && l.estado === 'golpe' && !movimentoReduzido.matches;
+        // Hadouken carrega energia nas mãos; aura de fogo fica nos outros poderes.
+        const queima = !hadouken && (l.golpe === 'sup' || /Ex$/.test(l.golpe || '')) && l.estado === 'golpe' && !movimentoReduzido.matches;
         d.aura.emitRate = queima ? 260 : 0;
         if (queima) d.aura.emitter.set((l.x / simulador.U - simulador.LARGURA / 2) / 24, l.y / simulador.U / 24 + 1.15, 0);
       });
     },
-    limpar() { for (const b of bolas) { b.malha.setEnabled(false); b.fogo.emitRate = 0; b.fogo.reset(); } for (const d of lados) { d.rastro.stop(); d.rastro.setEnabled(false); d.ativo = false; d.aura.emitRate = 0; d.aura.reset(); d.foco.emitRate = 0; d.foco.reset(); d.nevoa.emitRate = 0; d.nevoa.reset(); } },
+    limpar() { for (const b of bolas) { b.malha.setEnabled(false); b.fogo.emitRate = 0; b.fogo.reset(); } for (const d of lados) { d.carga.setEnabled(false); d.rastro.stop(); d.rastro.setEnabled(false); d.ativo = false; d.aura.emitRate = 0; d.aura.reset(); d.foco.emitRate = 0; d.foco.reset(); d.nevoa.emitRate = 0; d.nevoa.reset(); } },
     descartar() {
       tintaFoco.dispose();
-      for (const d of lados) { d.nevoa.dispose(); d.foco.dispose(); d.aura.dispose(); d.rastro.dispose(); d.mat.dispose(); d.ponta.dispose(); }
+      for (const d of lados) { d.carga.material.dispose(); d.carga.dispose(); d.nevoa.dispose(); d.foco.dispose(); d.aura.dispose(); d.rastro.dispose(); d.mat.dispose(); d.ponta.dispose(); }
       for (const b of bolas) { b.fogo.dispose(); b.malha.material.dispose(); b.malha.dispose(); }
       for (const m of chamasChuva) m.dispose();
       matChuva.dispose();

@@ -36,31 +36,50 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
       .filter(m => m.name.startsWith('golpe-bola-')).map(m => m.material.emissiveTexture)).size), 1,
       'projéteis compartilham uma textura pronta, sem clones dinâmicos vazios');
     const casos = [
+      ['hadouken-preparo', 'esp', 5], ['hadouken-quadril', 'esp', 7],
+      ['hadouken-disparo', 'esp', 10], ['hadouken-viagem', 'esp', 16],
+      ['hadouken-invertido', 'esp', 16, -1],
+      ['hadouken-preparo-invertido', 'esp', 7, -1],
       ['shoryuken-subida', 'dp', 8], ['shoryuken-apice', 'dp', 16],
       ['furacao', 'tatsu', 12], ['furacao-volta', 'tatsu', 22],
       ['hadouken-ex', 'espEx', 16], ['shoryuken-ex', 'dpEx', 12], ['furacao-ex', 'tatsuEx', 21],
       ['super-toca', 'sup', 46], ['ultra-carga', 'ultra', 18], ['ultra-projetil', 'ultra', 25], ['focus-carga', 'foc', 30],
     ];
-    for (const [nome, golpe, quadro] of casos) {
-      const resultado = await page.evaluate(({ golpe, quadro }) => {
+    for (const [nome, golpe, quadro, face = 1] of casos) {
+      if (process.env.KO_HADOUKEN && !['esp', 'espEx', 'ultra'].includes(golpe)) continue;
+      const resultado = await page.evaluate(async ({ golpe, quadro, face }) => {
         const lab = globalThis.__laboratorio3d; lab.pausado = true;
         const novo = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: true }); novo.fase = 'luta'; novo.fT = 0;
-        novo.p[0].x = 80 * KOSim.U; novo.p[1].x = 300 * KOSim.U;
+        novo.p[0].x = (face > 0 ? 80 : 300) * KOSim.U; novo.p[1].x = (face > 0 ? 300 : 80) * KOSim.U;
+        novo.p[0].face = face; novo.p[1].face = -face;
         novo.p[0].poder = KOSim.PODER_MAX; novo.p[0].revanche = KOSim.ULTRA_MAX;
         Object.assign(lab.estado, novo);
         const B = KOSim.B;
-        const comandos = { dp: B.R | B.S, tatsu: B.L | B.S, espEx: B.S | B.P, dpEx: B.R | B.S | B.P,
+        const comandos = { esp: B.S, dp: B.R | B.S, tatsu: B.L | B.S, espEx: B.S | B.P, dpEx: B.R | B.S | B.P,
           tatsuEx: B.L | B.S | B.P, sup: B.S | B.K, ultra: B.S | B.F, foc: B.F };
         KOSim.passo(lab.estado, [comandos[golpe], 0]);
         let guarda = 0;
         while ((golpe === 'foc' ? lab.estado.p[0].focoCarga < quadro : lab.estado.p[0].t < quadro) && guarda++ < 180)
           KOSim.passo(lab.estado, [golpe === 'foc' ? B.F : 0, 0]);
+        await new Promise(resolve => lab.scene.onAfterRenderObservable.addOnce(() => resolve()));
         return { golpe: lab.estado.p[0].golpe, altura: lab.estado.p[0].y, proj: lab.estado.proj.length };
-      }, { golpe, quadro });
+      }, { golpe, quadro, face });
       assert.equal(resultado.golpe, golpe);
       if (golpe.startsWith('dp')) assert.ok(resultado.altura > 0);
       if (golpe === 'espEx') assert.equal(resultado.proj, 2);
       await page.waitForTimeout(500);
+      if (['esp', 'espEx', 'ultra'].includes(golpe)) {
+        const visual = await page.evaluate(() => {
+          const scene = globalThis.__laboratorio3d.scene;
+          const bolas = scene.meshes.filter(m => m.name.startsWith('golpe-bola-') && m.isEnabled());
+          return { carga: scene.getMeshByName('hadouken-carga-0').isEnabled(),
+            brancoSomado: bolas.some(m => m.material.emissiveColor.asArray().some(c => c > 0)),
+            rotacoes: bolas.map(m => m.rotation.z) };
+        });
+        assert.equal(visual.carga, quadro < (golpe === 'ultra' ? 25 : 10), 'carga só antes do disparo');
+        assert.equal(visual.brancoSomado, false, 'preservar azul da textura sem saturar tudo em branco');
+        for (const rotacao of visual.rotacoes) assert.equal(rotacao, face > 0 ? 0 : Math.PI, 'rastro aponta para trás');
+      }
       await page.locator('canvas').screenshot({ path: path.join(saida, `${nome}.png`) });
       if (golpe === 'espEx') assert.equal(await page.evaluate(() => globalThis.__laboratorio3d.scene.meshes.filter(m => m.name.startsWith('golpe-bola-') && m.isEnabled()).length), 2);
       console.log('OK', nome, JSON.stringify(resultado));

@@ -30,6 +30,25 @@ for (const cor of ['azul', 'vermelha']) test(`poderes v5 ${cor}: clipes próprio
         const antes = JSON.stringify(s);
         modelo.atualizar(descreverPose(s.p[0], K, s));
         assert.equal(JSON.stringify(s), antes);
+        if (['esp', 'espEx', 'ultra'].includes(nome) && s.p[0].golpe === nome) {
+          const l = s.p[0], preparo = nome === 'ultra' ? 20 : 7, disparo = nome === 'ultra' ? 25 : 10;
+          if (l.t === preparo || l.t === disparo) {
+            const maos = ['E', 'D'].map(lado => {
+              const no = modelo.osso(`mao_${lado}`), cadeia = [];
+              for (let n = no; n; n = n.parent) cadeia.unshift(n);
+              for (const n of cadeia) n.computeWorldMatrix(true);
+              return no.getAbsolutePosition().clone();
+            });
+            const centro = Vector3.Center(...maos), xCorpo = (l.x / K.U - K.LARGURA / 2) / 24;
+            const frente = (centro.x - xCorpo) * face;
+            assert.ok(Vector3.Distance(...maos) < .45, `${nome}: duas mãos próximas, q${l.t}, face ${face}`);
+            assert.ok(maos.every(p => p.y < 1.85), `${nome}: mãos abaixo dos ombros, sem lançamento por cima`);
+            assert.ok(l.t === preparo ? frente < .08 : frente > .45,
+              `${nome}: preparar ao lado do quadril e empurrar à frente, q${l.t}, face ${face}: ${frente}`);
+            if (l.t === preparo) assert.ok(maos.every(p => p.z * face < -.18 && (p.x - xCorpo) * face > -.05),
+              `${nome}: ambas as mãos vêm pela frente do corpo, face ${face}, mãos ${maos.map(p => p.asArray())}, corpo ${xCorpo}`);
+          }
+        }
         if (nome.startsWith('tatsu') && s.p[0].golpe === nome) for (const janela of K.LUTADORES.pipoca.golpes[nome].janelas) if (s.p[0].t === janela.de) {
           const pe = modelo.osso('pe_E'), cadeia = [];
           for (let n = pe; n; n = n.parent) cadeia.unshift(n);

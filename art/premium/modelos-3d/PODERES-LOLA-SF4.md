@@ -38,6 +38,21 @@ com que foram assados. Novos comandos usam os mesmos bits combinados dos
 quatro botões, preservando o formato das entradas online. A máquina também
 usa os novos golpes por comandos.
 
+## Hadouken — referência de movimento e energia
+
+Conferido no vídeo local `Downloads/videoplayback.mp4`, trecho de 5:52,9 a
+5:53,4: as duas mãos recolhem juntas ao lado do quadril e empurram para a
+frente. Especial, EX e Ultra usam um alvo comum do corpo para aproximar as
+mãos, em vez de repetir deslocamentos relativos a ombros diferentes.
+Conforme a correção de Filipe, ambos os cotovelos guiam as mãos pela frente
+da barriga até o disparo, sem recolher um braço para trás do tronco.
+
+O projétil tem núcleo branco, envelope azul/ciano, filamentos curvos e rastro
+curto. A carga acompanha o centro das mãos antes do lançamento. Removidos
+o fogo laranja desses três golpes e a rotação contínua da bola. O material
+não soma branco à textura, preservando suas cores. Dano, colisão, velocidade
+e quadros de lançamento permanecem definidos pelo motor.
+
 ## Verificações
 
 - Testes do motor: comandos nas duas orientações, recursos insuficientes,
