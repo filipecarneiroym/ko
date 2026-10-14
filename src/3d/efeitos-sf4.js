@@ -214,6 +214,10 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
   fumaca.addSizeGradient(0, .5); fumaca.addSizeGradient(1, 1.6);
   fumaca.createSphereEmitter(.15); fumaca.emitRate = 0; fumaca.manualEmitCount = 0; fumaca.renderingGroupId = 1;
   fumaca.start();
+  // Névoa azul da defesa.
+  const fumacaFria = fumaca.clone('sf4-fumaca-fria');
+  fumacaFria.color1 = new Color4(.75, .88, 1, .55); fumacaFria.color2 = new Color4(.45, .65, 1, .45); fumacaFria.colorDead = new Color4(.4, .55, 1, 0);
+  fumacaFria.blendMode = ParticleSystem.BLENDMODE_ADD; fumacaFria.emitRate = 0; fumacaFria.manualEmitCount = 0; fumacaFria.start();
 
   // Escudo de defesa (anel com hexágonos, voltado para a câmera).
   const escudos = Array.from({ length: 4 }, (_, i) => ({ malha: plano(`sf4-escudo-${i}`, matEscudo, 1), nasc: -1e9 }));
@@ -293,10 +297,10 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
         tremor = pesado ? .16 : .06; tremorNasc = relogio;
         if (pesado) { flashNasc = relogio; flashForca = .18; }
       } else if (e.t === 'defendeu') {
-        const { x, y } = contato(e, estado), s = escudos[cursorEscudo++ % escudos.length];
-        s.malha.position.set(x, y, -.55); s.nasc = relogio;
-        estrela(matEstrelaFria, x, y, -.7, 1.2, 7);
-        if (!reduzido()) explodir(faiscasFrias, x, y, -.55, 24);
+        // Como no SF4: explosão azul-branca com faíscas e névoa azul (sem escudo).
+        const { x, y } = contato(e, estado);
+        estrela(matEstrelaFria, x, y, -.7, 2.1, 10);
+        if (!reduzido()) { explodir(faiscasFrias, x, y, -.55, 45); explodir(fumacaFria, x, y, -.45, 10); }
         tremor = .03; tremorNasc = relogio;
       } else if (e.t === 'choque') {
         const x = xMundo(e.x), y = yMundo(e.y) + 1.4;
