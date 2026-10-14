@@ -173,8 +173,11 @@ button, a.botao { touch-action: manipulation; min-height: 48px; }
 .direcional .seta-b { --a: 180deg; } .direcional .seta-be { --a: 225deg; } .direcional .seta-e { --a: 270deg; } .direcional .seta-ce { --a: 315deg; }
 .direcional .analogico {
   position: absolute; left: 21%; top: 21%; width: 58%; height: 58%; border-radius: 50%;
-  background: radial-gradient(circle at 33% 27%, #ffffffd0 0 5%, #ff8a8acc 12%, #c42020c0 38%, #7a0a0ec8 72%, #4a0508d8);
-  box-shadow: 0 6px 12px #0008, inset 0 -8px 14px #0007, inset 0 4px 8px #ffffff30;
+  /* Bola de vidro: translúcida, mas com contorno e brilho para ler em qualquer cenário. */
+  background: radial-gradient(circle at 33% 27%, #ffffffe6 0 5%, #ffffff8c 13%, #e8eef859 40%, #9aa8c040 75%, #5a647a59);
+  border: 2px solid #ffffffb3;
+  box-shadow: 0 0 0 1.5px #0000004d, 0 6px 12px #0006, inset 0 -8px 14px #00000033, inset 0 4px 8px #ffffff40;
+  backdrop-filter: blur(2px);
   transform: translate(var(--analogico-x, 0px), var(--analogico-y, 0px));
 }
 .direcional[data-dir]:not([data-dir=""]) { opacity: 0.92; }
