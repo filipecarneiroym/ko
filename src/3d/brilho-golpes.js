@@ -73,19 +73,21 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
       estado.p.forEach((l, i) => {
         const d = lados[i], modelo = modelos[i];
         const golpe = l.estado === 'golpe' && simulador.LUTADORES[l.id]?.golpes[l.golpe];
-        const janela = golpe?.janelas?.[0];
-        const ativo = !!(modelo && janela && l.t >= janela.de - 3 && l.t <= janela.ate + 2 && !l.sumido);
+        // Só durante o golpe de verdade (cada janela: chute duplo tem duas, uma
+        // por perna) e um pouco antes; some quando a perna começa a voltar.
+        const janela = golpe?.janelas?.find(j => l.t >= j.de - 3 && l.t <= j.ate);
+        const ativo = !!(modelo && janela && !l.sumido);
         if (ativo) {
           const p = membro(modelo, l);
           if (p) d.ponta.position.copyFrom(p);
-          if (!d.ativo) {
+          if (!d.ativo || d.janela !== janela) {
             const tipo = l.golpe === 'sup' ? 'super' : l.golpe === 'esp' ? 'especial' : FORTES.has(l.golpe) ? 'forte' : 'fraco';
             d.mat.emissiveColor = Color3.FromHexString(COR[tipo]);
             d.rastro.diameter = tipo === 'fraco' ? .12 : .2;
             d.rastro.reset(); d.rastro.setEnabled(true); d.rastro.start();
           }
         } else if (d.ativo) { d.rastro.stop(); d.rastro.setEnabled(false); }
-        d.ativo = ativo;
+        d.ativo = ativo; d.janela = janela;
 
         // Aura de fogo enquanto solta o especial/Super.
         const queima = (l.golpe === 'esp' || l.golpe === 'sup') && l.estado === 'golpe' && !movimentoReduzido.matches;
