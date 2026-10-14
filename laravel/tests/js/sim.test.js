@@ -227,21 +227,36 @@ test('especial com barra cheia vira Super', () => {
   assert.strictEqual(s.p[0].poder, 0);
 });
 
-test('quebra-combo gasta meia barra e solta quem apanhava', () => {
+test('como no SF4: segurar para trás defende com ataque por perto e anda para trás sem ameaça', () => {
   const s = prontaParaLutar();
   colar(s);
-  s.p[1].poder = K.PODER_MAX;
-  let quebrou = false;
-  for (const [b, espera] of [[B.P, 9], [B.P, 12], [B.K, 30]]) {
-    K.passo(s, [b, 0]);
-    for (let i = 0; i < espera && !quebrou; i++) {
-      K.passo(s, [0, s.p[1].combo >= 2 ? B.D_ | B.S : 0]);
-      quebrou = s.ev.some((e) => e.t === 'quebra');
-    }
+  // p[1] olha para a esquerda: trás = direita.
+  K.passo(s, [B.P, B.R]);
+  let defendeu = false;
+  for (let i = 0; i < 12; i++) { K.passo(s, [0, B.R]); defendeu ||= s.ev.some((e) => e.t === 'defendeu'); }
+  assert.ok(defendeu, 'segurar para trás deveria defender o soco');
+  const livre = prontaParaLutar();
+  livre.p[0].x = 100 * K.U; livre.p[1].x = 300 * K.U;
+  const x = livre.p[1].x;
+  for (let i = 0; i < 10; i++) K.passo(livre, [0, B.R]);
+  assert.equal(livre.p[1].estado, 'andando');
+  assert.ok(livre.p[1].x > x, 'sem ameaça, trás é andar para trás');
+});
+
+test('Focus Attack (F) aguenta um golpe na carga e devolve o soco', () => {
+  const s = prontaParaLutar();
+  colar(s);
+  K.passo(s, [0, B.F]);
+  assert.equal(s.p[1].golpe, 'foc');
+  K.passo(s, [B.P, 0]);
+  let armadura = false, acertou = false;
+  for (let i = 0; i < 40; i++) {
+    K.passo(s, [0, 0]);
+    armadura ||= s.ev.some((e) => e.t === 'armadura');
+    acertou ||= s.ev.some((e) => e.t === 'acerto' && e.lado === 1);
   }
-  assert.ok(quebrou, 'quebra-combo não saiu');
-  assert.strictEqual(s.p[1].poder, K.PODER_MAX / 2);
-  assert.ok(s.p[1].combo === 0 && s.p[0].estado === 'dano', 'quem batia deveria ficar atordoado');
+  assert.ok(armadura, 'o soco bate na armadura');
+  assert.ok(acertou, 'o Focus devolve o golpe');
 });
 
 test('dois rounds vencidos levam ao "ACABA!" e ao Golpe Final', () => {

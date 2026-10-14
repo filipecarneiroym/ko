@@ -59,7 +59,7 @@
     if (ajuste) {
       const passo = pads.configuracao();
       ajuste.querySelector('[role="status"]').textContent = passo
-        ? 'Solte os botões, depois pressione: ' + ({ L: 'esquerda', R: 'direita', U: 'cima', D: 'baixo', P: 'soco', K: 'chute / confirmar', D_: 'defesa', S: 'especial', menu: 'menu' }[KOControle.ACOES[passo.passo]])
+        ? 'Solte os botões, depois pressione: ' + ({ L: 'esquerda', R: 'direita', U: 'cima', D: 'baixo', P: 'soco', K: 'chute / confirmar', D_: 'Focus (F)', S: 'especial (SP)', menu: 'menu' }[KOControle.ACOES[passo.passo]])
         : estadosPads.map((p, i) => 'Jogador ' + (i + 1) + ': ' + (!p.conectado ? 'aperte um botão no controle' : p.mapeado ? 'pronto' : 'precisa configurar')).join(' · ');
       pulsosPads = [0, 0];
       if (!passo) KOControle.navegar(ajuste, estadosPads.find((p) => p.pulso || p.confirmarClicado));
@@ -180,7 +180,7 @@
   // ---------- Controles ----------
   // bitsPulso guarda toques rápidos (apertou e soltou entre dois quadros) para não se perderem.
   let bitsToque = 0, bitsTeclado = 0, bitsPulso = 0;
-  const TECLAS = { KeyA: B.L, ArrowLeft: B.L, KeyD: B.R, ArrowRight: B.R, KeyW: B.U, ArrowUp: B.U, Space: B.U, KeyS: B.D, ArrowDown: B.D, KeyJ: B.P, KeyK: B.K, KeyL: B.D_, KeyI: B.S };
+  const TECLAS = { KeyA: B.L, ArrowLeft: B.L, KeyD: B.R, ArrowRight: B.R, KeyW: B.U, ArrowUp: B.U, Space: B.U, KeyS: B.D, ArrowDown: B.D, KeyJ: B.P, KeyK: B.K, KeyL: B.F, KeyI: B.S }; // L = Focus (F); defesa = segurar para trás
   addEventListener('keydown', (e) => { if (TECLAS[e.code]) { bitsTeclado |= TECLAS[e.code]; bitsPulso |= TECLAS[e.code]; e.preventDefault(); acordarAudio(); } });
   addEventListener('keyup', (e) => { if (TECLAS[e.code]) bitsTeclado &= ~TECLAS[e.code]; });
   addEventListener('blur', () => { bitsTeclado = 0; bitsToque = 0; });
@@ -208,8 +208,8 @@
     } else { saiuDoCentro = 0; petelecoFeito = false; }
     direcional.dataset.dir = (bitsDir & B.U ? 'c' : '') + (bitsDir & B.D ? 'b' : '') + (bitsDir & B.L ? 'e' : '') + (bitsDir & B.R ? 'd' : '');
   }
-  // Botões: quem encosta perto da divisa aperta os dois (soco+chute = esquiva, defesa+especial = quebra-combo).
-  const botoes = [...document.querySelectorAll('.botoes .b')].map((el) => ({ el, bit: { P: B.P, K: B.K, B: B.D_, S: B.S }[el.dataset.b] }));
+  // Botões: quem encosta perto da divisa aperta os dois (soco+chute = esquiva).
+  const botoes = [...document.querySelectorAll('.botoes .b')].map((el) => ({ el, bit: { P: B.P, K: B.K, B: B.F, S: B.S }[el.dataset.b] }));
   const dedosBotao = new Map();
   function botoesSob(x, y) {
     let bits = 0;
@@ -331,7 +331,7 @@
         }
         break;
       case 'i':
-        if (luta && luta.online && Number.isInteger(d.f) && d.f >= luta.s.f && d.f < luta.s.f + 600 && Number.isInteger(d.b) && d.b >= 0 && d.b <= 1023) {
+        if (luta && luta.online && Number.isInteger(d.f) && d.f >= luta.s.f && d.f < luta.s.f + 600 && Number.isInteger(d.b) && d.b >= 0 && d.b <= 2047) {
           const entradas = luta.entradas[1 - meuLado];
           if (entradas[d.f] !== undefined && entradas[d.f] !== d.b) {
             luta.dessincronizou = true; luta.aviso = 'Comandos divergentes. Esta luta não contará no ranking.'; return;
@@ -839,7 +839,7 @@
       <div class="acoes"><button class="botao" data-acao="voltar">Voltar para a luta</button>
       <button class="botao botao-sec" data-acao="som">Som: ${somLigado ? 'ligado' : 'desligado'}</button>
       <a class="botao botao-sec" href="${cfg.inicio}">${luta.online ? 'Desistir e sair' : 'Sair'}</a></div>
-      <p class="dica">Soco+chute juntos: esquiva · Defesa+especial no meio do combo dele: quebra-combo · Toque duplo para frente: corrida</p></div>`;
+      <p class="dica">Segure para trás para defender (agachado: golpes baixos) · F: Focus Attack · Soco+chute juntos: esquiva · Toque duplo para frente: corrida</p></div>`;
     document.getElementById('jogo').appendChild(sobreposicao);
     sobreposicao.querySelector('[data-acao="voltar"]').onclick = () => {
       if (versus && estadosPads.some((p) => !p.conectado || !p.mapeado)) return;

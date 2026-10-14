@@ -22,8 +22,10 @@
   const INTRO = 100, FIM_ROUND = 150, JANELA_FINAL = 300, DURACAO_FINAL = 200;
 
   // Botões (um bit cada): esquerda, direita, cima, baixo, soco, chute, defesa, especial;
-  // LV: analógico pouco inclinado (anda devagar); RC: peteleco para trás (recuo).
-  const B = { L: 1, R: 2, U: 4, D: 8, P: 16, K: 32, D_: 64, S: 128, LV: 256, RC: 512 };
+  // LV: analógico pouco inclinado (anda devagar); RC: peteleco para trás (recuo);
+  // F: Focus Attack. D_ segue como guarda segurada (máquina e testes); o jogador
+  // defende como no SF4, segurando para trás.
+  const B = { L: 1, R: 2, U: 4, D: 8, P: 16, K: 32, D_: 64, S: 128, LV: 256, RC: 512, F: 1024 };
   const DEF = B.D_;
 
   // ---------- Elenco ----------
@@ -31,6 +33,9 @@
   // janelas: quadros em que o golpe acerta. cancel: o que dá para emendar se o golpe encostou.
   const P = (o) => Object.assign({ tipo: 'medio', bs: 10, hs: 16, empurra: 5 }, o);
 
+  // Focus Attack do SF4 (botão F): armadura que aguenta um golpe enquanto carrega
+  // e depois um soco forte. Vale para todo lutador que não tiver o seu.
+  const FOCO = { dur: 34, armadura: [2, 18], janelas: [P({ de: 19, ate: 21, dano: 50, hs: 28, bs: 12, caixa: [6, -56, 30, 16] })] };
   const LUTADORES = {
     pipoca: {
       nome: 'Lola', vida: 950, andar: 42, tras: 32, correr: 86, pulo: 150, puloX: 50, gravidade: 9, pulosAr: 1,
@@ -392,6 +397,9 @@
   function trasBit(l) { return l.face === 1 ? B.L : B.R; }
   const livre = (l) => l.estado === 'parado' || l.estado === 'andando' || l.estado === 'agachado' || l.estado === 'corrida';
 
+  // Não enumerável: listas de golpes (um clipe 3D por golpe) não o incluem; o 3D usa o p2.
+  for (const L of Object.values(LUTADORES)) if (!L.golpes.foc) Object.defineProperty(L.golpes, 'foc', { value: FOCO });
+
   function mudar(l, estado) { l.estado = estado; l.t = 0; }
 
   // No gelo da Nix, quem não é dono escorrega: a velocidade muda devagar (não dá para parar na hora).
@@ -419,7 +427,7 @@
   // ---------- Entrada ----------
   function lerEntrada(s, l, bits) {
     const sobe = bits & ~l.bAnt;
-    for (const [k, b] of [['P', B.P], ['K', B.K], ['S', B.S], ['B', DEF], ['U', B.U]]) {
+    for (const [k, b] of [['P', B.P], ['K', B.K], ['S', B.S], ['B', DEF], ['U', B.U], ['F', B.F]]) {
       if (sobe & b) l.buf[k] = BUFFER;
       else if (l.buf[k] > 0 && s.hitstop === 0) l.buf[k]--;
     }
@@ -459,15 +467,7 @@
     const fr = frenteBit(l), tr = trasBit(l);
     const segura = (b) => temBit(bits, b);
 
-    // Quebra-combo (Killer Instinct): defesa + especial no meio do combo, gastando meia barra.
-    if (l.estado === 'dano' && l.combo >= 2 && l.poder >= PODER_MAX / 2 && segura(DEF) && segura(B.S) && (l.buf.S || l.buf.B)) {
-      l.buf.S = l.buf.B = 0; l.poder -= PODER_MAX / 2; l.stun = 0; l.combo = 0; l.inv = 20;
-      mudar(l, 'quebra'); l.vx = -l.face * 40;
-      if (o.estado === 'golpe' || o.estado === 'dano') { mudar(o, 'dano'); o.golpe = null; o.stun = 24; o.vx = -o.face * 70; }
-      s.ev.push({ t: 'quebra', lado: l.lado });
-      s.hitstop = 10;
-      return;
-    }
+    // (Sem quebra-combo: no SF4 não existe; a saída é defender ou o Focus Attack.)
 
     if (l.estado === 'golpe') {
       // Cancelar no próximo golpe (combo) quando o golpe atual encostou.
@@ -506,10 +506,14 @@
     if (l.buf.P && segura(fr) && !agachado && Math.abs(o.x - l.x) <= AGARRAO.alcance && noChao(o) && livreParaAgarrar(o)) {
       l.buf.P = 0; agarrar(s, l, o); return;
     }
+    if (usar(l, 'F')) { iniciarGolpe(s, l, 'foc'); return; } // F: Focus Attack
     if (usar(l, 'P')) { iniciarGolpe(s, l, agachado ? 'cp' : 'p1'); return; }
     if (usar(l, 'K')) { iniciarGolpe(s, l, agachado ? 'ck' : (l.estado === 'corrida' ? 'k2' : 'k1')); return; }
 
-    if (segura(DEF)) {
+    const ameaca = (o.estado === 'golpe' && Math.abs(o.x - l.x) <= 150 * U)
+      || s.proj.some((p) => p.dono === o.lado && p.vida > 0 && Math.abs(p.x - l.x) <= 160 * U)
+      || ((l.estado === 'defesa' || l.estado === 'defesaBaixa') && l.stun > 0);
+    if (segura(DEF) || (segura(tr) && ameaca)) {
       // O relógio do estado reinicia a cada quadro (como já era antes): a entrada e a
       // saída da guarda seguem as poses testadas.
       mudar(l, agachado ? 'defesaBaixa' : 'defesa');

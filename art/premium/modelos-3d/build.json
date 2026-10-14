@@ -16,7 +16,7 @@
     "src/3d/contrato-glb.mjs": "0fafc4fa6b706c2b0f88155714a14aa42b0450b3eee768c28e46f4694b8cff53",
     "src/3d/efeitos-sf4.js": "749e4aea28119c5439060932b96bd3ea54e5eb84b4054c9702f72abb8130ae80",
     "src/3d/efeitos.js": "cb5d985a4ad1956bd9e1dd2d49492e94daec6b563243d26becae7752cd60c483",
-    "src/3d/estado-visual.mjs": "09451a3fa28366480d8b6ef0ec79ba3fc404582894878a1c791044702493dbf2",
+    "src/3d/estado-visual.mjs": "090b9f4d73d7bd87283ce4c3aeda077b1660cbd519ea1d9edd03636aec709330",
     "src/3d/jogo-3d.js": "c782a4a63774413a8c6947c1f221c6fde96fbf7133d3e85595528fc76e7e41cc",
     "src/3d/laboratorio.js": "b784bf8081ad08f3a9efc95f279fbe73f24e528dc4552bc69a2047e2177f1f5e",
     "src/3d/modelo-glb.js": "9cde84b0448c333109af16f686c95006e92e5b31563bd2f9bf8191a8c1e65607",
@@ -24,6 +24,6 @@
   },
   "saida": {
     "caminho": "public/js/ko-laboratorio-3d.js",
-    "sha256": "7c196d3f9903d091e5898986f11b6255f83df4b153c28ecc55cd0b661f2edf15"
+    "sha256": "e5ebb9431dadd01545f4ff854ab3513767a2a1a0a01263837477db53a53668a2"
   }
 }

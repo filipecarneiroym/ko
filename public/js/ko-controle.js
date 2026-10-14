@@ -5,7 +5,8 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
   const ACOES = ['L', 'R', 'U', 'D', 'P', 'K', 'D_', 'S', 'menu'];
-  const BITS = { L: 1, R: 2, U: 4, D: 8, P: 16, K: 32, D_: 64, S: 128 };
+  // A ação D_ do controle (botão 3) agora é o Focus Attack (F, bit 1024); defender é segurar para trás.
+  const BITS = { L: 1, R: 2, U: 4, D: 8, P: 16, K: 32, D_: 1024, S: 128 };
   const botao = (indice) => ({ tipo: 'botao', indice });
   const eixo = (indice, sinal) => ({ tipo: 'eixo', indice, sinal });
   const PADRAO = {

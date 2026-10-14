@@ -11,9 +11,11 @@ export function descreverPose(lutador, simulador, estado = null) {
   // mantém seu ciclo vivo e também fica congelado durante o hitstop.
   const usaRelogioDaFase = ['defesa', 'defesaBaixa'].includes(lutador.estado)
     || estado?.fase === 'final' && ['final', 'vitimaFinal'].includes(lutador.estado);
+  const foco = golpe && lutador.golpe === 'foc';
   return {
-    clip: golpe ? lutador.golpe : lutador.estado,
-    quadro: Math.max(0, usaRelogioDaFase ? estado?.fT ?? lutador.t : lutador.t),
+    clip: foco ? 'p2' : golpe ? lutador.golpe : lutador.estado,
+    quadro: foco ? (lutador.t < 18 ? 2 : Math.min(18, 2 + (lutador.t - 18) * 1.6))
+      : Math.max(0, usaRelogioDaFase ? estado?.fT ?? lutador.t : lutador.t),
     ciclico: !golpe && CICLICOS.has(lutador.estado),
     duracao: golpe ? golpe.dur : null,
     x: (lutador.x / simulador.U - simulador.LARGURA / 2) / 24,
