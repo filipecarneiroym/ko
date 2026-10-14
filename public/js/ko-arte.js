@@ -1355,6 +1355,10 @@
       const gr = g.createLinearGradient(0, y, 0, y + 9);
       gr.addColorStop(0, perigo ? '#ffb0a0' : '#fff3a0'); gr.addColorStop(0.5, frac > 0.5 ? '#ffd23f' : frac > 0.25 ? '#ffa23f' : '#ff6b3f'); gr.addColorStop(1, frac > 0.5 ? '#e0a400' : '#d04a10');
       g.fillStyle = gr; if (w > 0) { barra(g, lado === 0 ? x + larg - w : x, y, w, 9, 3); g.fill(); }
+      if (l.cinza > 0) {
+        const wc = Math.min(larg - w, l.cinza / max * larg);
+        g.fillStyle = '#d5dcdf'; g.fillRect(lado === 0 ? x + larg - w - wc : x + w, y + 1, wc, 7);
+      }
       texto(g, String(nomes[lado] || '').toUpperCase(), lado === 0 ? x + 1 : x + larg - 1, y + 13, 8, '#ffffff', { direita: lado === 1 });
       for (let i = 0; i < 2; i++) {
         const mx = lado === 0 ? 166 - i * 11 : 218 + i * 11;
@@ -1385,6 +1389,15 @@
         g.save(); g.shadowColor = '#3fd8ff'; g.shadowBlur = 8;
         texto(g, 'SUPER!', lado === 0 ? px + 4 * (gomo + folga) + 3 : px - 5, py - 3, 9, pisca ? '#ffffff' : '#7fefff', { direita: lado === 1 });
         g.restore();
+      }
+      if (K.LUTADORES[l.id].golpes.ultra) {
+        const ux = lado === 0 ? 10 : W - 94, uy = H - 28, uf = Math.max(0, Math.min(1, (l.revanche || 0) / K.ULTRA_MAX));
+        g.fillStyle = '#21162f'; barra(g, ux, uy, 84, 4, 2); g.fill();
+        const ug = g.createLinearGradient(ux, 0, ux + 84, 0); ug.addColorStop(0, '#8740dc'); ug.addColorStop(1, '#f1b5ff');
+        g.fillStyle = ug; if (uf > 0) { barra(g, lado === 0 ? ux : ux + 84 * (1 - uf), uy, 84 * uf, 4, 2); g.fill(); }
+        g.fillStyle = '#ffffff80'; g.fillRect(ux + 42, uy, 1, 4);
+        texto(g, (l.revanche || 0) >= K.ULTRA_MIN ? 'ULTRA' : 'REVANCHE', lado === 0 ? ux : ux + 84, uy - 2, 5.5,
+          (l.revanche || 0) >= K.ULTRA_MIN ? '#edc5ff' : '#a495b7', { direita: lado === 1 });
       }
     }
     g.fillStyle = CONTORNO; barra(g, 175, 3, 34, 20, 5); g.fill();

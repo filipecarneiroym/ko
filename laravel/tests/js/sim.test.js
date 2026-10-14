@@ -238,10 +238,10 @@ test('direção com defesa não interrompe introdução, ataque ou atordoamento'
   }
 });
 
-test('especial com barra cheia vira Super', () => {
+test('Super usa SP + chute com barra cheia', () => {
   const s = prontaParaLutar();
   s.p[0].poder = K.PODER_MAX;
-  K.passo(s, [B.S, 0]);
+  K.passo(s, [B.S | B.K, 0]);
   assert.strictEqual(s.p[0].golpe, 'sup');
   assert.strictEqual(s.p[0].poder, 0);
 });
@@ -361,7 +361,7 @@ test('Super do Maromba cega mesmo quem está defendendo', () => {
   const s = prontaParaLutar(['maromba', 'pipoca']);
   colar(s);
   s.p[0].poder = K.PODER_MAX;
-  K.passo(s, [B.S, B.D_]);
+  K.passo(s, [B.S | B.K, B.D_]);
   roteiro(s, [[0, B.D_, 130]]);
   assert.ok(s.p[1].vida < K.LUTADORES.pipoca.vida - 150, 'super deveria acertar através da defesa');
 });
@@ -390,7 +390,7 @@ test('bengala do Vô Tião puxa o adversário para perto', () => {
 test('dentadura do Super gruda e morde várias vezes', () => {
   const s = prontaParaLutar(['vo-tiao', 'pipoca']);
   s.p[0].x = 120 * K.U; s.p[1].x = 220 * K.U; s.p[0].poder = K.PODER_MAX;
-  K.passo(s, [B.S, 0]);
+  K.passo(s, [B.S | B.K, 0]);
   let mordidas = 0;
   for (let i = 0; i < 260; i++) { K.passo(s, [0, 0]); mordidas += s.ev.filter((e) => e.t === 'acerto').length; }
   assert.ok(mordidas >= 5, 'mordeu só ' + mordidas + ' vezes');
@@ -418,7 +418,7 @@ test('tora do Toco derruba e a árvore do Super cai na frente dele', () => {
   const vida = s.p[1].vida;
   roteiro(s, [[0, 0, 90]]);
   s.p[0].poder = K.PODER_MAX; s.p[0].x = 120 * K.U; s.p[1].x = 220 * K.U;
-  K.passo(s, [B.S, 0]);
+  K.passo(s, [B.S | B.K, 0]);
   roteiro(s, [[0, 0, 120]]);
   assert.ok(s.p[1].vida < vida - 150, 'a árvore deveria acertar');
 });
@@ -426,7 +426,7 @@ test('tora do Toco derruba e a árvore do Super cai na frente dele', () => {
 test('pista de gelo da Nix faz o outro escorregar', () => {
   const s = prontaParaLutar(['nix', 'uivo']);
   s.p[0].poder = K.PODER_MAX; s.p[0].x = 120 * K.U; s.p[1].x = 250 * K.U;
-  K.passo(s, [B.S, 0]);
+  K.passo(s, [B.S | B.K, 0]);
   roteiro(s, [[0, 0, 200]]);
   assert.ok(s.gelo.f > 0, 'o chão deveria estar congelado');
   roteiro(s, [[0, B.L, 30]]); // anda em direção à Nix...
@@ -459,7 +459,7 @@ test('Truque some na fumaça e aparece atrás do adversário', () => {
 test('cartola do Truque prende quem não defende em pé', () => {
   const s = prontaParaLutar(['truque', 'pipoca']);
   s.p[0].x = 120 * K.U; s.p[1].x = 200 * K.U; s.p[0].poder = K.PODER_MAX;
-  K.passo(s, [B.S, 0]);
+  K.passo(s, [B.S | B.K, 0]);
   roteiro(s, [[0, 0, 60]]);
   assert.strictEqual(s.p[1].prende, 'cartola');
 });
@@ -483,7 +483,7 @@ test('Fóssil defende especiais sem levar raspão', () => {
 test('onda gigante do Maré não dá para pular por cima', () => {
   const s = prontaParaLutar(['mare', 'kira']);
   s.p[0].x = 100 * K.U; s.p[1].x = 260 * K.U; s.p[0].poder = K.PODER_MAX;
-  K.passo(s, [B.S, 0]);
+  K.passo(s, [B.S | B.K, 0]);
   let pegou = false;
   for (let i = 0; i < 160; i++) { K.passo(s, [0, i % 40 === 20 ? B.U : 0]); if (s.p[1].vida < K.LUTADORES.kira.vida) pegou = true; }
   assert.ok(pegou, 'a onda deveria pegar mesmo pulando');
@@ -514,7 +514,7 @@ test('arrancada de moto do Volt e escada da Brasa acertam várias vezes', () => 
   for (const id of ['volt', 'brasa']) {
     const s = prontaParaLutar([id, 'uivo']);
     colar(s); s.p[0].poder = K.PODER_MAX;
-    K.passo(s, [B.S, 0]);
+    K.passo(s, [B.S | B.K, 0]);
     let maior = 0;
     for (let i = 0; i < 200; i++) { K.passo(s, [0, 0]); maior = Math.max(maior, s.p[1].combo); }
     assert.ok(maior >= 4, id + ' só fez ' + maior + ' hits');

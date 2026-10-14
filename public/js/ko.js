@@ -144,6 +144,8 @@
     pulo: () => tom(300, 0.12, 'square', 0.04, 600),
     especial: (e) => somEspecial(e),
     super: (e) => somEspecial(e, true),
+    ultra: (e) => somEspecial(e, true),
+    ex: (e) => somEspecial(e),
     agarrao: () => ruido(0.15, 0.3, 600),
     chao: () => ruido(0.2, 0.35, 400),
     quebra: () => { tom(1200, 0.3, 'square', 0.1, 200); ruido(0.2, 0.3, 3000); },
@@ -180,9 +182,15 @@
   // ---------- Controles ----------
   // bitsPulso guarda toques rápidos (apertou e soltou entre dois quadros) para não se perderem.
   let bitsToque = 0, bitsTeclado = 0, bitsPulso = 0;
-  const TECLAS = { KeyA: B.L, ArrowLeft: B.L, KeyD: B.R, ArrowRight: B.R, KeyW: B.U, ArrowUp: B.U, Space: B.U, KeyS: B.D, ArrowDown: B.D, KeyJ: B.P, KeyK: B.K, KeyL: B.F, KeyI: B.S }; // L = Focus (F); defesa = segurar para trás
-  addEventListener('keydown', (e) => { if (TECLAS[e.code]) { bitsTeclado |= TECLAS[e.code]; bitsPulso |= TECLAS[e.code]; e.preventDefault(); acordarAudio(); } });
-  addEventListener('keyup', (e) => { if (TECLAS[e.code]) bitsTeclado &= ~TECLAS[e.code]; });
+  const TECLAS = { KeyA: B.L, ArrowLeft: B.L, KeyD: B.R, ArrowRight: B.R, KeyW: B.U, ArrowUp: B.U, Space: B.U, KeyS: B.D, ArrowDown: B.D, KeyJ: B.P, KeyK: B.K, KeyL: B.F, KeyI: B.S,
+    KeyE: B.S | B.P, KeyO: B.S | B.K, KeyH: B.S | B.F }; // EX, Super e Ultra também têm atalhos.
+  const teclasAtivas = new Set();
+  const recalcularTeclado = () => { bitsTeclado = 0; for (const codigo of teclasAtivas) bitsTeclado |= TECLAS[codigo]; };
+  addEventListener('keydown', (e) => { if (TECLAS[e.code]) {
+    if (!teclasAtivas.has(e.code)) bitsPulso |= TECLAS[e.code];
+    teclasAtivas.add(e.code); recalcularTeclado(); e.preventDefault(); acordarAudio();
+  } });
+  addEventListener('keyup', (e) => { if (TECLAS[e.code]) { teclasAtivas.delete(e.code); recalcularTeclado(); } });
   addEventListener('blur', () => { bitsTeclado = 0; bitsToque = 0; });
 
   // Direcional em cruz: encosta em qualquer lugar da metade esquerda; a direção vale a partir do centro da cruz.
@@ -209,13 +217,16 @@
     direcional.dataset.dir = (bitsDir & B.U ? 'c' : '') + (bitsDir & B.D ? 'b' : '') + (bitsDir & B.L ? 'e' : '') + (bitsDir & B.R ? 'd' : '');
   }
   // Botões: quem encosta perto da divisa aperta os dois (soco+chute = esquiva).
-  const botoes = [...document.querySelectorAll('.botoes .b')].map((el) => ({ el, bit: { P: B.P, K: B.K, B: B.F, S: B.S }[el.dataset.b] }));
+  const botoes = [...document.querySelectorAll('.botoes .b, .atalhos-poderes [data-b]')].map((el) => ({ el, bit: { P: B.P, K: B.K, B: B.F, S: B.S,
+    EX: B.S | B.P, SUPER: B.S | B.K, ULTRA: B.S | B.F }[el.dataset.b] }));
   const dedosBotao = new Map();
   function botoesSob(x, y) {
     let bits = 0;
     for (const b of botoes) {
       const r = b.el.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-      if (Math.hypot(x - cx, y - cy) <= r.width / 2 + 6) bits |= b.bit;
+      const dentro = b.el.closest('.atalhos-poderes') ? x >= r.left && x <= r.right && y >= r.top && y <= r.bottom
+        : Math.hypot(x - cx, y - cy) <= r.width / 2 + 6;
+      if (dentro) bits |= b.bit;
     }
     return bits;
   }
@@ -224,13 +235,13 @@
     for (const v of dedosBotao.values()) bits |= v;
     bitsPulso |= bits & ~bitsToque;
     bitsToque = bits;
-    for (const b of botoes) b.el.classList.toggle('apertado', !!(bits & b.bit));
+    for (const b of botoes) b.el.classList.toggle('apertado', (bits & b.bit) === b.bit);
   }
   controles.addEventListener('pointerdown', (e) => {
     if (e.target.closest('.pausa')) return;
     e.preventDefault(); acordarAudio();
     controles.setPointerCapture(e.pointerId);
-    if (e.clientX < innerWidth * 0.45 && dedoDir === null) {
+    if (!e.target.closest('[data-b]') && e.clientX < innerWidth * 0.45 && dedoDir === null) {
       dedoDir = e.pointerId;
       atualizarDirecional(e.clientX, e.clientY);
     } else {
@@ -254,6 +265,7 @@
   controles.addEventListener('pointercancel', soltar);
   controles.addEventListener('lostpointercapture', soltar);
   function limparControles() {
+    teclasAtivas.clear();
     dedoDir = null; bitsDir = bitsToque = bitsTeclado = bitsPulso = 0;
     dedosBotao.clear(); direcional.dataset.dir = '';
     direcional.style.removeProperty('--analogico-x'); direcional.style.removeProperty('--analogico-y');
@@ -507,6 +519,13 @@
     if (em3d) {
       luta.r3d.desenhar(luta.s);
       A.desenhar(luta.s, { nomes, esperando, somenteHud: true });
+      const l = luta.s.p[meuLado];
+      for (const botao of document.querySelectorAll('.atalhos-poderes [data-b]')) {
+        const disponivel = botao.dataset.b === 'EX' ? l.poder >= K.EX_CUSTO
+          : botao.dataset.b === 'SUPER' ? l.poder >= K.PODER_MAX : l.revanche >= K.ULTRA_MIN;
+        botao.dataset.disponivel = String(disponivel);
+        botao.setAttribute('aria-disabled', String(!disponivel));
+      }
     } else canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
     if (luta.s.fase === 'fim' && !luta.fimEm) { luta.fimEm = agora; fimDaLuta(); }
   }
@@ -839,7 +858,7 @@
       <div class="acoes"><button class="botao" data-acao="voltar">Voltar para a luta</button>
       <button class="botao botao-sec" data-acao="som">Som: ${somLigado ? 'ligado' : 'desligado'}</button>
       <a class="botao botao-sec" href="${cfg.inicio}">${luta.online ? 'Desistir e sair' : 'Sair'}</a></div>
-      <p class="dica">Segure para trás para defender (agachado: golpes baixos) · F: Focus Attack · Soco+chute juntos: esquiva · Toque duplo para frente: corrida</p></div>`;
+      <p class="dica">Trás: defender · SP: Hadouken · Frente + SP: Shoryuken · Trás + SP: furacão · SP + P: EX · SP + K: Super · SP + F: Ultra · Segure F para carregar; dois toques na direção cancelam em passo. Teclado: E / O / H para EX / Super / Ultra.</p></div>`;
     document.getElementById('jogo').appendChild(sobreposicao);
     sobreposicao.querySelector('[data-acao="voltar"]').onclick = () => {
       if (versus && estadosPads.some((p) => !p.conectado || !p.mapeado)) return;

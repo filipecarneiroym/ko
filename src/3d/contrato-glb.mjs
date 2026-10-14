@@ -1,7 +1,7 @@
 import { ESTADOS_VISUAIS } from './estado-visual.mjs';
 
 export const LIMITE_GLB = 24 * 1024 * 1024;
-export const GOLPES_OPCIONAIS = ['dp'];
+export const GOLPES_OPCIONAIS = ['dp', 'tatsu', 'espEx', 'dpEx', 'tatsuEx', 'ultra'];
 export function validarGlb(buffer, id, simulador) {
   if (!(buffer instanceof ArrayBuffer) || buffer.byteLength < 20 || buffer.byteLength > LIMITE_GLB) throw new Error('Use um GLB de até 24 MB.');
   const view = new DataView(buffer);

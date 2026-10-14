@@ -1,0 +1,71 @@
+const path = require('node:path');
+const fs = require('node:fs');
+const assert = require('node:assert/strict');
+const root = path.resolve(__dirname, '../../..');
+const { chromium } = require(path.join(root, '.browser-check/node_modules/playwright'));
+const origem = 'http://127.0.0.1:8039';
+const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-jogo/poderes');
+(async () => {
+  fs.mkdirSync(saida, { recursive: true });
+  const browser = await chromium.launch({ executablePath: process.env.KO_BROWSER || 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
+    headless: true, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 720 }, serviceWorkers: 'block' });
+    const erros = [];
+    page.on('pageerror', e => erros.push(e.message));
+    page.on('console', m => { if (m.type() === 'error') erros.push(m.text()); });
+    await page.route(`${origem}/**`, async rota => {
+      const caminho = new URL(rota.request().url()).pathname;
+      if (caminho.startsWith('/arenas/') || caminho.startsWith('/modelos/'))
+        return rota.fulfill({ body: fs.readFileSync(path.join(root, 'public', caminho)) });
+      const nome = caminho === '/laboratorio.js' ? 'ko-laboratorio-3d.js' : caminho.slice(1);
+      if (['ko-sim.js', 'ko-cpu.js', 'ko-laboratorio-3d.js'].includes(nome))
+        return rota.fulfill({ contentType: 'text/javascript', body: fs.readFileSync(path.join(root, 'public/js', nome)) });
+      return rota.fulfill({ contentType: 'text/html', body: `<!doctype html><style>body{margin:0;background:#110d21;color:white}canvas{width:1280px;height:620px;display:block}</style>
+        <script defer src="/ko-sim.js"></script><script defer src="/ko-cpu.js"></script><script defer src="/laboratorio.js"></script>
+        <canvas id="arena-3d"></canvas><p id="estado-3d"></p>
+        <select id="modo-luta"><option value="versus">versus</option></select><select id="nivel-maquina"><option value="medio">m</option></select>
+        <button id="iniciar-luta">Começar luta</button><p id="estado-modelos"></p>` });
+    });
+    await page.goto(origem);
+    await page.waitForFunction(() => document.querySelector('#estado-3d').textContent.includes('FPS'));
+    await page.click('#iniciar-luta');
+    await page.waitForFunction(() => document.querySelector('#estado-modelos').textContent.includes('2 jogadores'), null, { timeout: 90000 });
+    await page.waitForFunction(() => globalThis.__laboratorio3d.scene.isReady(), null, { timeout: 30000 });
+    assert.equal(await page.evaluate(() => new Set(globalThis.__laboratorio3d.scene.meshes
+      .filter(m => m.name.startsWith('golpe-bola-')).map(m => m.material.emissiveTexture)).size), 1,
+      'projéteis compartilham uma textura pronta, sem clones dinâmicos vazios');
+    const casos = [
+      ['shoryuken-subida', 'dp', 8], ['shoryuken-apice', 'dp', 16],
+      ['furacao', 'tatsu', 12], ['furacao-volta', 'tatsu', 22],
+      ['hadouken-ex', 'espEx', 16], ['shoryuken-ex', 'dpEx', 12], ['furacao-ex', 'tatsuEx', 21],
+      ['super-toca', 'sup', 46], ['ultra-carga', 'ultra', 18], ['ultra-projetil', 'ultra', 25], ['focus-carga', 'foc', 30],
+    ];
+    for (const [nome, golpe, quadro] of casos) {
+      const resultado = await page.evaluate(({ golpe, quadro }) => {
+        const lab = globalThis.__laboratorio3d; lab.pausado = true;
+        const novo = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: true }); novo.fase = 'luta'; novo.fT = 0;
+        novo.p[0].x = 80 * KOSim.U; novo.p[1].x = 300 * KOSim.U;
+        novo.p[0].poder = KOSim.PODER_MAX; novo.p[0].revanche = KOSim.ULTRA_MAX;
+        Object.assign(lab.estado, novo);
+        const B = KOSim.B;
+        const comandos = { dp: B.R | B.S, tatsu: B.L | B.S, espEx: B.S | B.P, dpEx: B.R | B.S | B.P,
+          tatsuEx: B.L | B.S | B.P, sup: B.S | B.K, ultra: B.S | B.F, foc: B.F };
+        KOSim.passo(lab.estado, [comandos[golpe], 0]);
+        let guarda = 0;
+        while ((golpe === 'foc' ? lab.estado.p[0].focoCarga < quadro : lab.estado.p[0].t < quadro) && guarda++ < 180)
+          KOSim.passo(lab.estado, [golpe === 'foc' ? B.F : 0, 0]);
+        return { golpe: lab.estado.p[0].golpe, altura: lab.estado.p[0].y, proj: lab.estado.proj.length };
+      }, { golpe, quadro });
+      assert.equal(resultado.golpe, golpe);
+      if (golpe.startsWith('dp')) assert.ok(resultado.altura > 0);
+      if (golpe === 'espEx') assert.equal(resultado.proj, 2);
+      await page.waitForTimeout(500);
+      await page.locator('canvas').screenshot({ path: path.join(saida, `${nome}.png`) });
+      if (golpe === 'espEx') assert.equal(await page.evaluate(() => globalThis.__laboratorio3d.scene.meshes.filter(m => m.name.startsWith('golpe-bola-') && m.isEnabled()).length), 2);
+      console.log('OK', nome, JSON.stringify(resultado));
+    }
+    assert.deepEqual(erros, []);
+    console.log('OK poderes 3D, sem erros. Capturas:', saida);
+  } finally { await browser.close(); }
+})().catch(e => { console.error(e); process.exitCode = 1; });

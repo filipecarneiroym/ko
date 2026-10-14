@@ -120,7 +120,7 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
     await rodar('foc', [[K.F, 1], [0, 40]]);
     await rodar('dp', [[K.R, 2], [K.D, 2], [K.D | K.R, 2], [0, 4], [K.P, 1], [0, 60]]);
     await rodar('cenoura-qcf', [[K.D, 2], [K.D | K.R, 2], [K.R, 2], [K.R | K.P, 1], [0, 60]]);
-    await rodar('super', [[K.S, 1], [0, 80]], [], { prepara: s => { s.p[0].poder = 1000; } });
+    await rodar('super', [[K.S | K.K, 1], [0, 80]], [], { prepara: s => { s.p[0].poder = 1000; } });
     // Defesa: o adversário ataca e a jogadora segura para trás (contrário à frente).
     await rodar('defesa-soco', [[K.L, 60]], [[K.L, 8], [0, 4], [K.P, 1], [0, 40]], { posicao: [160, 186] });
     await rodar('defesa-chute', [[K.L, 60]], [[K.L, 8], [0, 4], [K.K, 1], [0, 40]], { posicao: [160, 186] });

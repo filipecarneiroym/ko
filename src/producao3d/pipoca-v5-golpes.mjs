@@ -312,19 +312,60 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 30 },
   ]);
 
-  // dp: subida com soco (Shoryuken próprio da Pipoca, 30 quadros). Agacha e carrega
-  // (4), sobe com o braço da frente em linha reta (10), no ápice o corpo está mais
-  // alto e o braço de trás puxa para o quadril; desce e pousa (22-30).
-  // Subida com os pés plantados: o motor não tira o lutador do chão, então a
-  // força vem da perna de trás empurrando e do tronco inclinado; a pelve sobe pouco.
-  clips.dp = animar('dp', 30, [
+  // A subida inteira pertence ao motor. O clipe recolhe as pernas e estende
+  // o soco, sem acrescentar altura visual à trajetória física.
+  const pernasSubida = { E: { local: v(.28, -.70, ZE), loc: 1, joelho: v(1, .5, -.1), pe: 'corpo' },
+    D: { local: v(-.18, -.96, ZD), loc: 1, joelho: v(1, .4, .1), pe: 'corpo' } };
+  clips.dp = animar('dp', simulador.LUTADORES.pipoca.golpes.dp.dur, [
     { q: 0 },
     { q: 4, giro: 0, inclinacao: -.12, pelve: v(-.02, -.22, 0), pernas: { E: { tornozelo: v(.5, .2, ZE + .06), joelho: v(1, .5, -.2), pe: 'plano' }, D: { joelho: v(1, .1, .06) } }, bracos: { E: { alvo: v(.12, .02, -.14), cotovelo: v(-.2, -.6, -1) }, D: { alvo: v(-.02, .05, .16), cotovelo: v(-.3, -.8, 1) } } },
-    { q: 7, giro: .1, inclinacao: .16, pelve: v(.03, .04, 0), pernas: { E: { tornozelo: v(.55, .1, ZE + .08), joelho: v(1, .6, 0), pe: 'plano' }, D: { tornozelo: v(.95, .1, ZD - .04), joelho: v(0, 1, 0), pe: 'esticado' } }, bracos: { E: { alvo: v(.1, .5, -.12), cotovelo: v(-.1, .1, -1) }, D: { alvo: v(-.14, .18, .14), cotovelo: v(-.3, -.2, 1) } } },
-    { q: 10, giro: .1, inclinacao: .2, pelve: v(.05, .08, 0), pernas: { E: { tornozelo: v(.4, .1, ZE + .1), joelho: v(1, .6, 0), pe: 'plano' }, D: { tornozelo: v(1.0, .1, ZD - .04), joelho: v(0, 1, 0), pe: 'esticado' } }, bracos: { E: { alvo: v(.04, .7, -.12), cotovelo: v(-.1, .3, -1) }, D: { alvo: v(-.2, .12, .14), cotovelo: v(-.4, -.4, 1) } } },
-    { q: 16, giro: 0, inclinacao: .08, pelve: v(.02, .04, 0), pernas: { E: { tornozelo: v(.5, .1, ZE + .08), joelho: v(1, .6, 0), pe: 'plano' }, D: { tornozelo: v(.7, .1, ZD - .06), joelho: v(0, .9, 0), pe: 'plano' } }, bracos: { E: { alvo: v(.06, .5, -.12), cotovelo: v(-.1, .2, -1) }, D: { alvo: v(-.14, .14, .14), cotovelo: v(-.3, -.2, 1) } } },
-    { q: 22, giro: 0, inclinacao: -.04, pelve: v(0, .02, 0) },
-    { q: 30 },
+    { q: 7, giro: .1, inclinacao: .12, pernas: pernasSubida, bracos: { E: { alvo: v(.1, .6, -.12), cotovelo: v(-.1, .1, -1) } } },
+    { q: 12, giro: .25, inclinacao: .08, pernas: pernasSubida, bracos: { E: { alvo: v(.04, .72, -.12), cotovelo: v(-.1, .3, -1) } } },
+    { q: 20, giro: .35, inclinacao: .04, pernas: pernasSubida, bracos: { E: { alvo: v(.06, .6, -.12), cotovelo: v(-.1, .2, -1) } } },
+    { q: 27, giro: .1, inclinacao: -.04, pernas: pernasSubida },
+    { q: 32, pelve: v(0, -.16, 0) },
+    { q: 40 },
+  ]);
+
+  // Chute furacão: perna E estendida e D recolhida, girando com a pelve.
+  // A raiz não avança no GLB: movimento e suspensão vêm da simulação.
+  function furacao(nome, fim, voltas) {
+    const chaves = [{ q: 0 }, { q: 5, pelve: v(-.04, -.14, 0) }];
+    // A perna aponta para a adversária no início de cada janela do motor:
+    // q9/17/25 no normal, q9/15/21/27 no EX.
+    const intervalo = nome === 'tatsuEx' ? 6 : 8;
+    for (let q = 7; q <= fim; q += 2) chaves.push({ q, giro: (q - 9) / intervalo * Math.PI * 2,
+      inclinacao: .12, pelve: v(0, -.06, 0), pernas: {
+        E: { local: v(1.05, -.30, ZE * .5), loc: 1, joelho: v(1, .7, -.1), pe: 'corpo' },
+        D: { local: v(-.13, -.88, ZD * .5), loc: 1, joelho: v(1, .4, .1), pe: 'corpo' },
+      } });
+    chaves.push({ q: fim + 5, giro: voltas * Math.PI * 2, pelve: v(0, -.12, 0) },
+      { q: simulador.LUTADORES.pipoca.golpes[nome].dur, giro: voltas * Math.PI * 2 });
+    return animar(nome, simulador.LUTADORES.pipoca.golpes[nome].dur, chaves);
+  }
+  clips.tatsu = furacao('tatsu', 27, 3);
+  clips.tatsuEx = furacao('tatsuEx', 31, 4);
+  const copiarTempo = (origem, nome, duracao) => ({ clip: { ...structuredClone(origem.clip), nome, duracaoQuadros: duracao,
+    canais: origem.clip.canais.map(c => ({ ...structuredClone(c), tempos: c.tempos.map(t => t * duracao / origem.clip.duracaoQuadros) })) } });
+  clips.espEx = copiarTempo(clips.esp, 'espEx', 30);
+  clips.dpEx = copiarTempo(clips.dp, 'dpEx', 44);
+  clips.ultra = animar('ultra', 70, [
+    { q: 0 }, { q: 8, pelve: v(-.08, -.18, 0), inclinacao: .12, ...juntas(.18, -.45) },
+    { q: 20, pelve: v(-.10, -.22, 0), inclinacao: .16, ...juntas(.20, -.42) },
+    { q: 25, pelve: v(.08, -.10, 0), inclinacao: .18, ...juntas(.88, -.38) },
+    { q: 38, pelve: v(.04, -.08, 0), inclinacao: .12, ...juntas(.82, -.38) },
+    { q: 55, ...juntas(.30, -.42) }, { q: 70 },
+  ]);
+  clips.foc = animar('foc', 34, [
+    { q: 0 }, { q: 6, giro: -.2, inclinacao: .06, pelve: v(-.04, -.08, 0) },
+    { q: 12, giro: -.38, inclinacao: .12, pelve: v(-.08, -.14, 0),
+      bracos: { E: { alvo: v(.12, -.15, -.14), cotovelo: v(-.3, -.5, -1) } } },
+    { q: 14, giro: -.38, inclinacao: .12, pelve: v(-.08, -.14, 0) },
+    { q: 19, giro: .35, inclinacao: -.12, pelve: v(.12, -.06, 0),
+      bracos: { E: { alvo: v(.88, -.12, -.02), cotovelo: v(.1, -.4, -1) } } },
+    { q: 21, giro: .35, inclinacao: -.12, pelve: v(.12, -.06, 0),
+      bracos: { E: { alvo: v(.88, -.12, -.02), cotovelo: v(.1, -.4, -1) } } },
+    { q: 28, giro: .1 }, { q: 34 },
   ]);
 
   // agachado: guarda baixa de luta (laço de 60 quadros com respiração).

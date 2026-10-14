@@ -86,7 +86,7 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
     await golpe('4-cenoura', 'KeyI', 'especial', { depois: 900 });
     await page.waitForTimeout(1500);
     await page.evaluate(() => { const s = globalThis.__laboratorio3d.estado; s.p[0].poder = 1000; s.p[0].x = 160 * 16; s.p[1].x = 200 * 16; });
-    await golpe('5-super', 'KeyI', 'super', { depois: 200 });
+    await golpe('5-super', 'KeyO', 'super', { depois: 200 });
     await page.waitForTimeout(3000);
     await page.evaluate(() => { const s = globalThis.__laboratorio3d.estado; s.p[1].vida = 1; });
     await aproximar();

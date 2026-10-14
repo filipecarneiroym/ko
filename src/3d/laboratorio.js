@@ -30,10 +30,10 @@ const modelos = [null, null];
 const controles = globalThis.KOControle?.criar();
 const ciclo = new AbortController();
 const ouvir = (alvo, evento, fn, opcoes = {}) => alvo?.addEventListener(evento, fn, { ...opcoes, signal: ciclo.signal });
-const mapa = { KeyA: 'L', KeyD: 'R', KeyW: 'U', KeyS: 'D', KeyJ: 'P', KeyK: 'K', KeyL: 'D_', KeyI: 'S' };
+const mapa = { KeyA: 'L', KeyD: 'R', KeyW: 'U', KeyS: 'D', KeyJ: 'P', KeyK: 'K', KeyL: 'F', KeyI: 'S', KeyE: 'EX', KeyO: 'SUPER', KeyH: 'ULTRA' };
 // Jogador 2 no mesmo teclado (modo 2 jogadores): setas + 1/2/3/0 do teclado numérico ou N/M/,/.
-const mapa2 = { ArrowLeft: 'L', ArrowRight: 'R', ArrowUp: 'U', ArrowDown: 'D', Numpad1: 'P', Numpad2: 'K', Numpad3: 'D_', Numpad0: 'S',
-  KeyN: 'P', KeyM: 'K', Comma: 'D_', Period: 'S' };
+const mapa2 = { ArrowLeft: 'L', ArrowRight: 'R', ArrowUp: 'U', ArrowDown: 'D', Numpad1: 'P', Numpad2: 'K', Numpad3: 'F', Numpad0: 'S',
+  KeyN: 'P', KeyM: 'K', Comma: 'F', Period: 'S' };
 const teclas2 = new Set();
 const limparEntrada = () => { teclas.clear(); teclas2.clear(); pulsos.clear(); toques.clear(); };
 const reiniciar = () => {
@@ -284,7 +284,8 @@ try {
     if (globalThis.__laboratorio3d?.pausado) acumulado = 0;
     while (acumulado >= 1000 / 60) {
       let entrada = 0;
-      for (const tecla of teclas) entrada |= KOSim.B[mapa[tecla]];
+      const bitsAcao = acao => ({ EX: KOSim.B.S | KOSim.B.P, SUPER: KOSim.B.S | KOSim.B.K, ULTRA: KOSim.B.S | KOSim.B.F }[acao] || KOSim.B[acao]);
+      for (const tecla of teclas) entrada |= bitsAcao(mapa[tecla]);
       for (const botao of toques.values()) entrada |= KOSim.B[botao];
       for (const [botao, quadros] of pulsos) {
         entrada |= KOSim.B[botao];

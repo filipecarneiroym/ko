@@ -61,6 +61,6 @@
         <label>Uivo <input type="file" accept=".glb" data-modelo="1"></label>
         </details>
     <p id="estado-modelos" role="status" aria-live="polite">Escolha o modo e comece a luta. Lola refinada em teste; ainda não aprovada como arte final.</p>
-    <p>Teclado: A/D para andar; W para pular; S para agachar; J/K para golpes; L para defender; I para especial. No modo 2 jogadores, o jogador 2 usa as setas e N (soco), M (chute), vírgula (defesa), ponto (especial). Controles com mapeamento padrão podem testar os dois lados. Esta prévia não altera salas nem ranking.</p>
+    <p>Teclado: A/D para andar; W para pular; S para agachar; J/K para golpes; L para carregar o Focus; I para especial; E para EX; O para Super; H para Ultra. Frente + especial: Shoryuken; trás + especial: furacão. Para defender, segure para trás. No modo 2 jogadores: setas, N (soco), M (chute), vírgula (Focus) e ponto (especial). Especial + soco/chute/Focus: EX/Super/Ultra. Esta prévia não altera salas nem ranking.</p>
 </main>
 @endsection

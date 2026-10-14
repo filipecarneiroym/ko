@@ -77,7 +77,10 @@ export async function carregarModelo(buffer, id, simulador, scene) {
         raiz.rotation.y = pose.face > 0 ? 0 : Math.PI;
         raiz.rotation.z = giro;
         raiz.setEnabled(pose.visivel);
-        const grupo = grupos.get(pose.clip);
+        // Estudos históricos não trazem os golpes novos; só o laboratório usa
+        // essa reserva. Os GLBs jogáveis exportam os clipes próprios.
+        const reservas = { foc: 'p2', espEx: 'esp', dpEx: 'dp', tatsuEx: 'tatsu', ultra: 'esp' };
+        const grupo = grupos.get(pose.clip) || grupos.get(reservas[pose.clip]);
         if (!grupo) return;
         const distanciaCiclo = ciclosPorDistancia.get(grupo.name);
         const marchaAtiva = !!distanciaCiclo;

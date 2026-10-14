@@ -23,9 +23,12 @@
       if (eu.estado === 'dano' && eu.combo >= 2 && eu.poder >= K.PODER_MAX / 2 && sorte < perfil.quebra) return B.D_ | B.S;
       const vindo = (ele.estado === 'golpe' && dist < 70) || s.proj.some((p) => p.dono !== lado && Math.abs(p.x - eu.x) < 90 * K.U);
       if (vindo && sorte < perfil.defesa) { espera = 10; segura = ele.golpe === 'ck' ? B.D_ | B.D : B.D_; return segura; }
-      if (eu.poder >= K.PODER_MAX && dist < 90 && sorte < perfil.super) { fila = [[B.S, 2]]; return 0; }
+      if (eu.revanche >= K.ULTRA_MIN && K.LUTADORES[eu.id].golpes.ultra && dist > 65 && sorte < perfil.super / 2) { fila = [[B.S | B.F, 2]]; return 0; }
+      if (eu.poder >= K.PODER_MAX && dist < 90 && sorte < perfil.super) { fila = [[B.S | B.K, 2]]; return 0; }
+      if (K.LUTADORES[eu.id].golpes.dp && ele.y > 20 * K.U && dist < 65 && sorte < perfil.defesa) { fila = [[frente | B.S, 2]]; return 0; }
+      if (K.LUTADORES[eu.id].golpes.tatsu && dist >= 45 && dist < 100 && sorte < perfil.combo / 3) { fila = [[tras | B.S, 2]]; return 0; }
       if (dist > 110) {
-        if (sorte < 0.04) fila = [[B.S, 2]];
+        if (sorte < 0.04) fila = [[B.S | (eu.poder >= K.EX_CUSTO && K.LUTADORES[eu.id].golpes.espEx && perfil.combo > 0 ? B.P : 0), 2]];
         else if (sorte < 0.08) fila = [[frente | B.U, 4], [0, 20], [B.K, 2]];
         else { espera = 8; segura = frente; return frente; }
         return 0;

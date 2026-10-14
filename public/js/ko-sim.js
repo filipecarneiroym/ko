@@ -18,6 +18,7 @@
   const SEPARACAO = 26 * U;           // distância mínima entre os corpos
   const ROUND_FRAMES = 99 * 60;
   const PODER_MAX = 1000;
+  const EX_CUSTO = 250, CANCEL_FOCO_CUSTO = 500, ULTRA_MAX = 1000, ULTRA_MIN = 500;
   const BUFFER = 6;                   // quadros que um botão apertado fica "guardado"
   const JANELA_MOVIMENTO = 16;        // quadros de direção guardados para sequências (quarto de círculo)
   const INTRO = 100, FIM_ROUND = 150, JANELA_FINAL = 300, DURACAO_FINAL = 200;
@@ -37,6 +38,9 @@
   // Focus Attack do SF4 (botão F): armadura que aguenta um golpe enquanto carrega
   // e depois um soco forte. Vale para todo lutador que não tiver o seu.
   const FOCO = { dur: 34, armadura: [2, 18], janelas: [P({ de: 19, ate: 21, dano: 50, hs: 28, bs: 12, caixa: [6, -56, 30, 16] })] };
+  const FOCOS = [FOCO,
+    { ...FOCO, janelas: [P({ de: 19, ate: 21, dano: 70, hs: 36, bs: 18, colapso: 1, caixa: [6, -56, 30, 16] })] },
+    { ...FOCO, janelas: [P({ de: 19, ate: 21, dano: 95, hs: 42, bs: 18, colapso: 1, imparavel: 1, quebraArmadura: 1, caixa: [6, -56, 30, 16] })] }];
   const LUTADORES = {
     pipoca: {
       nome: 'Lola', vida: 950, andar: 30, tras: 24, correr: 86, pulo: 150, puloX: 50, gravidade: 9, pulosAr: 1,
@@ -50,9 +54,23 @@
         ap: { dur: 20, janelas: [P({ de: 4, ate: 14, dano: 45, tipo: 'aereo', caixa: [4, -40, 22, 14] })] },
         ak: { dur: 22, janelas: [P({ de: 5, ate: 16, dano: 55, hs: 18, tipo: 'aereo', caixa: [2, -26, 28, 12] })] },
         // Hadouken: a chama sai reta e some; não volta.
-        esp: { dur: 30, proj: { quadro: 10, tipo: 'cenoura', vx: 100, y: 48, w: 16, h: 8, vida: 110, dano: 55, hs: 20, bs: 14 } },
+        esp: { dur: 30, focusCancel: 1, proj: { quadro: 10, tipo: 'cenoura', vx: 100, y: 36, w: 16, h: 8, vida: 110, dano: 55, hs: 20, bs: 14 } },
         // Subida com soco (frente, baixo, baixo-frente + soco): alta, pega quem está de pé.
-        dp: { dur: 30, janelas: [P({ de: 6, ate: 12, dano: 60, hs: 22, bs: 14, caixa: [2, -96, 30, 70], derruba: 1 })] },
+        dp: { dur: 40, focusCancel: 1, inv: [0, 5], salta: [5, 26, 110], pousaNoFim: 1,
+          janelas: [P({ de: 6, ate: 12, dano: 65, hs: 24, bs: 14, caixa: [2, -74, 28, 66], lanca: [30, 120], derruba: 1 })] },
+        tatsu: { dur: 40, focusCancel: 1, salta: [6, 50, 65], planar: [8, 26], pousaNoFim: 1,
+          mov: [[7, 27, 50]], invProj: [7, 27], janelas: [9, 17, 25].map(de => P({ de, ate: de + 2,
+            dano: 22, hs: 15, bs: 10, caixa: [-10, -42, 46, 26], quebraArmadura: 1 })) },
+        espEx: { dur: 30, custo: EX_CUSTO, focusCancel: 1,
+          proj: { quadro: 10, quadros: [10, 16], tipo: 'cenoura', vx: 115, y: 36, w: 18, h: 10, vida: 100, dano: 42, hs: 22, bs: 15, ex: 1 } },
+        dpEx: { dur: 44, custo: EX_CUSTO, focusCancel: 1, inv: [0, 10], salta: [5, 30, 125], pousaNoFim: 1,
+          janelas: [P({ de: 6, ate: 8, dano: 42, hs: 24, bs: 15, caixa: [0, -74, 30, 70], lanca: [20, 110] }),
+            P({ de: 10, ate: 14, dano: 48, hs: 28, bs: 17, caixa: [0, -74, 30, 70], lanca: [35, 150], derruba: 1 })] },
+        tatsuEx: { dur: 44, custo: EX_CUSTO, salta: [6, 60, 65], planar: [8, 30], pousaNoFim: 1,
+          mov: [[7, 31, 60]], invProj: [7, 31], janelas: [9, 15, 21, 27].map((de, i) => P({ de, ate: de + 2,
+            dano: 25, hs: 20, bs: 12, caixa: [-12, -44, 50, 28], quebraArmadura: 1, ...(i === 3 ? { lanca: [35, 110], derruba: 1 } : {}) })) },
+        ultra: { dur: 70, inv: [0, 24], proj: { quadro: 25, tipo: 'cenoura', vx: 120, y: 36,
+          w: 42, h: 22, vida: 100, dano: 300, hs: 38, bs: 24, derruba: 1, ultra: 1, quebraArmadura: 1 } },
         // Toca: some no chão, anda por baixo e salta debaixo do adversário.
         sup: { dur: 62, inv: [0, 46], toca: [8, 42], janelas: [P({ de: 44, ate: 50, dano: 230, hs: 34, bs: 20, caixa: [-16, -86, 32, 86], lanca: [16, 190], derruba: 1 })] },
       },
@@ -364,7 +382,8 @@
     const d = LUTADORES[id];
     return {
       id, lado, x: lado === 0 ? 112 * U : 272 * U, y: 0, vx: 0, vy: 0, face: lado === 0 ? 1 : -1,
-      vida: d.vida, poder: 0, estado: 'parado', t: 0, golpe: null, encostou: 0, acertos: 0,
+      vida: d.vida, poder: 0, revanche: 0, cinza: 0, curaT: 0, focoCarga: 0, focoSolto: 0, nivelFoco: 1,
+      estado: 'parado', t: 0, golpe: null, encostou: 0, acertos: 0,
       stun: 0, combo: 0, juggle: 0, inv: 0, pulosAr: 0, empurrao: 0, sumido: 0, armadura: 0, forca: 0, enrolado: 0, prende: '', estrelas: 0,
       bAnt: 0, buf: { P: 0, K: 0, S: 0, B: 0, U: 0 }, quandoP: -99, quandoK: -99, hist: [],
       toqueFrente: -99, toqueTras: -99, soltouFrente: 1, soltouTras: 1,
@@ -394,6 +413,7 @@
 
   // ---------- Utilidades ----------
   const dados = (l) => LUTADORES[l.id];
+  const golpeAtual = (l) => l.golpe === 'foc' ? FOCOS[(l.nivelFoco || 1) - 1] : dados(l).golpes[l.golpe];
   const noChao = (l) => l.y === 0;
   const temBit = (bits, b) => (bits & b) !== 0;
   function frenteBit(l) { return l.face === 1 ? B.R : B.L; }
@@ -445,7 +465,7 @@
     if (sobe & B.RC) l.toqueDuploTras = 1;
     if (!(bits & tr) && l.toqueTras !== s.f) l.soltouTras = 1;
     // Histórico de direção (frente/baixo) para sequências como o quarto de círculo.
-    l.hist.push((bits & B.D ? 'D' : '') + (bits & fr ? 'F' : '') || 'N');
+    l.hist.push((bits & B.D ? 'D' : '') + (bits & fr ? 'F' : bits & tr ? 'T' : '') || 'N');
     if (l.hist.length > JANELA_MOVIMENTO) l.hist.shift();
     l.bAnt = bits;
   }
@@ -459,22 +479,46 @@
   }
   const quartoDeCirculo = (l) => sequencia(l, ['D', 'DF', 'F']);   // baixo, baixo-frente, frente
   const dragao = (l) => sequencia(l, ['F', 'D', 'DF']);             // frente, baixo, baixo-frente
+  const quartoParaTras = (l) => sequencia(l, ['D', 'DT', 'T']);
 
   function usar(l, k) { if (l.buf[k] > 0) { l.buf[k] = 0; return true; } return false; }
 
   function iniciarGolpe(s, l, nome) {
     l.golpe = nome; l.estado = 'golpe'; l.t = 0; l.encostou = 0; l.acertos = 0;
-    if (nome !== 'esp' && nome !== 'sup') s.ev.push({ t: 'ataque', lado: l.lado, id: l.id, golpe: nome });
-    if (nome === 'esp') s.ev.push({ t: 'especial', lado: l.lado, id: l.id });
+    l.vx = 0; l.armadura = 0;
+    if (nome === 'foc') { l.focoCarga = 0; l.focoSolto = 0; l.nivelFoco = 1; l.armadura = 1; }
+    if (dados(l).golpes[nome]?.custo) { l.poder -= dados(l).golpes[nome].custo; s.ev.push({ t: 'ex', lado: l.lado, id: l.id, golpe: nome }); }
+    if (nome !== 'esp' && nome !== 'sup' && nome !== 'ultra') s.ev.push({ t: 'ataque', lado: l.lado, id: l.id, golpe: nome });
+    if (nome === 'esp' || nome === 'tatsu' || /Ex$/.test(nome)) s.ev.push({ t: 'especial', lado: l.lado, id: l.id, golpe: nome });
     if (nome === 'sup') { l.poder = 0; s.ev.push({ t: 'super', lado: l.lado, id: l.id }); s.hitstop = 24; }
+    if (nome === 'ultra') { l.ultraForca = 70 + ((l.revanche * 30 / ULTRA_MAX) | 0); l.revanche = 0; s.ev.push({ t: 'ultra', lado: l.lado, id: l.id }); s.hitstop = 28; }
   }
 
-  function tentarEspecial(s, l) {
-    if (!usar(l, 'S')) return false;
-    if (l.poder >= PODER_MAX) { iniciarGolpe(s, l, 'sup'); return true; }
-    if (dados(l).golpes.esp.proj && s.proj.some((p) => p.dono === l.lado)) return false; // um projétil por vez
-    iniciarGolpe(s, l, 'esp');
+  function comandoEspecial(s, l, bits) {
+    const g = dados(l).golpes;
+    if (!(bits & B.S) && !l.buf.S) return null;
+    if ((bits & B.F) && (l.buf.S || l.buf.F)) return g.ultra && l.revanche >= ULTRA_MIN ? 'ultra' : 'indisponivel';
+    if ((bits & B.K) && (l.buf.S || l.buf.K)) return l.poder >= PODER_MAX ? 'sup' : 'indisponivel';
+    const base = g.dp && (bits & frenteBit(l)) ? 'dp' : g.tatsu && (bits & trasBit(l)) ? 'tatsu' : 'esp';
+    if ((bits & B.P) && (l.buf.S || l.buf.P)) return g[base + 'Ex'] && l.poder >= EX_CUSTO ? base + 'Ex' : 'indisponivel';
+    return l.buf.S ? base : null;
+  }
+  function tentarEspecial(s, l, bits) {
+    const nome = comandoEspecial(s, l, bits);
+    if (!nome) return false;
+    l.buf.S = l.buf.P = l.buf.K = l.buf.F = 0;
+    if (nome === 'indisponivel') return true;
+    if (dados(l).golpes[nome].proj && s.proj.some(p => p.dono === l.lado)) return true;
+    iniciarGolpe(s, l, nome);
     return true;
+  }
+
+  function passoFoco(s, l, frente) {
+    l.golpe = null; l.armadura = 0; l.focoSolto = 1;
+    mudar(l, 'impulso'); l.vx = l.face * (frente ? 70 : -60);
+    l.vy = Math.min(l.vy, 0);
+    l.impulsoDur = frente ? 12 : 16; l.inv = frente ? 0 : 6;
+    s.ev.push({ t: 'passoFoco', lado: l.lado });
   }
 
   // ---------- Decisão de cada lutador ----------
@@ -486,14 +530,33 @@
     // (Sem quebra-combo: no SF4 não existe; a saída é defender ou o Focus Attack.)
 
     if (l.estado === 'golpe') {
+      if (l.golpe === 'foc') {
+        if ((l.toqueDuploFrente || l.toqueDuploTras) && (!l.focoSolto || l.encostou)) { passoFoco(s, l, !!l.toqueDuploFrente); return; }
+        if (!l.focoSolto) {
+          l.focoCarga++;
+          l.nivelFoco = l.focoCarga >= 60 ? 3 : l.focoCarga >= 24 ? 2 : 1;
+          if (!segura(B.F) || l.focoCarga >= 60) { l.focoSolto = 1; l.t = 14; }
+          else l.t = 0;
+        }
+        return;
+      }
       // Cancelar no próximo golpe (combo) quando o golpe atual encostou.
       const g = d.golpes[l.golpe] || {};
+      if (g.focusCancel && l.encostou && l.buf.F && l.poder >= CANCEL_FOCO_CUSTO && !(bits & B.S)) {
+        l.buf.F = 0; l.poder -= CANCEL_FOCO_CUSTO;
+        // Cancela também a velocidade vertical da subida; o Focus começa no piso.
+        // No ar só a emenda em passo é permitida, sem teletransportar ao chão.
+        if (!noChao(l)) { passoFoco(s, l, !segura(tr)); return; }
+        iniciarGolpe(s, l, 'foc'); return;
+      }
+      // Aceitar o acorde do controle nos dois primeiros quadros do especial.
+      if (l.t <= 2 && ['esp', 'dp', 'tatsu'].includes(l.golpe) && segura(B.S) && (bits & (B.P | B.K | B.F)) && tentarEspecial(s, l, bits)) return;
       if (l.encostou && g.cancel) {
-        if (g.cancel.S && l.buf.S && tentarEspecial(s, l)) return;
+        if (g.cancel.S && l.buf.S && tentarEspecial(s, l, bits)) return;
         for (const k of ['P', 'K']) if (g.cancel[k] && usar(l, k)) { iniciarGolpe(s, l, g.cancel[k]); return; }
       }
       // Esquiva (KOF) logo no comecinho de um soco/chute, para o "soco+chute" juntos funcionar.
-      if (l.t <= 2 && (l.golpe === 'p1' || l.golpe === 'k1') && Math.abs(l.quandoP - l.quandoK) <= 3 && noChao(l)) {
+      if (!segura(B.S) && l.t <= 2 && (l.golpe === 'p1' || l.golpe === 'k1') && Math.abs(l.quandoP - l.quandoK) <= 3 && noChao(l)) {
         rolar(l); return;
       }
       return;
@@ -511,17 +574,19 @@
 
     if (!livre(l) && l.estado !== 'defesa' && l.estado !== 'defesaBaixa') return;
 
+    if (tentarEspecial(s, l, bits)) return;
     // Esquiva rolando: soco + chute juntos.
     if ((l.buf.P || l.buf.K) && Math.abs(l.quandoP - l.quandoK) <= 3 && l.quandoP > s.f - BUFFER && l.quandoK > s.f - BUFFER) {
       l.buf.P = l.buf.K = 0; rolar(l); return;
     }
-    if (tentarEspecial(s, l)) return;
-
     const agachado = segura(B.D);
     if (usar(l, 'F')) { iniciarGolpe(s, l, 'foc'); return; } // F: Focus Attack
     // Frente, baixo, baixo-frente + soco = subida (dp), que sobe do chão.
-    if (l.buf.P && !agachado && d.golpes.dp && dragao(l)) {
+    if (l.buf.P && d.golpes.dp && dragao(l)) {
       l.buf.P = 0; l.hist = []; iniciarGolpe(s, l, 'dp'); return;
+    }
+    if (l.buf.K && d.golpes.tatsu && quartoParaTras(l)) {
+      l.buf.K = 0; l.hist = []; iniciarGolpe(s, l, 'tatsu'); return;
     }
     // Quarto de círculo + soco = projétil (Hadouken): a cenoura, quando o lutador tem uma.
     if (l.buf.P && !agachado && d.golpes.esp?.proj && quartoDeCirculo(l) && !s.proj.some((p) => p.dono === l.lado)) {
@@ -586,9 +651,12 @@
     const d = dados(l);
     l.t++;
     if (l.inv > 0) l.inv--;
+    if (l.cinza > 0 && livre(l) && ++l.curaT > 90 && l.curaT % 3 === 0) {
+      l.cinza--; l.vida = Math.min(d.vida, l.vida + 1);
+    }
 
     if (l.estado === 'golpe') {
-      const g = d.golpes[l.golpe];
+      const g = golpeAtual(l);
       if (g.mov) { l.vx = 0; for (const [de, ate, v] of g.mov) if (l.t >= de && l.t <= ate) l.vx = l.face * v; }
       if (g.inv && l.t >= g.inv[0] && l.t <= g.inv[1]) l.inv = Math.max(l.inv, 1);
       if (g.toca) {
@@ -596,7 +664,7 @@
         if (l.sumido) { const alvo = o.x - l.x; l.vx = alvo > 96 ? 96 : alvo < -96 ? -96 : alvo; }
         else if (l.t > g.toca[1]) l.vx = 0;
       }
-      if (g.proj && l.t === g.proj.quadro) soltarProjetil(s, l, g.proj);
+      if (g.proj && (g.proj.quadros || [g.proj.quadro]).includes(l.t)) soltarProjetil(s, l, g.proj);
       if (g.teleporta && l.t === g.teleporta) {
         // Aparece atrás do adversário; se ele está colado na parede, aparece na frente mesmo.
         const lado = o.x >= l.x ? 1 : -1, destino = o.x + lado * 30 * U;
@@ -611,11 +679,12 @@
         s.ev.push({ t: 'agarrao', lado: l.lado });
       }
       if (g.salta && l.t === g.salta[0]) { l.vx = l.face * g.salta[1]; l.vy = g.salta[2]; } // golpe que sai do chão
-      if (g.armadura) { if (l.t === g.armadura[0]) l.armadura = 1; else if (l.t > g.armadura[1]) l.armadura = 0; }
+      if (l.golpe === 'foc') { if (l.focoSolto && l.t >= 19) l.armadura = 0; }
+      else if (g.armadura) { if (l.t === g.armadura[0]) l.armadura = 1; else if (l.t > g.armadura[1]) l.armadura = 0; }
       if (g.forca && l.t === g.dur) { l.forca = g.forca; s.ev.push({ t: 'forca', lado: l.lado }); }
       if (noChao(l) && l.vy <= 0 && !g.mov && !g.toca && l.golpe !== 'k2') vel(s, l, 0);
       if (g.gelo && l.t === g.gelo[0]) { s.gelo = { lado: l.lado, f: g.gelo[1] }; s.ev.push({ t: 'gelo', lado: l.lado }); }
-      if (l.t >= g.dur) { l.golpe = null; l.sumido = 0; mudar(l, noChao(l) ? 'parado' : 'pulo'); l.vx = noChao(l) ? 0 : l.vx; }
+      if (l.t >= g.dur) { l.golpe = null; l.sumido = 0; l.armadura = 0; mudar(l, noChao(l) ? 'parado' : 'pulo'); l.vx = noChao(l) ? 0 : l.vx; }
     } else if (l.estado === 'agarrando') {
       if (l.t === 10) {
         // Joga o outro para trás de si e derruba.
@@ -631,6 +700,11 @@
       if (l.t >= 24) { mudar(l, 'parado'); l.vx = 0; } else if (l.t > 16) l.vx = 0;
     } else if (l.estado === 'recuo') {
       if (l.t >= 18) { mudar(l, 'parado'); l.vx = 0; }
+    } else if (l.estado === 'impulso') {
+      if (l.t >= l.impulsoDur) { mudar(l, noChao(l) ? 'parado' : 'pulo'); l.vx = 0; }
+    } else if (l.estado === 'colapso') {
+      l.vx = 0;
+      if (l.t >= 36) mudar(l, 'caido');
     } else if (l.estado === 'dano' || l.estado === 'quebra') {
       if (noChao(l)) {
         if (l.stun > 0) l.stun--;
@@ -659,11 +733,14 @@
     // Movimento e gravidade.
     l.x += l.vx;
     if (!noChao(l) || l.vy > 0) {
-      l.y += l.vy; l.vy -= d.gravidade;
+      const g = l.estado === 'golpe' && golpeAtual(l);
+      const planando = g?.planar && l.t >= g.planar[0] && l.t <= g.planar[1];
+      if (planando) l.vy = 0;
+      else { l.y += l.vy; l.vy -= d.gravidade; }
       if (l.y <= 0) {
         l.y = 0; l.vy = 0;
         if (l.estado === 'dano' && (l.derrubado || l.combo > 0)) { mudar(l, l.vida > 0 ? 'caido' : 'derrotado'); l.vx = 0; l.derrubado = 0; s.ev.push({ t: 'chao', lado: l.lado }); }
-        else if (l.estado === 'pulo' || l.estado === 'golpe') { l.golpe = null; mudar(l, 'pousando'); l.vx = 0; }
+        else if (l.estado === 'pulo' || l.estado === 'golpe' && !g?.pousaNoFim) { l.golpe = null; mudar(l, 'pousando'); l.vx = 0; }
         else if (l.estado === 'dano') l.vx = 0;
       }
     }
@@ -674,8 +751,9 @@
 
   function soltarProjetil(s, l, p) {
     s.proj.push({
-      dono: l.lado, tipo: p.tipo, x: l.x + l.face * 18 * U, y: p.y * U, vx: l.face * p.vx, vida: p.vida, t: 0,
-      volta: p.volta, w: p.w * U, h: p.h * U, dano: p.dano, hs: p.hs, bs: p.bs, acertou: 0, voltando: 0,
+      dono: l.lado, origem: l.golpe, tipo: p.tipo, x: l.x + l.face * 18 * U, y: p.y * U, vx: l.face * p.vx, vida: p.vida, t: 0,
+      volta: p.volta, w: p.w * U, h: p.h * U, dano: p.ultra ? ((p.dano * l.ultraForca / 100) | 0) : p.dano, hs: p.hs, bs: p.bs, acertou: 0, voltando: 0,
+      ex: p.ex || 0, ultra: p.ultra || 0, quebraArmadura: p.quebraArmadura || 0,
       tipoGolpe: p.tipoGolpe || 'medio', enrola: p.enrola || 0, derruba: p.derruba || 0, empurra: p.empurra || 4, mordidas: p.mordidas || 0, intervalo: p.intervalo || 0, colado: 0, espera: 0,
     });
   }
@@ -683,7 +761,7 @@
   // ---------- Acertos ----------
   function ativas(l) {
     if (l.estado !== 'golpe' || l.sumido) return [];
-    const g = dados(l).golpes[l.golpe];
+    const g = golpeAtual(l);
     if (!g.janelas) return [];
     return g.janelas.map((j, i) => [j, i]).filter(([j, i]) => l.t >= j.de && l.t <= j.ate && !(l.acertos & (1 << i)));
   }
@@ -711,21 +789,25 @@
       return 'defesa';
     }
     // Pose do Maromba: aguenta o golpe (leva metade do dano) sem recuar.
-    if (v.armadura > 0 && golpe.tipo !== 'agarrao') {
+    if (v.armadura > 0 && golpe.tipo !== 'agarrao' && !golpe.quebraArmadura) {
       v.armadura = 0;
-      v.vida = Math.max(s.treino ? 1 : 0, v.vida - ((golpe.dano / 2) | 0));
+      const foco = v.golpe === 'foc', danoArmadura = foco ? golpe.dano : ((golpe.dano / 2) | 0);
+      const perdido = Math.min(v.vida - (s.treino ? 1 : 0), danoArmadura);
+      v.vida -= perdido;
+      if (foco) { v.cinza += perdido; v.curaT = 0; v.revanche = Math.min(ULTRA_MAX, v.revanche + perdido * 3); }
       a.poder = Math.min(PODER_MAX, a.poder + ((golpe.dano / 2) | 0));
       s.hitstop = Math.max(s.hitstop, 8);
       s.ev.push({ t: 'armadura', lado: v.lado, x: v.x, y: v.y + 44 * U });
       return 'armadura';
     }
     // Combo: cada acerto seguido rende menos (sem isso um combo longo mata de uma vez).
-    const noCombo = v.estado === 'dano' || v.estado === 'agarrado' || !noChao(v);
+    const noCombo = v.estado === 'dano' || v.estado === 'colapso' || v.estado === 'agarrado' || !noChao(v);
     v.combo = noCombo ? v.combo + 1 : 1;
     const escala = Math.max(40, 100 - 10 * Math.max(0, v.combo - 2));
     const base = a.forca > 0 ? ((golpe.dano * 130) / 100) | 0 : golpe.dano; // Maromba depois de posar
     const dano = Math.max(1, ((base * escala) / 100) | 0);
     v.vida = Math.max(s.treino ? 1 : 0, v.vida - dano);
+    v.revanche = Math.min(ULTRA_MAX, v.revanche + dano * 3); v.cinza = 0; v.curaT = 0;
     // Barra enche batendo e apanhando (quem apanha enche um pouco mais, para poder virar o jogo).
     a.poder = Math.min(PODER_MAX, a.poder + dano);
     v.poder = Math.min(PODER_MAX, v.poder + ((dano * 3) >> 1));
@@ -744,6 +826,7 @@
     }
     if (golpe.derruba) v.derrubado = 1;
     if (golpe.derruba && !golpe.lanca && noChao(v)) { mudar(v, 'caido'); v.vx = 0; }
+    if (golpe.colapso && noChao(v) && v.vida > 0) { mudar(v, 'colapso'); v.vx = v.vy = 0; }
     if (golpe.tonto) v.estrelas = 50;
     if (golpe.enrola || golpe.prende) { v.enrolado = golpe.hs; v.prende = golpe.prende || 'la'; } // lã da Vó Nena, cartola do Truque
     // Bengala do Vô Tião: puxa quem foi fisgado para colado nele.
@@ -768,7 +851,7 @@
     // Os dois golpes valem no mesmo quadro (troca de socos), por isso aplica depois de checar.
     for (const [a, v, j, i] of golpes) {
       a.acertos |= 1 << i; a.encostou = 1;
-      receberDano(s, v, a, j, a.golpe === 'sup' ? 2 : a.golpe === 'esp' ? 1 : 0);
+      receberDano(s, v, a, j, ['sup', 'ultra'].includes(a.golpe) ? 2 : ['esp', 'dp', 'tatsu', 'espEx', 'dpEx', 'tatsuEx'].includes(a.golpe) ? 1 : 0);
     }
 
     // Projéteis.
@@ -782,10 +865,13 @@
       if (p.voltando && Math.abs(p.x - dono.x) < 14 * U) p.vida = 0; // a cenoura voltou para a mão
       if (--p.vida <= 0 || p.x < 0 || p.x > LARGURA * U) { p.vida = 0; continue; }
       const v = s.p[1 - p.dono];
+      const golpeVitima = v.estado === 'golpe' && golpeAtual(v);
+      if (golpeVitima?.invProj && v.t >= golpeVitima.invProj[0] && v.t <= golpeVitima.invProj[1]) continue;
       const caixa = { x: p.x - p.w / 2, y: p.y - p.h / 2, w: p.w, h: p.h };
       if (!p.acertou && p.espera === 0 && v.inv === 0 && !v.sumido && (p.colado || cruza(caixa, corpo(v)))) {
         p.acertou = 1;
-        const r = receberDano(s, v, dono, { dano: p.dano, hs: p.hs, bs: p.bs, tipo: p.tipoGolpe, empurra: p.colado ? 0 : p.empurra, enrola: p.enrola, derruba: p.derruba }, 1, p.x - p.vx * 4);
+        if (dono.estado === 'golpe' && dono.golpe === p.origem) dono.encostou = 1;
+        const r = receberDano(s, v, dono, { dano: p.dano, hs: p.hs, bs: p.bs, tipo: p.tipoGolpe, empurra: p.colado ? 0 : p.empurra, enrola: p.enrola, derruba: p.derruba, quebraArmadura: p.quebraArmadura }, p.ultra ? 2 : 1, p.x - p.vx * 4);
         if (p.mordidas > 1 && r === 'acerto') { p.mordidas--; p.colado = 1; p.espera = p.intervalo; p.acertou = 0; p.vida = Math.max(p.vida, 30); }
         else if (!p.volta) p.vida = 0;
       }
@@ -949,5 +1035,5 @@
     return h;
   }
 
-  return { U, LARGURA, B, LUTADORES, PODER_MAX, ROUND_FRAMES, novo, passo, hash, caixaHit, corpo };
+  return { U, LARGURA, B, LUTADORES, PODER_MAX, EX_CUSTO, CANCEL_FOCO_CUSTO, ULTRA_MAX, ULTRA_MIN, ROUND_FRAMES, novo, passo, hash, caixaHit, corpo };
 });

@@ -84,7 +84,10 @@ export async function verificarTecnicasPipoca(bytes, simulador = K) {
           }
           if (nome === 'esp' && q === golpe.proj.quadro) {
             const pulso = pose.posicoes.mao_E;
-            assert.ok(Math.abs(pulso.x * face - .75) < .001 && Math.abs(pulso.y - golpe.proj.y / 24) < .001, 'Lançamento coincide com a origem visual da cenoura');
+            // Este verificador mede o estudo v15, assado na altura original
+            // de 48 px. O lançamento da v5 é validado no teste dos poderes
+            // jogáveis; balancear o motor não repinta um estudo histórico.
+            assert.ok(Math.abs(pulso.x * face - .75) < .001 && Math.abs(pulso.y - 48 / 24) < .001, 'Lançamento coincide com a origem assada do estudo v15');
             relato.lancamento = { quadro: q, pulso: [pulso.x * face, pulso.y] };
           }
         }

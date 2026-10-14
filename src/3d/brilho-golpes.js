@@ -19,7 +19,7 @@ const COR = {
   fraco: '#bfe9ff', forte: '#ff7a1c', especial: '#ff9a2a', super: '#ffd84a',
 };
 const FORTES = new Set(['p2', 'k2']);
-const CHUTES = new Set(['k1', 'k2', 'ck', 'ak']);
+const CHUTES = new Set(['k1', 'k2', 'ck', 'ak', 'tatsu', 'tatsuEx']);
 
 // Tinta escura do Focus Attack (como no SF4): mancha preta-azulada com borda clara.
 function texturaTintaFoco(scene) {
@@ -73,14 +73,19 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
   const chama = texturaChama(scene), tintaFoco = texturaTintaFoco(scene);
   const U = simulador.U, xMundo = x => (x / U - simulador.LARGURA / 2) / 24, yMundo = y => y / U / 24;
 
-  // Uma bola de fogo por dono (mesmo pool das cenouras de efeitos.js).
+  // Até dois projéteis EX por lutadora; todos compartilham a textura pronta.
   const texBola = texturaBolaDeFogo(scene);
-  const matBola = new StandardMaterial('golpe-bola-mat', scene);
-  matBola.disableLighting = true; matBola.emissiveTexture = texBola; matBola.opacityTexture = texBola;
-  matBola.diffuseColor = new Color3(0, 0, 0); matBola.backFaceCulling = false; matBola.alphaMode = Constants.ALPHA_ADD;
-  const bolas = [0, 1].map(dono => {
+  function materialBola(nome) {
+    // StandardMaterial.clone também clona DynamicTexture em branco. Isso
+    // deixava scene.whenReadyAsync esperando uma textura nunca atualizada.
+    const mat = new StandardMaterial(nome, scene);
+    mat.disableLighting = true; mat.emissiveTexture = texBola; mat.opacityTexture = texBola;
+    mat.diffuseColor = new Color3(0, 0, 0); mat.backFaceCulling = false; mat.alphaMode = Constants.ALPHA_ADD;
+    return mat;
+  }
+  const bolas = [0, 1, 2, 3].map(dono => {
     const malha = MeshBuilder.CreatePlane(`golpe-bola-${dono}`, { size: 1.9 }, scene);
-    malha.material = matBola; malha.billboardMode = Mesh.BILLBOARDMODE_ALL; malha.isPickable = false; malha.setEnabled(false);
+    malha.material = materialBola(`golpe-bola-mat-${dono}`); malha.billboardMode = Mesh.BILLBOARDMODE_ALL; malha.isPickable = false; malha.setEnabled(false);
     brilho.addIncludedOnlyMesh(malha);
     const fogo = new ParticleSystem(`golpe-bola-rastro-${dono}`, 200, scene);
     fogo.particleTexture = chama; fogo.blendMode = ParticleSystem.BLENDMODE_ADD;
@@ -144,9 +149,10 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
   }
 
   // Chuva de Cenouras do Final: as que estão caindo ganham a mesma bola de fogo.
+  const matChuva = materialBola('golpe-chuva-mat');
   const chamasChuva = Array.from({ length: 8 }, (_, i) => {
     const m = MeshBuilder.CreatePlane(`golpe-chuva-fogo-${i}`, { size: .9 }, scene);
-    m.material = matBola; m.billboardMode = Mesh.BILLBOARDMODE_ALL; m.isPickable = false; m.setEnabled(false);
+    m.material = matChuva; m.billboardMode = Mesh.BILLBOARDMODE_ALL; m.isPickable = false; m.setEnabled(false);
     brilho.addIncludedOnlyMesh(m);
     return m;
   });
@@ -164,15 +170,17 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
         m.position.set(xMundo(q.x), (140 - q.idade * 3.6) / 24 + .25, -.18);
         m.scaling.setAll(1 + .15 * Math.sin(q.idade * .8)); m.rotation.z = q.idade * .3;
       }
-      bolas.forEach((b, dono) => {
-        const p = estado.proj?.find(p => p.dono === dono && p.tipo === 'cenoura' && p.vida > 0);
+      const projeteis = (estado.proj || []).filter(p => p.tipo === 'cenoura' && p.vida > 0);
+      bolas.forEach((b, indice) => {
+        const p = projeteis[indice];
         b.malha.setEnabled(!!p);
         b.fogo.emitRate = p && !movimentoReduzido.matches ? 160 : 0;
         if (!p) return;
         const x = xMundo(p.x), y = yMundo(p.y);
         // Atrás da cenoura (z maior = mais longe da câmera), pulsando e girando.
         b.malha.position.set(x, y, -.04);
-        b.malha.scaling.setAll(1 + .12 * Math.sin(p.t * .9));
+        b.malha.scaling.setAll((p.ultra ? 2.2 : p.ex ? 1.15 : 1) * (1 + .12 * Math.sin(p.t * .9)));
+        b.malha.material.emissiveColor = p.ultra ? new Color3(.8, .4, 1) : p.ex ? new Color3(1, .95, .35) : new Color3(1, 1, 1);
         b.malha.rotation.z = p.t * .35;
         b.fogo.emitter.set(x - Math.sign(p.vx || 1) * .15, y, -.1);
         b.fogo.direction1 = new Vector3(-Math.sign(p.vx || 1) * 2.2, -.3, 0); b.fogo.direction2 = new Vector3(-Math.sign(p.vx || 1) * 3, .4, 0);
@@ -211,10 +219,10 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
 
         // Focus: tinta enquanto carrega (até soltar o golpe).
         const carregando = l.estado === 'golpe' && l.golpe === 'foc' && l.t < 19 && !movimentoReduzido.matches;
-        d.foco.emitRate = carregando ? 220 : 0;
+        d.foco.emitRate = carregando ? 140 + (l.nivelFoco || 1) * 65 : 0;
         if (carregando) d.foco.emitter.set((l.x / simulador.U - simulador.LARGURA / 2) / 24, l.y / simulador.U / 24 + 1.15, 0);
         // Aura de fogo só no Super (no especial, o fogo é o da cenoura).
-        const queima = l.golpe === 'sup' && l.estado === 'golpe' && !movimentoReduzido.matches;
+        const queima = (['sup', 'ultra'].includes(l.golpe) || /Ex$/.test(l.golpe || '')) && l.estado === 'golpe' && !movimentoReduzido.matches;
         d.aura.emitRate = queima ? 260 : 0;
         if (queima) d.aura.emitter.set((l.x / simulador.U - simulador.LARGURA / 2) / 24, l.y / simulador.U / 24 + 1.15, 0);
       });
@@ -223,8 +231,10 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
     descartar() {
       tintaFoco.dispose();
       for (const d of lados) { d.nevoa.dispose(); d.foco.dispose(); d.aura.dispose(); d.rastro.dispose(); d.mat.dispose(); d.ponta.dispose(); }
-      for (const b of bolas) { b.fogo.dispose(); b.malha.dispose(); }
-      matBola.dispose(); texBola.dispose(); chama.dispose(); brilho.dispose();
+      for (const b of bolas) { b.fogo.dispose(); b.malha.material.dispose(); b.malha.dispose(); }
+      for (const m of chamasChuva) m.dispose();
+      matChuva.dispose();
+      texBola.dispose(); chama.dispose(); brilho.dispose();
     },
   };
 }

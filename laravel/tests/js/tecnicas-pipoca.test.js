@@ -80,7 +80,7 @@ test('super real oculta apenas conforme p.sumido, reaparece e renderizar preserv
     s.p[0].poder = K.PODER_MAX; s.p[0].x = 80 * K.U; s.p[1].x = 270 * K.U;
     let oculto = false, retorno = false;
     for (let i = 0; i < 110; i++) {
-      K.passo(s, [i === 0 ? K.B.S : 0, 0]);
+      K.passo(s, [i === 0 ? K.B.S | K.B.K : 0, 0]);
       const antes = JSON.stringify(s), pose = descreverPose(s.p[0], K, s);
       for (let j = 0; j < 3; j++) modelo.atualizar(pose);
       assert.equal(JSON.stringify(s), antes);

@@ -128,7 +128,7 @@ export function criarAnimacoes(id, ossos, simulador) {
     return p;
   }
   // dp (Shoryuken da Pipoca) não tem clipe na base v13: o clipe dele é feito à mão na v5.
-  const golposBase = Object.entries(simulador.LUTADORES[id].golpes).filter(([nome]) => nome !== 'dp');
+  const golposBase = Object.entries(simulador.LUTADORES[id].golpes).filter(([nome]) => !['dp', 'tatsu', 'espEx', 'dpEx', 'tatsuEx', 'ultra'].includes(nome));
   for (const [nome,golpe] of golposBase) {
     const d = golpe.dur, chaves = new Map([[0,guarda],[d,guarda]]);
     const inserir = (q,p) => chaves.set(Math.max(0,Math.min(d,q)),p);

@@ -16,7 +16,7 @@ import { criarCameraLuta, enquadrarCameraLuta } from './camera-luta.js';
 
 // Etiqueta da versão do 3D. Aparece no aviso de erro para conferir se o aparelho
 // carregou o arquivo novo (o Safari do iOS guarda JavaScript em cache com facilidade).
-const VERSAO_3D = 'ko3d-2026-10-14-passada';
+const VERSAO_3D = 'ko3d-2026-10-14-poderes';
 // iPhone/iPad: o WebGL do Safari é mais frágil e a memória é curta.
 const IOS = /iP(hone|ad|od)/.test(navigator.userAgent)
   || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);

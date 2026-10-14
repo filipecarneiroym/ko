@@ -120,7 +120,7 @@ test('toca aparece na entrada de sumido; pool, reinício e descarte são limitad
     const quantidade = cena.scene.meshes.length;
     let entrou = false, reapareceu = false;
     for (let i = 0; i < 100; i++) {
-      K.passo(s, [i === 0 ? K.B.S : 0, 0]); desenhar(cena, s);
+      K.passo(s, [i === 0 ? K.B.S | K.B.K : 0, 0]); desenhar(cena, s);
       const tocas = cena.scene.meshes.filter(m => m.name.startsWith('pipoca-vfx-toca-') && m.isEnabled());
       if (s.p[0].sumido && tocas.length) entrou = true;
       if (entrou && !s.p[0].sumido && s.p[0].golpe === 'sup') reapareceu = true;

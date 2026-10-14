@@ -324,10 +324,10 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
       } else if (e.t === 'golpeFinal') {
         // Como o Ultra do SF4: tela escura e clarão.
         superLado = e.lado; superNasc = relogio; flashNasc = relogio; flashForca = .5;
-      } else if (e.t === 'super') {
+      } else if (e.t === 'super' || e.t === 'ultra') {
         const p = estado?.p?.[e.lado];
         superLado = e.lado; superNasc = relogio;
-        flashNasc = relogio; flashForca = .45;
+        flashNasc = relogio; flashForca = e.t === 'ultra' ? .6 : .45;
         // Como no Street Fighter IV: sem nome escrito; o lutador grita o nome
         // do golpe (ko-voz) enquanto a tela escurece e a câmera aproxima.
         if (p) respingo(matEspecial, xMundo(p.x), yMundo(p.y) + 1.3, .6, 2.6, 26, 'super', .65);

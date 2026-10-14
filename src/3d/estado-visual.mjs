@@ -16,8 +16,9 @@ export function descreverPose(lutador, simulador, estado = null) {
   const chama = false; // sem chuva de cenouras: no Final a vencedora só comemora
   const fT = Math.max(0, estado?.fT ?? lutador.t);
   return {
-    clip: foco ? 'p2' : chama ? (fT < 34 ? 'esp' : 'vitoria') : golpe ? lutador.golpe : lutador.estado,
-    quadro: foco ? (lutador.t < 18 ? 2 : Math.min(18, 2 + (lutador.t - 18) * 1.6))
+    clip: foco ? 'foc' : lutador.estado === 'impulso' ? 'andando' : lutador.estado === 'colapso' ? 'dano'
+      : chama ? (fT < 34 ? 'esp' : 'vitoria') : golpe ? lutador.golpe : lutador.estado,
+    quadro: foco ? (lutador.focoSolto ? lutador.t : Math.min(12, (lutador.focoCarga || 0) / 2))
       : chama ? (fT < 34 ? fT : fT - 34)
       : Math.max(0, usaRelogioDaFase ? estado?.fT ?? lutador.t : lutador.t),
     ciclico: !golpe && CICLICOS.has(lutador.estado),

@@ -102,6 +102,7 @@ let browser;
   async function conferirBloqueio(nome) {
     await page.locator('[data-acao="tentar-3d"]').waitFor({ state: 'visible', timeout: 180000 });
     assert.ok((await page.locator('.painel-graficos').innerText()).includes('3D'), 'Falha informa que o 3D não carregou');
+    console.log('Diagnóstico de bloqueio:', await page.evaluate(() => window.KODiagnostico3D));
     const quadro = await page.evaluate(() => window.KOTeste.luta().s.f);
     await page.waitForTimeout(800);
     assert.equal(await page.evaluate(() => window.KOTeste.luta().s.f), quadro, 'Simulação não avança enquanto o 3D está indisponível');
@@ -135,6 +136,40 @@ let browser;
   const quadro3d = await page.evaluate(() => window.KOTeste.luta().s.f);
   await page.waitForFunction(f => window.KOTeste.luta().s.f > f, quadro3d, { timeout: 15000 });
   await page.screenshot({ path: path.join(saida, 'pipoca-3d-inicio.png') });
+
+  // Os atalhos visíveis e as teclas atravessam o fluxo real de entrada.
+  await page.evaluate(() => {
+    window.__golpesPoderes = [];
+    window.__passoPoderesOriginal = KOSim.passo;
+    KOSim.passo = (s, entradas) => {
+      const r = window.__passoPoderesOriginal(s, entradas);
+      if (s.p[0].golpe) window.__golpesPoderes.push(s.p[0].golpe);
+      return r;
+    };
+    window.KOTeste.luta().cpu = null;
+  });
+  for (const [acao, golpe, tecla] of [['EX', 'espEx', 'KeyE'], ['SUPER', 'sup', 'KeyO'], ['ULTRA', 'ultra', 'KeyH']]) {
+    for (const teclado of [false, true]) {
+      await page.evaluate(() => {
+        const luta = window.KOTeste.luta(), s = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: true });
+        s.fase = 'luta'; s.fT = 0; s.p[0].x = 60 * KOSim.U; s.p[1].x = 320 * KOSim.U;
+        s.p[0].poder = KOSim.PODER_MAX; s.p[0].revanche = KOSim.ULTRA_MAX;
+        Object.assign(luta.s, s); luta.r3d.limpar(); window.__golpesPoderes = [];
+      });
+      await page.waitForFunction(acao => document.querySelector(`[data-b="${acao}"]`).dataset.disponivel === 'true', acao);
+      if (teclado) await page.keyboard.press(tecla);
+      else await page.locator(`.atalhos-poderes [data-b="${acao}"]`).click();
+      await page.waitForFunction(golpe => window.__golpesPoderes.includes(golpe), golpe, { timeout: 30000 });
+    }
+  }
+  await page.screenshot({ path: path.join(saida, 'poderes-atalhos.png') });
+  await page.evaluate(() => {
+    KOSim.passo = window.__passoPoderesOriginal;
+    const luta = window.KOTeste.luta(), s = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: true });
+    s.fase = 'luta'; s.fT = 0; Object.assign(luta.s, s);
+    luta.cpu = KOCPU.criar(KOSim, 'medio'); luta.r3d.limpar();
+  });
+  console.log('EX, Super e Ultra: atalhos da tela e do teclado acionam os golpes corretos.');
 
   // Aproxima para verificar golpes reais; SwiftShader roda a poucos FPS.
   await page.evaluate(() => {

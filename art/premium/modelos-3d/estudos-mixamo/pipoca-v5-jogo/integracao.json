@@ -31,23 +31,23 @@
   "arquivos": {
     "azul": {
       "caminho": "public/modelos/estudos/pipoca-v5-azul.glb",
-      "bytes": 6266556,
-      "sha256": "1b0958d0ba10efa1bbd2af0a6d21d2a36db9028a5893d594f9a75e0f1b32f362",
+      "bytes": 6555940,
+      "sha256": "3a0b3c680d5750d562aa9a8d0ba2d7b5861ac51b142279b48dfef4a9c8edc1bf",
       "triangulos": 28346,
       "materiais": 1,
       "ossos": 20,
-      "clips": 32,
+      "clips": 38,
       "dentroDoTeto": true,
       "glbDentroDoAlvo": true
     },
     "vermelha": {
       "caminho": "public/modelos/estudos/pipoca-v5-vermelha.glb",
-      "bytes": 6281292,
-      "sha256": "6e97f4fdf38709b7e6a27ba3e1a4a9c9e68213e6f84bcb49bbade232240b3305",
+      "bytes": 6570676,
+      "sha256": "1d0775809b4d07fc0acd1175c5dfe1ec8057b5a11eee7b587e0e662adb805c3a",
       "triangulos": 28346,
       "materiais": 1,
       "ossos": 20,
-      "clips": 32,
+      "clips": 38,
       "dentroDoTeto": true,
       "glbDentroDoAlvo": true
     }
