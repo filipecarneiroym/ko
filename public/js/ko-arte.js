@@ -1321,12 +1321,32 @@
   // ---------- Placar ----------
   const vidaAtraso = [1, 1];
   function barra(g, x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
+  // Rosto 3D de cada lutadora na ponta de dentro da barra (azul à esquerda,
+  // vermelha à direita), recortado do retrato da seleção.
+  const rostos = new Map();
+  function rosto(id, lado) {
+    const url = '/personagens/' + id + '-3d-retrato' + (lado ? '-vermelha' : '') + '.png';
+    if (!rostos.has(url)) { const img = new Image(); img.src = url; rostos.set(url, img); }
+    const img = rostos.get(url);
+    return img.complete && img.naturalWidth ? img : null;
+  }
   function placar(g, s, nomes) {
-    const larg = 154;
+    const larg = 138;
     for (const lado of [0, 1]) {
       const l = s.p[lado], max = K.LUTADORES[l.id].vida, frac = l.vida / max;
       vidaAtraso[lado] = vidaAtraso[lado] > frac ? Math.max(frac, vidaAtraso[lado] - 0.004) : frac;
       const x = lado === 0 ? 10 : W - 10 - larg, y = 7;
+      const rx = lado === 0 ? 159 : W - 159, img = rosto(l.id, lado);
+      g.save(); g.beginPath(); g.arc(rx, 11, 9.5, 0, Math.PI * 2); g.fillStyle = CONTORNO; g.fill();
+      g.beginPath(); g.arc(rx, 11, 8, 0, Math.PI * 2); g.fillStyle = lado ? '#5a1418' : '#1a2a6a'; g.fill(); g.clip();
+      if (img) {
+        // Cabeça do retrato 640×800 (orelhas cortadas pelo círculo); o lado 2 olha para o centro.
+        g.translate(rx, 11); if (lado) g.scale(-1, 1);
+        const lw = img.naturalWidth, lh = img.naturalHeight;
+        g.drawImage(img, lw * .15, lh * .45, lw * .48, lw * .48, -9, -9, 18, 18);
+      }
+      g.restore();
+      g.lineWidth = 1.2; g.strokeStyle = lado ? '#ff5a5a' : '#6aa8ff'; g.beginPath(); g.arc(rx, 11, 8.6, 0, Math.PI * 2); g.stroke();
       g.fillStyle = CONTORNO; barra(g, x - 2, y - 2, larg + 4, 13, 4); g.fill();
       g.fillStyle = '#4a0e1c'; barra(g, x, y, larg, 9, 3); g.fill();
       const w = larg * frac, wa = larg * vidaAtraso[lado];
