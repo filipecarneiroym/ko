@@ -1,0 +1,464 @@
+{
+  "golpes": [
+    {
+      "lado": 0,
+      "nome": "p1",
+      "duracaoRegra": 12,
+      "duracaoMs": 200,
+      "primeiroAtivo": 3,
+      "quadrosDecorridos": 17,
+      "acertos": 1,
+      "projeteis": 0
+    },
+    {
+      "lado": 0,
+      "nome": "p2",
+      "duracaoRegra": 18,
+      "duracaoMs": 300,
+      "primeiroAtivo": 5,
+      "quadrosDecorridos": 25,
+      "acertos": 2,
+      "projeteis": 0
+    },
+    {
+      "lado": 0,
+      "nome": "k1",
+      "duracaoRegra": 24,
+      "duracaoMs": 400,
+      "primeiroAtivo": 6,
+      "quadrosDecorridos": 29,
+      "acertos": 1,
+      "projeteis": 0
+    },
+    {
+      "lado": 0,
+      "nome": "k2",
+      "duracaoRegra": 28,
+      "duracaoMs": 466.7,
+      "primeiroAtivo": 7,
+      "quadrosDecorridos": 35,
+      "acertos": 3,
+      "projeteis": 0
+    },
+    {
+      "lado": 0,
+      "nome": "cp",
+      "duracaoRegra": 10,
+      "duracaoMs": 166.7,
+      "primeiroAtivo": 3,
+      "quadrosDecorridos": 15,
+      "acertos": 1,
+      "projeteis": 0
+    },
+    {
+      "lado": 0,
+      "nome": "ck",
+      "duracaoRegra": 26,
+      "duracaoMs": 433.3,
+      "primeiroAtivo": 6,
+      "quadrosDecorridos": 31,
+      "acertos": 1,
+      "projeteis": 0
+    },
+    {
+      "lado": 0,
+      "nome": "ap",
+      "duracaoRegra": 20,
+      "duracaoMs": 333.3,
+      "primeiroAtivo": 4,
+      "quadrosDecorridos": 19,
+      "acertos": 0,
+      "projeteis": 0
+    },
+    {
+      "lado": 0,
+      "nome": "ak",
+      "duracaoRegra": 22,
+      "duracaoMs": 366.7,
+      "primeiroAtivo": 5,
+      "quadrosDecorridos": 21,
+      "acertos": 0,
+      "projeteis": 0
+    },
+    {
+      "lado": 0,
+      "nome": "esp",
+      "duracaoRegra": 30,
+      "duracaoMs": 500,
+      "primeiroAtivo": 10,
+      "quadrosDecorridos": 29,
+      "acertos": 1,
+      "projeteis": 1
+    },
+    {
+      "lado": 0,
+      "nome": "dp",
+      "duracaoRegra": 40,
+      "duracaoMs": 666.7,
+      "primeiroAtivo": 6,
+      "quadrosDecorridos": 47,
+      "acertos": 1,
+      "projeteis": 0
+    },
+    {
+      "lado": 0,
+      "nome": "tatsu",
+      "duracaoRegra": 40,
+      "duracaoMs": 666.7,
+      "primeiroAtivo": 9,
+      "quadrosDecorridos": 57,
+      "acertos": 3,
+      "projeteis": 0
+    },
+    {
+      "lado": 0,
+      "nome": "espEx",
+      "duracaoRegra": 30,
+      "duracaoMs": 500,
+      "primeiroAtivo": 10,
+      "quadrosDecorridos": 29,
+      "acertos": 2,
+      "projeteis": 2
+    },
+    {
+      "lado": 0,
+      "nome": "dpEx",
+      "duracaoRegra": 44,
+      "duracaoMs": 733.3,
+      "primeiroAtivo": 6,
+      "quadrosDecorridos": 55,
+      "acertos": 2,
+      "projeteis": 0
+    },
+    {
+      "lado": 0,
+      "nome": "tatsuEx",
+      "duracaoRegra": 44,
+      "duracaoMs": 733.3,
+      "primeiroAtivo": 9,
+      "quadrosDecorridos": 67,
+      "acertos": 4,
+      "projeteis": 0
+    },
+    {
+      "lado": 0,
+      "nome": "ultra",
+      "duracaoRegra": 70,
+      "duracaoMs": 1166.7,
+      "primeiroAtivo": 25,
+      "quadrosDecorridos": 111,
+      "acertos": 1,
+      "projeteis": 1
+    },
+    {
+      "lado": 0,
+      "nome": "sup",
+      "duracaoRegra": 62,
+      "duracaoMs": 1033.3,
+      "primeiroAtivo": 44,
+      "quadrosDecorridos": 99,
+      "acertos": 1,
+      "projeteis": 0
+    },
+    {
+      "lado": 0,
+      "nome": "foc",
+      "duracaoRegra": 34,
+      "duracaoMs": 566.7,
+      "primeiroAtivo": 19,
+      "quadrosDecorridos": 89,
+      "acertos": 1,
+      "projeteis": 0
+    },
+    {
+      "lado": 1,
+      "nome": "p1",
+      "duracaoRegra": 12,
+      "duracaoMs": 200,
+      "primeiroAtivo": 3,
+      "quadrosDecorridos": 17,
+      "acertos": 1,
+      "projeteis": 0
+    },
+    {
+      "lado": 1,
+      "nome": "p2",
+      "duracaoRegra": 18,
+      "duracaoMs": 300,
+      "primeiroAtivo": 5,
+      "quadrosDecorridos": 25,
+      "acertos": 2,
+      "projeteis": 0
+    },
+    {
+      "lado": 1,
+      "nome": "k1",
+      "duracaoRegra": 24,
+      "duracaoMs": 400,
+      "primeiroAtivo": 6,
+      "quadrosDecorridos": 29,
+      "acertos": 1,
+      "projeteis": 0
+    },
+    {
+      "lado": 1,
+      "nome": "k2",
+      "duracaoRegra": 28,
+      "duracaoMs": 466.7,
+      "primeiroAtivo": 7,
+      "quadrosDecorridos": 35,
+      "acertos": 3,
+      "projeteis": 0
+    },
+    {
+      "lado": 1,
+      "nome": "cp",
+      "duracaoRegra": 10,
+      "duracaoMs": 166.7,
+      "primeiroAtivo": 3,
+      "quadrosDecorridos": 15,
+      "acertos": 1,
+      "projeteis": 0
+    },
+    {
+      "lado": 1,
+      "nome": "ck",
+      "duracaoRegra": 26,
+      "duracaoMs": 433.3,
+      "primeiroAtivo": 6,
+      "quadrosDecorridos": 31,
+      "acertos": 1,
+      "projeteis": 0
+    },
+    {
+      "lado": 1,
+      "nome": "ap",
+      "duracaoRegra": 20,
+      "duracaoMs": 333.3,
+      "primeiroAtivo": 4,
+      "quadrosDecorridos": 19,
+      "acertos": 0,
+      "projeteis": 0
+    },
+    {
+      "lado": 1,
+      "nome": "ak",
+      "duracaoRegra": 22,
+      "duracaoMs": 366.7,
+      "primeiroAtivo": 5,
+      "quadrosDecorridos": 21,
+      "acertos": 0,
+      "projeteis": 0
+    },
+    {
+      "lado": 1,
+      "nome": "esp",
+      "duracaoRegra": 30,
+      "duracaoMs": 500,
+      "primeiroAtivo": 10,
+      "quadrosDecorridos": 29,
+      "acertos": 1,
+      "projeteis": 1
+    },
+    {
+      "lado": 1,
+      "nome": "dp",
+      "duracaoRegra": 40,
+      "duracaoMs": 666.7,
+      "primeiroAtivo": 6,
+      "quadrosDecorridos": 47,
+      "acertos": 1,
+      "projeteis": 0
+    },
+    {
+      "lado": 1,
+      "nome": "tatsu",
+      "duracaoRegra": 40,
+      "duracaoMs": 666.7,
+      "primeiroAtivo": 9,
+      "quadrosDecorridos": 57,
+      "acertos": 3,
+      "projeteis": 0
+    },
+    {
+      "lado": 1,
+      "nome": "espEx",
+      "duracaoRegra": 30,
+      "duracaoMs": 500,
+      "primeiroAtivo": 10,
+      "quadrosDecorridos": 29,
+      "acertos": 2,
+      "projeteis": 2
+    },
+    {
+      "lado": 1,
+      "nome": "dpEx",
+      "duracaoRegra": 44,
+      "duracaoMs": 733.3,
+      "primeiroAtivo": 6,
+      "quadrosDecorridos": 55,
+      "acertos": 2,
+      "projeteis": 0
+    },
+    {
+      "lado": 1,
+      "nome": "tatsuEx",
+      "duracaoRegra": 44,
+      "duracaoMs": 733.3,
+      "primeiroAtivo": 9,
+      "quadrosDecorridos": 67,
+      "acertos": 4,
+      "projeteis": 0
+    },
+    {
+      "lado": 1,
+      "nome": "ultra",
+      "duracaoRegra": 70,
+      "duracaoMs": 1166.7,
+      "primeiroAtivo": 25,
+      "quadrosDecorridos": 111,
+      "acertos": 1,
+      "projeteis": 1
+    },
+    {
+      "lado": 1,
+      "nome": "sup",
+      "duracaoRegra": 62,
+      "duracaoMs": 1033.3,
+      "primeiroAtivo": 44,
+      "quadrosDecorridos": 99,
+      "acertos": 1,
+      "projeteis": 0
+    },
+    {
+      "lado": 1,
+      "nome": "foc",
+      "duracaoRegra": 34,
+      "duracaoMs": 566.7,
+      "primeiroAtivo": 19,
+      "quadrosDecorridos": 89,
+      "acertos": 1,
+      "projeteis": 0
+    }
+  ],
+  "defesa": [
+    {
+      "lado": 0,
+      "baixa": false,
+      "bloqueios": 1,
+      "vida": 950
+    },
+    {
+      "lado": 0,
+      "baixa": true,
+      "bloqueios": 1,
+      "vida": 950
+    },
+    {
+      "lado": 1,
+      "baixa": false,
+      "bloqueios": 1,
+      "vida": 950
+    },
+    {
+      "lado": 1,
+      "baixa": true,
+      "bloqueios": 1,
+      "vida": 950
+    }
+  ],
+  "lutas": [
+    {
+      "nivel": "facil",
+      "passos": 6641,
+      "segundosSimulados": 110.68,
+      "rounds": [
+        2,
+        0
+      ],
+      "eventos": {
+        "lutem": 2,
+        "especial": 2,
+        "choque": 1,
+        "ataque": 63,
+        "pulo": 10,
+        "acerto": 43,
+        "ultra": 2,
+        "super": 5,
+        "chao": 6,
+        "defendeu": 2,
+        "ko": 2,
+        "round": 1,
+        "acaba": 1,
+        "vitoria": 1
+      }
+    },
+    {
+      "nivel": "medio",
+      "passos": 6804,
+      "segundosSimulados": 113.4,
+      "rounds": [
+        2,
+        1
+      ],
+      "eventos": {
+        "lutem": 3,
+        "especial": 30,
+        "choque": 1,
+        "ataque": 89,
+        "acerto": 70,
+        "combo": 6,
+        "defendeu": 12,
+        "pulo": 5,
+        "ultra": 6,
+        "super": 8,
+        "chao": 12,
+        "ko": 3,
+        "round": 2,
+        "ex": 1,
+        "acaba": 1,
+        "vitoria": 1
+      }
+    },
+    {
+      "nivel": "dificil",
+      "passos": 4827,
+      "segundosSimulados": 80.45,
+      "rounds": [
+        0,
+        2
+      ],
+      "eventos": {
+        "lutem": 2,
+        "especial": 37,
+        "choque": 3,
+        "ataque": 78,
+        "defendeu": 27,
+        "acerto": 48,
+        "combo": 6,
+        "chao": 10,
+        "pulo": 3,
+        "ultra": 7,
+        "super": 6,
+        "ko": 2,
+        "round": 1,
+        "ex": 1,
+        "acaba": 1,
+        "vitoria": 1
+      }
+    }
+  ],
+  "movimentos": {
+    "frente": {
+      "pixelsPorSegundo": 112.5
+    },
+    "tras": {
+      "pixelsPorSegundo": 90
+    },
+    "salto": {
+      "quadrosAtePouso": 35,
+      "milissegundos": 583.3333333333334,
+      "alturaPixels": 82.875
+    }
+  }
+}

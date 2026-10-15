@@ -40,17 +40,9 @@
   let usandoControle = false;
   // Tocar na tela traz de volta o direcional e os botões de toque.
   addEventListener('pointerdown', (e) => { if (e.pointerType === 'touch') { usandoControle = false; document.body.classList.remove('com-controle'); } }, true);
-  const petelecoPad = [{ desde: 0, feito: false }, { desde: 0, feito: false }];
   function atualizarPads() {
     estadosPads = pads.atualizar();
-    estadosPads.forEach((p, i) => {
-      const x = Math.abs(p.eixoX || 0), m = petelecoPad[i], agora = performance.now();
-      if (x < 0.35) { m.desde = 0; m.feito = false; return; }
-      if (!m.desde) m.desde = agora;
-      const meuDoPad = versus ? i : meuLado, face = luta?.s?.p?.[meuDoPad]?.face ?? 1;
-      const praTras = (p.eixoX < 0) === (face > 0);
-      if (!m.feito && x > 0.9 && agora - m.desde <= 120 && praTras) { pulsosPads[i] |= B.RC; m.feito = true; }
-    });
+    // Segurar para trás é caminhada/guarda; o motor reconhece o toque duplo.
     // Controle externo (USB/Bluetooth) em uso: some o toque e fica só o ícone, como no SF4.
     if (!estadosPads.some((p) => p.conectado)) usandoControle = false;
     else if (estadosPads.some((p) => p.conectado && (p.bits || p.pulso))) usandoControle = true;
@@ -196,12 +188,14 @@
   } });
   addEventListener('keyup', (e) => { if (TECLAS[e.code]) { teclasAtivas.delete(e.code); recalcularTeclado(); } });
   addEventListener('blur', () => { bitsTeclado = 0; bitsToque = 0; });
+  document.addEventListener('visibilitychange', () => {
+    // Trocar de aba não deve reaplicar dois segundos de comandos ao voltar.
+    if (luta) { luta.ultimo = performance.now(); luta.sobra = 0; }
+  });
 
   // Direcional em cruz: encosta em qualquer lugar da metade esquerda; a direção vale a partir do centro da cruz.
   const direcional = $('#direcional');
-  let dedoDir = null, bitsDir = 0, saiuDoCentro = 0, petelecoFeito = false;
-  // Para trás = longe da adversária (depende do lado em que estou olhando).
-  const bitTras = () => ((luta?.s?.p?.[meuLado]?.face ?? 1) > 0 ? B.L : B.R);
+  let dedoDir = null, bitsDir = 0;
   function atualizarDirecional(x, y) {
     const r = direcional.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
     const dx = x - cx, dy = y - cy, dist = Math.hypot(dx, dy);
@@ -213,11 +207,9 @@
       const ang = Math.atan2(dy, dx), s = Math.sin(ang), c = Math.cos(ang);
       if (c > 0.38) bitsDir |= B.R; if (c < -0.38) bitsDir |= B.L;
       if (s < -0.5) bitsDir |= B.U; if (s > 0.5) bitsDir |= B.D;
-      // Pouco inclinado: anda devagar. Peteleco (centro → borda em ~0,12 s) para trás: recuo.
+      // Pouco inclinado: anda devagar. Recuo exige dois toques, como no teclado.
       if ((bitsDir & (B.L | B.R)) && dist < r.width * 0.3) bitsDir |= B.LV;
-      if (!saiuDoCentro) saiuDoCentro = performance.now();
-      if (!petelecoFeito && dist >= r.width * 0.38 && performance.now() - saiuDoCentro <= 120 && (bitsDir & bitTras())) { bitsPulso |= B.RC; petelecoFeito = true; }
-    } else { saiuDoCentro = 0; petelecoFeito = false; }
+    }
     direcional.dataset.dir = (bitsDir & B.U ? 'c' : '') + (bitsDir & B.D ? 'b' : '') + (bitsDir & B.L ? 'e' : '') + (bitsDir & B.R ? 'd' : '');
   }
   // Botões: quem encosta perto da divisa aperta os dois (soco+chute = esquiva).
@@ -510,10 +502,13 @@
     requestAnimationFrame(quadro);
     atualizarPads();
     if (!luta) return;
-    luta.sobra += Math.min(250, agora - luta.ultimo);
+    luta.sobra += Math.min(2000, agora - luta.ultimo);
     luta.ultimo = agora;
     let passos = 0;
-    while (luta && luta.sobra >= PASSO_MS && passos < 8) {
+    // Cobrir até 2 s de desenho lento (120 passos), sem mudar os 60 Hz.
+    // O limite antigo de oito passos atrelava a velocidade da luta ao 3D.
+    // Pausa/rede continuam interrompendo a recuperação em avancar().
+    while (luta && luta.sobra >= PASSO_MS && passos < 120) {
       if (!avancar()) { luta.sobra = Math.min(luta.sobra, PASSO_MS * 2); break; }
       luta.sobra -= PASSO_MS; passos++;
     }

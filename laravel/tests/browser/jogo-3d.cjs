@@ -50,6 +50,14 @@ let browser;
   });
   // Quem já havia escolhido 2D na versão antiga também deve entrar no 3D.
   await context.addInitScript(() => localStorage.setItem('ko-graficos', '2d'));
+  await context.addInitScript(() => {
+    window.__leiturasPad = 0;
+    window.__pad = { index: 0, id: 'Controle virtual de teste', mapping: 'standard', connected: false,
+      axes: [0, 0], buttons: Array.from({ length: 16 }, () => ({ pressed: false, value: 0 })) };
+    Object.defineProperty(navigator, 'getGamepads', { configurable: true, value: () => {
+      window.__leiturasPad++; return window.__pad.connected ? [window.__pad] : [];
+    } });
+  });
   const page = await context.newPage();
   const erros = [];
   let bloquearModelo = false, falhasModelo = 0;
@@ -136,6 +144,25 @@ let browser;
   const quadro3d = await page.evaluate(() => window.KOTeste.luta().s.f);
   await page.waitForFunction(f => window.KOTeste.luta().s.f > f, quadro3d, { timeout: 15000 });
   await page.screenshot({ path: path.join(saida, 'pipoca-3d-inicio.png') });
+  if (process.env.KO_MEDIR_RITMO) {
+    const medidas = await page.evaluate(async () => {
+      const luta = window.KOTeste.luta(); luta.cpu = null;
+      let primeiro = null, ultimo = null, desenhos = 0; const desenhar = luta.r3d.desenhar;
+      luta.r3d.desenhar = function (s) {
+        desenhos++; ultimo = { agora: luta.ultimo, f: s.f }; primeiro ||= ultimo;
+        return desenhar.call(this, s);
+      };
+      await new Promise(resolve => setTimeout(resolve, 6000));
+      luta.r3d.desenhar = desenhar;
+      const segundos = (ultimo.agora - primeiro.agora) / 1000, passos = ultimo.f - primeiro.f;
+      return { segundos, desenhos, fps: (desenhos - 1) / segundos, passos,
+        passosPorSegundo: passos / segundos, visibilidade: document.visibilityState };
+    });
+    fs.writeFileSync(path.join(temp, 'ritmo-3d.json'), JSON.stringify(medidas, null, 2));
+    console.log('Medição real de ritmo 3D (SwiftShader):', medidas);
+    assert.ok(medidas.passosPorSegundo > 58 && medidas.passosPorSegundo < 62, 'simulação real acompanha 60 Hz com desenho lento');
+    if (process.env.KO_MEDIR_RITMO !== 'completo') return;
+  }
 
   // Os atalhos visíveis e as teclas atravessam o fluxo real de entrada.
   await page.evaluate(() => {
@@ -190,6 +217,53 @@ let browser;
     luta.cpu = KOCPU.criar(KOSim, 'medio'); luta.r3d.limpar();
   });
   console.log('EX, Super e Ultra: atalhos da tela e do teclado acionam os golpes corretos.');
+
+  // Gamepad API real da página, alimentada por controle virtual standard.
+  await page.evaluate(() => {
+    window.__pad.connected = true; window.KOTeste.luta().cpu = null;
+    window.__golpesPad = []; window.__estadosPad = []; window.__bloqueiosPad = 0;
+    KOSim.passo = (s, entradas) => {
+      const r = window.__passoPoderesOriginal(s, entradas);
+      window.__estadosPad.push(s.p[0].estado);
+      if (s.p[0].golpe) window.__golpesPad.push(s.p[0].golpe);
+      window.__bloqueiosPad += s.ev.filter(e => e.t === 'defendeu' && e.lado === 0).length;
+      return r;
+    };
+  });
+  async function soltarPad() {
+    const n = await page.evaluate(() => {
+      window.__pad.buttons.forEach(b => { b.pressed = false; b.value = 0; }); return window.__leiturasPad;
+    });
+    await page.waitForFunction(n => window.__leiturasPad > n, n);
+  }
+  for (const [golpe, botoes] of [['p1', [2]], ['k1', [0]], ['foc', [1]], ['esp', [3]], ['espEx', [3, 2]], ['sup', [3, 0]], ['ultra', [3, 1]]]) {
+    await soltarPad();
+    await page.evaluate(botoes => {
+      const luta = window.KOTeste.luta(), s = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: true });
+      s.fase = 'luta'; s.fT = 0; s.p[0].poder = KOSim.PODER_MAX; s.p[0].revanche = KOSim.ULTRA_MAX;
+      Object.assign(luta.s, s); luta.r3d.limpar(); window.__golpesPad = [];
+      for (const i of botoes) window.__pad.buttons[i].pressed = true;
+    }, botoes);
+    await page.waitForFunction(g => window.__golpesPad.includes(g), golpe, { timeout: 15000 });
+  }
+  await soltarPad();
+  await page.evaluate(() => {
+    const luta = window.KOTeste.luta(), s = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: true });
+    s.fase = 'luta'; s.fT = 0; s.p[0].x = 150 * KOSim.U; s.p[1].x = 180 * KOSim.U;
+    Object.assign(luta.s, s); luta.r3d.limpar(); window.__estadosPad = []; window.__bloqueiosPad = 0;
+    window.__pad.buttons[14].pressed = true;
+    let q = 0; luta.cpu = () => ++q === 3 ? KOSim.B.P : 0;
+  });
+  await page.waitForFunction(() => window.__bloqueiosPad > 0, null, { timeout: 15000 });
+  assert.equal(await page.evaluate(() => window.__estadosPad.includes('recuo')), false, 'segurar para trás não causa backdash antes da defesa');
+  await soltarPad();
+  await page.evaluate(() => {
+    window.__pad.connected = false; KOSim.passo = window.__passoPoderesOriginal;
+    const luta = window.KOTeste.luta(), s = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: true });
+    s.fase = 'luta'; s.fT = 0; Object.assign(luta.s, s); luta.r3d.limpar();
+    luta.cpu = KOCPU.criar(KOSim, 'medio');
+  });
+  console.log('Gamepad: P, K, F, SP, EX, Super, Ultra e defesa para trás: OK.');
 
   // Aproxima para verificar golpes reais; SwiftShader roda a poucos FPS.
   await page.evaluate(() => {
