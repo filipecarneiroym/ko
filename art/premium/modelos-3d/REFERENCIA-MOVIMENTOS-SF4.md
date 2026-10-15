@@ -1,5 +1,47 @@
 # Referência de movimentos para a Lola
 
+## Revisão: chute, efeitos, voz e recuperação
+
+O novo link de 475 segundos contém exatamente o mesmo vídeo de treino da
+Chun-Li já analisado (SHA-256 começa com A67BFEA24D2D). O vídeo vertical de
+59 segundos é diferente: Chun-Li contra C. Viper. Sua área de luta foi
+recortada e examinada em toda a duração a cada segundo. Mostra impactos
+amarelos/brancos, defesa azul, brilho dourado do EX, poeira de aterrissagem
+e a diferença entre recuperação durante o round e derrota após K.O.
+São amostras visuais; não equivalem a assistir cada quadro nem ouvir o áudio.
+
+- K: preparo com contrarrotação, giro progressivo de quadril e tronco,
+  pivô da sola de apoio e braço de contrapeso; recolhe antes de voltar à
+  guarda. A perna mais próxima da câmera chuta nas duas orientações.
+  Referências densas: Ryu em ~36,5–37,5 s do vídeo de recuperação e
+  Chun-Li em ~18,5–19,7 s do treino. Sem volta extra de 360° no chute comum.
+- Impactos: estrela irregular com centro branco e pontas douradas; azul
+  na defesa. Tinta grande fica reservada aos efeitos que a justificam.
+- Focus: conforme escolha de Filipe, o brilho “full” é o clarão branco
+  da carga máxima. Há também o pulso curto ao chegar ao nível 2. O corpo
+  volta à cor normal depois do clarão; barra Super cheia não acende a pele.
+- EX: pulso dourado sobre a própria malha, sem fogo contínuo nos golpes
+  comuns. Super e Ultra têm clarão de abertura. Hadouken mantém o vapor
+  irregular azul/ciano que acompanha a energia em movimento.
+- Voz: nove gritos humanos femininos CC0, de ataque, dano e salto, com
+  Chun-Li como referência de uso. Não são gravações da personagem original.
+  Arquivos e créditos em `public/audio/lola/README.md`.
+- EX/SUPER/ULTRA: acima do losango, texto claro e áreas de toque de pelo
+  menos 44 px. Testados em seis tamanhos de tela, de 480×240 a 1280×720.
+
+A falha relatada de permanecer deitada não foi reproduzida na sequência
+local causada por rasteira: `caido → levantando → parado`. O teste usa o
+motor e os GLBs reais, sem atribuir esses estados manualmente. Foram
+registrados apoio das luvas junto da cabeça, arco e retorno à guarda.
+O teste da página Laravel também percorreu essa sequência no laço normal
+da partida e capturou a Lola novamente em pé.
+Os modelos agora usam uma URL com os hashes das duas cores, além da
+revalidação HTTP que já existia; um teste exige atualizar essa versão
+sempre que o conteúdo mudar. Cache antigo é hipótese, não causa confirmada.
+Após K.O., a derrota deitada continua sendo a pose esperada.
+
+Validação visual final continua dependendo de Filipe jogar no aparelho.
+
 Vídeo local: `Downloads/videoplayback.mp4`, aproximadamente 13 minutos.
 Análise em 14/10/2026: toda a duração percorrida em quadros a cada segundo;
 sequências de chutes e Hadouken revistas com intervalos menores. Isso permite

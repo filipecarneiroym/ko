@@ -79,9 +79,9 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
     // A adversária precisa ter saído do atordoamento do chute duplo para defender.
     await page.waitForFunction(() => !['dano', 'caido', 'levantando'].includes(globalThis.__laboratorio3d.estado.p[1].estado), null, { timeout: 30000 });
     await aproximar();
-    await page.keyboard.down('Comma');
+    await page.keyboard.down('ArrowRight'); // trás do jogador 2: defesa; vírgula é Focus
     await golpe('3-defesa', 'KeyJ', 'defendeu', { antes: aproximar });
-    await page.keyboard.up('Comma');
+    await page.keyboard.up('ArrowRight');
     await page.evaluate(() => { const s = globalThis.__laboratorio3d.estado; s.p[0].poder = 0; s.proj.length = 0; s.p[0].x = 100 * 16; s.p[1].x = 300 * 16; });
     await golpe('4-cenoura', 'KeyI', 'especial', { depois: 900 });
     await page.waitForTimeout(1500);

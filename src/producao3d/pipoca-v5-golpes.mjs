@@ -161,8 +161,12 @@ export function criarGolpesV5(ossos, parado, simulador) {
       let { G, P } = resolver({ ...pose, pernas: Object.fromEntries(['E', 'D'].map(l => [l, { ...pose.pernas[l], pe: G0[PERNAS[l].pe] }])) });
       for (const lado of ['E', 'D']) {
         const b2 = PERNAS[lado], K = P[b2.canela], T = P[b2.pe];
-        const fa = formaPe(lado, a.pernas?.[lado]?.pe ?? 'plano', K, T, pose.giro, pose.rol);
-        const fb = formaPe(lado, b.pernas?.[lado]?.pe ?? 'plano', K, T, pose.giro, pose.rol);
+        const fa = a.pernas?.[lado]?.pivo !== undefined
+          ? Quaternion.RotationAxis(v(0, 1, 0), a.pernas[lado].pivo).multiply(G0[b2.pe])
+          : formaPe(lado, a.pernas?.[lado]?.pe ?? 'plano', K, T, pose.giro, pose.rol);
+        const fb = b.pernas?.[lado]?.pivo !== undefined
+          ? Quaternion.RotationAxis(v(0, 1, 0), b.pernas[lado].pivo).multiply(G0[b2.pe])
+          : formaPe(lado, b.pernas?.[lado]?.pe ?? 'plano', K, T, pose.giro, pose.rol);
         pose.pernas[lado].pe = Quaternion.Slerp(fa, fb, t).normalize();
       }
       if (chaves.some(k => k.bracos)) {
@@ -262,28 +266,31 @@ export function criarGolpesV5(ossos, parado, simulador) {
         valores: i === 0 ? raizMarcha : temposMarcha.flatMap(() => o.posicao) },
     ]) } };
 
-  // K comum: uma extensão da perna E e recolhimento; D sustenta o corpo.
-  clips.k1 = animar('k1', 24, [
-    { q: 0 },
-    { q: 3, giro: -.25, inclinacao: .08, pelve: v(-.03, .02, 0), pernas: { E: { tornozelo: v(.42, .82, ZE + .12), joelho: v(1, .8, 0), pe: 'plano' } } },
-    { q: 6, giro: -.5, inclinacao: .26, pelve: v(.03, .03, 0), pernas: { E: { tornozelo: v(1.28, 1.02, ZE + .16), joelho: v(0, 1, 0), pe: 'esticado' } } },
-    { q: 8, giro: -.5, inclinacao: .26, pelve: v(.04, .03, 0), pernas: { E: { tornozelo: v(1.3, 1.02, ZE + .16), joelho: v(0, 1, 0), pe: 'esticado' } } },
-    { q: 11, giro: -.25, inclinacao: .12, pelve: v(.02, .02, 0), pernas: { E: { tornozelo: v(.5, .74, ZE + .1), joelho: v(1, .8, 0), pe: 'plano' } } },
-    { q: 14, giro: -.05, inclinacao: .03, pelve: v(0, .01, 0), pernas: { E: { tornozelo: v(.36, .32, ZE + .02), joelho: v(1, .3, 0), pe: 'plano' } } },
-    { q: 16 },
-    { q: 24 },
-  ]);
-  // Variante com a outra perna: a câmera fica em -Z. A v5 roda 180°
-  // ao trocar de face; selecionar D em +X e E em -X mantém o chute visível.
-  clips.k1D = animar('k1D', 24, [
-    { q: 0 },
-    { q: 3, giro: .25, inclinacao: .08, pelve: v(-.03, .02, 0), pernas: { D: { tornozelo: v(.25, .82, ZD - .12), joelho: v(1, .8, 0), pe: 'plano' } } },
-    { q: 6, giro: .5, inclinacao: .26, pelve: v(.03, .03, 0), pernas: { D: { tornozelo: v(1.28, 1.02, ZD - .16), joelho: v(0, 1, 0), pe: 'esticado' } } },
-    { q: 8, giro: .5, inclinacao: .26, pelve: v(.04, .03, 0), pernas: { D: { tornozelo: v(1.3, 1.02, ZD - .16), joelho: v(0, 1, 0), pe: 'esticado' } } },
-    { q: 11, giro: .25, inclinacao: .12, pelve: v(.02, .02, 0), pernas: { D: { tornozelo: v(.4, .74, ZD - .1), joelho: v(1, .8, 0), pe: 'plano' } } },
-    { q: 14, giro: .05, inclinacao: .03, pelve: v(0, .01, 0), pernas: { D: { tornozelo: v(-.2, .32, ZD - .02), joelho: v(1, .3, 0), pe: 'plano' } } },
-    { q: 16 }, { q: 24 },
-  ]);
+  // Chute circular: antecipação, quadril e tronco girando juntos, pivô do
+  // apoio, extensão em arco, recolhimento e retorno. Referência: Chun-Li
+  // e Ryu dos vídeos. Um toque/um contato, sem uma volta inteira da raiz.
+  const chuteCircular = lado => {
+    const d = lado === 'D', sinal = d ? 1 : -1, apoio = d ? 'E' : 'D', z = d ? ZD : ZE;
+    const chave = (q, giro, inc, peso, x, y, lateral, estendido = false) => ({ q,
+      giro: sinal * giro, inclinacao: inc, pelve: v((d ? .2 : -.14) * peso, .025 * peso, 0),
+      pernas: { [lado]: { tornozelo: v(x, y, z - sinal * lateral), joelho: estendido ? v(0, 1, 0) : v(1, .9, 0), pe: estendido ? 'esticado' : 'plano' },
+        [apoio]: { pivo: sinal * giro * .6 } },
+      bracos: { [lado]: { alvo: v(-.12 * peso, -.22, sinal * .14), cotovelo: v(-.3, -.6, sinal * .8) } },
+    });
+    return animar(d ? 'k1D' : 'k1', 24, [
+      { q: 0 }, { q: 2, giro: -sinal * .12, pelve: v(d ? .04 : -.03, -.025, 0) },
+      chave(3, .2, .06, .5, d ? .15 : .35, .78, .28),
+      chave(5, .7, .2, .9, 1.0, 1.01, .3, true),
+      chave(6, 1.0, .28, 1, 1.28, 1.02, .18, true),
+      chave(8, 1.15, .24, 1, 1.3, 1.0, .06, true),
+      chave(10, .92, .17, .8, .48, .85, .15),
+      chave(13, .4, .06, .4, d ? -.1 : .35, .48, .06),
+      { q: 17, giro: sinal * .08 }, { q: 21 }, { q: 24 },
+    ]);
+  };
+  clips.k1 = chuteCircular('E');
+  // A câmera fica em -Z: D em +X e E em -X mantêm a perna voltada à tela.
+  clips.k1D = chuteCircular('D');
 
   // k2: chute alto de perna E (28 quadros), janela 7-10.
   // k2: chute alto (28 quadros), janela 7-10. A subida é a mesma (pé de apoio firme),

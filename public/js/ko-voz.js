@@ -1,4 +1,4 @@
-/* Vozes originais: gritos sintetizados com vogais e perfis próprios, sem downloads. */
+/* Lola: gravações humanas femininas locais (CC0). Reserva sintetizada para os demais. */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
   else root.KOVoz = factory();
@@ -23,9 +23,69 @@
     fossil: { hz: 115, vogal: [550, 1050, 2600], pitch: 0.6, esp: 'Mordida mecânica!', sup: 'Força do Tiranossauro!', final: 'Dino rugido!' },
   };
 
-  function grito(ctx, id, forte, variacao) {
+  const AMOSTRAS_LOLA = Object.freeze(Object.fromEntries(['ataque', 'dano', 'salto'].flatMap(tipo =>
+    [1, 2, 3].map(i => [`${tipo}-${i}`, `/audio/lola/${tipo}-${i}.mp3`]))));
+  const contextos = new WeakMap();
+  function dadosDoContexto(ctx) {
+    if (!contextos.has(ctx)) contextos.set(ctx, { buffers: new Map(), pedidos: new Map(), vozes: new Map(), eventos: new Map() });
+    return contextos.get(ctx);
+  }
+  function preparar(ctx, saida) {
+    if (!ctx || typeof ctx.decodeAudioData !== 'function') return Promise.resolve();
+    const dados = dadosDoContexto(ctx);
+    dados.saida = saida || dados.saida || ctx.destination;
+    return Promise.all(Object.entries(AMOSTRAS_LOLA).map(([nome, url]) => {
+      if (!dados.pedidos.has(nome)) dados.pedidos.set(nome, fetch(url).then(r => {
+        if (!r.ok) throw new Error(`Voz da Lola indisponível: ${nome}`);
+        return r.arrayBuffer();
+      }).then(bytes => ctx.decodeAudioData(bytes)).then(buffer => dados.buffers.set(nome, buffer))
+        .catch(erro => { dados.pedidos.delete(nome); throw erro; }));
+      return dados.pedidos.get(nome);
+    }));
+  }
+  function amostraDoEvento(e = {}, variacao = 0) {
+    const numero = Math.abs(variacao | 0) % 3 + 1;
+    if (e.t === 'acerto' || e.t === 'chao') return `dano-${numero}`;
+    if (e.t === 'pulo') return `salto-${numero}`;
+    if (['especial', 'ex', 'super', 'ultra', 'golpeFinal', 'agarrao'].includes(e.t)
+      || /^(p2|k2|ck|foc|dp|tatsu)/.test(e.golpe || '')) return 'ataque-3';
+    return `ataque-${numero}`;
+  }
+  function vozGravada(ctx, forte, variacao, evento) {
+    const dados = dadosDoContexto(ctx), chave = amostraDoEvento(evento, variacao);
+    const buffer = dados.buffers.get(chave);
+    if (!buffer) return false; // nunca atrasar um grito esperando o download
+    const lado = evento.lado === 1 ? 1 : 0, quadro = evento.quadro ?? variacao;
+    // EX pode emitir ataque, especial e ex no mesmo passo: uma voz só.
+    if (dados.eventos.get(lado) === quadro) return true;
+    dados.eventos.set(lado, quadro);
+    const anterior = dados.vozes.get(lado);
+    if (anterior) {
+      anterior.volume.gain.cancelScheduledValues(ctx.currentTime);
+      anterior.volume.gain.setValueAtTime(anterior.volume.gain.value, ctx.currentTime);
+      anterior.volume.gain.linearRampToValueAtTime(0, ctx.currentTime + .015);
+      anterior.fonte.stop(ctx.currentTime + .02);
+    }
+    const fonte = ctx.createBufferSource(), volume = ctx.createGain();
+    fonte.buffer = buffer; fonte.playbackRate.value = forte ? .97 : 1;
+    volume.gain.value = forte ? .66 : .52;
+    fonte.connect(volume); volume.connect(dados.saida || ctx.destination);
+    const voz = { fonte, volume }; dados.vozes.set(lado, voz);
+    fonte.onended = () => { fonte.disconnect(); volume.disconnect(); if (dados.vozes.get(lado) === voz) dados.vozes.delete(lado); };
+    fonte.start();
+    return true;
+  }
+  function parar(ctx) {
+    const dados = contextos.get(ctx);
+    if (!dados) return;
+    for (const voz of dados.vozes.values()) { voz.volume.gain.setValueAtTime(0, ctx.currentTime); voz.fonte.stop(); }
+    dados.vozes.clear(); dados.eventos.clear();
+  }
+
+  function grito(ctx, id, forte, variacao, evento = {}) {
     const perfil = PERFIS[id];
     if (!ctx || ctx.state !== 'running' || !perfil) return;
+    if (id === 'pipoca' && vozGravada(ctx, forte, variacao, evento)) return;
     const inicio = ctx.currentTime, dur = forte ? 0.33 : 0.14;
     const fonte = ctx.createOscillator(), volume = ctx.createGain();
     const hz = perfil.hz * (variacao % 2 ? 1.12 : 0.95);
@@ -47,5 +107,5 @@
     fonte.start(inicio); fonte.stop(inicio + dur);
   }
 
-  return { PERFIS, grito };
+  return { PERFIS, grito, preparar, parar, amostraDoEvento, AMOSTRAS_LOLA };
 });

@@ -7,6 +7,7 @@ import { TransformNode } from '@babylonjs/core/Meshes/transformNode.js';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
 import { descreverPose } from './estado-visual.mjs';
 import { carregarModelo } from './modelo-glb.js';
+import { urlModeloAtual } from './versao-modelos.mjs';
 import { LIMITE_GLB } from './contrato-glb.mjs';
 import { criarEfeitos } from './efeitos.js';
 import { criarCaixas } from './caixas.js';
@@ -135,7 +136,7 @@ async function executarCarregamento(mensagem, carregar) {
   }
 }
 async function baixarModelo(caminho, operacao) {
-  const resposta = await fetch(caminho, {
+  const resposta = await fetch(urlModeloAtual(caminho), {
     mode: 'same-origin', credentials: 'same-origin', redirect: 'error', cache: 'no-cache',
     signal: operacao.controlador.signal, headers: { Accept: 'model/gltf-binary' },
   });

@@ -65,12 +65,14 @@ function texturaEstrela(scene, nome, cor) {
   const g = t.getContext();
   g.clearRect(0, 0, n, n);
   g.globalCompositeOperation = 'lighter';
-  // Raios: 4 longos e 4 curtos, afinando para a ponta.
-  for (let i = 0; i < 8; i++) {
-    const comp = c * (i % 2 ? .55 : .98), larg = c * (i % 2 ? .05 : .075);
-    g.save(); g.translate(c, c); g.rotate(i * Math.PI / 4);
+  // Clarão irregular de contato: pontas de comprimentos diferentes, como
+  // nos socos e chutes dos vídeos, sem a simetria de um ícone de estrela.
+  const r = semente(37);
+  for (let i = 0; i < 17; i++) {
+    const comp = c * (.38 + r() * .6), larg = c * (.022 + r() * .065);
+    g.save(); g.translate(c, c); g.rotate(i * Math.PI * 2 / 17 + (r() - .5) * .15);
     const gr = g.createLinearGradient(0, 0, comp, 0);
-    gr.addColorStop(0, '#ffffff'); gr.addColorStop(.35, cor); gr.addColorStop(1, 'rgba(0,0,0,0)');
+    gr.addColorStop(0, '#ffffff'); gr.addColorStop(.23, '#ffffff'); gr.addColorStop(.55, cor); gr.addColorStop(1, 'rgba(0,0,0,0)');
     g.fillStyle = gr; g.beginPath(); g.moveTo(0, -larg); g.lineTo(comp, 0); g.lineTo(0, larg); g.closePath(); g.fill();
     g.restore();
   }
@@ -313,18 +315,18 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
         const forte = Math.max(0, Math.min(2, e.forte || 0)), { x, y } = contato(e, estado);
         const pesado = forte >= 1 || (e.dano || 0) >= 50;
         // Como no SF4: golpe fraco é só faísca; a tinta de pincel fica para os fortes.
-        if (pesado) respingo(matForte, x, y, -.5, 1.6, 20, 'acerto', .9);
-        bolasFlash[cursor % 3].position.set(x, y, -.6); bolasFlash[cursor % 3].metadata = { nasc: relogio, tam: pesado ? 2.6 : 1.5 };
-        estrela(matEstrela, x, y, -.7, pesado ? 2.4 : 1.5, pesado ? 11 : 8);
-        if (!reduzido()) explodir(fumaca, x, y, -.45, pesado ? 16 : 7);
-        if (!reduzido()) explodir(faiscas, x, y, -.5, pesado ? 70 : 30);
+        if (estado?.p?.[e.lado]?.golpe === 'foc') respingo(matForte, x, y, .3, 1.6, 16, 'acerto', .65);
+        bolasFlash[cursor % 3].position.set(x, y, -.6); bolasFlash[cursor % 3].metadata = { nasc: relogio, tam: pesado ? 1.8 : 1.1 };
+        estrela(matEstrela, x, y, -.7, pesado ? 1.9 : 1.35, pesado ? 9 : 7);
+        if (!reduzido()) explodir(fumaca, x, y, -.45, pesado ? 10 : 4);
+        if (!reduzido()) explodir(faiscas, x, y, -.5, pesado ? 40 : 20);
         tremor = pesado ? .16 : .06; tremorNasc = relogio;
         if (pesado) { flashNasc = relogio; flashForca = .18; }
       } else if (e.t === 'defendeu') {
         // Como no SF4: explosão azul-branca com faíscas e névoa azul (sem escudo).
         const { x, y } = contato(e, estado);
-        estrela(matEstrelaFria, x, y, -.7, 2.1, 10);
-        if (!reduzido()) { explodir(faiscasFrias, x, y, -.55, 45); explodir(fumacaFria, x, y, -.45, 10); }
+        estrela(matEstrelaFria, x, y, -.7, 1.6, 8);
+        if (!reduzido()) { explodir(faiscasFrias, x, y, -.55, 28); explodir(fumacaFria, x, y, -.45, 7); }
         tremor = .03; tremorNasc = relogio;
       } else if (e.t === 'choque') {
         const x = xMundo(e.x), y = yMundo(e.y) + 1.4;

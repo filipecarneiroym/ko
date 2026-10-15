@@ -36,6 +36,8 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
       .filter(m => m.name.startsWith('golpe-bola-')).map(m => m.material.emissiveTexture)).size), 1,
       'projéteis compartilham uma textura pronta, sem clones dinâmicos vazios');
     const casos = [
+      ['queda-real-no-chao', 'caido', 20], ['queda-real-maos', 'levantando', 5],
+      ['queda-real-arco', 'levantando', 10], ['queda-real-guarda', 'parado', 3],
       ['queda-contato', 'caido', 8], ['queda-deitada', 'caido', 30],
       ['queda-impacto', 'caido', 11],
       ['levantar-recolhe', 'levantando', 3], ['levantar-maos', 'levantando', 5],
@@ -47,6 +49,8 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
       ['soco-p-contato', 'p1', 3], ['soco-p-recolhe', 'p1', 8], ['soco-p-invertido', 'p1', 3, -1],
       ['soco-combo-contato', 'p2', 5], ['soco-baixo-contato', 'cp', 3],
       ['focus-solta', 'foc', 19], ['focus-solta-invertido', 'foc', 19, -1],
+      ['focus-curto', 'foc', 12], ['focus-nivel2', 'foc', 24],
+      ['focus-maximo', 'foc', 60], ['focus-maximo-invertido', 'foc', 60, -1], ['focus-fim-clarao', 'foc', 60],
       ['chute-alto-preparo', 'k2', 4], ['chute-alto-contato', 'k2', 7],
       ['rasteira-preparo', 'ck', 4], ['rasteira-contato', 'ck', 6],
       ['chute-aereo-inicio', 'ak', 5], ['chute-aereo-fim', 'ak', 16],
@@ -76,7 +80,17 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
         const B = KOSim.B;
         const comandos = { p1: B.P, cp: B.D | B.P, k1: B.K, ck: B.D | B.K, esp: B.S, dp: B.R | B.S, tatsu: B.L | B.S, espEx: B.S | B.P, dpEx: B.R | B.S | B.P,
           tatsuEx: B.L | B.S | B.P, sup: B.S | B.K, ultra: B.S | B.F, foc: B.F };
-        if (['caido', 'levantando', 'derrotado'].includes(golpe)) {
+        if (nome.startsWith('queda-real-')) {
+          lab.estado.p[0].x = 150 * KOSim.U; lab.estado.p[1].x = 180 * KOSim.U;
+          KOSim.passo(lab.estado, [0, B.D | B.K]);
+          let passos = 0, caiu = false;
+          while (passos++ < 220) {
+            const l = lab.estado.p[0]; caiu ||= l.estado === 'caido';
+            if (caiu && l.estado === golpe && l.t >= quadro) break;
+            KOSim.passo(lab.estado, [0, 0]);
+          }
+          if (!caiu || passos >= 220) throw new Error('queda real não completou caído → levantando → guarda');
+        } else if (['caido', 'levantando', 'derrotado'].includes(golpe)) {
           Object.assign(lab.estado.p[0], { estado: golpe, golpe: null, t: quadro });
         } else if (['p2', 'k2', 'ak'].includes(golpe)) {
           // Inspeção do clipe inteiro, sem a queda interromper o chute aéreo.
@@ -89,6 +103,7 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
           KOSim.passo(lab.estado, [0, 0]);
           while (lab.estado.p[0].t < 19) KOSim.passo(lab.estado, [0, 0]);
         }
+        if (nome === 'focus-fim-clarao') while (lab.estado.p[0].t < 21) KOSim.passo(lab.estado, [0, 0]);
         if (nome.startsWith('fim-')) {
           Object.assign(lab.estado, { fase: 'fim', vencedor: 1, fT: quadro, finalFeito: nome === 'fim-apos-final' ? 1 : 0 });
           Object.assign(lab.estado.p[0], { estado: nome === 'fim-partida' ? 'tonto' : 'derrotado', t: 0 });
@@ -96,12 +111,21 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
         await new Promise(resolve => lab.scene.onAfterRenderObservable.addOnce(() => resolve()));
         return { golpe: lab.estado.p[0].golpe, estado: lab.estado.p[0].estado, altura: lab.estado.p[0].y, proj: lab.estado.proj.length };
       }, { nome, golpe, quadro, face });
-      if (nome === 'fim-partida') assert.equal(resultado.estado, 'tonto', 'fim visual não muda o estado do motor');
+      if (nome.startsWith('queda-real-')) assert.equal(resultado.estado, golpe, 'recuperação real, sem forçar estado');
+      else if (nome === 'fim-partida') assert.equal(resultado.estado, 'tonto', 'fim visual não muda o estado do motor');
       else if (['caido', 'levantando', 'derrotado'].includes(golpe)) assert.equal(resultado.estado, golpe);
       else assert.equal(resultado.golpe, golpe);
       if (golpe.startsWith('dp')) assert.ok(resultado.altura > 0);
       if (golpe === 'espEx') assert.equal(resultado.proj, 2);
       await page.waitForTimeout(500);
+      if (nome.startsWith('focus-')) {
+        const corpo = await page.evaluate(() => globalThis.__laboratorio3d.scene.meshes
+          .filter(m => m.getTotalVertices() > 10000 && m.renderOverlay)
+          .map(m => ({ alfa: m.overlayAlpha, cor: m.overlayColor.asArray() })));
+        const pisca = ['focus-nivel2', 'focus-maximo', 'focus-maximo-invertido'].includes(nome);
+        assert.equal(corpo.length > 0, pisca, 'clarão branco somente nas passagens de carga');
+        if (pisca) { assert.ok(corpo[0].alfa > .85); assert.deepEqual(corpo[0].cor, [1, 1, 1]); }
+      }
       if (['queda-impacto', 'queda-deitada', 'levantar-pouso', 'fim-partida', 'fim-apos-final'].includes(nome)) {
         const piso = await page.evaluate(() => {
           const scene = globalThis.__laboratorio3d.scene, onda = scene.getMeshByName('sf4-onda-chao-0');
@@ -117,10 +141,10 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
         const efeitos = await page.evaluate(() => {
           const scene = globalThis.__laboratorio3d.scene;
           return { particulas: scene.getParticleSystemById('golpe-nevoa-0').emitRate,
-            largura: scene.getMeshByName('golpe-rastro-0').diameter };
+            ativo: scene.getMeshByName('golpe-rastro-0').isEnabled(), largura: scene.getMeshByName('golpe-rastro-0').diameter };
         });
         assert.equal(efeitos.particulas, 0, 'golpes comuns sem névoa de fogo cobrindo o membro');
-        assert.ok(efeitos.largura <= .08, 'rastro discreto de movimento');
+        assert.ok(!efeitos.ativo || efeitos.largura <= .08, 'rastro discreto de movimento');
         if (['p1', 'p2', 'cp', 'foc'].includes(golpe)) {
           const extensao = await page.evaluate(() => {
             const rastro = globalThis.__laboratorio3d.scene.getMeshByName('golpe-rastro-0');

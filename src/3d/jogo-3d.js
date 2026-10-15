@@ -2,6 +2,7 @@ import { Engine } from '@babylonjs/core/Engines/engine.js';
 import { Scene } from '@babylonjs/core/scene.js';
 import { descreverPose } from './estado-visual.mjs';
 import { carregarModelo } from './modelo-glb.js';
+import { urlModeloAtual } from './versao-modelos.mjs';
 import { criarEfeitos } from './efeitos.js';
 import { criarEfeitosSF4 } from './efeitos-sf4.js';
 import { criarBrilhoGolpes } from './brilho-golpes.js';
@@ -16,7 +17,7 @@ import { criarCameraLuta, enquadrarCameraLuta } from './camera-luta.js';
 
 // Etiqueta da versão do 3D. Aparece no aviso de erro para conferir se o aparelho
 // carregou o arquivo novo (o Safari do iOS guarda JavaScript em cache com facilidade).
-const VERSAO_3D = 'ko3d-2026-10-14-poderes';
+const VERSAO_3D = 'ko3d-2026-10-14-recuperacao-focus';
 // iPhone/iPad: o WebGL do Safari é mais frágil e a memória é curta.
 const IOS = /iP(hone|ad|od)/.test(navigator.userAgent)
   || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -63,7 +64,7 @@ async function baixar(url, sinal) {
   if (sinal.aborted) cancelar();
   try {
     // Revalidar a URL evita reutilizar um modelo antigo após uma publicação.
-    const r = await fetch(url, { credentials: 'same-origin', cache: 'no-cache', signal: controle.signal });
+    const r = await fetch(urlModeloAtual(url), { credentials: 'same-origin', cache: 'no-cache', signal: controle.signal });
     if (!r.ok) throw new Error(`Não foi possível baixar o modelo 3D (HTTP ${r.status}).`);
     return await r.arrayBuffer();
   } catch (erro) {

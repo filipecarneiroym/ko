@@ -535,7 +535,10 @@
         if (!l.focoSolto) {
           l.focoCarga++;
           l.nivelFoco = l.focoCarga >= 60 ? 3 : l.focoCarga >= 24 ? 2 : 1;
-          if (!segura(B.F) || l.focoCarga >= 60) { l.focoSolto = 1; l.t = 14; }
+          if (!segura(B.F) || l.focoCarga >= 60) {
+            l.focoSolto = 1; l.t = 14;
+            s.ev.push({ t: 'focusSolto', lado: l.lado, id: l.id, golpe: 'foc' });
+          }
           else l.t = 0;
         }
         return;

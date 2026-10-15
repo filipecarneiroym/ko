@@ -10,6 +10,7 @@ import { Color3, Color4 } from '@babylonjs/core/Maths/math.color.js';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector.js';
 import { Constants } from '@babylonjs/core/Engines/constants.js';
 import { quedasDoFinal } from './estado-visual.mjs';
+import { criarBrilhoPersonagem, descreverBrilhoPersonagem } from './brilho-personagem.mjs';
 
 // Luminosidade dos golpes no estilo do SF4 de celular: rastro de luz na mão
 // ou no pé que bate (branco-azulado no fraco, fogo no forte, energia no
@@ -21,16 +22,20 @@ const COR = {
 const FORTES = new Set(['p2', 'k2']);
 const CHUTES = new Set(['k1', 'k2', 'ck', 'ak', 'tatsu', 'tatsuEx']);
 
-// Tinta escura do Focus Attack (como no SF4): mancha preta-azulada com borda clara.
+// Tinta do Focus: pinceladas irregulares, sem anéis ovais em volta do corpo.
 function texturaTintaFoco(scene) {
-  const n = 64, t = new DynamicTexture('golpe-tinta-foco', { width: n, height: n }, scene, false);
+  const n = 128, t = new DynamicTexture('golpe-tinta-foco', { width: n, height: n }, scene, false);
   t.hasAlpha = true;
   const g = t.getContext();
   g.clearRect(0, 0, n, n);
-  g.save(); g.translate(n / 2, n / 2); g.scale(1, .32); // pincelada: comprida e fina
-  const gr = g.createRadialGradient(0, 0, 0, 0, 0, n / 2);
-  gr.addColorStop(0, 'rgba(10,8,22,.95)'); gr.addColorStop(.6, 'rgba(20,16,40,.75)'); gr.addColorStop(.85, 'rgba(160,170,220,.35)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
-  g.fillStyle = gr; g.beginPath(); g.arc(0, 0, n / 2, 0, Math.PI * 2); g.fill(); g.restore(); t.update();
+  for (let i = 0; i < 7; i++) {
+    g.save(); g.translate(64, 64); g.rotate(-.45 + i * .075);
+    g.globalAlpha = .25 + i * .08; g.fillStyle = i % 3 ? '#171321' : '#667184';
+    const y = (i - 3) * 4;
+    g.beginPath(); g.moveTo(-52, y + 6); g.quadraticCurveTo(-5, y - 16, 55, y - 9);
+    g.quadraticCurveTo(12, y + 8, -52, y + 6); g.fill(); g.restore();
+  }
+  t.update();
   return t;
 }
 
@@ -95,6 +100,7 @@ function quadroVapor(malha, quadro) {
 export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matches: false }) {
   // Meia resolução: o brilho é borrado de propósito e pesa pouco no celular.
   const brilho = new GlowLayer('golpes-brilho', scene, { mainTextureRatio: .5, blurKernelSize: 40 });
+  const corpo = criarBrilhoPersonagem(Color3, brilho);
   brilho.intensity = 1.25; // visível no celular (tela pequena e brilho do aparelho); o pico vem do impacto e da velocidade
   const chama = texturaChama(scene), tintaFoco = texturaTintaFoco(scene);
   const U = simulador.U, xMundo = x => (x / U - simulador.LARGURA / 2) / 24, yMundo = y => y / U / 24;
@@ -156,11 +162,11 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
     const foco = new ParticleSystem(`golpe-foco-${lado}`, 160, scene);
     foco.particleTexture = tintaFoco; foco.blendMode = ParticleSystem.BLENDMODE_STANDARD;
     foco.emitter = new Vector3(0, -100, 0);
-    foco.minEmitBox = new Vector3(-.5, -1.1, -.3); foco.maxEmitBox = new Vector3(.5, 1, .3);
+    foco.minEmitBox = new Vector3(-.5, -1.1, .12); foco.maxEmitBox = new Vector3(.5, 1, .4);
     foco.direction1 = new Vector3(-.6, .6, -.2); foco.direction2 = new Vector3(.6, 1.2, .2);
     foco.minEmitPower = .3; foco.maxEmitPower = .9; foco.gravity = new Vector3(0, .6, 0);
     foco.minAngularSpeed = -4; foco.maxAngularSpeed = 4;
-    foco.minSize = .35; foco.maxSize = .75; foco.minLifeTime = .25; foco.maxLifeTime = .5;
+    foco.minSize = .25; foco.maxSize = .6; foco.minLifeTime = .18; foco.maxLifeTime = .4;
     foco.color1 = new Color4(1, 1, 1, .85); foco.color2 = new Color4(.8, .85, 1, .7); foco.colorDead = new Color4(.5, .5, .7, 0);
     foco.emitRate = 0; foco.start();
     return { carga, ponta, rastro, mat, aura, foco, nevoa, ativo: false };
@@ -233,6 +239,7 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
       });
       estado.p.forEach((l, i) => {
         const d = lados[i], modelo = modelos[i];
+        corpo.atualizar(modelo, descreverBrilhoPersonagem(l, estado, simulador, movimentoReduzido.matches));
         const hadouken = ['esp', 'espEx', 'ultra'].includes(l.golpe);
         const golpeComum = ['p1', 'p2', 'cp', 'ap', 'foc', 'k1', 'k2', 'ck', 'ak', 'tatsu'].includes(l.golpe);
         const solta = l.golpe === 'ultra' ? 25 : 10;
@@ -284,16 +291,18 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
 
         // Focus: tinta enquanto carrega (até soltar o golpe).
         const carregando = l.estado === 'golpe' && l.golpe === 'foc' && l.t < 19 && !movimentoReduzido.matches;
-        d.foco.emitRate = carregando ? 140 + (l.nivelFoco || 1) * 65 : 0;
+        d.foco.emitRate = carregando ? 40 + (l.nivelFoco || 1) * 15 : 0;
         if (carregando) d.foco.emitter.set((l.x / simulador.U - simulador.LARGURA / 2) / 24, l.y / simulador.U / 24 + 1.15, 0);
         // Hadouken carrega energia nas mãos; aura de fogo fica nos outros poderes.
-        const queima = !hadouken && (l.golpe === 'sup' || /Ex$/.test(l.golpe || '')) && l.estado === 'golpe' && !movimentoReduzido.matches;
-        d.aura.emitRate = queima ? 260 : 0;
+        const queima = !hadouken && l.golpe === 'sup' && l.t < 14 && l.estado === 'golpe' && !movimentoReduzido.matches;
+        d.aura.color1 = new Color4(.65, .87, 1, .55); d.aura.color2 = new Color4(.2, .55, 1, .35);
+        d.aura.emitRate = queima ? 120 : 0;
         if (queima) d.aura.emitter.set((l.x / simulador.U - simulador.LARGURA / 2) / 24, l.y / simulador.U / 24 + 1.15, 0);
       });
     },
-    limpar() { for (const b of bolas) { b.malha.setEnabled(false); b.fumaca.forEach(m => m.setEnabled(false)); } for (const d of lados) { d.carga.setEnabled(false); d.rastro.stop(); d.rastro.setEnabled(false); d.ativo = false; d.aura.emitRate = 0; d.aura.reset(); d.foco.emitRate = 0; d.foco.reset(); d.nevoa.emitRate = 0; d.nevoa.reset(); } },
+    limpar() { corpo.limpar(); for (const b of bolas) { b.malha.setEnabled(false); b.fumaca.forEach(m => m.setEnabled(false)); } for (const d of lados) { d.carga.setEnabled(false); d.rastro.stop(); d.rastro.setEnabled(false); d.ativo = false; d.aura.emitRate = 0; d.aura.reset(); d.foco.emitRate = 0; d.foco.reset(); d.nevoa.emitRate = 0; d.nevoa.reset(); } },
     descartar() {
+      corpo.descartar();
       tintaFoco.dispose();
       for (const d of lados) { d.carga.material.dispose(); d.carga.dispose(); d.nevoa.dispose(); d.foco.dispose(); d.aura.dispose(); d.rastro.dispose(); d.mat.dispose(); d.ponta.dispose(); }
       for (const b of bolas) { for (const m of b.fumaca) { m.material.dispose(); m.dispose(); } b.malha.material.dispose(); b.malha.dispose(); }

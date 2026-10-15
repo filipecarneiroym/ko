@@ -32,7 +32,7 @@
     "azul": {
       "caminho": "public/modelos/estudos/pipoca-v5-azul.glb",
       "bytes": 6807448,
-      "sha256": "3c95c212475998cf8de9f106b6056531d0240620ff4dd6ea5db8c8b95450363c",
+      "sha256": "238ea6b85c06eb0e09fd07cb8a796c67bd1d66711163fc816860578121c60303",
       "triangulos": 28346,
       "materiais": 1,
       "ossos": 20,
@@ -43,7 +43,7 @@
     "vermelha": {
       "caminho": "public/modelos/estudos/pipoca-v5-vermelha.glb",
       "bytes": 6822184,
-      "sha256": "972d974fcac3b88f9d6bfb7bda59abb25a66d401852a8928df4360432d22778f",
+      "sha256": "b5fc63516e1ccbae97df679841be40f98480c10cda293d1b3d93d5cc296c7b1d",
       "triangulos": 28346,
       "materiais": 1,
       "ossos": 20,
@@ -67,17 +67,17 @@
             "q": 6,
             "dentro": true,
             "tornozelo": [
-              1.28,
-              1.02,
-              -0.204
+              1.126,
+              1.044,
+              -0.158
             ]
           },
           {
             "q": 7,
             "dentro": true,
             "tornozelo": [
-              1.29,
-              1.02,
+              1.112,
+              1.039,
               -0.204
             ]
           },
@@ -85,9 +85,9 @@
             "q": 8,
             "dentro": true,
             "tornozelo": [
-              1.299,
-              1.02,
-              -0.204
+              1.094,
+              1.035,
+              -0.247
             ]
           }
         ],

@@ -154,7 +154,7 @@ button, a.botao { touch-action: manipulation; min-height: 48px; }
 @keyframes carregar-3d { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .carregando-3d { animation: none; } }
 
-.controles { position: absolute; inset: 0; touch-action: none; -webkit-touch-callout: none; }
+.controles { --golpe-t: clamp(44px, 12.5vmin, 80px); --controle-chao: max(6dvh, calc(env(safe-area-inset-bottom) + 8px)); position: absolute; inset: 0; touch-action: none; -webkit-touch-callout: none; }
 .versus-local .direcional, .versus-local .botoes { display: none; }
 /* Direcional no estilo do Street Fighter IV de celular: bola vermelha
    brilhante cercada por 8 setas amarelas; a seta da direção acende. */
@@ -194,8 +194,8 @@ button, a.botao { touch-action: manipulation; min-height: 48px; }
 /* Quatro botões em losango, como no SF4 de celular: em cima especial, esquerda soco, direita Focus, embaixo chute.
    Vizinhos de propósito: soco+chute (esquiva) com um dedo só. */
 .botoes {
-  --b: clamp(58px, 12.5vmin, 80px);
-  position: absolute; right: calc(4% + env(safe-area-inset-right)); bottom: 6%;
+  --b: var(--golpe-t);
+  position: absolute; right: calc(4% + env(safe-area-inset-right)); bottom: var(--controle-chao);
   display: grid; grid-template-columns: repeat(3, var(--b)); grid-template-rows: repeat(3, var(--b)); gap: 2px;
   pointer-events: none;
 }
@@ -215,12 +215,12 @@ button, a.botao { touch-action: manipulation; min-height: 48px; }
 .b-especial { background: radial-gradient(circle at 35% 30%, #ff9ae9, #e03fc0 60%); }
 .b-soco { background: radial-gradient(circle at 35% 30%, #ff7f83, #d82a30 60%); }
 .b-chute { background: radial-gradient(circle at 35% 30%, #ffc27a, #f08a1c 60%); }
-.atalhos-poderes { position: absolute; left: 50%; bottom: calc((100dvh - min(100dvh, 100vw * 9 / 16)) / 2 + 62px); transform: translateX(-50%); display: flex; gap: 8px; }
-.atalhos-poderes button { min-width: 44px; min-height: 44px; padding: 6px 10px; border: 1px solid #8de8ff9c; border-radius: 12px;
+.atalhos-poderes { position: absolute; right: calc(4% + env(safe-area-inset-right)); bottom: calc(var(--controle-chao) + var(--golpe-t) * 3 + 14px); width: calc(var(--golpe-t) * 3 + 8px); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; z-index: 2; }
+.atalhos-poderes button { min-width: 0; min-height: 44px; padding: 6px 3px; white-space: nowrap; border: 1px solid #8de8ff9c; border-radius: 12px;
   background: linear-gradient(#19324de8, #091124e8); color: #d3faff; font: 800 clamp(10px, 2.4vmin, 13px)/1 system-ui; box-shadow: 0 2px 6px #0008; }
 .atalhos-poderes [data-b="ULTRA"] { color: #edd5ff; border-color: #d4a0ff9c; background: linear-gradient(#42265be8, #190e2be8); }
 .atalhos-poderes .apertado { filter: brightness(1.7); border-color: white; }
-.atalhos-poderes [data-disponivel="false"] { opacity: .4; }
+.atalhos-poderes [data-disponivel="false"] { opacity: .65; }
 .atalhos-poderes [data-disponivel="true"] { box-shadow: 0 0 12px #a2bfff55; }
 .com-controle .atalhos-poderes, .versus-local .atalhos-poderes { display: none; }
 /* O feedback não desloca a área de toque durante golpes simultâneos. */

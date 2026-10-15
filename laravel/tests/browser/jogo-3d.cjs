@@ -163,6 +163,26 @@ let browser;
     }
   }
   await page.screenshot({ path: path.join(saida, 'poderes-atalhos.png') });
+  // Rasteira real no laço da partida: não forçar estados de queda/levantada.
+  await page.evaluate(() => {
+    const luta = window.KOTeste.luta(), s = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: true });
+    s.fase = 'luta'; s.fT = 0; s.p[0].x = 150 * KOSim.U; s.p[1].x = 180 * KOSim.U;
+    Object.assign(luta.s, s); luta.r3d.limpar(); window.__recuperacaoReal = [];
+    let primeiro = true;
+    KOSim.passo = estado => {
+      const r = window.__passoPoderesOriginal(estado, [0, primeiro ? KOSim.B.D | KOSim.B.K : 0]);
+      primeiro = false;
+      const nome = estado.p[0].estado, vistos = window.__recuperacaoReal;
+      if (vistos.at(-1) !== nome) vistos.push(nome);
+      return r;
+    };
+  });
+  await page.waitForFunction(() => {
+    const vistos = window.__recuperacaoReal;
+    return vistos.includes('caido') && vistos.includes('levantando') && vistos.at(-1) === 'parado';
+  }, null, { timeout: 30000 });
+  await page.screenshot({ path: path.join(saida, 'recuperacao-real-guarda.png') });
+  console.log('Recuperação no jogo real:', await page.evaluate(() => window.__recuperacaoReal));
   await page.evaluate(() => {
     KOSim.passo = window.__passoPoderesOriginal;
     const luta = window.KOTeste.luta(), s = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: true });

@@ -1,0 +1,80 @@
+{
+  "autora": "Cici Fyre (cicifyre)",
+  "licenca": "CC0-1.0",
+  "origem": "https://opengameart.org/content/female-rpg-voice-starter-pack",
+  "observacao": "Gravações humanas licenciadas; não são áudios extraídos do SF4.",
+  "gritos": {
+    "ataque-1": {
+      "arquivo": "ataque-1.mp3",
+      "fonte": "Type 2/attack1.wav",
+      "duracao": 0.2416,
+      "pico": 0.65726,
+      "bytes": 3820,
+      "sha256": "bd9e8f8ccb4ee661fb2f57a8339cb3d780820435555f69d07bc7e242d65031f0"
+    },
+    "ataque-2": {
+      "arquivo": "ataque-2.mp3",
+      "fonte": "Type 2/attack2.wav",
+      "duracao": 0.2679,
+      "pico": 0.66073,
+      "bytes": 4108,
+      "sha256": "73b75d947412857652d5c145bb40982805f44677b7f45eb78026501c4b67c1e6"
+    },
+    "ataque-3": {
+      "arquivo": "ataque-3.mp3",
+      "fonte": "Type 2/attack3.wav",
+      "duracao": 0.2213,
+      "pico": 0.65287,
+      "bytes": 3532,
+      "sha256": "0b37f2b9c8bf20604ab088cbe23850c6458db4039cb094ebc44daa0b797add45"
+    },
+    "dano-1": {
+      "arquivo": "dano-1.mp3",
+      "fonte": "Type 2/damaged1.wav",
+      "duracao": 0.3273,
+      "pico": 0.66266,
+      "bytes": 4686,
+      "sha256": "21027dfc2722474b700834ed3993b295e60bff03459f4206cecbf1e7f2c69378"
+    },
+    "dano-2": {
+      "arquivo": "dano-2.mp3",
+      "fonte": "Type 2/damaged2.wav",
+      "duracao": 0.227,
+      "pico": 0.64199,
+      "bytes": 3534,
+      "sha256": "dd5da771d506c7c0633cd7d973c461c8dc8c7ec10a08d1c15e7983364105d2f4"
+    },
+    "dano-3": {
+      "arquivo": "dano-3.mp3",
+      "fonte": "Type 2/damaged3.wav",
+      "duracao": 0.2763,
+      "pico": 0.67824,
+      "bytes": 4110,
+      "sha256": "200cdc8919ed635032732ee61b296879f9415a59c3477a28cf465a32b11b907e"
+    },
+    "salto-1": {
+      "arquivo": "salto-1.mp3",
+      "fonte": "Type 2/jump1.wav",
+      "duracao": 0.0992,
+      "pico": 0.64727,
+      "bytes": 2091,
+      "sha256": "ba6c4fe08feb86c3aa983d7481ddce70c520142888c94d20a80a681811b150c2"
+    },
+    "salto-2": {
+      "arquivo": "salto-2.mp3",
+      "fonte": "Type 2/jump2.wav",
+      "duracao": 0.1548,
+      "pico": 0.65302,
+      "bytes": 2667,
+      "sha256": "336e0553b363b80e9094939d4d56c98fe41b72a4e586da58bb30fedef01fd97c"
+    },
+    "salto-3": {
+      "arquivo": "salto-3.mp3",
+      "fonte": "Type 2/jump3.wav",
+      "duracao": 0.1328,
+      "pico": 0.67008,
+      "bytes": 2379,
+      "sha256": "e6d8d3648b3f9fefc832c5ec6db67d5c1e85a3680c3a41575fd76aff30b8518a"
+    }
+  }
+}

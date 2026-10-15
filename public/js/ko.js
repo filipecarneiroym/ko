@@ -101,6 +101,7 @@
         somArena = KOSom.criar(audio);
         somArena.preparar().catch(erro => console.warn('K.O: não foi possível preparar o locutor.', erro));
       }
+      window.KOVoz?.preparar(audio, somArena?.saida).catch(erro => console.warn('K.O: não foi possível preparar a voz da Lola.', erro));
     }
     if (audio.state === 'suspended') audio.resume().catch(() => {});
   }
@@ -159,11 +160,14 @@
     if (!somLigado || !window.KOVoz || !luta) return;
     const lado = e.lado;
     if (lado !== 0 && lado !== 1) return;
-    const id = luta.s.p[lado].id, perfil = KOVoz.PERFIS[id];
-    if (!perfil || !['ataque', 'especial', 'super', 'agarrao', 'golpeFinal'].includes(e.t)) return;
-    if (e.t === 'ataque' && luta.s.f - ultimoGrito[lado] < 12) return;
-    ultimoGrito[lado] = luta.s.f;
-    KOVoz.grito(audio, id, e.t !== 'ataque', luta.s.f);
+    const vitima = e.t === 'acerto' ? 1 - lado : lado;
+    const id = luta.s.p[vitima].id, perfil = KOVoz.PERFIS[id];
+    if (!perfil || !['ataque', 'especial', 'ex', 'super', 'ultra', 'focusSolto', 'agarrao', 'golpeFinal', 'acerto', 'chao', 'pulo'].includes(e.t)) return;
+    if (e.t === 'ataque' && e.golpe === 'foc') return; // o grito acompanha a soltura
+    if (id !== 'pipoca' && ['ex', 'ultra', 'acerto', 'chao', 'pulo'].includes(e.t)) return;
+    if (e.t === 'ataque' && luta.s.f - ultimoGrito[vitima] < 12) return;
+    ultimoGrito[vitima] = luta.s.f;
+    KOVoz.grito(audio, id, e.t !== 'ataque', luta.s.f, { ...e, lado: vitima, quadro: luta.s.f });
   }
 
   function vibrar(ms) { if (navigator.vibrate) guarda(() => navigator.vibrate(ms)); }
@@ -396,7 +400,7 @@
     tratarEventos(s.ev);
   }
 
-  function encerrarLuta() { somArena?.pararVoz(); descartarGraficos(luta); luta = null; controles.hidden = true; document.body.classList.remove('em-luta'); limparControles(); }
+  function encerrarLuta() { somArena?.pararVoz(); window.KOVoz?.parar(audio); descartarGraficos(luta); luta = null; controles.hidden = true; document.body.classList.remove('em-luta'); limparControles(); }
 
   // ---------- Gráficos 3D ----------
   let r3d = null, painelGraficos = null;
@@ -865,7 +869,7 @@
       sobreposicao.remove(); limparControles(); pulsosPads = [0, 0];
       if (luta) { luta.pausado = false; luta.aviso = ''; luta.ultimo = performance.now(); }
     };
-    sobreposicao.querySelector('[data-acao="som"]').onclick = (e) => { somLigado = !somLigado; if (!somLigado) somArena?.pararVoz(); guarda(() => localStorage.setItem('ko-som', somLigado ? 'sim' : 'nao')); e.target.textContent = 'Som: ' + (somLigado ? 'ligado' : 'desligado'); };
+    sobreposicao.querySelector('[data-acao="som"]').onclick = (e) => { somLigado = !somLigado; if (!somLigado) { somArena?.pararVoz(); window.KOVoz?.parar(audio); } guarda(() => localStorage.setItem('ko-som', somLigado ? 'sim' : 'nao')); e.target.textContent = 'Som: ' + (somLigado ? 'ligado' : 'desligado'); };
   });
 
   // Para testes automáticos (endereço terminando em #teste): deixa ver e mexer na luta pelo console.

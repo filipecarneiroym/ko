@@ -104,6 +104,7 @@
     }
 
     return {
+      saida,
       preparar,
       pararVoz,
       locutor(e) {
