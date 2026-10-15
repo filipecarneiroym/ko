@@ -24,6 +24,9 @@ const { chromium } = require(path.join(root, '.browser-check/node_modules/playwr
       }
       const poderes = botoes.filter(b => ['EX', 'SUPER', 'ULTRA'].includes(b.nome));
       assert.equal(poderes.length, 3);
+      const pausa = botoes.find(b => b.nome === '❚❚');
+      assert.ok(Math.abs((poderes[0].x + poderes[2].x + poderes[2].w) / 2 - width / 2) < 1, 'atalhos centralizados na arena');
+      assert.ok(poderes.every(p => p.y + p.h + 10 <= pausa.y), 'atalhos acima da pausa com espaço livre');
       for (const p of poderes) {
         assert.equal(p.combo, { EX: 'SP + P', SUPER: 'SP + K', ULTRA: 'SP + F' }[p.nome]);
         assert.ok(p.textoCabe && p.cor !== 'rgb(0, 0, 0)', `${p.nome}: texto legível e inteiro`);
