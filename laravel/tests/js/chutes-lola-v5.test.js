@@ -5,9 +5,10 @@ const path = require('node:path');
 const K = require('../../../public/js/ko-sim.js');
 
 for (const cor of ['azul', 'vermelha']) test(`chutes Lola ${cor}: pé dentro da caixa ativa, nas duas faces`, async () => {
-  const [{ NullEngine }, { Scene }, { carregarModelo }, { descreverPose }] = await Promise.all([
+  const [{ NullEngine }, { Scene }, { carregarModelo }, { descreverPose }, { Vector3 }] = await Promise.all([
     import('@babylonjs/core/Engines/nullEngine.js'), import('@babylonjs/core/scene.js'),
     import('../../../src/3d/modelo-glb.js'), import('../../../src/3d/estado-visual.mjs'),
+    import('@babylonjs/core/Maths/math.vector.js'),
   ]);
   const engine = new NullEngine(), scene = new Scene(engine);
   const bytes = fs.readFileSync(path.resolve(__dirname, `../../../public/modelos/estudos/pipoca-v5-${cor}.glb`));
@@ -27,6 +28,9 @@ for (const cor of ['azul', 'vermelha']) test(`chutes Lola ${cor}: pé dentro da 
           for (const n of cadeia) n.computeWorldMatrix(true);
           const p = no.getAbsolutePosition(), caixa = K.caixaHit(l, janela.caixa);
           if (golpe === 'k1') {
+            const lado = face > 0 ? 'D' : 'E', quadril = modelo.osso(`coxa_${lado}`).getAbsolutePosition(), joelho = modelo.osso(`canela_${lado}`).getAbsolutePosition();
+            const extensao = p.subtract(quadril).length() / (joelho.subtract(quadril).length() + p.subtract(joelho).length());
+            assert.ok(extensao > .985 && extensao <= 1.00001, 'perna estende no contato, sem hiperextensão, nos dois lados');
             const apoio = modelo.osso(face > 0 ? 'pe_E' : 'pe_D'), pais = [];
             for (let n = apoio; n; n = n.parent) pais.unshift(n);
             for (const n of pais) n.computeWorldMatrix(true);
@@ -39,6 +43,16 @@ for (const cor of ['azul', 'vermelha']) test(`chutes Lola ${cor}: pé dentro da 
         }
       }
       if (golpe === 'k1') {
+        const direcao = nome => {
+          const no = modelo.osso(nome), cadeia = []; for (let n = no; n; n = n.parent) cadeia.unshift(n);
+          for (const n of cadeia) n.computeWorldMatrix(true);
+          const v = Vector3.TransformNormal(new Vector3(1, 0, 0), no.getWorldMatrix()); v.y = 0; return v.normalize();
+        };
+        l.t = 0; modelo.atualizar(descreverPose(l, K, s));
+        const inicio = direcao('quadril');
+        l.t = 8; modelo.atualizar(descreverPose(l, K, s));
+        const giro = Math.acos(Math.max(-1, Math.min(1, Vector3.Dot(inicio, direcao('quadril')))));
+        assert.ok(giro > 1.5 && giro < 1.6, `quadril acompanha o chute em ~89 graus: ${giro}`);
         let apoio;
         for (let t = 0; t <= 24; t += .5) {
           l.t = t;

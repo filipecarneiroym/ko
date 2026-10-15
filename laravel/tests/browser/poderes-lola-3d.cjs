@@ -36,6 +36,9 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
       .filter(m => m.name.startsWith('golpe-bola-')).map(m => m.material.emissiveTexture)).size), 1,
       'projéteis compartilham uma textura pronta, sem clones dinâmicos vazios');
     const casos = [
+      ['salto-frente-inicio', 'pulo', 4], ['salto-frente-apice', 'pulo', 17],
+      ['salto-frente-abre', 'pulo', 28], ['salto-frente-pouso', 'pulo', 33],
+      ['salto-frente-invertido', 'pulo', 17, -1], ['salto-tras-apice', 'pulo', 17], ['salto-parado-apice', 'pulo', 17],
       ['queda-real-no-chao', 'caido', 20], ['queda-real-maos', 'levantando', 5],
       ['queda-real-arco', 'levantando', 10], ['queda-real-guarda', 'parado', 3],
       ['queda-contato', 'caido', 8], ['queda-deitada', 'caido', 30],
@@ -80,7 +83,11 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
         const B = KOSim.B;
         const comandos = { p1: B.P, cp: B.D | B.P, k1: B.K, ck: B.D | B.K, esp: B.S, dp: B.R | B.S, tatsu: B.L | B.S, espEx: B.S | B.P, dpEx: B.R | B.S | B.P,
           tatsuEx: B.L | B.S | B.P, sup: B.S | B.K, ultra: B.S | B.F, foc: B.F };
-        if (nome.startsWith('queda-real-')) {
+        if (nome.startsWith('salto-')) {
+          const frente = face > 0 ? B.R : B.L, tras = face > 0 ? B.L : B.R;
+          KOSim.passo(lab.estado, [B.U | (nome.includes('parado') ? 0 : nome.includes('tras') ? tras : frente), 0]);
+          for (let q = 1; q < quadro; q++) KOSim.passo(lab.estado, [0, 0]);
+        } else if (nome.startsWith('queda-real-')) {
           lab.estado.p[0].x = 150 * KOSim.U; lab.estado.p[1].x = 180 * KOSim.U;
           KOSim.passo(lab.estado, [0, B.D | B.K]);
           let passos = 0, caiu = false;
@@ -111,7 +118,8 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
         await new Promise(resolve => lab.scene.onAfterRenderObservable.addOnce(() => resolve()));
         return { golpe: lab.estado.p[0].golpe, estado: lab.estado.p[0].estado, altura: lab.estado.p[0].y, proj: lab.estado.proj.length };
       }, { nome, golpe, quadro, face });
-      if (nome.startsWith('queda-real-')) assert.equal(resultado.estado, golpe, 'recuperação real, sem forçar estado');
+      if (nome.startsWith('salto-')) assert.equal(resultado.estado, 'pulo');
+      else if (nome.startsWith('queda-real-')) assert.equal(resultado.estado, golpe, 'recuperação real, sem forçar estado');
       else if (nome === 'fim-partida') assert.equal(resultado.estado, 'tonto', 'fim visual não muda o estado do motor');
       else if (['caido', 'levantando', 'derrotado'].includes(golpe)) assert.equal(resultado.estado, golpe);
       else assert.equal(resultado.golpe, golpe);

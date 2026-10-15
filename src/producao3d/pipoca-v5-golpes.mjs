@@ -129,13 +129,13 @@ export function criarGolpesV5(ossos, parado, simulador) {
   }
 
   // Interpola as poses-chave quadro a quadro e grava os canais do clip.
-  function animar(nome, duracao, chaves, { laco = false } = {}) {
+  function animar(nome, duracao, chaves, { laco = false, passo = 1 } = {}) {
     assert.equal(chaves[0].q, 0);
     assert.equal(chaves.at(-1).q, duracao);
     const tempos = [], rot = Array.from({ length: n }, () => []), raiz = [], poses = [];
     const lerpV = (a, b, t) => Vector3.Lerp(a, b, t);
     const tornozeloDe = (k, lado) => k.pernas?.[lado]?.tornozelo ?? P0[PERNAS[lado].pe];
-    for (let q = 0; q <= duracao; q++) {
+    for (let q = 0; q <= duracao; q += passo) {
       let j = 0;
       while (j < chaves.length - 2 && chaves[j + 1].q <= q) j++;
       const a = chaves[j], b = chaves[j + 1], t = suave(Math.max(0, Math.min(1, (q - a.q) / (b.q - a.q))));
@@ -203,7 +203,7 @@ export function criarGolpesV5(ossos, parado, simulador) {
         rot[i].push(...(pai === null ? G[i] : Quaternion.Inverse(G[pai]).multiply(G[i]).normalize()).asArray());
       }
       raiz.push(...P[0].asArray());
-      poses.push(P);
+      if (Number.isInteger(q)) poses.push(P);
     }
     // Continuidade do sinal dos quaternions (q e -q são a mesma rotação; a
     // interpolação entre quadros escolheria o caminho longo após a volta de 360°).
@@ -272,21 +272,21 @@ export function criarGolpesV5(ossos, parado, simulador) {
   const chuteCircular = lado => {
     const d = lado === 'D', sinal = d ? 1 : -1, apoio = d ? 'E' : 'D', z = d ? ZD : ZE;
     const chave = (q, giro, inc, peso, x, y, lateral, estendido = false) => ({ q,
-      giro: sinal * giro, inclinacao: inc, pelve: v((d ? .2 : -.14) * peso, .025 * peso, 0),
+      giro: sinal * giro, inclinacao: inc, pelve: v((d ? -.08 : -.14) * peso, (d ? -.055 : .025) * peso, 0),
       pernas: { [lado]: { tornozelo: v(x, y, z - sinal * lateral), joelho: estendido ? v(0, 1, 0) : v(1, .9, 0), pe: estendido ? 'esticado' : 'plano' },
-        [apoio]: { pivo: sinal * giro * .6 } },
+        [apoio]: { pivo: sinal * giro * .72 } },
       bracos: { [lado]: { alvo: v(-.12 * peso, -.22, sinal * .14), cotovelo: v(-.3, -.6, sinal * .8) } },
     });
     return animar(d ? 'k1D' : 'k1', 24, [
       { q: 0 }, { q: 2, giro: -sinal * .12, pelve: v(d ? .04 : -.03, -.025, 0) },
       chave(3, .2, .06, .5, d ? .15 : .35, .78, .28),
-      chave(5, .7, .2, .9, 1.0, 1.01, .3, true),
-      chave(6, 1.0, .28, 1, 1.28, 1.02, .18, true),
-      chave(8, 1.15, .24, 1, 1.3, 1.0, .06, true),
-      chave(10, .92, .17, .8, .48, .85, .15),
-      chave(13, .4, .06, .4, d ? -.1 : .35, .48, .06),
+      chave(5, .92, .24, .9, 1.0, 1.01, .3, true),
+      chave(6, 1.35, .32, 1, 1.28, 1.02, .18, true),
+      chave(8, 1.55, .28, 1, 1.3, 1.0, .06, true),
+      chave(10, 1.18, .2, .8, .48, .85, .15),
+      chave(13, .48, .07, .4, d ? -.1 : .35, .48, .06),
       { q: 17, giro: sinal * .08 }, { q: 21 }, { q: 24 },
-    ]);
+    ], { passo: .25 });
   };
   clips.k1 = chuteCircular('E');
   // A câmera fica em -Z: D em +X e E em -X mantêm a perna voltada à tela.
@@ -432,9 +432,11 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 0 },
     { q: 3, pelve: v(0, -.1, 0), inclinacao: -.08 },
     { q: 6, ...ar(.02, v(.2, quadrilY - 1.02, ZE + .14), v(-.25, quadrilY - 1.0, ZD - .02), -.02) },
-    { q: 14, ...ar(0, v(.42, quadrilY - .58, ZE + .2), v(.12, quadrilY - .66, ZD - .06), -.06) },
-    { q: 30, ...ar(0, v(.4, quadrilY - .6, ZE + .2), v(.1, quadrilY - .68, ZD - .06), -.06) },
-    { q: 44, ...ar(-.02, v(.3, quadrilY - .95, ZE + .1), v(-.3, quadrilY - .95, ZD - .02), -.02) },
+    { q: 12, ...ar(0, v(.42, quadrilY - .58, ZE + .2), v(.12, quadrilY - .66, ZD - .06), -.09) },
+    { q: 20, ...ar(0, v(.4, quadrilY - .6, ZE + .2), v(.1, quadrilY - .68, ZD - .06), -.09) },
+    // O salto real pousa em ~35 passos: abrir antes, não esperar q44.
+    { q: 27, ...ar(-.02, v(.3, quadrilY - .95, ZE + .1), v(-.3, quadrilY - .95, ZD - .02), -.035) },
+    { q: 33, pelve: v(0, -.04, 0), inclinacao: -.02 }, { q: 44 },
   ]);
 
   // rolando: esquiva (24 quadros, o motor desloca). Mergulho para a frente,
@@ -470,9 +472,13 @@ export function criarGolpesV5(ossos, parado, simulador) {
     }, ...relaxada() });
   const queda = [
     { q: 0, rol: .25, pelve: v(-.05, -.12, 0), inclinacao: .12 },
-    { q: 4, ...deitada(1.0, -.6) },
+    { q: 4, ...deitada(1.0, -.6), bracos: {
+      E: { alvo: v(.18, .1, -.1), cotovelo: v(-.1, -.4, -.7) },
+      D: { alvo: v(.18, .1, .1), cotovelo: v(-.1, -.4, .7) },
+    } },
     { q: 8, ...deitada(1.48, -1.18) },
-    { q: 11, ...deitada(1.38, -1.08) },
+    { q: 10, ...deitada(1.34, -1.08) },
+    { q: 13, ...deitada(1.44, -1.16) },
     { q: 16, ...deitada() },
   ];
   clips.caido = animar('caido', 46, [...queda, { q: 46, ...deitada() }]);
@@ -488,14 +494,16 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 0, ...deitada() },
     { q: 3, ...recolhida(1.95, -.7) },
     { q: 5, ...recolhida(2.05, -.62) },
-    { q: 7, ...recolhida(1.8, -.5) },
+    { q: 6, ...recolhida(1.95, -.48) },
+    { q: 7, ...recolhida(1.65, -.28) },
+    { q: 8, ...recolhida(1.3, -.06) },
     // Solta as mãos depois do impulso; pernas desenham o arco até o pouso.
-    { q: 10, rol: .85, pelve: v(-.12, .02, 0), inclinacao: -.28,
+    { q: 10, rol: .72, pelve: v(.02, .1, 0), inclinacao: -.36,
       pernas: {
         E: { local: v(.1, -1.25, ZE * .8), loc: 1, joelho: v(1, .4, -.1), pe: 'corpo' },
         D: { local: v(.02, -1.22, ZD * .8), loc: 1, joelho: v(1, .4, .1), pe: 'corpo' },
       } },
-    { q: 12, rol: .25, pelve: v(-.04, -.16, 0), inclinacao: -.15,
+    { q: 12, rol: .16, pelve: v(.07, -.14, 0), inclinacao: -.22,
       pernas: {
         E: { tornozelo: v(.44, .32, ZE), joelho: v(1, .4, -.1), pe: 'plano' },
         D: { tornozelo: v(-.3, .35, ZD), joelho: v(1, .4, .1), pe: 'plano' },

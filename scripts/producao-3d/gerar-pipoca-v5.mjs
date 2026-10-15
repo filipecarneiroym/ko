@@ -47,7 +47,7 @@ export function gerarPipocaV5() {
     const primitiva = v5.primitivas[0];
     for (const c of clips) if (['rolando', 'caido', 'levantando', 'derrotado', 'vitimaFinal', 'sup', 'quebra'].includes(c.nome))
       acimaDoPiso(c, v5.ossos, { posicoes: primitiva.posicoes, juntas: primitiva.juntas, pesos: primitiva.pesos },
-        ['caido', 'levantando'].includes(c.nome) ? { subdivisoes: 8, passoVertices: 1 } : {});
+        ['caido', 'levantando'].includes(c.nome) ? { subdivisoes: c.nome === 'levantando' ? 16 : 8, passoVertices: 1 } : {});
     const pesAoContrario = conferirPes(v5.ossos, clips);
     assert.deepEqual(pesAoContrario, [], `Pé ao contrário: ${JSON.stringify(pesAoContrario.slice(0, 20))}`);
     const dados = { nome: 'pipoca', ...v5, clips,

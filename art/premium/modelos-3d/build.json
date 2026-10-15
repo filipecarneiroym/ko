@@ -17,15 +17,15 @@
     "src/3d/contrato-glb.mjs": "d4aff4d79adccb1ff3eed3acec16a1ab42805f82fce164e059ac784d9f9f6e9d",
     "src/3d/efeitos-sf4.js": "2ef45b1fa501380635e6a90fb59f886447a0fecec59773aea3fe266b6dbbe1ba",
     "src/3d/efeitos.js": "422cdfa76ae591d0fd78989a94d5b38110a8cc83f365d6cb6d326fd9a5bdcf2b",
-    "src/3d/estado-visual.mjs": "a57ea7cdc7e2dc1767a7e51598ae2e70a1a0647209df9594f476423e06d95627",
-    "src/3d/jogo-3d.js": "926456de17bed7e1d704b9dfa423d515063a299f8d6857aab862cab42504e634",
+    "src/3d/estado-visual.mjs": "7977c7aa104234fbd1e014338cc6657bc463319c0ce8daf0ea0c3851ed404baa",
+    "src/3d/jogo-3d.js": "b5229564f9d924edf354e417625a770ba9e5ac19eb430467033aacbfd85033ea",
     "src/3d/laboratorio.js": "8a6ba72fd825c165dbaf54a8a88efa7d095720859b2f0378cc10995412af650f",
     "src/3d/modelo-glb.js": "bbb3b4c836fee1ccabac7dd0bc3d3162cac20be5a0b3658bec25c336275688a9",
     "src/3d/perfil-pipoca.mjs": "effca8a992370c7fe15a90f05e570b5ac9b677f69ad879b44de49c6b58e9884a",
-    "src/3d/versao-modelos.mjs": "dbefc45de58b96f7371ed59bb8ab6cc0c06d1a8a8e1d8a960b958c0cffdb065e"
+    "src/3d/versao-modelos.mjs": "24ef78040795c60a18e2eba67c5d40fb49ee1041c9595415f2b3050aecd6ca81"
   },
   "saida": {
     "caminho": "public/js/ko-laboratorio-3d.js",
-    "sha256": "6ac45a9b5d628c7bd7e52cf64cc5e4a8b1dd0e54081c54abe00eb98b2f3ffc9e"
+    "sha256": "5ad7440dcda68a97ab777caed5f88434a217ebd48d6c1a3a15750cbb1b49da2d"
   }
 }
