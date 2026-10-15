@@ -120,7 +120,7 @@
   // Navegação espacial: em uma grade, cima/baixo seguem a posição visual.
   function navegar(raiz, estado) {
     if (!raiz || !estado) return;
-    const opcoes = [...raiz.querySelectorAll('button:not(:disabled), a[href], input:not([type="hidden"]):not(:disabled)')]
+    const opcoes = [...raiz.querySelectorAll('button:not(:disabled), a[href], input:not([type="hidden"]):not(:disabled), summary')]
       .filter((el) => el.getClientRects().length && !el.closest('[hidden]'));
     if (!opcoes.length) return;
     const atual = raiz.ownerDocument.activeElement;

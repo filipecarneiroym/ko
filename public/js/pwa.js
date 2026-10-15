@@ -32,18 +32,3 @@ if (!document.getElementById('ko-config') && window.KOControle) {
   }
   requestAnimationFrame(quadroMenu);
 }
-
-const acessoModal = document.querySelector('.acesso-modal');
-if (acessoModal) {
-  acessoModal.focus({ preventScroll: true });
-  acessoModal.addEventListener('keydown', (e) => {
-    if (e.key !== 'Tab') return;
-    const campos = [...acessoModal.querySelectorAll('input:not([type="hidden"]), button')];
-    const primeiro = campos[0], ultimo = campos[campos.length - 1];
-    if (e.shiftKey && (document.activeElement === primeiro || document.activeElement === acessoModal)) {
-      e.preventDefault(); ultimo.focus();
-    } else if (!e.shiftKey && document.activeElement === ultimo) {
-      e.preventDefault(); primeiro.focus();
-    }
-  });
-}

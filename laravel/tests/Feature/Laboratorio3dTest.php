@@ -10,12 +10,11 @@ class Laboratorio3dTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_exige_desbloqueio_e_conta(): void
+    public function test_exige_conta_sem_senha_compartilhada(): void
     {
         $this->get('/laboratorio/3d')->assertRedirect();
         $jogador = Jogador::create(['apelido' => 'Bloqueado']);
-        $this->actingAs($jogador)->withSession(['acesso_amigos' => null])
-            ->get('/laboratorio/3d')->assertForbidden();
+        $this->actingAs($jogador)->get('/laboratorio/3d')->assertOk();
     }
 
     public function test_conta_acessa_previa_identificada_sem_criar_partida(): void

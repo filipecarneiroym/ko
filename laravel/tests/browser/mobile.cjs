@@ -31,27 +31,16 @@ let browser;
   const apelidos = ['TesteTouchA', 'TesteTouchB'];
   for (let i = 0; i < 2; i++) {
     await paginas[i].goto(env.APP_URL);
-    assert.equal(await paginas[i].getByRole('dialog').isVisible(), true);
-    if (i === 0) {
-      await paginas[i].locator('#senha-amigos').fill('o.k');
-      await paginas[i].getByRole('button', { name: 'Desbloquear arena' }).tap();
-      await paginas[i].getByText('Senha incorreta.', { exact: false }).waitFor();
-      await paginas[i].screenshot({ path: path.join(temp, 'acesso-amigos-mobile.png') });
-    }
-    await paginas[i].locator('#senha-amigos').fill('ko');
-    await paginas[i].getByRole('button', { name: 'Desbloquear arena' }).tap();
+    assert.equal(await paginas[i].locator('#senha-amigos').count(), 0);
     await paginas[i].locator('#apelido').fill(apelidos[i]);
     await paginas[i].locator('#pin').fill('0123');
     await paginas[i].getByRole('button', { name: 'Entrar e jogar' }).tap();
-    await paginas[i].getByRole('button', { name: 'Criar sala' }).waitFor();
+    await paginas[i].locator('.modos-jogo').waitFor();
+    await paginas[i].locator('.online-opcoes summary').tap();
   }
   const [host, convidado] = paginas;
-  await host.locator('.elenco-poster img').evaluateAll(async imgs => Promise.all(imgs.map(i => i.decode())));
-  const fundo = await host.locator('.elenco-poster img').evaluateAll(imgs => imgs.map(i => ({ id: i.dataset.lutador, x: i.getBoundingClientRect().x, y: i.getBoundingClientRect().y })));
-  assert.equal(fundo.length, 18);
-  assert.equal(new Set(fundo.map(i => i.id)).size, 18);
-  assert.ok(new Set(fundo.map(i => Math.round(i.x))).size >= 6, 'CSP não pode empilhar personagens');
-  assert.ok(new Set(fundo.map(i => Math.round(i.y))).size >= 3);
+  assert.equal(await host.locator('.elenco-poster').count(), 0);
+  assert.equal(await host.locator('.hero-lola img').count(), 1);
   await host.screenshot({ path: path.join(temp, 'menu-batalha-mobile.png') });
   await host.getByRole('button', { name: 'Criar sala' }).tap();
   await host.waitForURL('**/sala/*');
@@ -146,8 +135,8 @@ let browser;
   await host.locator('#apelido').fill(apelidos[1]);
   await host.locator('#pin').fill('0123');
   await host.getByRole('button', { name: 'Entrar e jogar' }).tap();
-  await host.getByRole('button', { name: 'Criar sala' }).waitFor();
-  assert.match(await host.locator('.ola').textContent(), /TesteTouchB/);
+  await host.locator('.modos-jogo').waitFor();
+  assert.match(await host.locator('.menu-cabecalho h2').textContent(), /TesteTouchB/);
   console.log('PASS: apelido e PIN acessam a mesma conta em outro navegador');
   await host.addInitScript(() => {
     window.padsTeste = [0, 1].map((index) => ({ index, id: 'Controle teste', connected: true, mapping: 'standard', axes: [0, 0], buttons: Array.from({ length: 16 }, () => ({ pressed: false, value: 0 })) }));

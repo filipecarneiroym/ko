@@ -706,6 +706,7 @@
 
   function telaEscolha(recado) {
     if (escolheDois) primeiroLocal = null;
+    if (prontos.length === 1 && !estadoSala.minhaEscolha) estadoSala.minhaEscolha = prontos[0];
     painel.dataset.tela = 'escolha';
     painel.className = 'painel painel-escolha';
     const cartas = prontos.map((id) => {
@@ -721,7 +722,7 @@
     painel.innerHTML = `
       <div class="escolha escolha-sf4">
         <div class="palco" aria-hidden="true">${figura(1)}${figura(2)}</div>
-        <header><h2 id="titulo-escolha">${arcadeModo ? 'Arcade · escolha seu lutador' : 'Escolha seu lutador'}</h2>${recado ? `<p class="recado">${esc(recado)}</p>` : ''}</header>
+        <header><a class="voltar-menu" href="${esc(cfg.inicio || '/')}">← Menu</a><div><p class="sobretitulo">PREPARE-SE PARA LUTAR</p><h2 id="titulo-escolha">${arcadeModo ? 'Arcade · escolha seu lutador' : 'Escolha seu lutador'}</h2></div>${recado ? `<p class="recado">${esc(recado)}</p>` : ''}</header>
         ${cfg.modo === 'cpu' ? `<div class="dificuldade" role="group" aria-label="Dificuldade do computador">${Object.entries(KOCPU.PERFIS).map(([id, perfil]) => `<button type="button" class="botao botao-sec" data-nivel="${id}" aria-pressed="${cfg.dificuldade === id}">${perfil.nome}</button>`).join('')}</div>` : ''}
         <div class="grade">${cartas}</div>
         <footer>

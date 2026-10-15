@@ -16,11 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
         // firewall aceitando HTTP/HTTPS apenas da Cloudflare; senão, trocar '*' pelos IPs dela.
         $middleware->trustProxies(at: '*');
         $middleware->append(SecurityHeaders::class);
-        $middleware->trimStrings(except: ['senha_amigos']);
         $middleware->redirectGuestsTo(fn () => route('inicio'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->dontFlash(['pin', 'pin_confirmation', 'senha_amigos']);
+        $exceptions->dontFlash(['pin', 'pin_confirmation']);
     })
     ->create()
     // public/ fica ao lado de laravel/ (mesmo molde da YM): sem isso o artisan serve não acharia o site.

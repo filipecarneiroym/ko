@@ -68,11 +68,9 @@ class JogadorController extends Controller
 
     public function sair(Request $request): RedirectResponse
     {
-        $acessoAmigos = $request->session()->get('acesso_amigos');
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        $request->session()->put('acesso_amigos', $acessoAmigos);
 
         return redirect()->route('inicio');
     }

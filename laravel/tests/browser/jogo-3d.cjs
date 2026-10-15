@@ -18,7 +18,6 @@ const env = {
   APP_URL: 'http://127.0.0.1:8019', DB_URL: '',
   DB_CONNECTION: 'sqlite', DB_DATABASE: banco,
   SESSION_DRIVER: 'file', SESSION_SECURE_COOKIE: 'false', CACHE_STORE: 'file',
-  KO_SENHA_AMIGOS: 'ko',
   KO_RELAY_HOST: '127.0.0.1', KO_RELAY_PORTA: '6019', KO_RELAY_URL: 'ws://127.0.0.1:6019',
 };
 const migracao = spawnSync('php', ['artisan', 'migrate', '--force'], {
@@ -75,12 +74,10 @@ let browser;
     return rota.fulfill({ status: 500, contentType: 'text/plain', body: 'Falha de modelo simulada pelo teste' });
   });
   await page.goto(env.APP_URL);
-  await page.locator('#senha-amigos').fill(env.KO_SENHA_AMIGOS);
-  await page.getByRole('button', { name: 'Desbloquear arena' }).click();
   await page.locator('#apelido').fill('Teste3D');
   await page.locator('#pin').fill('0123');
   await page.getByRole('button', { name: 'Entrar e jogar' }).click();
-  await page.getByRole('button', { name: 'Criar sala' }).waitFor();
+  await page.locator('.modos-jogo').waitFor();
 
   // Versus CPU: o 1º Pronto confirma a lutadora; o 2º, a da máquina (Pipoca vermelha).
   async function confirmar() {

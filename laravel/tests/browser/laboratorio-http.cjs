@@ -14,7 +14,7 @@ const env = {
   APP_KEY: 'base64:MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDE=',
   APP_URL: origem, DB_URL: '', DB_CONNECTION: 'sqlite', DB_DATABASE: banco,
   SESSION_DRIVER: 'file', SESSION_SECURE_COOKIE: 'false', CACHE_STORE: 'file',
-  KO_RELAY_URL: 'ws://127.0.0.1:6027', KO_SENHA_AMIGOS: 'ko',
+  KO_RELAY_URL: 'ws://127.0.0.1:6027',
 };
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 let servidor, browser;
@@ -50,12 +50,10 @@ let servidor, browser;
   });
 
   await page.goto(origem);
-  await page.locator('#senha-amigos').fill('ko');
-  await page.getByRole('button', { name: 'Desbloquear arena' }).tap();
   await page.locator('#apelido').fill('TesteLabHTTP');
   await page.locator('#pin').fill('0123');
   await page.getByRole('button', { name: 'Entrar e jogar' }).tap();
-  await page.getByRole('button', { name: 'Criar sala' }).waitFor();
+  await page.locator('.modos-jogo').waitFor();
   const resposta = await page.goto(origem + '/laboratorio/3d');
   assert.equal(resposta.status(), 200);
   const csp = resposta.headers()['content-security-policy'];

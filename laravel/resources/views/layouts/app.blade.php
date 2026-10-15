@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="theme-color" content="#0b0614">
     <meta name="mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
 </head>
 <body class="@yield('corpo')">
     @if(trim($__env->yieldContent('corpo')) !== 'corpo-jogo')
-        @include('partials.fundo-elenco')
+        <div class="fundo-arena" aria-hidden="true"></div>
     @endif
     @yield('conteudo')
 </body>
