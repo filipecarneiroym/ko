@@ -40,7 +40,7 @@ const suave = t => t * t * (3 - 2 * t);
 function giros(l, simulador, golpe) {
   const dados = simulador.LUTADORES[l.id];
   let mortal = 0, volta = 0;
-  if (l.estado === 'pulo' && l.vx && dados?.pulo) {
+  if (l.estado === 'pulo' && l.vx && !l.atacouNoAr && dados?.pulo) {
     // vy vai de +pulo (saída) a -pulo (pouso): o progresso não depende do FPS.
     // Recolhe antes da volta; meia volta no ápice e abre antes do pouso.
     const fase = (dados.pulo - l.vy) / (2 * dados.pulo);

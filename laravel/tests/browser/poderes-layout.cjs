@@ -11,12 +11,12 @@ const { chromium } = require(path.join(root, '.browser-check/node_modules/playwr
       .replace(' hidden', '').replace(/\{\{--[\s\S]*?--\}\}/g, '');
     const page = await browser.newPage();
     const tamanhos = [[480, 240], [568, 320], [667, 375], [844, 390], [915, 412], [1280, 720]];
-    for (const [width, height] of tamanhos) {
+    for (const [width, height] of tamanhos) for (const modo of ['', 'com-controle', 'versus-local']) {
       await page.setViewportSize({ width, height });
-      await page.setContent(`<meta name="viewport" content="width=device-width,initial-scale=1"><style>${css}</style><body class="corpo-jogo em-luta"><div class="jogo">${controles}</div></body>`);
-      const botoes = await page.locator('[data-b], #pausa').evaluateAll(ns => ns.map(n => {
+      await page.setContent(`<meta name="viewport" content="width=device-width,initial-scale=1"><style>${css}</style><body class="corpo-jogo em-luta ${modo}"><div class="jogo">${controles}</div></body>`);
+      const botoes = await page.locator('[data-b], #pausa').evaluateAll(ns => ns.filter(n => n.getClientRects().length).map(n => {
         const r = n.getBoundingClientRect();
-        return { nome: n.textContent.trim(), x: r.x, y: r.y, w: r.width, h: r.height, cor: getComputedStyle(n).color, textoCabe: n.scrollWidth <= n.clientWidth };
+        return { nome: n.dataset.b || n.textContent.trim(), combo: n.querySelector('small')?.textContent, x: r.x, y: r.y, w: r.width, h: r.height, cor: getComputedStyle(n).color, textoCabe: n.scrollWidth <= n.clientWidth };
       }));
       for (const b of botoes) {
         assert.ok(b.x >= 0 && b.y >= 0 && b.x + b.w <= width && b.y + b.h <= height, `${width}x${height}: ${b.nome} dentro da tela`);
@@ -25,6 +25,7 @@ const { chromium } = require(path.join(root, '.browser-check/node_modules/playwr
       const poderes = botoes.filter(b => ['EX', 'SUPER', 'ULTRA'].includes(b.nome));
       assert.equal(poderes.length, 3);
       for (const p of poderes) {
+        assert.equal(p.combo, { EX: 'SP + P', SUPER: 'SP + K', ULTRA: 'SP + F' }[p.nome]);
         assert.ok(p.textoCabe && p.cor !== 'rgb(0, 0, 0)', `${p.nome}: texto legível e inteiro`);
         for (const b of botoes.filter(b => b !== p)) assert.ok(p.x + p.w <= b.x || b.x + b.w <= p.x || p.y + p.h <= b.y || b.y + b.h <= p.y, `${p.nome} não sobrepõe ${b.nome}`);
       }

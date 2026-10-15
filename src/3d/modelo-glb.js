@@ -80,7 +80,8 @@ export async function carregarModelo(buffer, id, simulador, scene) {
         // Estudos históricos não trazem os golpes novos; só o laboratório usa
         // essa reserva. Os GLBs jogáveis exportam os clipes próprios.
         const reservas = { foc: 'p2', espEx: 'esp', dpEx: 'dp', tatsuEx: 'tatsu', ultra: 'esp' };
-        const nomeClip = id === 'pipoca' && pose.clip === 'k1' && pose.face > 0 && grupos.has('k1D') ? 'k1D' : pose.clip;
+        const variante = pose.face > 0 && { k1: 'k1D', p1: 'p1D', p2: 'p2E', ap: 'apD', dp: 'dpD', dpEx: 'dpExD' }[pose.clip];
+        const nomeClip = id === 'pipoca' && variante && grupos.has(variante) ? variante : pose.clip;
         const grupo = grupos.get(nomeClip) || grupos.get(reservas[pose.clip]);
         if (!grupo) return;
         const distanciaCiclo = ciclosPorDistancia.get(grupo.name);
@@ -98,7 +99,7 @@ export async function carregarModelo(buffer, id, simulador, scene) {
         if (grupo !== atual) {
           // Suavizar a emenda dos socos e o relaxamento da defesa pelo relógio
           // do novo estado. Entrar em defesa aplica a proteção imediatamente.
-          const emendaChute = atual?.name === 'p2' && grupo.name === 'k2';
+          const emendaChute = /^p2E?$/.test(atual?.name) && grupo.name === 'k2';
           // Chutes (troca de perna, chute cortado, volta à guarda) também fundem
           // as poses em 4 quadros, antes da janela ativa. Defesa e dano entram na hora.
           // (Rasteira e chute aéreo ficam de fora: a fusão perto do piso o atravessaria.)
@@ -111,7 +112,7 @@ export async function carregarModelo(buffer, id, simulador, scene) {
           // Queda e levantada já compartilham a pose de emenda no GLB.
           // Misturar seis quadros aqui atrasava o apoio e apagava o impulso rápido.
           const fimTransicao = emendaChute || trocaPassada ? 6 : 4;
-          const suavizar = atual?.name === 'p1' && grupo.name === 'p2'
+          const suavizar = /^p1D?$/.test(atual?.name) && /^p2E?$/.test(grupo.name)
             || emendaChute || trocaChute || trocaPassada
             || atual?.name === 'defesa' && grupo.name === 'parado';
           transicao = id === 'pipoca' && suavizar && pose.quadro < fimTransicao ? {

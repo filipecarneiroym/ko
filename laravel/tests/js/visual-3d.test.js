@@ -81,6 +81,7 @@ test('mortal no pulo e chutes sem uma volta artificial antes do contato', async 
   assert.ok(Math.abs(frente.mortal + Math.PI) < 1e-9, 'meia volta no ápice, sem antecipar a abertura');
   assert.ok(Math.abs(descreverPose({ ...base, estado: 'pulo', vx: 50, vy: pulo * .8 }, K).mortal) < 1e-9, 'primeiro recolhe antes de girar');
   assert.equal(descreverPose({ ...base, estado: 'pulo', vx: 0, vy: 0 }, K).mortal, 0, 'pulo parado não gira');
+  assert.equal(descreverPose({ ...base, estado: 'pulo', vx: 50, vy: 0, atacouNoAr: true }, K).mortal, 0, 'não retoma o mortal depois do soco aéreo');
   assert.ok(Math.abs(descreverPose({ ...base, estado: 'pulo', vx: 50, vy: -pulo }, K).mortal + Math.PI * 2) < 1e-9, 'pousa de pé (volta completa)');
   for (const golpe of ['k1', 'k2', 'ck', 'ak', 'tatsu', 'tatsuEx'])
     for (let t = 0; t <= K.LUTADORES.pipoca.golpes[golpe].dur; t++)

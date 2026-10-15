@@ -219,10 +219,12 @@ button, a.botao { touch-action: manipulation; min-height: 48px; }
 .atalhos-poderes button { min-width: 0; min-height: 44px; padding: 6px 3px; white-space: nowrap; border: 1px solid #8de8ff9c; border-radius: 12px;
   background: linear-gradient(#19324de8, #091124e8); color: #d3faff; font: 800 clamp(10px, 2.4vmin, 13px)/1 system-ui; box-shadow: 0 2px 6px #0008; }
 .atalhos-poderes [data-b="ULTRA"] { color: #edd5ff; border-color: #d4a0ff9c; background: linear-gradient(#42265be8, #190e2be8); }
+.atalhos-poderes span, .atalhos-poderes small { display: block; }
+.atalhos-poderes small { margin-top: 4px; font: 700 clamp(8px, 2vmin, 10px)/1 system-ui; color: #fff; }
 .atalhos-poderes .apertado { filter: brightness(1.7); border-color: white; }
 .atalhos-poderes [data-disponivel="false"] { opacity: .65; }
 .atalhos-poderes [data-disponivel="true"] { box-shadow: 0 0 12px #a2bfff55; }
-.com-controle .atalhos-poderes, .versus-local .atalhos-poderes { display: none; }
+.com-controle .atalhos-poderes, .versus-local .atalhos-poderes { bottom: calc(var(--controle-chao) + 86px); }
 /* O feedback não desloca a área de toque durante golpes simultâneos. */
 .b.apertado { transform: none; box-shadow: 0 0 0 2px #fff9, inset 0 -2px 0 rgba(0, 0, 0, 0.2); opacity: 0.9; filter: brightness(1.2); }
 .pausa {

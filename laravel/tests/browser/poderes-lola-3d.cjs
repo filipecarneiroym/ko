@@ -36,6 +36,8 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
       .filter(m => m.name.startsWith('golpe-bola-')).map(m => m.material.emissiveTexture)).size), 1,
       'projéteis compartilham uma textura pronta, sem clones dinâmicos vazios');
     const casos = [
+      ['soco-aereo-contato', 'ap', 4], ['soco-aereo-invertido', 'ap', 4, -1],
+      ['subida-soco-visivel', 'dp', 12], ['subida-soco-invertido', 'dp', 12, -1], ['subida-ex-chamas', 'dpEx', 12],
       ['salto-frente-inicio', 'pulo', 4], ['salto-frente-apice', 'pulo', 17],
       ['salto-frente-abre', 'pulo', 28], ['salto-frente-pouso', 'pulo', 33],
       ['salto-frente-invertido', 'pulo', 17, -1], ['salto-tras-apice', 'pulo', 17], ['salto-parado-apice', 'pulo', 17],
@@ -81,8 +83,9 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
         novo.p[0].poder = KOSim.PODER_MAX; novo.p[0].revanche = KOSim.ULTRA_MAX;
         Object.assign(lab.estado, novo);
         const B = KOSim.B;
-        const comandos = { p1: B.P, cp: B.D | B.P, k1: B.K, ck: B.D | B.K, esp: B.S, dp: B.R | B.S, tatsu: B.L | B.S, espEx: B.S | B.P, dpEx: B.R | B.S | B.P,
-          tatsuEx: B.L | B.S | B.P, sup: B.S | B.K, ultra: B.S | B.F, foc: B.F };
+        const frenteComando = face > 0 ? B.R : B.L, trasComando = face > 0 ? B.L : B.R;
+        const comandos = { p1: B.P, cp: B.D | B.P, k1: B.K, ck: B.D | B.K, esp: B.S, dp: frenteComando | B.S, tatsu: trasComando | B.S, espEx: B.S | B.P, dpEx: frenteComando | B.S | B.P,
+          tatsuEx: trasComando | B.S | B.P, sup: B.S | B.K, ultra: B.S | B.F, foc: B.F };
         if (nome.startsWith('salto-')) {
           const frente = face > 0 ? B.R : B.L, tras = face > 0 ? B.L : B.R;
           KOSim.passo(lab.estado, [B.U | (nome.includes('parado') ? 0 : nome.includes('tras') ? tras : frente), 0]);
@@ -99,6 +102,10 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
           if (!caiu || passos >= 220) throw new Error('queda real não completou caído → levantando → guarda');
         } else if (['caido', 'levantando', 'derrotado'].includes(golpe)) {
           Object.assign(lab.estado.p[0], { estado: golpe, golpe: null, t: quadro });
+        } else if (golpe === 'ap') {
+          KOSim.passo(lab.estado, [B.U, 0]);
+          for (let q = 0; q < 5; q++) KOSim.passo(lab.estado, [0, 0]);
+          KOSim.passo(lab.estado, [B.P, 0]);
         } else if (['p2', 'k2', 'ak'].includes(golpe)) {
           // Inspeção do clipe inteiro, sem a queda interromper o chute aéreo.
           Object.assign(lab.estado.p[0], { estado: 'golpe', golpe, t: quadro, y: golpe === 'ak' ? 48 * KOSim.U : 0 });
@@ -124,6 +131,14 @@ const saida = path.join(root, 'art/premium/modelos-3d/estudos-mixamo/pipoca-v5-j
       else if (['caido', 'levantando', 'derrotado'].includes(golpe)) assert.equal(resultado.estado, golpe);
       else assert.equal(resultado.golpe, golpe);
       if (golpe.startsWith('dp')) assert.ok(resultado.altura > 0);
+      if (nome.startsWith('subida-soco-') || nome === 'subida-ex-chamas' || nome === 'focus-maximo') {
+        const fogo = await page.evaluate(() => {
+          const p = globalThis.__laboratorio3d.scene.getParticleSystemById('golpe-aura-0');
+          return { taxa: p.emitRate, emissor: typeof p.startPositionFunction };
+        });
+        assert.ok(fogo.taxa > 0, 'chamas emitidas durante subida e Focus máximo');
+        assert.equal(fogo.emissor, 'function', 'chamas nascem nos segmentos do corpo animado');
+      }
       if (golpe === 'espEx') assert.equal(resultado.proj, 2);
       await page.waitForTimeout(500);
       if (nome.startsWith('focus-')) {

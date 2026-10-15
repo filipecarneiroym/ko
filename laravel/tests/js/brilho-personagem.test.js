@@ -2,6 +2,19 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const K = require('../../../public/js/ko-sim.js');
 const modulos = import('../../../src/3d/brilho-personagem.mjs');
+test('chamas: subida e EX quentes, Focus máximo azul, sem fogo em soco comum', async () => {
+  const { descreverChamasPersonagem: fogo } = await modulos;
+  const s = estado(), l = s.p[0]; Object.assign(l, { estado: 'golpe', golpe: 'p1', t: 5 });
+  assert.equal(fogo(l, s, K), null);
+  for (const golpe of ['dp', 'dpEx', 'espEx', 'tatsuEx']) {
+    l.golpe = golpe; l.t = 12; assert.ok(fogo(l, s, K).taxa > 0);
+    assert.equal(fogo(l, s, K, true), null);
+  }
+  Object.assign(l, { golpe: 'foc', t: 0, focoCarga: 47, focoSolto: 0 }); assert.equal(fogo(l, s, K), null);
+  l.focoCarga = 48; assert.equal(fogo(l, s, K).tipo, 'focus');
+  Object.assign(l, { focoSolto: 1, nivelFoco: 3, t: 15 }); assert.equal(fogo(l, s, K).tipo, 'focus');
+  l.t = 23; assert.equal(fogo(l, s, K), null); l.estado = 'parado'; assert.equal(fogo(l, s, K), null);
+});
 function estado() { const s = K.novo({ lutadores: ['pipoca', 'pipoca'], treino: true }); s.fase = 'luta'; return s; }
 test('Focus pisca na carga de nível 2 e no máximo, sem brilho contínuo com Super cheio', async () => {
   const { descreverBrilhoPersonagem: brilho } = await modulos;

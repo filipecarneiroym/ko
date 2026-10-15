@@ -10,7 +10,7 @@ import { Color3, Color4 } from '@babylonjs/core/Maths/math.color.js';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector.js';
 import { Constants } from '@babylonjs/core/Engines/constants.js';
 import { quedasDoFinal } from './estado-visual.mjs';
-import { criarBrilhoPersonagem, descreverBrilhoPersonagem } from './brilho-personagem.mjs';
+import { criarBrilhoPersonagem, descreverBrilhoPersonagem, descreverChamasPersonagem } from './brilho-personagem.mjs';
 
 // Luminosidade dos golpes no estilo do SF4 de celular: rastro de luz na mão
 // ou no pé que bate (branco-azulado no fraco, fogo no forte, energia no
@@ -40,11 +40,21 @@ function texturaTintaFoco(scene) {
 }
 
 function texturaChama(scene) {
-  const n = 64, t = new DynamicTexture('golpe-chama', { width: n, height: n }, scene, false);
+  const n = 128, t = new DynamicTexture('golpe-chama', { width: n, height: n }, scene, false);
   t.hasAlpha = true;
-  const g = t.getContext(), gr = g.createRadialGradient(n / 2, n / 2, 0, n / 2, n / 2, n / 2);
-  gr.addColorStop(0, '#ffffff'); gr.addColorStop(.3, '#ffd27a'); gr.addColorStop(.65, 'rgba(255,90,20,.55)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
-  g.fillStyle = gr; g.fillRect(0, 0, n, n); t.update();
+  const g = t.getContext(); g.clearRect(0, 0, n, n);
+  const gr = g.createLinearGradient(0, n, 0, 0);
+  gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(.18, 'rgba(255,255,255,.8)');
+  gr.addColorStop(.55, 'rgba(255,255,255,.6)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gr;
+  for (let i = 0; i < 3; i++) {
+    const x = 45 + i * 13, y = 5 + i * 10;
+    g.beginPath(); g.moveTo(x - 20, 118);
+    g.bezierCurveTo(x - 43, 85, x + 20, 65, x - 5, y);
+    g.bezierCurveTo(x + 28, y + 32, x + 4, 62, x + 20, 82);
+    g.bezierCurveTo(x + 36, 105, x + 10, 122, x - 20, 118); g.fill();
+  }
+  t.update();
   return t;
 }
 
@@ -149,6 +159,15 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
     aura.direction1 = new Vector3(-.2, 1, 0); aura.direction2 = new Vector3(.2, 1.6, 0);
     aura.minEmitPower = .8; aura.maxEmitPower = 1.8; aura.gravity = new Vector3(0, 1.5, 0);
     aura.minSize = .18; aura.maxSize = .42; aura.minLifeTime = .18; aura.maxLifeTime = .45;
+    aura.minScaleX = .6; aura.maxScaleX = .95; aura.minScaleY = 1.2; aura.maxScaleY = 1.8;
+    aura.addSizeGradient(0, .65); aura.addSizeGradient(.35, 1); aura.addSizeGradient(1, .15);
+    const pontosChama = [];
+    aura.startPositionFunction = (_, posicao) => {
+      if (!pontosChama.length) { posicao.copyFrom(aura.emitter); return; }
+      const [a, b] = pontosChama[Math.floor(Math.random() * pontosChama.length)];
+      Vector3.LerpToRef(a, b, Math.random(), posicao);
+      posicao.addInPlaceFromFloats((Math.random() - .5) * .12, 0, (Math.random() - .5) * .12);
+    };
     aura.color1 = new Color4(1, .78, .3, .9); aura.color2 = new Color4(1, .35, .08, .8); aura.colorDead = new Color4(.3, 0, 0, 0);
     aura.emitRate = 0; aura.start();
     const nevoa = new ParticleSystem(`golpe-nevoa-${lado}`, 160, scene);
@@ -169,7 +188,7 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
     foco.minSize = .25; foco.maxSize = .6; foco.minLifeTime = .18; foco.maxLifeTime = .4;
     foco.color1 = new Color4(1, 1, 1, .85); foco.color2 = new Color4(.8, .85, 1, .7); foco.colorDead = new Color4(.5, .5, .7, 0);
     foco.emitRate = 0; foco.start();
-    return { carga, ponta, rastro, mat, aura, foco, nevoa, ativo: false };
+    return { carga, ponta, rastro, mat, aura, pontosChama, foco, nevoa, ativo: false };
   });
 
   // O membro que bate é o mais esticado para a frente (mão ou pé).
@@ -293,11 +312,25 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
         const carregando = l.estado === 'golpe' && l.golpe === 'foc' && l.t < 19 && !movimentoReduzido.matches;
         d.foco.emitRate = carregando ? 40 + (l.nivelFoco || 1) * 15 : 0;
         if (carregando) d.foco.emitter.set((l.x / simulador.U - simulador.LARGURA / 2) / 24, l.y / simulador.U / 24 + 1.15, 0);
-        // Hadouken carrega energia nas mãos; aura de fogo fica nos outros poderes.
-        const queima = !hadouken && l.golpe === 'sup' && l.t < 14 && l.estado === 'golpe' && !movimentoReduzido.matches;
-        d.aura.color1 = new Color4(.65, .87, 1, .55); d.aura.color2 = new Color4(.2, .55, 1, .35);
-        d.aura.emitRate = queima ? 120 : 0;
-        if (queima) d.aura.emitter.set((l.x / simulador.U - simulador.LARGURA / 2) / 24, l.y / simulador.U / 24 + 1.15, 0);
+        const fogoCorpo = descreverChamasPersonagem(l, estado, simulador, movimentoReduzido.matches);
+        d.aura.emitRate = fogoCorpo?.taxa || 0;
+        d.pontosChama.length = 0;
+        if (fogoCorpo && modelo) {
+          d.aura.color1 = new Color4(...fogoCorpo.cor, .72); d.aura.color2 = new Color4(...fogoCorpo.cor2, .45);
+          d.aura.colorDead = new Color4(...fogoCorpo.cor2, 0);
+          d.aura.emitter.set(xMundo(l.x), yMundo(l.y) + 1.15, 0);
+          const ponto = nome => {
+            const no = modelo.osso(nome); if (!no) return null;
+            const pais = []; for (let n = no; n; n = n.parent) pais.unshift(n);
+            for (const n of pais) n.computeWorldMatrix(true);
+            return no.getAbsolutePosition().clone();
+          };
+          for (const [a, b] of [['quadril', 'peito'], ['peito', 'cabeca'], ...['E', 'D'].flatMap(lado =>
+            [[`braco_${lado}`, `mao_${lado}`], [`coxa_${lado}`, `canela_${lado}`], [`canela_${lado}`, `pe_${lado}`]])]) {
+            const pa = ponto(a), pb = ponto(b); if (pa && pb) d.pontosChama.push([pa, pb]);
+          }
+        }
+        if (movimentoReduzido.matches) d.aura.reset();
       });
     },
     limpar() { corpo.limpar(); for (const b of bolas) { b.malha.setEnabled(false); b.fumaca.forEach(m => m.setEnabled(false)); } for (const d of lados) { d.carga.setEnabled(false); d.rastro.stop(); d.rastro.setEnabled(false); d.ativo = false; d.aura.emitRate = 0; d.aura.reset(); d.foco.emitRate = 0; d.foco.reset(); d.nevoa.emitRate = 0; d.nevoa.reset(); } },

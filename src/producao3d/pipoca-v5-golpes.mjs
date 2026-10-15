@@ -226,14 +226,19 @@ export function criarGolpesV5(ossos, parado, simulador) {
 
   // Jab com extensão quase completa, sem hiperestender o cotovelo.
   // A outra luva permanece protegendo o rosto e os pés ficam plantados.
-  const jab = (x, giro, inclinacao) => ({ giro, inclinacao, pelve: v(.025, 0, 0),
-    bracos: { E: { alvo: v(x, -.015, -.02), cotovelo: v(.1, -.8, -.3) } } });
-  clips.p1 = animar('p1', 12, [
-    { q: 0 }, { q: 2, ...jab(.38, -.1, -.025) },
-    { q: 3, ...jab((B1 + B2) * .995, -.22, -.055) },
-    { q: 5, ...jab((B1 + B2) * .995, -.22, -.055) },
-    { q: 8, ...jab(.35, -.06, -.015) }, { q: 12 },
-  ]);
+  function socoReto(nome, lado, forte = false) {
+    const sinal = lado === 'D' ? 1 : -1, ativo = forte ? 5 : 3, fim = forte ? 7 : 5, dur = forte ? 18 : 12;
+    const jab = (x, giro, inc) => ({ giro: sinal * giro, inclinacao: inc, pelve: v(.025, 0, 0),
+      bracos: { [lado]: { alvo: v(x, forte ? .015 : -.015, sinal * .02), cotovelo: v(.1, -.8, sinal * .3) } } });
+    return animar(nome, dur, [
+      { q: 0 }, { q: 2, ...jab(.38, .1, -.025) },
+      { q: ativo, ...jab((B1 + B2) * (forte ? .985 : .995), forte ? .35 : .22, -.055) },
+      { q: fim, ...jab((B1 + B2) * (forte ? .985 : .995), forte ? .35 : .22, -.055) },
+      { q: forte ? 12 : 8, ...jab(.35, .06, -.015) }, { q: dur },
+    ]);
+  }
+  clips.p1 = socoReto('p1', 'E'); clips.p1D = socoReto('p1D', 'D');
+  clips.p2 = socoReto('p2', 'D', true); clips.p2E = socoReto('p2E', 'E', true);
 
   // Caminhada de luta: guarda firme, elevação baixa e sola de apoio parada
   // no mundo. A velocidade vem da distância do motor, inclusive ao recuar.
@@ -350,16 +355,20 @@ export function criarGolpesV5(ossos, parado, simulador) {
   // o soco, sem acrescentar altura visual à trajetória física.
   const pernasSubida = { E: { local: v(.28, -.70, ZE), loc: 1, joelho: v(1, .5, -.1), pe: 'corpo' },
     D: { local: v(-.18, -.96, ZD), loc: 1, joelho: v(1, .4, .1), pe: 'corpo' } };
-  clips.dp = animar('dp', simulador.LUTADORES.pipoca.golpes.dp.dur, [
+  function subida(nome, lado) {
+    const sinal = lado === 'D' ? -1 : 1;
+    return animar(nome, simulador.LUTADORES.pipoca.golpes.dp.dur, [
     { q: 0 },
     { q: 4, giro: 0, inclinacao: -.12, pelve: v(-.02, -.22, 0), pernas: { E: { tornozelo: v(.5, .2, ZE + .06), joelho: v(1, .5, -.2), pe: 'plano' }, D: { joelho: v(1, .1, .06) } }, bracos: { E: { alvo: v(.12, .02, -.14), cotovelo: v(-.2, -.6, -1) }, D: { alvo: v(-.02, .05, .16), cotovelo: v(-.3, -.8, 1) } } },
-    { q: 7, giro: .1, inclinacao: .12, pernas: pernasSubida, bracos: { E: { alvo: v(.1, .6, -.12), cotovelo: v(-.1, .1, -1) } } },
-    { q: 12, giro: .25, inclinacao: .08, pernas: pernasSubida, bracos: { E: { alvo: v(.04, .72, -.12), cotovelo: v(-.1, .3, -1) } } },
-    { q: 20, giro: .35, inclinacao: .04, pernas: pernasSubida, bracos: { E: { alvo: v(.06, .6, -.12), cotovelo: v(-.1, .2, -1) } } },
-    { q: 27, giro: .1, inclinacao: -.04, pernas: pernasSubida },
+    { q: 7, giro: sinal * .1, inclinacao: .12, pernas: pernasSubida, bracos: { [lado]: { alvo: v(.1, .6, -sinal * .12), cotovelo: v(-.1, .1, -sinal) } } },
+    { q: 12, giro: sinal * .25, inclinacao: .08, pernas: pernasSubida, bracos: { [lado]: { alvo: v(.04, .72, -sinal * .12), cotovelo: v(-.1, .3, -sinal) } } },
+    { q: 20, giro: sinal * .35, inclinacao: .04, pernas: pernasSubida, bracos: { [lado]: { alvo: v(.06, .6, -sinal * .12), cotovelo: v(-.1, .2, -sinal) } } },
+    { q: 27, giro: sinal * .1, inclinacao: -.04, pernas: pernasSubida },
     { q: 32, pelve: v(0, -.16, 0) },
     { q: 40 },
-  ]);
+    ]);
+  }
+  clips.dp = subida('dp', 'E'); clips.dpD = subida('dpD', 'D');
 
   // Chute furacão: perna E estendida e D recolhida, girando com a pelve.
   // A raiz não avança no GLB: movimento e suspensão vêm da simulação.
@@ -383,6 +392,7 @@ export function criarGolpesV5(ossos, parado, simulador) {
     canais: origem.clip.canais.map(c => ({ ...structuredClone(c), tempos: c.tempos.map(t => t * duracao / origem.clip.duracaoQuadros) })) } });
   clips.espEx = copiarTempo(clips.esp, 'espEx', 30);
   clips.dpEx = copiarTempo(clips.dp, 'dpEx', 44);
+  clips.dpExD = copiarTempo(clips.dpD, 'dpExD', 44);
   clips.ultra = animar('ultra', 70, [
     { q: 0 }, { q: 8, giro: -.32, pelve: v(-.08, -.18, 0), inclinacao: .03, ...juntas(.12, 1.50, .43) },
     { q: 20, giro: -.36, pelve: v(-.10, -.22, 0), inclinacao: .04, ...juntas(.14, 1.54, .43) },
@@ -438,6 +448,14 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 27, ...ar(-.02, v(.3, quadrilY - .95, ZE + .1), v(-.3, quadrilY - .95, ZD - .02), -.035) },
     { q: 33, pelve: v(0, -.04, 0), inclinacao: -.02 }, { q: 44 },
   ]);
+  for (const [nome, lado] of [['ap', 'E'], ['apD', 'D']]) {
+    const sinal = lado === 'D' ? 1 : -1;
+    const estende = x => ({ giro: sinal * .16, inclinacao: -.06,
+      bracos: { [lado]: { alvo: v(x, -.08, sinal * .02), cotovelo: v(.1, .2, sinal * .5) } } });
+    const c = animar(nome, 20, [{ q: 0 }, { q: 4, ...estende((B1 + B2) * .98) },
+      { q: 14, ...estende((B1 + B2) * .98) }, { q: 17, ...estende(.3) }, { q: 20 }]);
+    clips[nome] = { clip: pernasDe(ossos, c.clip, clips.pulo.clip, 14) };
+  }
 
   // rolando: esquiva (24 quadros, o motor desloca). Mergulho para a frente,
   // corpo em bola rente ao chão com uma volta inteira e levantada na guarda.

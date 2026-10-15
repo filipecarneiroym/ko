@@ -10,22 +10,22 @@
     "src/3d/arena-academia.js": "3af338b17730d72f77cfca7c0015bb2f7e45bd57240d4f5654f91ed620377fbf",
     "src/3d/arena-realista.js": "8d629c7a44a1cb4e9aac9a8026c279137038016b36557cba8f362c346439688f",
     "src/3d/arenas.js": "56e5edf049966daa6e797a2cacfae1ec2a47d847ae13134780ccb349c70ae94d",
-    "src/3d/brilho-golpes.js": "e9c7bcef3adba6dfba22cb18757240c612c35166d2e29de4ddd1bfb9529de11b",
-    "src/3d/brilho-personagem.mjs": "efa3fcc43ee60f2bd5c42ae4285a611f32fa3e1de9e30f84a0a4dd942d1087dc",
+    "src/3d/brilho-golpes.js": "3b76ddf37372a5ac501611f6856bf588fbfba9de42ea4bc3e796cd117930f373",
+    "src/3d/brilho-personagem.mjs": "bc6e2a22b084fb059a9b61696b4b758b59f42f8e93f601414de4cfa3246e653b",
     "src/3d/caixas.js": "14ab50a1c505237c3aa4005385e121a131affe8ea212a7539f9499cd3fe82f24",
     "src/3d/camera-luta.js": "db2e510b35a409e53692fa3dcff8481b2e95d7102934bf7edf9327dd6be9777a",
     "src/3d/contrato-glb.mjs": "d4aff4d79adccb1ff3eed3acec16a1ab42805f82fce164e059ac784d9f9f6e9d",
     "src/3d/efeitos-sf4.js": "2ef45b1fa501380635e6a90fb59f886447a0fecec59773aea3fe266b6dbbe1ba",
     "src/3d/efeitos.js": "422cdfa76ae591d0fd78989a94d5b38110a8cc83f365d6cb6d326fd9a5bdcf2b",
-    "src/3d/estado-visual.mjs": "7977c7aa104234fbd1e014338cc6657bc463319c0ce8daf0ea0c3851ed404baa",
-    "src/3d/jogo-3d.js": "b5229564f9d924edf354e417625a770ba9e5ac19eb430467033aacbfd85033ea",
+    "src/3d/estado-visual.mjs": "661ed0dcb7ebcebda67c1bc720ac4f7d09f232c1a3d1d71103a5f7f9677bc947",
+    "src/3d/jogo-3d.js": "08d098b6f906f74f191bdbfff7f1a026b71adae0376468f088c99c7795378415",
     "src/3d/laboratorio.js": "8a6ba72fd825c165dbaf54a8a88efa7d095720859b2f0378cc10995412af650f",
-    "src/3d/modelo-glb.js": "bbb3b4c836fee1ccabac7dd0bc3d3162cac20be5a0b3658bec25c336275688a9",
+    "src/3d/modelo-glb.js": "ce7f3c784a4ef71cc48ce97da4240f14f3d7f78f5d993bcfdaeff92024bc033e",
     "src/3d/perfil-pipoca.mjs": "effca8a992370c7fe15a90f05e570b5ac9b677f69ad879b44de49c6b58e9884a",
-    "src/3d/versao-modelos.mjs": "24ef78040795c60a18e2eba67c5d40fb49ee1041c9595415f2b3050aecd6ca81"
+    "src/3d/versao-modelos.mjs": "7a31c64bb41a24848d201e944811f8d6e1488c017e863ca07bff4d490f618fc1"
   },
   "saida": {
     "caminho": "public/js/ko-laboratorio-3d.js",
-    "sha256": "5ad7440dcda68a97ab777caed5f88434a217ebd48d6c1a3a15750cbb1b49da2d"
+    "sha256": "ee6090eb83f9ee6d9d8a32962d323d43999ec476276b352fc55a934849530156"
   }
 }

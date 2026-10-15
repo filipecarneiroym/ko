@@ -20,10 +20,10 @@ for (const cor of ['azul', 'vermelha']) test(`socos Lola ${cor}: extensão, cont
     return no.getAbsolutePosition().clone();
   };
   try {
-    for (const face of [1, -1]) for (const golpe of ['p1', 'p2', 'cp', 'foc']) {
+    for (const face of [1, -1]) for (const golpe of ['p1', 'p2', 'ap', 'cp', 'foc']) {
       const s = K.novo({ lutadores: ['pipoca', 'pipoca'], treino: true }), l = s.p[0];
       Object.assign(l, { estado: 'golpe', golpe, face, focoSolto: 1 });
-      const lado = golpe === 'p2' ? 'D' : 'E', protecao = lado === 'E' ? 'D' : 'E';
+      const lado = golpe === 'p2' ? (face > 0 ? 'E' : 'D') : ['p1', 'ap'].includes(golpe) && face > 0 ? 'D' : 'E', protecao = lado === 'E' ? 'D' : 'E';
       for (const janela of K.LUTADORES.pipoca.golpes[golpe].janelas) for (let t = janela.de; t <= janela.ate; t++) {
         l.t = t;
         const antes = JSON.stringify(s);
@@ -41,6 +41,13 @@ for (const cor of ['azul', 'vermelha']) test(`socos Lola ${cor}: extensão, cont
       modelo.atualizar(descreverPose(l, K, s));
       const ombro = pos(`braco_${lado}`), cotovelo = pos(`antebraco_${lado}`), mao = pos(`mao_${lado}`);
       assert.ok(mao.subtract(ombro).length() / (cotovelo.subtract(ombro).length() + mao.subtract(cotovelo).length()) < .8, 'recolhe depois do soco');
+    }
+    for (const face of [1, -1]) for (const golpe of ['dp', 'dpEx']) {
+      const s = K.novo({ lutadores: ['pipoca', 'pipoca'], treino: true }), l = s.p[0];
+      Object.assign(l, { estado: 'golpe', golpe, face, t: 12 });
+      modelo.atualizar(descreverPose(l, K, s));
+      const lado = face > 0 ? 'D' : 'E';
+      assert.ok(pos(`mao_${lado}`).y > pos('cabeca').y + .08, `${golpe}: punho sobe acima da cabeça nos dois lados`);
     }
     for (const face of [1, -1]) for (const nome of ['parado', 'andando', 'recuo', 'corrida', 'agachado',
       'defesa', 'defesaBaixa', 'p1', 'p2', 'k1', 'k2', 'ck', 'cp', 'esp', 'espEx', 'ultra', 'foc']) {
