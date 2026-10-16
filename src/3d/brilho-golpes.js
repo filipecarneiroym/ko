@@ -219,8 +219,17 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
     return m;
   });
 
+  const pendentes = [null, null];
   return {
     brilho,
+    registrar(estado) {
+      estado.p.forEach((l, i) => {
+        const chama = descreverChamasPersonagem(l, estado, simulador, movimentoReduzido.matches);
+        const corpo = descreverBrilhoPersonagem(l, estado, simulador, movimentoReduzido.matches);
+        if (chama || corpo.tipo) pendentes[i] = { chama, corpo };
+        else if (l.sumido || ['caido', 'derrotado', 'dano'].includes(l.estado)) pendentes[i] = null;
+      });
+    },
     // Depois de os modelos receberem a pose do quadro.
     atualizar(estado, modelos) {
       for (const m of chamasChuva) m.setEnabled(false);
@@ -258,7 +267,9 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
       });
       estado.p.forEach((l, i) => {
         const d = lados[i], modelo = modelos[i];
-        corpo.atualizar(modelo, descreverBrilhoPersonagem(l, estado, simulador, movimentoReduzido.matches));
+        const pendente = pendentes[i]; pendentes[i] = null;
+        const efeitoCorpo = descreverBrilhoPersonagem(l, estado, simulador, movimentoReduzido.matches);
+        corpo.atualizar(modelo, efeitoCorpo.tipo ? efeitoCorpo : pendente?.corpo || efeitoCorpo);
         const hadouken = ['esp', 'espEx', 'ultra'].includes(l.golpe);
         const golpeComum = ['p1', 'p2', 'cp', 'ap', 'foc', 'k1', 'k2', 'ck', 'ak', 'tatsu'].includes(l.golpe);
         const solta = l.golpe === 'ultra' ? 25 : 10;
@@ -312,8 +323,10 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
         const carregando = l.estado === 'golpe' && l.golpe === 'foc' && l.t < 19 && !movimentoReduzido.matches;
         d.foco.emitRate = carregando ? 40 + (l.nivelFoco || 1) * 15 : 0;
         if (carregando) d.foco.emitter.set((l.x / simulador.U - simulador.LARGURA / 2) / 24, l.y / simulador.U / 24 + 1.15, 0);
-        const fogoCorpo = descreverChamasPersonagem(l, estado, simulador, movimentoReduzido.matches);
+        const fogoCorpo = movimentoReduzido.matches ? null : descreverChamasPersonagem(l, estado, simulador) || pendente?.chama;
         d.aura.emitRate = fogoCorpo?.taxa || 0;
+        d.aura.manualEmitCount = fogoCorpo && !d.fogoAnterior ? Math.ceil(fogoCorpo.taxa * .18) : -1;
+        d.fogoAnterior = !!fogoCorpo;
         d.pontosChama.length = 0;
         if (fogoCorpo && modelo) {
           d.aura.color1 = new Color4(...fogoCorpo.cor, .72); d.aura.color2 = new Color4(...fogoCorpo.cor2, .45);
@@ -333,7 +346,7 @@ export function criarBrilhoGolpes(scene, simulador, movimentoReduzido = { matche
         if (movimentoReduzido.matches) d.aura.reset();
       });
     },
-    limpar() { corpo.limpar(); for (const b of bolas) { b.malha.setEnabled(false); b.fumaca.forEach(m => m.setEnabled(false)); } for (const d of lados) { d.carga.setEnabled(false); d.rastro.stop(); d.rastro.setEnabled(false); d.ativo = false; d.aura.emitRate = 0; d.aura.reset(); d.foco.emitRate = 0; d.foco.reset(); d.nevoa.emitRate = 0; d.nevoa.reset(); } },
+    limpar() { pendentes.fill(null); corpo.limpar(); for (const b of bolas) { b.malha.setEnabled(false); b.fumaca.forEach(m => m.setEnabled(false)); } for (const d of lados) { d.carga.setEnabled(false); d.rastro.stop(); d.rastro.setEnabled(false); d.ativo = false; d.fogoAnterior = false; d.aura.manualEmitCount = 0; d.aura.emitRate = 0; d.aura.reset(); d.foco.emitRate = 0; d.foco.reset(); d.nevoa.emitRate = 0; d.nevoa.reset(); } },
     descartar() {
       corpo.descartar();
       tintaFoco.dispose();

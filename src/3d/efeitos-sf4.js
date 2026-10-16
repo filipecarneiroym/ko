@@ -309,7 +309,26 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
     return { x: xMundo((x0 + x1) / 2), y: yMundo((y0 + y1) / 2) };
   }
 
+  const pendentes = [], contatosSolo = [null, null], ultimasPoses = [null, null];
+  let ultimaFaseRecebida = null;
   function eventos(lista, estado) {
+    // Os passos podem chegar em lote antes de um desenho no celular. Guardar
+    // o contato daquele passo e iniciar o efeito só quando puder ser exibido.
+    estado?.p.forEach((p, lado) => {
+      const anterior = ultimasPoses[lado], queda = ['caido', 'derrotado'].includes(p.estado);
+      const limite = queda ? 8 : p.estado === 'levantando' ? 21 : Infinity;
+      if (p.y === 0 && p.t >= limite && (!anterior || anterior.estado !== p.estado || anterior.t < limite))
+        contatosSolo[lado] = { p: { ...p }, queda };
+      ultimasPoses[lado] = { estado: p.estado, t: p.t };
+    });
+    if (!lista.length && estado?.fase === ultimaFaseRecebida) return;
+    ultimaFaseRecebida = estado?.fase;
+    pendentes.push({ lista: lista.map(e => ({ ...e })), estado: estado && {
+      fase: estado.fase, vencedorRound: estado.vencedorRound,
+      p: estado.p.map(p => ({ ...p })),
+    } });
+  }
+  function aplicarEventos(lista, estado) {
     for (const e of lista) {
       if (e.t === 'acerto') {
         const forte = Math.max(0, Math.min(2, e.forte || 0)), { x, y } = contato(e, estado);
@@ -379,24 +398,31 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
   // dt em quadros de motor (fração quando a tela está em câmera lenta).
   function atualizar(estado, dt, camera) {
     relogio += dt;
+    for (const p of pendentes.splice(0)) aplicarEventos(p.lista, p.estado);
     solo.forEach((s, lado) => {
-      const p = estado?.p?.[lado], pose = p && descreverPose(p, simulador, estado);
+      if (contatosSolo[lado]) {
+        s.contato = { ...contatosSolo[lado], nasc: relogio }; contatosSolo[lado] = null;
+      }
+      let p = estado?.p?.[lado]; const pose = p && descreverPose(p, simulador, estado);
       const queda = pose && ['caido', 'derrotado'].includes(pose.clip);
       const pouso = pose?.clip === 'levantando';
-      const idade = p ? pose.quadro - (queda ? 8 : 14) : -1;
-      const dur = queda ? 20 : 10;
-      const vivo = p?.id === 'pipoca' && (queda || pouso) && idade >= 0 && idade < dur && p.y === 0;
+      const contato = s.contato;
+      if (contato) p = contato.p;
+      const ehQueda = contato ? contato.queda : queda;
+      const idade = contato ? relogio - contato.nasc : p ? pose.quadro - (queda ? 8 : 21) : -1;
+      const dur = ehQueda ? 20 : 10;
+      const vivo = p?.id === 'pipoca' && (contato || queda || pouso) && idade >= 0 && idade < dur && p.y === 0;
       s.onda.setEnabled(vivo); s.nuvens.forEach(n => n.setEnabled(vivo && !reduzido()));
       if (!vivo) return;
-      const f = idade / dur, tamanho = queda ? 3 : 1.15;
-      const x = xMundo(p.x) - (queda ? .1 * p.face : 0);
+      const f = idade / dur, tamanho = ehQueda ? 3 : 1.15;
+      const x = xMundo(p.x) - (ehQueda ? .1 * p.face : 0);
       s.onda.position.set(x, .035, 0);
       s.onda.scaling.setAll(tamanho * (.6 + .7 * Math.sqrt(f)));
       s.onda.visibility = .95 * (1 - f) ** 2;
       s.nuvens.forEach((n, i) => {
         const direcao = i / 2 - 1;
         n.position.set(x + direcao * tamanho * (.15 + f * .45), .12 + f * (.25 + i % 2 * .12), -.12 + i * .05);
-        n.scaling.setAll((.45 + f * .85) * (queda ? 1 : .6));
+        n.scaling.setAll((.45 + f * .85) * (ehQueda ? 1 : .6));
         n.visibility = .8 * (1 - f) ** 2;
       });
     });
@@ -507,10 +533,12 @@ export function criarEfeitosSF4(scene, simulador, movimentoReduzido = { matches:
   }
 
   function limpar() {
+    pendentes.length = 0;
+    contatosSolo.fill(null); ultimasPoses.fill(null); ultimaFaseRecebida = null;
     relogio = 0; tremor = 0; superNasc = koNasc = flashNasc = tremorNasc = -1e9; faseAnterior = null;
     for (const r of [...respingos, ...escudos, ...rastro]) { r.nasc = -1e9; r.malha.setEnabled(false); }
     for (const l of letreiros_.values()) { l.nasc = -1e9; l.malha.setEnabled(false); }
-    for (const s of solo) { s.onda.setEnabled(false); s.nuvens.forEach(n => n.setEnabled(false)); }
+    for (const s of solo) { s.contato = null; s.onda.setEnabled(false); s.nuvens.forEach(n => n.setEnabled(false)); }
   }
 
   // Malhas que acendem na camada de brilho (estrelas, tinta, escudos, flash).

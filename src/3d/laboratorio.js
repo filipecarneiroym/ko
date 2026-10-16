@@ -300,6 +300,7 @@ try {
       // segue com cenoura, toca, poeira e Chuva de Cenouras.
       efeitos.eventos(estado.ev.filter(e => e.t !== 'acerto' && e.t !== 'defendeu' && e.t !== 'especial'), estado.f, estado);
       sf4.eventos(estado.ev, estado);
+      brilhoGolpes.registrar(estado);
       acumulado -= 1000 / 60; passos++;
     }
     sf4.atualizar(estado, passos, camera);

@@ -34,3 +34,14 @@ A revisão verifica correspondência de poses e sequência, comandos e estabilid
 ## Próxima validação
 
 Filipe precisa jogar a versão publicada para aprovar o resultado visual e a sensação dos controles no celular. O Render atual não inclui o relay WebSocket; o teste online local não comprova funcionamento online na publicação. A configuração de produção do relay continua pendente conforme o guia do projeto.
+
+## Correção após o teste no iPhone
+
+Filipe relatou impactos/chamas ausentes e levantada sem fluidez. Foram encontradas duas falhas na apresentação que os testes anteriores, focados em poses isoladas, não detectavam:
+
+- O jogo chama `scene.render()` pelo laço de `ko.js`, enquanto o laboratório usa `engine.runRenderLoop()`. Faltavam `engine.beginFrame()` e `engine.endFrame()` na luta real: o delta do Babylon permanecia zero e as partículas avançavam pelo mínimo de 1 ms, quase sem emissão. O ciclo agora atualiza o relógio gráfico.
+- Impactos nasciam com o relógio do último desenho e expiravam quando o próximo desenho avançava todos os passos acumulados. Agora guardam o contato daquele passo e começam a ser exibidos no próximo desenho. Chamas, clarões do corpo e contato da queda também preservam sua primeira exibição quando a janela inteira passa entre desenhos.
+
+Na levantada, a interpolação smoothstep por trecho freava em cada pose. Foi substituída, somente nesse clipe, por Hermite monotônica para a pelve, o rolamento e os alvos dos membros. Duas poses intermediárias redundantes do impulso foram removidas e o pouso/acomodação distribuídos até a volta à guarda. Permanecem os 40 passos da regra; a poeira de pouso acompanha o novo contato no quadro 21.
+
+Validação adicional: 34 testes de geometria, recuperação, efeitos, golpes e encerramento passaram. O novo teste `efeitos-quadros-lentos.cjs` reproduziu a falha antes da correção e verifica impacto após 30 passos sem desenho, chamas da subida e Focus máximo, poeira da queda, limpeza e delta real do Babylon. Passou no Edge e no WebKit com identificação de iPhone e tela horizontal; as capturas do WebKit foram inspecionadas. WebKit no Windows não equivale ao teste em um iPhone físico. A preferência de acessibilidade “Reduzir Movimento” continua respeitada.

@@ -133,32 +133,52 @@ export function criarGolpesV5(ossos, parado, simulador) {
   }
 
   // Interpola as poses-chave quadro a quadro e grava os canais do clip.
-  function animar(nome, duracao, chaves, { laco = false, passo = 1 } = {}) {
+  function animar(nome, duracao, chaves, { laco = false, passo = 1, continuo = false } = {}) {
     assert.equal(chaves[0].q, 0);
     assert.equal(chaves.at(-1).q, duracao);
     const tempos = [], rot = Array.from({ length: n }, () => []), raiz = [], poses = [];
-    const lerpV = (a, b, t) => Vector3.Lerp(a, b, t);
     const tornozeloDe = (k, lado) => k.pernas?.[lado]?.tornozelo ?? P0[PERNAS[lado].pe];
     for (let q = 0; q <= duracao; q += passo) {
       let j = 0;
       while (j < chaves.length - 2 && chaves[j + 1].q <= q) j++;
       const a = chaves[j], b = chaves[j + 1], t = suave(Math.max(0, Math.min(1, (q - a.q) / (b.q - a.q))));
+      // Hermite monotônica mantém a velocidade entre chaves sem ultrapassar
+      // os alvos. Na levantada, smoothstep por trecho freava em cada pose.
+      const interpolar = ler => {
+        const A = ler(a), B = ler(b);
+        const componente = (A, B, lerNumero) => {
+          if (!continuo) return A + (B - A) * t;
+          const h = b.q - a.q, u = Math.max(0, Math.min(1, (q - a.q) / h));
+          const tangente = i => {
+            if (i === 0 || i === chaves.length - 1) return 0;
+            const h0 = chaves[i].q - chaves[i - 1].q, h1 = chaves[i + 1].q - chaves[i].q;
+            const d0 = (lerNumero(chaves[i]) - lerNumero(chaves[i - 1])) / h0;
+            const d1 = (lerNumero(chaves[i + 1]) - lerNumero(chaves[i])) / h1;
+            if (d0 * d1 <= 0) return 0;
+            const w0 = 2 * h1 + h0, w1 = h1 + 2 * h0;
+            return (w0 + w1) / (w0 / d0 + w1 / d1);
+          };
+          return (2*u**3 - 3*u*u + 1)*A + (u**3 - 2*u*u + u)*h*tangente(j)
+            + (-2*u**3 + 3*u*u)*B + (u**3 - u*u)*h*tangente(j + 1);
+        };
+        return typeof A === 'number' ? componente(A, B, ler)
+          : v(...['x', 'y', 'z'].map(e => componente(A[e], B[e], k => ler(k)[e])));
+      };
       const pose = {
-        pelve: lerpV(a.pelve ?? Vector3.Zero(), b.pelve ?? Vector3.Zero(), t),
+        pelve: interpolar(k => k.pelve ?? Vector3.Zero()),
         giro: (a.giro ?? 0) + ((b.giro ?? 0) - (a.giro ?? 0)) * t,
-        inclinacao: (a.inclinacao ?? 0) + ((b.inclinacao ?? 0) - (a.inclinacao ?? 0)) * t,
-        rol: (a.rol ?? 0) + ((b.rol ?? 0) - (a.rol ?? 0)) * t,
+        inclinacao: interpolar(k => k.inclinacao ?? 0),
+        rol: interpolar(k => k.rol ?? 0),
         bola: (a.bola ?? 0) + ((b.bola ?? 0) - (a.bola ?? 0)) * t,
         pescoco: (a.pescoco ?? 0) + ((b.pescoco ?? 0) - (a.pescoco ?? 0)) * t,
         orelhas: (a.orelhas ?? 0) + ((b.orelhas ?? 0) - (a.orelhas ?? 0)) * t,
         pernas: {},
       };
       for (const lado of ['E', 'D']) {
-        const pa = a.pernas?.[lado] ?? {}, pb = b.pernas?.[lado] ?? {};
-        const tornozelo = lerpV(tornozeloDe(a, lado), tornozeloDe(b, lado), t);
-        const joelho = lerpV(pa.joelho ?? v(1, 0, lado === 'E' ? -.15 : .15), pb.joelho ?? v(1, 0, lado === 'E' ? -.15 : .15), t);
-        const local = lerpV(pa.local ?? v(.2, -.5, lado === 'E' ? -.15 : .15), pb.local ?? v(.2, -.5, lado === 'E' ? -.15 : .15), t);
-        const loc = (pa.loc ?? 0) + ((pb.loc ?? 0) - (pa.loc ?? 0)) * t;
+        const tornozelo = interpolar(k => tornozeloDe(k, lado));
+        const joelho = interpolar(k => k.pernas?.[lado]?.joelho ?? v(1, 0, lado === 'E' ? -.15 : .15));
+        const local = interpolar(k => k.pernas?.[lado]?.local ?? v(.2, -.5, lado === 'E' ? -.15 : .15));
+        const loc = interpolar(k => k.pernas?.[lado]?.loc ?? 0);
         pose.pernas[lado] = { tornozelo, joelho, local, loc };
       }
       // Forma do pé nas duas chaves, depois interpolada (sem saltos).
@@ -187,8 +207,8 @@ export function criarGolpesV5(ossos, parado, simulador) {
             : chave?.alvoCorpo ? chave.alvoCorpo.add(pose.pelve).subtract(fk[bb.braco])
               : chave?.alvo ?? guardaAlvo;
           pose.bracos[lado] = {
-            alvo: lerpV(alvo(ba), alvo(bz), t),
-            cotovelo: lerpV(ba?.cotovelo ?? guardaCot, bz?.cotovelo ?? guardaCot, t),
+            alvo: interpolar(k => alvo(k.bracos?.[lado])),
+            cotovelo: interpolar(k => k.bracos?.[lado]?.cotovelo ?? guardaCot),
           };
         }
       }
@@ -517,8 +537,6 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 0, ...deitada() },
     { q: 3, ...recolhida(1.95, -.7) },
     { q: 5, ...recolhida(2.05, -.62) },
-    { q: 6, ...recolhida(1.95, -.48) },
-    { q: 7, ...recolhida(1.65, -.28) },
     { q: 8, ...recolhida(1.3, -.06) },
     // Solta as mãos depois do impulso; pernas desenham o arco até o pouso.
     { q: 10, rol: .72, pelve: v(.02, .24, 0), inclinacao: .26,
@@ -526,15 +544,15 @@ export function criarGolpesV5(ossos, parado, simulador) {
         E: { local: v(.1, -1.25, ZE * .8), loc: 1, joelho: v(1, .4, -.1), pe: 'corpo' },
         D: { local: v(.02, -1.22, ZD * .8), loc: 1, joelho: v(1, .4, .1), pe: 'corpo' },
       } },
-    { q: 12, rol: .16, pelve: v(.07, -.14, 0), inclinacao: -.22,
+    { q: 16, rol: .16, pelve: v(.07, -.14, 0), inclinacao: -.22,
       pernas: {
         E: { tornozelo: v(.44, .32, ZE), joelho: v(1, .4, -.1), pe: 'plano' },
         D: { tornozelo: v(-.3, .35, ZD), joelho: v(1, .4, .1), pe: 'plano' },
       } },
-    { q: 14, ...baixa(-.08), rol: .08 },
-    { q: 18, ...baixa(.1) },
-    { q: 24 }, { q: 32 }, { q: 40 },
-  ]);
+    { q: 21, ...baixa(-.08), rol: .08 },
+    { q: 28, ...baixa(.1) },
+    { q: 32 }, { q: 40 },
+  ], { continuo: true });
 
   // Rolamento sem atravessar o chão: em cada quadro, mede o ponto mais baixo
   // de todos os ossos (com a espessura do corpo/orelhas) e sobe a pelve.

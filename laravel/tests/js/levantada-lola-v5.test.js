@@ -45,6 +45,11 @@ for (const cor of ['azul', 'vermelha']) test(`queda e levantada ${cor}: apoios, 
       assert.ok(pos('quadril').y > quadrilDeitado + .65, 'quadril percorre o arco de recuperação');
       assert.ok((pos('quadril').x - pos('cabeca').x) * face > .35, 'peito inclinado para trás durante o arco, sem endireitar cedo');
       assert.ok(pos('pe_E').y > .35 && pos('pe_D').y > .35, 'fase aérea depois do impulso dos braços');
+      pose('levantando', 24); const pouso = pos('quadril');
+      pose('levantando', 28); const acomodacao = pos('quadril');
+      pose('levantando', 32);
+      assert.ok(Vector3.Distance(pouso, acomodacao) > .01 && Vector3.Distance(acomodacao, pos('quadril')) > .01,
+        'acomodação continua depois do pouso, sem congelar a guarda na metade da levantada');
       pose('levantando', 40); const guarda = pos('quadril');
       pose('parado', 0); assert.ok(Vector3.Distance(pos('quadril'), guarda) < .01, 'termina na guarda');
       pose('derrotado', 60);
