@@ -300,15 +300,19 @@ export function criarGolpesV5(ossos, parado, simulador) {
   // k2: chute alto de perna E (28 quadros), janela 7-10.
   // k2: chute alto (28 quadros), janela 7-10. A subida é a mesma (pé de apoio firme),
   // e a volta é mais rápida: recolhe em 6 quadros em vez de 9.
-  clips.k2 = animar('k2', 28, [
+  const chuteAlto = lado => {
+    const sinal = lado === 'E' ? 1 : -1, z = lado === 'E' ? ZE : ZD;
+    return animar(lado === 'E' ? 'k2' : 'k2D', 28, [
     { q: 0 },
-    { q: 4, giro: -.4, inclinacao: .22, pelve: v(-.06, .03, 0), pernas: { E: { tornozelo: v(.38, 1.22, ZE + .14), joelho: v(1, .9, 0), pe: 'plano' } } },
-    { q: 7, giro: -.55, inclinacao: .46, pelve: v(-.04, .04, 0), pernas: { E: { tornozelo: v(1.0, 1.82, ZE + .2), joelho: v(0, 1, .2), pe: 'esticado' } } },
-    { q: 10, giro: -.55, inclinacao: .46, pelve: v(-.03, .04, 0), pernas: { E: { tornozelo: v(1.02, 1.8, ZE + .2), joelho: v(0, 1, .2), pe: 'esticado' } } },
-    { q: 13, giro: -.3, inclinacao: .18, pelve: v(-.05, .02, 0), pernas: { E: { tornozelo: v(.38, 1.05, ZE + .12), joelho: v(1, .9, 0), pe: 'plano' } } },
-    { q: 17, giro: -.05, inclinacao: .03, pelve: v(-.01, 0, 0) },
+    { q: 4, giro: -sinal * .4, inclinacao: .22, pelve: v(-.06, .03, 0), pernas: { [lado]: { tornozelo: v(.38, 1.22, z + sinal * .14), joelho: v(1, .9, 0), pe: 'plano' } } },
+    { q: 7, giro: -sinal * .55, inclinacao: .46, pelve: v(-.04, .04, 0), pernas: { [lado]: { tornozelo: v(1.0, 1.82, z + sinal * .2), joelho: v(0, 1, sinal * .2), pe: 'esticado' } } },
+    { q: 10, giro: -sinal * .55, inclinacao: .46, pelve: v(-.03, .04, 0), pernas: { [lado]: { tornozelo: v(1.02, 1.8, z + sinal * .2), joelho: v(0, 1, sinal * .2), pe: 'esticado' } } },
+    { q: 13, giro: -sinal * .3, inclinacao: .18, pelve: v(-.05, .02, 0), pernas: { [lado]: { tornozelo: v(.38, 1.05, z + sinal * .12), joelho: v(1, .9, 0), pe: 'plano' } } },
+    { q: 17, giro: -sinal * .05, inclinacao: .03, pelve: v(-.01, 0, 0) },
     { q: 28 },
-  ]);
+    ]);
+  };
+  clips.k2 = chuteAlto('E'); clips.k2D = chuteAlto('D');
 
   // ck: rasteira (26 quadros), janela 6-9: agacha sobre a perna D e varre com a E rente ao chão.
   clips.ck = animar('ck', 26, [
@@ -479,15 +483,11 @@ export function criarGolpesV5(ossos, parado, simulador) {
     E: { alvoPiso: v(x, .16, -.27), cotovelo: v(-.2, .6, -1) },
     D: { alvoPiso: v(x, .16, .27), cotovelo: v(-.2, .6, 1) },
   } });
-  const relaxada = () => ({ bracos: {
-    E: { alvoPiso: v(-.65, .05, -.48), cotovelo: v(-.2, .2, -1) },
-    D: { alvoPiso: v(-.48, .07, .5), cotovelo: v(-.2, .2, 1) },
-  } });
   const deitada = (rol = 1.48, dy = -1.18) => ({ rol, pelve: v(-.3, dy, 0), inclinacao: .04,
     pernas: {
       E: { local: v(.18, -1.32, ZE * .65), loc: 1, joelho: v(1, .15, -.1), pe: 'corpo' },
       D: { local: v(.13, -1.26, ZD * .8), loc: 1, joelho: v(1, .25, .1), pe: 'corpo' },
-    }, ...relaxada() });
+    }, ...maosNoPiso(-1.0) });
   const queda = [
     { q: 0, rol: .25, pelve: v(-.05, -.12, 0), inclinacao: .12 },
     { q: 4, ...deitada(1.0, -.6), bracos: {
@@ -516,7 +516,7 @@ export function criarGolpesV5(ossos, parado, simulador) {
     { q: 7, ...recolhida(1.65, -.28) },
     { q: 8, ...recolhida(1.3, -.06) },
     // Solta as mãos depois do impulso; pernas desenham o arco até o pouso.
-    { q: 10, rol: .72, pelve: v(.02, .1, 0), inclinacao: -.36,
+    { q: 10, rol: .72, pelve: v(.02, .24, 0), inclinacao: .26,
       pernas: {
         E: { local: v(.1, -1.25, ZE * .8), loc: 1, joelho: v(1, .4, -.1), pe: 'corpo' },
         D: { local: v(.02, -1.22, ZD * .8), loc: 1, joelho: v(1, .4, .1), pe: 'corpo' },

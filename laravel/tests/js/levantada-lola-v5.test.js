@@ -43,11 +43,14 @@ for (const cor of ['azul', 'vermelha']) test(`queda e levantada ${cor}: apoios, 
       }
       pose('levantando', 10);
       assert.ok(pos('quadril').y > quadrilDeitado + .65, 'quadril percorre o arco de recuperação');
+      assert.ok((pos('quadril').x - pos('cabeca').x) * face > .35, 'peito inclinado para trás durante o arco, sem endireitar cedo');
       assert.ok(pos('pe_E').y > .35 && pos('pe_D').y > .35, 'fase aérea depois do impulso dos braços');
       pose('levantando', 40); const guarda = pos('quadril');
       pose('parado', 0); assert.ok(Vector3.Distance(pos('quadril'), guarda) < .01, 'termina na guarda');
       pose('derrotado', 60);
       assert.ok(pos('cabeca').y < .6 && pos('quadril').y < .5, 'derrota fica deitada');
+      for (const lado of ['E', 'D'])
+        assert.ok(Math.abs(pos(`mao_${lado}`).x - pos('cabeca').x) < .2, 'no K.O. luvas ficam junto da cabeça');
       for (const lado of ['E', 'D']) {
         const joelho = pos(`canela_${lado}`), coxa = pos(`coxa_${lado}`).subtract(joelho).normalize(), pe = pos(`pe_${lado}`).subtract(joelho).normalize();
         assert.ok(Vector3.Dot(coxa, pe) < -.75, 'pernas relaxadas sem joelhos presos sobre o corpo');

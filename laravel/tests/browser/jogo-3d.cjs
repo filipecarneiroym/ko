@@ -50,6 +50,7 @@ let browser;
   // Quem já havia escolhido 2D na versão antiga também deve entrar no 3D.
   await context.addInitScript(() => localStorage.setItem('ko-graficos', '2d'));
   await context.addInitScript(() => {
+    addEventListener('pointerup', e => { if (window.__omitirPointerUp) e.stopImmediatePropagation(); }, true);
     window.__leiturasPad = 0;
     window.__pad = { index: 0, id: 'Controle virtual de teste', mapping: 'standard', connected: false,
       axes: [0, 0], buttons: Array.from({ length: 16 }, () => ({ pressed: false, value: 0 })) };
@@ -58,6 +59,7 @@ let browser;
     } });
   });
   const page = await context.newPage();
+  page.setDefaultNavigationTimeout(90000); // SwiftShader: recarregar o pacote 3D compete com a renderização.
   const erros = [];
   let bloquearModelo = false, falhasModelo = 0;
   page.on('pageerror', e => { erros.push(e.message); console.log('PAGEERROR', e.message); });
@@ -141,6 +143,51 @@ let browser;
   const quadro3d = await page.evaluate(() => window.KOTeste.luta().s.f);
   await page.waitForFunction(f => window.KOTeste.luta().s.f > f, quadro3d, { timeout: 15000 });
   await page.screenshot({ path: path.join(saida, 'pipoca-3d-inicio.png') });
+  // Toques reais do navegador: fora da alavanca, arrasto capturado e dois dedos.
+  const toqueCDP = await context.newCDPSession(page);
+  await toqueCDP.send('Emulation.setTouchEmulationEnabled', { enabled: true });
+  await page.evaluate(() => {
+    const luta = KOTeste.luta(), s = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: true });
+    s.fase = 'luta'; s.p[0].x = 60 * KOSim.U; s.p[1].x = 320 * KOSim.U;
+    Object.assign(luta.s, s); luta.cpu = null; window.__toquesReais = [];
+    window.__passoAntesToque = KOSim.passo;
+    KOSim.passo = (s, entradas) => {
+      const r = window.__passoAntesToque(s, entradas);
+      window.__toquesReais.push({ bits: entradas[0], estado: s.p[0].estado, golpe: s.p[0].golpe });
+      return r;
+    };
+  });
+  const tocar = (type, touchPoints) => toqueCDP.send('Input.dispatchTouchEvent', { type, touchPoints });
+  await tocar('touchStart', [{ x: 10, y: 10, id: 1 }]);
+  await page.waitForTimeout(1800);
+  assert.ok(await page.evaluate(() => __toquesReais.length > 0 && __toquesReais.every(t => t.bits === 0)), 'toque longe da alavanca não move nem pula');
+  await tocar('touchEnd', []);
+  const area = await page.locator('#direcional').boundingBox();
+  const dedo = { x: area.x + area.width * .9, y: area.y + area.height / 2, id: 1 };
+  await tocar('touchStart', [dedo]);
+  await page.waitForFunction(() => __toquesReais.some(t => t.bits & KOSim.B.R));
+  const k = await page.locator('.botoes [data-b="K"]').boundingBox();
+  await tocar('touchStart', [dedo, { x: k.x + k.width / 2, y: k.y + k.height / 2, id: 2 }]);
+  await page.waitForFunction(() => __toquesReais.some(t => t.golpe === 'k1'));
+  await tocar('touchMove', [{ ...dedo, x: 400 }, { x: k.x + k.width / 2, y: k.y + k.height / 2, id: 2 }]);
+  await page.evaluate(() => { window.__omitirPointerUp = true; });
+  await tocar('touchEnd', [{ ...dedo, x: 400 }]);
+  await page.evaluate(() => { window.__omitirPointerUp = false; });
+  await page.waitForFunction(() => (__toquesReais.at(-1).bits & KOSim.B.K) && !(__toquesReais.at(-1).bits & KOSim.B.R));
+  await tocar('touchEnd', []);
+  await page.waitForTimeout(1800);
+  assert.equal(await page.evaluate(() => __toquesReais.at(-1).bits), 0, 'soltar os dois dedos limpa todas as entradas');
+  assert.ok(await page.evaluate(() => { const l = KOTeste.luta().s.p[0]; return l.vx === 0 && l.estado === 'parado'; }), 'a personagem realmente para depois de soltar');
+  assert.ok(await page.evaluate(() => !__toquesReais.some(t => t.golpe === 'k2')), 'um toque no K andando não alterna para chute alto');
+  await tocar('touchStart', [dedo]);
+  await page.waitForFunction(() => __toquesReais.at(-1).bits & KOSim.B.R);
+  await tocar('touchCancel', []);
+  await page.waitForFunction(() => __toquesReais.at(-1).bits === 0);
+  assert.equal(await page.locator('#direcional').getAttribute('data-dir'), '', 'cancelar gesto não prende a direção');
+  await page.evaluate(() => { KOSim.passo = window.__passoAntesToque; });
+  await toqueCDP.detach();
+  console.log('Toque real: área da alavanca, direção + K, arrasto e soltura: OK.');
+  if (process.env.KO_APENAS_TOQUE) return;
   if (process.env.KO_MEDIR_RITMO) {
     const medidas = await page.evaluate(async () => {
       const luta = window.KOTeste.luta(); luta.cpu = null;

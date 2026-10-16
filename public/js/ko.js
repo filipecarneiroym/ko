@@ -193,7 +193,7 @@
     if (luta) { luta.ultimo = performance.now(); luta.sobra = 0; }
   });
 
-  // Direcional em cruz: encosta em qualquer lugar da metade esquerda; a direção vale a partir do centro da cruz.
+  // Alavanca fixa: inicia dentro da área visível; o arrasto continua capturado fora dela.
   const direcional = $('#direcional');
   let dedoDir = null, bitsDir = 0;
   function atualizarDirecional(x, y) {
@@ -216,9 +216,11 @@
   const botoes = [...document.querySelectorAll('.botoes .b, .atalhos-poderes [data-b]')].map((el) => ({ el, bit: { P: B.P, K: B.K, B: B.F, S: B.S,
     EX: B.S | B.P, SUPER: B.S | B.K, ULTRA: B.S | B.F }[el.dataset.b] }));
   const dedosBotao = new Map();
+  const ponteirosNovos = new Map(), idsToque = new Map();
   function botoesSob(x, y) {
     let bits = 0;
     for (const b of botoes) {
+      if (!b.el.getClientRects().length) continue;
       const r = b.el.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
       const dentro = b.el.closest('.atalhos-poderes') ? x >= r.left && x <= r.right && y >= r.top && y <= r.bottom
         : Math.hypot(x - cx, y - cy) <= r.width / 2 + 6;
@@ -237,7 +239,11 @@
     if (e.target.closest('.pausa')) return;
     e.preventDefault(); acordarAudio();
     controles.setPointerCapture(e.pointerId);
-    if (!e.target.closest('[data-b]') && e.clientX < innerWidth * 0.45 && dedoDir === null) {
+    if (e.pointerType === 'touch') ponteirosNovos.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    const areaDir = direcional.getBoundingClientRect();
+    const dentroDir = direcional.getClientRects().length && e.clientX >= areaDir.left - 12 && e.clientX <= areaDir.right + 12
+      && e.clientY >= areaDir.top - 12 && e.clientY <= areaDir.bottom + 12;
+    if (!e.target.closest('[data-b]') && dentroDir && dedoDir === null) {
       dedoDir = e.pointerId;
       atualizarDirecional(e.clientX, e.clientY);
     } else {
@@ -253,6 +259,7 @@
     recalcularToque();
   });
   const soltar = (e) => {
+    ponteirosNovos.delete(e.pointerId);
     if (e.pointerId === dedoDir) { dedoDir = null; bitsDir = 0; direcional.dataset.dir = ''; direcional.style.removeProperty('--analogico-x'); direcional.style.removeProperty('--analogico-y'); }
     dedosBotao.delete(e.pointerId);
     recalcularToque();
@@ -260,14 +267,43 @@
   controles.addEventListener('pointerup', soltar);
   controles.addEventListener('pointercancel', soltar);
   controles.addEventListener('lostpointercapture', soltar);
-  function limparControles() {
-    teclasAtivas.clear();
-    dedoDir = null; bitsDir = bitsToque = bitsTeclado = bitsPulso = 0;
+  // A soltura também chega ao capturador global quando o alvo muda ou a
+  // captura se perde fora da área do jogo (barras do navegador no celular).
+  addEventListener('pointerup', soltar, true);
+  addEventListener('pointercancel', soltar, true);
+  function limparToques() {
+    dedoDir = null; bitsDir = bitsToque = 0;
     dedosBotao.clear(); direcional.dataset.dir = '';
+    ponteirosNovos.clear(); idsToque.clear();
     direcional.style.removeProperty('--analogico-x'); direcional.style.removeProperty('--analogico-y');
     recalcularToque();
   }
+  // Touch.identifier e PointerEvent.pointerId são diferentes. Associar na
+  // chegada permite liberar só o dedo correto mesmo sem receber pointerup.
+  addEventListener('touchstart', e => {
+    for (const toque of e.changedTouches) for (const [id, ponto] of ponteirosNovos) {
+      if (Math.hypot(toque.clientX - ponto.x, toque.clientY - ponto.y) <= 2) {
+        idsToque.set(toque.identifier, id); ponteirosNovos.delete(id); break;
+      }
+    }
+  }, { capture: true, passive: true });
+  addEventListener('touchend', e => {
+    for (const toque of e.changedTouches) {
+      const id = idsToque.get(toque.identifier);
+      if (id !== undefined) { soltar({ pointerId: id }); idsToque.delete(toque.identifier); }
+    }
+    if (!e.touches.length) limparToques();
+  }, { capture: true, passive: true });
+  addEventListener('touchcancel', limparToques, { capture: true, passive: true });
+  function limparControles() {
+    teclasAtivas.clear();
+    bitsTeclado = bitsPulso = 0;
+    limparToques();
+  }
   addEventListener('blur', limparControles);
+  addEventListener('resize', limparControles);
+  addEventListener('orientationchange', limparControles);
+  addEventListener('pagehide', limparControles);
   document.addEventListener('visibilitychange', () => { if (document.hidden) limparControles(); });
   controles.addEventListener('contextmenu', (e) => e.preventDefault());
 

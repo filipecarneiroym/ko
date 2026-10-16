@@ -23,7 +23,7 @@ for (const cor of ['azul', 'vermelha']) test(`chutes Lola ${cor}: pé dentro da 
           const antes = JSON.stringify(s);
           modelo.atualizar(descreverPose(l, K, s));
           assert.equal(JSON.stringify(s), antes, 'pose não muda a simulação');
-          const no = modelo.osso(golpe === 'k1' && face > 0 ? 'pe_D' : 'pe_E'), cadeia = [];
+          const no = modelo.osso(['k1', 'k2'].includes(golpe) && face > 0 ? 'pe_D' : 'pe_E'), cadeia = [];
           for (let n = no; n; n = n.parent) cadeia.unshift(n);
           for (const n of cadeia) n.computeWorldMatrix(true);
           const p = no.getAbsolutePosition(), caixa = K.caixaHit(l, janela.caixa);
@@ -37,6 +37,13 @@ for (const cor of ['azul', 'vermelha']) test(`chutes Lola ${cor}: pé dentro da 
             assert.ok(p.z < apoio.getAbsolutePosition().z, 'perna que chuta está voltada para a câmera em -Z');
           }
           const x = (caixa.x / K.U - K.LARGURA / 2) / 24, y = caixa.y / K.U / 24;
+          if (golpe === 'k2') {
+            const apoio = modelo.osso(face > 0 ? 'pe_E' : 'pe_D'), pais = [];
+            for (let n = apoio; n; n = n.parent) pais.unshift(n);
+            for (const n of pais) n.computeWorldMatrix(true);
+            assert.ok(p.z < apoio.getAbsolutePosition().z, 'chute alto também usa a perna voltada à tela');
+            assert.ok(apoio.getAbsolutePosition().y < .3, 'outra perna sustenta o corpo no chute alto');
+          }
           assert.ok(p.x >= x - .08 && p.x <= x + caixa.w / K.U / 24 + .08
             && p.y >= y - .08 && p.y <= y + caixa.h / K.U / 24 + .08,
             `${golpe} q${t}, face ${face}: pé ${p.asArray()}, caixa ${[x, y, caixa.w / K.U / 24, caixa.h / K.U / 24]}`);
