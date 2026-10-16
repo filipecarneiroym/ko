@@ -112,6 +112,10 @@ export function criarGolpesV5(ossos, parado, simulador) {
     const b = PERNAS[lado];
     if (forma === 'corpo') return Quaternion.RotationAxis(v(0, 0, 1), rol).multiply(Quaternion.RotationAxis(v(0, 1, 0), giro)).multiply(G0[b.pe]).normalize();
     if (forma === 'plano') return Quaternion.RotationAxis(v(0, 1, 0), giro * 0.3).multiply(G0[b.pe]).normalize();
+    // No chute alto, a sola segue o ataque e a ponta sobe moderadamente.
+    // Copiar todo o giro da pelve virava o tornozelo para trás.
+    if (forma === 'alto') return Quaternion.RotationAxis(v(0, 0, 1), .45)
+      .multiply(Quaternion.RotationAxis(v(0, 1, 0), giro * .3)).multiply(G0[b.pe]).normalize();
     const canela = tornozelo.subtract(joelho).normalize();
     // Eixo lateral fixo do corpo (girado com a pelve). Derivá-lo de
     // canela × vertical invertia o dorso quando a canela inclinava para trás
@@ -302,12 +306,13 @@ export function criarGolpesV5(ossos, parado, simulador) {
   // e a volta é mais rápida: recolhe em 6 quadros em vez de 9.
   const chuteAlto = lado => {
     const sinal = lado === 'E' ? 1 : -1, z = lado === 'E' ? ZE : ZD;
+    const apoio = lado === 'E' ? 'D' : 'E';
     return animar(lado === 'E' ? 'k2' : 'k2D', 28, [
     { q: 0 },
-    { q: 4, giro: -sinal * .4, inclinacao: .22, pelve: v(-.06, .03, 0), pernas: { [lado]: { tornozelo: v(.38, 1.22, z + sinal * .14), joelho: v(1, .9, 0), pe: 'plano' } } },
-    { q: 7, giro: -sinal * .55, inclinacao: .46, pelve: v(-.04, .04, 0), pernas: { [lado]: { tornozelo: v(1.0, 1.82, z + sinal * .2), joelho: v(0, 1, sinal * .2), pe: 'esticado' } } },
-    { q: 10, giro: -sinal * .55, inclinacao: .46, pelve: v(-.03, .04, 0), pernas: { [lado]: { tornozelo: v(1.02, 1.8, z + sinal * .2), joelho: v(0, 1, sinal * .2), pe: 'esticado' } } },
-    { q: 13, giro: -sinal * .3, inclinacao: .18, pelve: v(-.05, .02, 0), pernas: { [lado]: { tornozelo: v(.38, 1.05, z + sinal * .12), joelho: v(1, .9, 0), pe: 'plano' } } },
+    { q: 4, giro: -sinal * .35, inclinacao: .22, pelve: v(-.06, -.02, 0), pernas: { [lado]: { tornozelo: v(.38, 1.22, z + sinal * .14), joelho: v(1, .9, 0), pe: 'plano' }, [apoio]: { pivo: -sinal * .25 } } },
+    { q: 7, giro: -sinal * 1.1, inclinacao: .46, pelve: v(-.04, -.04, 0), pernas: { [lado]: { tornozelo: v(1.0, 1.82, z + sinal * .2), joelho: v(0, 1, sinal * .2), pe: 'alto' }, [apoio]: { pivo: -sinal * .8 } } },
+    { q: 10, giro: -sinal * 1.18, inclinacao: .46, pelve: v(-.03, -.04, 0), pernas: { [lado]: { tornozelo: v(1.02, 1.8, z + sinal * .2), joelho: v(0, 1, sinal * .2), pe: 'alto' }, [apoio]: { pivo: -sinal * .85 } } },
+    { q: 13, giro: -sinal * .5, inclinacao: .18, pelve: v(-.05, -.03, 0), pernas: { [lado]: { tornozelo: v(.38, 1.05, z + sinal * .12), joelho: v(1, .9, 0), pe: 'plano' }, [apoio]: { pivo: -sinal * .36 } } },
     { q: 17, giro: -sinal * .05, inclinacao: .03, pelve: v(-.01, 0, 0) },
     { q: 28 },
     ]);

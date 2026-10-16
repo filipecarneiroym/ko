@@ -49,7 +49,7 @@ for (const cor of ['azul', 'vermelha']) test(`chutes Lola ${cor}: pé dentro da 
             `${golpe} q${t}, face ${face}: pé ${p.asArray()}, caixa ${[x, y, caixa.w / K.U / 24, caixa.h / K.U / 24]}`);
         }
       }
-      if (golpe === 'k1') {
+      if (['k1', 'k2'].includes(golpe)) {
         const direcao = nome => {
           const no = modelo.osso(nome), cadeia = []; for (let n = no; n; n = n.parent) cadeia.unshift(n);
           for (const n of cadeia) n.computeWorldMatrix(true);
@@ -57,11 +57,12 @@ for (const cor of ['azul', 'vermelha']) test(`chutes Lola ${cor}: pé dentro da 
         };
         l.t = 0; modelo.atualizar(descreverPose(l, K, s));
         const inicio = direcao('quadril');
-        l.t = 8; modelo.atualizar(descreverPose(l, K, s));
+        l.t = golpe === 'k1' ? 8 : 10; modelo.atualizar(descreverPose(l, K, s));
         const giro = Math.acos(Math.max(-1, Math.min(1, Vector3.Dot(inicio, direcao('quadril')))));
-        assert.ok(giro > 1.5 && giro < 1.6, `quadril acompanha o chute em ~89 graus: ${giro}`);
+        assert.ok(golpe === 'k1' ? giro > 1.5 && giro < 1.6 : giro > 1.1 && giro < 1.2,
+          `${golpe}: quadril acompanha o chute, giro ${giro}`);
         let apoio;
-        for (let t = 0; t <= 24; t += .5) {
+        for (let t = 0; t <= K.LUTADORES.pipoca.golpes[golpe].dur; t += .5) {
           l.t = t;
           modelo.atualizar(descreverPose(l, K, s));
           const no = modelo.osso(face > 0 ? 'pe_E' : 'pe_D'), cadeia = [];

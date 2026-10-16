@@ -17,7 +17,7 @@ import { criarCameraLuta, enquadrarCameraLuta } from './camera-luta.js';
 
 // Etiqueta da versão do 3D. Aparece no aviso de erro para conferir se o aparelho
 // carregou o arquivo novo (o Safari do iOS guarda JavaScript em cache com facilidade).
-const VERSAO_3D = 'ko3d-2026-10-16-toque-chute-recuperacao';
+const VERSAO_3D = 'ko3d-2026-10-16-revisao-geral';
 // iPhone/iPad: o WebGL do Safari é mais frágil e a memória é curta.
 const IOS = /iP(hone|ad|od)/.test(navigator.userAgent)
   || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -80,6 +80,7 @@ function criar(canvas, { cenario, lutadores, aoFalhar } = {}) {
   let engine, scene, camera, apresentacao, efeitos, sf4, brilhoGolpes;
   const modelos = [null, null], controle = new AbortController();
   let arena = null, encerrado = false, ultimoF = null, preparado = false, falha = null;
+  let inicioResultado = null;
   perdeuContexto = false;
   let etapa = 'configuração', rejeitarCarga;
   const redimensionar = () => {
@@ -194,7 +195,11 @@ function criar(canvas, { cenario, lutadores, aoFalhar } = {}) {
       try {
         const passos = ultimoF === null ? 0 : Math.max(0, s.f - ultimoF);
         ultimoF = s.f;
-        s.p.forEach((p, i) => modelos[i].atualizar(descreverPose(p, KOSim, s)));
+        // Comemoração visual depois do fim: o motor e o resultado ficam congelados.
+        if (s.fase === 'fim') inicioResultado ??= performance.now();
+        else inicioResultado = null;
+        const quadroResultado = inicioResultado === null ? null : (performance.now() - inicioResultado) * .06;
+        s.p.forEach((p, i) => modelos[i].atualizar(descreverPose(p, KOSim, s, quadroResultado)));
         brilhoGolpes.atualizar(s, modelos);
         arena?.atualizar(s.f);
         sf4.atualizar(s, passos, camera);
@@ -205,7 +210,7 @@ function criar(canvas, { cenario, lutadores, aoFalhar } = {}) {
     },
     limpar() {
       if (encerrado) return;
-      try { efeitos.limpar(); sf4.limpar(); brilhoGolpes.limpar(); ultimoF = null; }
+      try { efeitos.limpar(); sf4.limpar(); brilhoGolpes.limpar(); ultimoF = null; inicioResultado = null; }
       catch (erro) { falhar(erro, 'efeitos'); }
     },
     descartar() {

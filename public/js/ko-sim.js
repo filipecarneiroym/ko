@@ -386,7 +386,7 @@
       estado: 'parado', t: 0, golpe: null, encostou: 0, acertos: 0,
       stun: 0, combo: 0, juggle: 0, inv: 0, pulosAr: 0, empurrao: 0, sumido: 0, armadura: 0, forca: 0, enrolado: 0, prende: '', estrelas: 0,
       bAnt: 0, buf: { P: 0, K: 0, S: 0, B: 0, U: 0 }, quandoP: -99, quandoK: -99, hist: [],
-      toqueFrente: -99, toqueTras: -99, soltouFrente: 1, soltouTras: 1,
+      toqueFrente: -99, toqueTras: -99, soltouFrente: 1, soltouTras: 1, duploEmHitstop: 0,
     };
   }
 
@@ -463,6 +463,17 @@
     if (!(bits & fr) && l.toqueFrente !== s.f) l.soltouFrente = 1;
     if (sobe & tr) { if (s.f - l.toqueTras <= 12 && l.soltouTras) l.toqueDuploTras = 1; l.toqueTras = s.f; l.soltouTras = 0; }
     if (sobe & B.RC) l.toqueDuploTras = 1;
+    // O impacto congela a ação, mas continua lendo o controle. Guardar o
+    // toque duplo evita perder o cancelamento do Focus antes da retomada.
+    if (s.hitstop > 0) {
+      if (l.toqueDuploFrente || l.toqueDuploTras) l.duploEmHitstop = l.toqueDuploFrente ? 1 : 2;
+    } else if (l.duploEmHitstop) {
+      if (!l.toqueDuploFrente && !l.toqueDuploTras) {
+        if (l.duploEmHitstop === 1) l.toqueDuploFrente = 1;
+        else l.toqueDuploTras = 1;
+      }
+      l.duploEmHitstop = 0;
+    }
     if (!(bits & tr) && l.toqueTras !== s.f) l.soltouTras = 1;
     // Histórico de direção (frente/baixo) para sequências como o quarto de círculo.
     l.hist.push((bits & B.D ? 'D' : '') + (bits & fr ? 'F' : bits & tr ? 'T' : '') || 'N');

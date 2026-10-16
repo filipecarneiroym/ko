@@ -390,7 +390,7 @@ body:not(.corpo-jogo) .tela .cartao { background: #131d2bee; border: 1px solid #
 .escolha-sf4 #ajustar-controles { min-height: 44px; }
 .escolha-sf4 .destaque.vazio { visibility: hidden; }
 .escolha-sf4 .palco:has(.lado-2.vazio) .lado-1 { left: 50%; transform: translateX(-50%); }
-.painel-controle { z-index: 6; }
+.painel-controle, .painel-pausa { z-index: 6; }
 .cartao-espera, .painel-controle .cartao-fim { background: linear-gradient(125deg, #172131, #0c131f); border: 1px solid #71809a; border-top: 3px solid #d63c35; border-radius: 4px; box-shadow: 0 20px 60px #0007; max-width: min(560px, 100%); }
 .painel-controle .botao, .cartao-espera .botao { border-radius: 4px; }
 @media (max-width: 700px) and (orientation: portrait) {

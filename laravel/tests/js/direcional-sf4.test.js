@@ -16,7 +16,7 @@ test('dois toques para trás continuam acionando recuo nos dois lados', () => {
 test('uma direção para trás no controle não vira recuo automático', () => {
   const s = K.novo({ lutadores: ['pipoca', 'pipoca'], treino: true }); s.fase = 'luta';
   const c = { B: K.B, pads: { atualizar: () => [{ conectado: true, mapeado: true, eixoX: -1, bits: K.B.L, pulso: K.B.L }, {}] },
-    estadosPads: [], pulsosPads: [0, 0], petelecoPad: [{ desde: 0, feito: false }, {}], usandoControle: false,
+    estadosPads: [], pulsosPads: [0, 0], soltarPads: [false, false], petelecoPad: [{ desde: 0, feito: false }, {}], usandoControle: false,
     performance: { now: () => 100 }, versus: false, meuLado: 0, luta: { s },
     document: { body: { classList: { toggle() {} } }, querySelector: () => null },
   };

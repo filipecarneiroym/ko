@@ -5,7 +5,7 @@ export const ESTADOS_VISUAIS = Object.freeze([
   'tonto', 'vitoria', 'derrotado', 'final', 'vitimaFinal',
 ]);
 const CICLICOS = new Set(['parado', 'andando', 'corrida', 'agachado', 'defesa', 'defesaBaixa', 'tonto']);
-export function descreverPose(lutador, simulador, estado = null) {
+export function descreverPose(lutador, simulador, estado = null, quadroResultado = null) {
   const golpe = lutador.estado === 'golpe' && simulador.LUTADORES[lutador.id]?.golpes[lutador.golpe];
   // Segurar defesa reinicia p.t no motor a cada passo. O relógio da fase
   // mantém seu ciclo vivo e também fica congelado durante o hitstop.
@@ -13,6 +13,7 @@ export function descreverPose(lutador, simulador, estado = null) {
     || estado?.fase === 'final' && ['final', 'vitimaFinal'].includes(lutador.estado);
   const foco = golpe && lutador.golpe === 'foc';
   const derrotadoNoFim = estado?.fase === 'fim' && estado.vencedor >= 0 && lutador.lado !== estado.vencedor;
+  const venceuNoFim = estado?.fase === 'fim' && lutador.lado === estado.vencedor;
   const vitimaDoFinal = estado?.fase === 'final' && lutador.estado === 'vitimaFinal';
   // Final da Lola: gesto do arremesso chamando a chuva (34 quadros) e comemoração.
   const chama = false; // sem chuva de cenouras: no Final a vencedora só comemora
@@ -20,7 +21,10 @@ export function descreverPose(lutador, simulador, estado = null) {
   return {
     clip: derrotadoNoFim || vitimaDoFinal ? 'derrotado' : foco ? 'foc' : lutador.estado === 'impulso' ? 'andando' : lutador.estado === 'colapso' ? 'dano'
       : chama ? (fT < 34 ? 'esp' : 'vitoria') : golpe ? lutador.golpe : lutador.estado,
-    quadro: derrotadoNoFim ? fT + (estado.finalFeito ? 60 : 0)
+    // A tela de resultado congela o motor em fT=0. A derrota precisa estar
+    // assentada mesmo sem Final, sem depender de outro passo da partida.
+    quadro: derrotadoNoFim ? Math.max(60, fT + (estado.finalFeito ? 60 : 0))
+      : venceuNoFim ? Math.max(0, quadroResultado ?? 100)
       : vitimaDoFinal ? fT : foco ? (lutador.focoSolto ? lutador.t : Math.min(12, (lutador.focoCarga || 0) / 2))
       : chama ? (fT < 34 ? fT : fT - 34)
       : Math.max(0, usaRelogioDaFase ? estado?.fT ?? lutador.t : lutador.t),

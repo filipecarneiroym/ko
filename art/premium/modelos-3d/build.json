@@ -17,15 +17,15 @@
     "src/3d/contrato-glb.mjs": "d4aff4d79adccb1ff3eed3acec16a1ab42805f82fce164e059ac784d9f9f6e9d",
     "src/3d/efeitos-sf4.js": "2ef45b1fa501380635e6a90fb59f886447a0fecec59773aea3fe266b6dbbe1ba",
     "src/3d/efeitos.js": "422cdfa76ae591d0fd78989a94d5b38110a8cc83f365d6cb6d326fd9a5bdcf2b",
-    "src/3d/estado-visual.mjs": "661ed0dcb7ebcebda67c1bc720ac4f7d09f232c1a3d1d71103a5f7f9677bc947",
-    "src/3d/jogo-3d.js": "718e24e0bc13498a6b1668653ddaab559ed42d3749eee95422e2cd413ac1fe62",
+    "src/3d/estado-visual.mjs": "bc65ae4cfc3864e1895967d1c0cadf59f73b363688276ab88b87efcc0b527839",
+    "src/3d/jogo-3d.js": "616b314e6a7662bfdb593a2e06a777395f88b6d34a98d64f094dfb09e64fa0ac",
     "src/3d/laboratorio.js": "8a6ba72fd825c165dbaf54a8a88efa7d095720859b2f0378cc10995412af650f",
     "src/3d/modelo-glb.js": "344e3e350e58d97324386de73e4db65516cf69ff8612c842ed90ae663d7476dd",
     "src/3d/perfil-pipoca.mjs": "effca8a992370c7fe15a90f05e570b5ac9b677f69ad879b44de49c6b58e9884a",
-    "src/3d/versao-modelos.mjs": "bb215edd002bf842569a2718727202731fd9a2d3c92c4aebc46fb314aad1780b"
+    "src/3d/versao-modelos.mjs": "7bcadd66c6293a95dab1e0bc9340a6de78111aae4b82a355f81b96204d48e9b5"
   },
   "saida": {
     "caminho": "public/js/ko-laboratorio-3d.js",
-    "sha256": "27cabd86e34f062eaa090566d3fba8b7c16aa453119c8809fc9aa3f5790afd73"
+    "sha256": "f739fd019d11a9327e8d3de154942391935d6571ef8f1aa81887cc1932d86dc7"
   }
 }

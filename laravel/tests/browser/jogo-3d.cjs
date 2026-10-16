@@ -302,6 +302,26 @@ let browser;
   assert.equal(await page.evaluate(() => window.__estadosPad.includes('recuo')), false, 'segurar para trás não causa backdash antes da defesa');
   await soltarPad();
   await page.evaluate(() => {
+    const luta = KOTeste.luta(), s = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: true });
+    s.fase = 'luta'; s.p[0].x = 60 * KOSim.U; s.p[1].x = 320 * KOSim.U;
+    Object.assign(luta.s, s); luta.cpu = null; window.__golpesPad = [];
+  });
+  await page.locator('#pausa').click();
+  assert.ok(await page.locator('.atalhos-poderes [data-b="EX"]').evaluate(el => {
+    const r = el.getBoundingClientRect();
+    return !!document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.closest('.painel-pausa');
+  }), 'menu fica acima dos atalhos de golpe');
+  await page.evaluate(() => { window.__pad.buttons[0].pressed = true; });
+  await page.waitForFunction(() => !document.querySelector('.painel-pausa'));
+  const leituraMenu = await page.evaluate(() => window.__leiturasPad);
+  await page.waitForFunction(n => window.__leiturasPad > n + 2, leituraMenu);
+  assert.equal(await page.evaluate(() => window.__golpesPad.includes('k1')), false, 'confirmar a retomada não executa um chute');
+  await soltarPad();
+  await page.evaluate(() => { window.__pad.buttons[0].pressed = true; });
+  await page.waitForFunction(() => window.__golpesPad.includes('k1'));
+  await soltarPad();
+  console.log('Pausa: atalhos cobertos; confirmar não vira golpe; novo K funciona: OK.');
+  await page.evaluate(() => {
     window.__pad.connected = false; KOSim.passo = window.__passoPoderesOriginal;
     const luta = window.KOTeste.luta(), s = KOSim.novo({ lutadores: ['pipoca', 'pipoca'], treino: true });
     s.fase = 'luta'; s.fT = 0; Object.assign(luta.s, s); luta.r3d.limpar();
@@ -345,6 +365,18 @@ let browser;
   const quadroRetomado = await page.evaluate(() => window.KOTeste.luta().s.f);
   await page.waitForFunction(f => window.KOTeste.luta().s.f > f, quadroRetomado, { timeout: 15000 });
   console.log('Perda de contexto sinalizada, bloqueio e retomada: OK');
+  await page.evaluate(() => {
+    const luta = KOTeste.luta(), s = KOSim.novo({ lutadores: ['pipoca', 'pipoca'] });
+    s.fase = 'luta'; s.rounds = [1, 0]; s.p[0].x = 150 * KOSim.U; s.p[1].x = 170 * KOSim.U; s.p[1].vida = 1;
+    for (let q = 0; q < 2500 && s.fase !== 'fim'; q++) KOSim.passo(s, [q === 0 ? KOSim.B.P : 0, 0]);
+    if (s.fase !== 'fim' || s.finalFeito || s.fT !== 0) throw new Error('Encerramento real sem Final não foi reproduzido');
+    Object.assign(luta.s, s); luta.cpu = null; luta.fimEm = 0; window.__fimNatural = s.f;
+  });
+  await page.locator('.cartao-vencedor').waitFor();
+  assert.ok(await page.evaluate(() => KOTeste.luta().s.f === window.__fimNatural && KOTeste.luta().s.fT === 0), 'resultado congela a simulação real');
+  await page.locator('#painel').evaluate(el => { el.style.visibility = 'hidden'; });
+  await page.locator('#tela-3d').screenshot({ path: path.join(saida, 'derrota-natural-sem-final.png') });
+  console.log('Encerramento natural sem Final e relógio congelado: OK.');
 
   // HTML normal, mas o pacote não instala nenhum renderizador 3D.
   await page.route('**/js/ko-jogo-3d.js*', rota => rota.fulfill({ status: 200, contentType: 'text/javascript', body: '/* Pacote 3D ausente no teste. */' }));

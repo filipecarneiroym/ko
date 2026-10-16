@@ -35,6 +35,7 @@
     salvar: (id, mapa) => guarda(() => localStorage.setItem('ko-pad:' + id, JSON.stringify(mapa))),
   });
   let estadosPads = [{ bits: 0 }, { bits: 0 }], pulsosPads = [0, 0], primeiroLocal = null;
+  let soltarPads = [false, false];
   if (versus) document.body.classList.add('versus-local');
 
   let usandoControle = false;
@@ -42,6 +43,7 @@
   addEventListener('pointerdown', (e) => { if (e.pointerType === 'touch') { usandoControle = false; document.body.classList.remove('com-controle'); } }, true);
   function atualizarPads() {
     estadosPads = pads.atualizar();
+    for (let i = 0; i < 2; i++) if (!estadosPads[i].bits) soltarPads[i] = false;
     // Segurar para trás é caminhada/guarda; o motor reconhece o toque duplo.
     // Controle externo (USB/Bluetooth) em uso: some o toque e fica só o ícone, como no SF4.
     if (!estadosPads.some((p) => p.conectado)) usandoControle = false;
@@ -59,7 +61,7 @@
     }
     const sobre = document.querySelector('.painel-pausa');
     if (luta && luta.s.fase !== 'fim' && !sobre) {
-      for (let i = 0; i < 2; i++) pulsosPads[i] |= estadosPads[i].pulso;
+      for (let i = 0; i < 2; i++) if (!soltarPads[i]) pulsosPads[i] |= estadosPads[i].pulso;
       if (versus && estadosPads.some((p) => !p.conectado || !p.mapeado)) {
         luta.aviso = 'Reconecte os dois controles e volte para a luta.';
         $('#pausa').click();
@@ -308,7 +310,11 @@
   controles.addEventListener('contextmenu', (e) => e.preventDefault());
 
   // Os comandos chegam "virados" para quem está do lado direito? Não: direita é direita, como no fliperama.
-  function lerBotoes() { const b = bitsToque | bitsTeclado | bitsPulso | estadosPads[0].bits | pulsosPads[0]; bitsPulso = pulsosPads[0] = 0; return b; }
+  function lerPad(lado) { return soltarPads[lado] ? 0 : estadosPads[lado].bits | pulsosPads[lado]; }
+  function lerBotoes() {
+    const b = document.querySelector('.painel-pausa, .painel-controle') ? 0 : bitsToque | bitsTeclado | bitsPulso | lerPad(0);
+    bitsPulso = pulsosPads[0] = 0; return b;
+  }
 
   // ---------- Rede ----------
   const rede = { ws: null, aberto: false, outroAqui: false, rtt: 120, pings: {}, seq: 0, erro: '' };
@@ -574,7 +580,7 @@
     if (luta.carregando3d || luta.erro3d || !luta.r3d) return false; // espera a arena 3D (o outro celular espera junto)
     if (!luta.online) {
       const meus = lerBotoes();
-      const dele = versus ? estadosPads[1].bits | pulsosPads[1] : luta.cpu ? luta.cpu(s, 1) : 0;
+      const dele = versus ? lerPad(1) : luta.cpu ? luta.cpu(s, 1) : 0;
       pulsosPads[1] = 0;
       K.passo(s, [meus, dele]);
       tratarEventos(s.ev);
@@ -888,6 +894,7 @@
     if (!luta || luta.carregando3d || luta.erro3d || luta.s.fase === 'fim' || document.querySelector('.painel-pausa')) return;
     const pausavel = !luta.online;
     if (pausavel) luta.pausado = true;
+    limparControles(); pulsosPads = [0, 0];
     const sobreposicao = document.createElement('div');
     sobreposicao.className = 'painel painel-pausa';
     sobreposicao.innerHTML = `<div class="cartao-fim"><h2>${pausavel ? 'Pausa' : 'Menu'}</h2>
@@ -899,6 +906,7 @@
     sobreposicao.querySelector('[data-acao="voltar"]').onclick = () => {
       if (versus && estadosPads.some((p) => !p.conectado || !p.mapeado)) return;
       sobreposicao.remove(); limparControles(); pulsosPads = [0, 0];
+      soltarPads = estadosPads.map(p => !!p.bits);
       if (luta) { luta.pausado = false; luta.aviso = ''; luta.ultimo = performance.now(); }
     };
     sobreposicao.querySelector('[data-acao="som"]').onclick = (e) => { somLigado = !somLigado; if (!somLigado) { somArena?.pararVoz(); window.KOVoz?.parar(audio); } guarda(() => localStorage.setItem('ko-som', somLigado ? 'sim' : 'nao')); e.target.textContent = 'Som: ' + (somLigado ? 'ligado' : 'desligado'); };
